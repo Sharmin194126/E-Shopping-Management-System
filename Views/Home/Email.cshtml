@@ -1,0 +1,63 @@
+@{
+    ViewData["Title"] = "Email Support";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-9">
+            <div class="card border-0 shadow-none" style="background: #fdfdfd; border: 1px solid #eee !important; border-radius: 12px;">
+                <div class="card-header bg-white border-bottom p-4">
+                    <h2 class="mb-0 text-primary"><i class="bi bi-envelope-at me-2"></i>Email Support</h2>
+                    <p class="text-muted mt-2 mb-0">Send us a direct email with any attachments. We usually respond within 24 hours.</p>
+                </div>
+                <div class="card-body p-5">
+                    @if (TempData["Message"] != null)
+                    {
+                        <div class="alert alert-success">@TempData["Message"]</div>
+                    }
+                    
+                    <form asp-action="SendMessage" method="post" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label fw-bold">Your Name</label>
+                                <input type="text" name="name" class="form-control py-2" placeholder="Enter your full name" required />
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label fw-bold">Your Email Address</label>
+                                <input type="email" name="email" class="form-control py-2" placeholder="email@example.com" required />
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Subject</label>
+                            <input type="text" name="subject" class="form-control py-2" placeholder="What is this regarding?" required />
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Detailed Message</label>
+                            <textarea name="message" class="form-control" rows="8" placeholder="Please describe your issue or inquiry in detail..." required></textarea>
+                        </div>
+
+                        <div class="p-3 mb-4 rounded" style="background: #f8f9fa; border: 1px dashed #ccc;">
+                            <label class="form-label fw-bold"><i class="bi bi-paperclip me-2"></i>Add Attachments</label>
+                            <input type="file" name="attachment" class="form-control" />
+                            <small class="text-muted d-block mt-2">You can attach screenshots, invoices, or any relevant documents (max 5MB).</small>
+                        </div>
+                        
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a asp-action="Contact" class="btn btn-outline-secondary px-4">Cancel</a>
+                            <button type="submit" class="btn btn-primary px-5 py-2 fw-bold">
+                                <i class="bi bi-send me-2"></i>Send Email Directly
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="mt-4 text-center">
+                <p class="text-muted small">By clicking "Send Email Directly", your message will be forwarded to our support team.</p>
+            </div>
+        </div>
+    </div>
+</div>

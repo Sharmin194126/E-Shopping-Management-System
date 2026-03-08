@@ -1,0 +1,632 @@
+@model E_ShoppingManagement.ViewModels.ProductDetailsViewModel
+@{
+    ViewData["Title"] = Model.Product.Name;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+    var sizes = !string.IsNullOrEmpty(Model.Product.AvailableSizes) 
+        ? Model.Product.AvailableSizes.Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries) 
+        : null;
+
+    string RenderStars(double rating) {
+        int fullStars = (int)Math.Round(rating);
+        string stars = "";
+        for(int i=0; i<fullStars; i++) stars += "★";
+        for(int i=fullStars; i<5; i++) stars += "☆";
+        return stars;
+    }
+}
+
+<style>
+    .live-chat-btn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 9999;
+        background: #25D366;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 30px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 16px;
+        font-weight: bold;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        cursor: pointer;
+        transition: transform 0.3s;
+        border: none;
+    }
+    .live-chat-btn:hover {
+        transform: scale(1.05);
+        color: white;
+        background: #128C7E;
+    }
+    .chat-box {
+        position: fixed;
+        bottom: 90px;
+        right: 20px;
+        width: 350px;
+        height: 500px;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        z-index: 9998;
+        display: none;
+        flex-direction: column;
+    }
+    .chat-box.active {
+        display: flex;
+    }
+    .chat-header {
+        background: #25D366;
+        color: white;
+        padding: 15px;
+        border-radius: 15px 15px 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .chat-body {
+        flex: 1;
+        padding: 15px;
+        overflow-y: auto;
+        background: #f5f5f5;
+    }
+    .chat-footer {
+        padding: 15px;
+        border-top: 1px solid #ddd;
+        display: flex;
+        gap: 10px;
+    }
+    .chat-message {
+        margin-bottom: 10px;
+        padding: 10px;
+        border-radius: 8px;
+        max-width: 80%;
+    }
+    .chat-message.user {
+        background: #dcf8c6;
+        margin-left: auto;
+    }
+    .chat-message.support {
+        background: white;
+    }
+    .rating-bar {
+        height: 8px;
+        background: #eee;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+    .rating-fill {
+        height: 100%;
+        background: #ffc107;
+    }
+    .live-chat-banner {
+        background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+        color: white;
+        padding: 20px 0;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    .zoom-container {
+        overflow: hidden;
+        border-radius: 8px;
+        cursor: crosshair;
+    }
+    .zoom-container img {
+        transition: transform 0.3s ease;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+    .zoom-container:hover img {
+        transform: scale(2.0);
+    }
+</style>
+
+<div class="live-chat-banner">
+    <div class="container d-flex justify-content-between align-items-center">
+        <div>
+            <h4 class="mb-1"><i class="bi bi-chat-text-fill me-2"></i>Live Chat Support Available!</h4>
+            <p class="mb-0 small opacity-75">Connect with our product experts instantly via our Live Chat button for real-time assistance.</p>
+        </div>
+        <button onclick="toggleChat()" class="btn btn-outline-light fw-bold px-4">Start Chat Now</button>
+    </div>
+</div>
+
+<div class="container mt-2">
+    <div class="row">
+        <!-- Image Section -->
+        <div class="col-md-5">
+            <div class="zoom-container" style="max-height: 500px; width: 100%;">
+                <img src="@(string.IsNullOrEmpty(Model.Product.ImageUrl) ? "/images/no-image.png" : (Model.Product.ImageUrl.StartsWith("/") ? Model.Product.ImageUrl : "/images/products/" + Model.Product.ImageUrl))" 
+                     class="img-fluid rounded" alt="@Model.Product.Name" />
+            </div>
+        </div>
+        
+        <!-- Details Section -->
+        <div class="col-md-7">
+            @if (TempData["Message"] != null)
+            {
+                <div class="alert alert-success">@TempData["Message"]</div>
+            }
+            <h2>@Model.Product.Name</h2>
+            <div class="mb-2">
+                <span class="text-warning fs-5">@Html.Raw(RenderStars(Model.Product.AverageRating))</span>
+                <span class="text-muted">(@Model.Product.AverageRating.ToString("0.0")) | @Model.TotalReviews Reviews</span>
+            </div>
+            <div class="price-area mb-3">
+                @if (Model.Product.OfferPercentage > 0)
+                {
+                    <span class="badge bg-danger mb-2">@Model.Product.OfferPercentage% offer price</span>
+                }
+                <div class="d-flex align-items-center gap-2">
+                    @if (Model.Product.RegularPrice > Model.Product.Price)
+                    {
+                        <h4 class="text-muted text-decoration-line-through mb-0">৳ @Model.Product.RegularPrice</h4>
+                    }
+                    <h3 class="text-danger fw-bold mb-0">৳ @Model.Product.Price</h3>
+                </div>
+                @if (Model.Product.VatPercentage > 0)
+                {
+                    <div class="text-muted small">+ @Model.Product.VatPercentage% VAT</div>
+                }
+            </div>
+            
+            <p class="mt-3">@Model.Product.Description</p>
+            
+            <hr />
+            
+            <form method="get" id="addToCartForm">
+                <input type="hidden" name="productId" value="@Model.Product.Id" />
+                
+                @if (sizes != null && sizes.Any())
+                {
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-dark fs-5">Select Size:</label>
+                        <div class="d-flex gap-2 mb-2">
+                            @foreach (var size in sizes)
+                            {
+                                <input type="radio" class="btn-check size-select" name="size" id="size-@size" value="@size" required autocomplete="off">
+                                <label class="btn btn-outline-dark" for="size-@size">@size</label>
+                            }
+                        </div>
+                        <div id="sizeStockDisplay" class="small fw-bold"></div>
+                        
+                        <div id="sizeStockData" style="display:none;">
+                            @foreach (var ss in Model.SizeStocks)
+                            {
+                                <div class="size-data" data-size="@ss.Size" data-stock="@ss.StockQty"></div>
+                            }
+                        </div>
+                    </div>
+                }
+                
+                <div class="mb-3">
+                    <label class="form-label fw-bold text-dark fs-5">Quantity:</label>
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="input-group" style="width: 140px; border: 1px solid #333; border-radius: 5px; overflow: hidden;">
+                            <button class="btn btn-light px-3" type="button" onclick="changeQty(-1)">-</button>
+                            <input type="number" id="quantityInput" name="qty" value="1" min="1" 
+                                    max="@Model.Product.StockQty" 
+                                    class="form-control text-center fw-bold border-0" 
+                                    style="color: #000 !important; background-color: #fff;"
+                                    oninput="checkStock(this)" readonly />
+                            <button class="btn btn-light px-3" type="button" onclick="changeQty(1)">+</button>
+                        </div>
+                        <span id="stockLimitMsg" class="text-muted small">
+                            (Stock: @Model.Product.StockQty units | Max: @(Model.Product.MaxOrderQty > 0 ? Model.Product.MaxOrderQty.ToString() : "No Limit"))
+                        </span>
+                    </div>
+                    <div id="stockWarning" class="text-danger small mt-1 fw-bold" style="display: none;"></div>
+                </div>
+
+                <script>
+                    function changeQty(amt) {
+                        const input = document.getElementById('quantityInput');
+                        let val = parseInt(input.value) + amt;
+                        if (val < 1) val = 1;
+                        input.value = val;
+                        checkStock(input);
+                    }
+                </script>
+                
+                <div class="d-flex flex-wrap gap-2 mt-4">
+                    <button type="submit" formaction="/Cart/AddToCart" class="btn btn-warning text-white btn-lg px-4">Add to Cart</button>
+                    <button type="submit" formaction="/Cart/BuyNow" class="btn btn-danger btn-lg px-4">Buy Now</button>
+                    <a href="/Home/CategoryProducts?typeId=@Model.Product.ProductTypeId" class="btn btn-outline-secondary btn-lg px-4">View More @Model.Product.ProductType?.Name</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <hr class="mt-5 mb-5" />
+
+    <!-- Ratings Summary and Review List -->
+    <div class="row">
+        <div class="col-md-4">
+            <h4>Ratings & Reviews</h4>
+            <div class="text-center p-4 bg-light rounded">
+                <h1 class="display-3 fw-bold text-dark">@Model.Product.AverageRating.ToString("0.0")</h1>
+                <div class="text-warning fs-3">@Html.Raw(RenderStars(Model.Product.AverageRating))</div>
+                <div class="text-muted">Based on @Model.TotalReviews reviews</div>
+            </div>
+            
+            <div class="mt-4">
+                @for (int i = 5; i >= 1; i--)
+                {
+                    int count = Model.RatingSummary.ContainsKey(i) ? Model.RatingSummary[i] : 0;
+                    double percent = Model.TotalReviews > 0 ? (double)count / Model.TotalReviews * 100 : 0;
+                    <div class="d-flex align-items-center mb-1">
+                        <span class="me-2" style="width: 20px;">@i</span>
+                        <div class="flex-grow-1 rating-bar">
+                            <div class="rating-fill" style="width: @percent%;"></div>
+                        </div>
+                        <span class="ms-2 text-muted" style="width: 30px;">@count</span>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="col-md-8 ps-md-5">
+            <h4 class="mb-4">Customer Experience</h4>
+            
+            <!-- Submit Review Section -->
+            <div class="card mb-4 border-primary">
+                <div class="card-body">
+                    <h5>Give a Review</h5>
+                    @if (User.Identity?.IsAuthenticated ?? false)
+                    {
+                        if (User.IsInRole("Customer"))
+                        {
+                            <form asp-action="SubmitReview" method="post" enctype="multipart/form-data">
+                                <input type="hidden" name="productId" value="@Model.Product.Id" />
+                                <div class="row">
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label fw-bold">Select Stars</label>
+                                        <select name="rating" class="form-select border-primary" required>
+                                            <option value="5">★★★★★ (5 Stars)</option>
+                                            <option value="4">★★★★☆ (4 Stars)</option>
+                                            <option value="3">★★★☆☆ (3 Stars)</option>
+                                            <option value="2">★★☆☆☆ (2 Stars)</option>
+                                            <option value="1">★☆☆☆☆ (1 Star)</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-8 mb-3">
+                                        <label class="form-label fw-bold">Comments</label>
+                                        <textarea name="comment" class="form-control border-primary" rows="2" placeholder="Write your experience..." required></textarea>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Add Photos (Optional)</label>
+                                    <input type="file" name="images" class="form-control" accept="image/*" multiple onchange="previewImages(this)" />
+                                    <small class="text-muted">You can upload up to 5 images</small>
+                                    <div id="imagePreview" class="mt-2 d-flex gap-2 flex-wrap"></div>
+                                </div>
+                                <button type="submit" class="btn btn-primary px-4 fw-bold">Submit Review</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <p class="text-muted mb-0">Only customers can leave reviews.</p>
+                        }
+                    }
+                    else
+                    {
+                        <p class="mb-2">Please login to share your feedback.</p>
+                        <a asp-controller="Account" asp-action="Login" class="btn btn-sm btn-outline-primary">Login Now</a>
+                    }
+                </div>
+            </div>
+
+            <!-- Review List -->
+            <div class="review-list">
+                @if (Model.Reviews != null && Model.Reviews.Any())
+                {
+                    foreach (var review in Model.Reviews)
+                    {
+                        <div class="border-bottom mb-4 pb-3">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <span class="text-warning">@Html.Raw(RenderStars(review.Rating))</span>
+                                    <span class="ms-2 fw-bold text-dark">@review.CustomerName</span>
+                                    <span class="badge bg-light text-success ms-2 small" style="font-size: 0.7rem;">Verified Purchase</span>
+                                </div>
+                                <small class="text-muted">@review.CreatedAt.ToString("MMM dd, yyyy")</small>
+                            </div>
+                            
+                            <p class="mt-2 mb-2 text-dark">@review.Comment</p>
+
+                            @if (!string.IsNullOrEmpty(review.ImageUrls))
+                            {
+                                <div class="d-flex flex-wrap gap-2 mb-3">
+                                    @foreach (var url in review.ImageUrls.Split(','))
+                                    {
+                                        <img src="@url" class="rounded review-image" style="width: 100px; height: 100px; object-fit: cover; cursor: pointer;" onclick="window.open('@url', '_blank')" />
+                                    }
+                                </div>
+                            }
+
+                            <!-- Reactions -->
+                            <div class="d-flex align-items-center gap-3 mb-2">
+                                <button class="btn btn-sm @(review.IsLikedByCurrentUser ? "btn-primary" : "btn-outline-primary")" onclick="reactToReview(@review.Id, 'Like')">
+                                    <i class="bi bi-hand-thumbs-up"></i> <span id="like-count-@review.Id">@review.LikeCount</span>
+                                </button>
+                                <button class="btn btn-sm @(review.IsDislikedByCurrentUser ? "btn-danger" : "btn-outline-danger")" onclick="reactToReview(@review.Id, 'Dislike')">
+                                    <i class="bi bi-hand-thumbs-down"></i> <span id="dislike-count-@review.Id">@review.DislikeCount</span>
+                                </button>
+                                @if (User.Identity?.IsAuthenticated == true && (User.IsInRole("Admin") || User.IsInRole("Employee")))
+                                {
+                                    <button class="btn btn-link btn-sm text-decoration-none" onclick="toggleReplyBox(@review.Id)">Reply</button>
+                                }
+                            </div>
+
+                            <!-- Replies -->
+                            @if (review.Replies != null && review.Replies.Any())
+                            {
+                                <div class="ms-5 mt-3 border-start ps-3 py-1 bg-light rounded">
+                                    @foreach (var reply in review.Replies)
+                                    {
+                                        <div class="mb-2">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <span class="fw-bold small @(reply.IsSeller ? "text-danger" : "text-primary")">
+                                                    @(reply.IsSeller ? "Seller Response" : reply.ReplierName)
+                                                </span>
+                                                <small class="text-muted" style="font-size: 0.7rem;">@reply.CreatedAt.ToString("MMM dd, HH:mm")</small>
+                                            </div>
+                                            <p class="small mb-0">@reply.ReplyText</p>
+                                        </div>
+                                    }
+                                </div>
+                            }
+
+                            <!-- Reply Box (Hidden by default) -->
+                            <div id="reply-box-@review.Id" class="ms-5 mt-2" style="display: none;">
+                                <div class="input-group">
+                                    <input type="text" id="reply-text-@review.Id" class="form-control form-control-sm" placeholder="Write a reply..." />
+                                    <button class="btn btn-sm btn-primary" onclick="submitReply(@review.Id)">Send</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p class="text-muted">No reviews yet. Be the first to review!</p>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Products Section -->
+    <div class="mt-5 mb-5">
+        <h4 class="mb-4">Related Products</h4>
+        <div class="row">
+            @if (Model.RelatedProducts != null && Model.RelatedProducts.Any())
+            {
+                foreach (var product in Model.RelatedProducts)
+                {
+                    <div class="col-md-2 col-6 mb-4">
+                        <div class="card h-100 border-0 text-center">
+                            <a asp-action="Details" asp-route-id="@product.Id" class="text-decoration-none">
+                                <img src="@(string.IsNullOrEmpty(product.ImageUrl) ? "/images/no-image.png" : (product.ImageUrl.StartsWith("/") ? product.ImageUrl : "/images/products/" + product.ImageUrl))" 
+                                     class="card-img-top rounded" style="height: 150px; object-fit: cover;" />
+                                <div class="card-body p-2">
+                                    <h6 class="text-dark text-truncate mb-1">@product.Name</h6>
+                                    <div class="text-danger fw-bold">৳ @product.Price</div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p class="text-muted col-12">No related products found.</p>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Live Chat Floating Button -->
+<button onclick="window.location.href='/Home/Contact'" class="live-chat-btn" title="Contact Us">
+    <i class="bi bi-chat-dots-fill"></i>
+    <span>Message</span>
+</button>
+
+<!-- Chat Box -->
+<div id="chatBox" class="chat-box">
+    <div class="chat-header">
+        <div>
+            <h6 class="mb-0">Live Chat Support</h6>
+            <small>We're here to help!</small>
+        </div>
+        <button onclick="toggleChat()" class="btn btn-sm text-white" style="font-size: 20px; padding: 0; border: none; background: transparent;">×</button>
+    </div>
+    <div class="chat-body" id="chatMessages">
+        <div class="chat-message support">
+            <strong>Support Team</strong>
+            <p class="mb-0 small">Hello! How can we help you today?</p>
+        </div>
+    </div>
+    <div class="chat-footer">
+        <input type="text" id="chatInput" class="form-control" placeholder="Type your message..." onkeypress="if(event.key==='Enter') sendMessage()">
+        <button onclick="sendMessage()" class="btn btn-success"><i class="bi bi-send-fill"></i></button>
+    </div>
+</div>
+
+<script>
+    function toggleChat() {
+        const chatBox = document.getElementById('chatBox');
+        chatBox.classList.toggle('active');
+    }
+
+    function sendMessage() {
+        const input = document.getElementById('chatInput');
+        const message = input.value.trim();
+        if (!message) return;
+
+        const chatMessages = document.getElementById('chatMessages');
+        const userMsg = document.createElement('div');
+        userMsg.className = 'chat-message user';
+        userMsg.innerHTML = `<strong>You</strong><p class="mb-0 small">${message}</p>`;
+        chatMessages.appendChild(userMsg);
+        
+        input.value = '';
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        // Auto-reply after 1 second
+        setTimeout(() => {
+            const supportMsg = document.createElement('div');
+            supportMsg.className = 'chat-message support';
+            supportMsg.innerHTML = `<strong>Support Team</strong><p class="mb-0 small">Thank you for your message. An agent will respond shortly. For immediate assistance, please call us or visit our <a href="/Home/Contact">Contact Page</a>.</p>`;
+            chatMessages.appendChild(supportMsg);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }, 1000);
+    }
+
+    function changeQty(amt) {
+        const input = document.getElementById('quantityInput');
+        let val = parseInt(input.value) + amt;
+        if (val < 1) val = 1;
+        
+        // Get current max based on size
+        const maxLimit = parseInt(input.getAttribute('max')) || @Model.Product.StockQty;
+        if (val > maxLimit) val = maxLimit;
+        
+        input.value = val;
+        checkStock(input);
+    }
+
+    function checkStock(input) {
+        const val = parseInt(input.value);
+        const stock = parseInt(input.getAttribute('max')) || 0;
+        const maxOrderLimit = @(Model.Product.MaxOrderQty.HasValue && Model.Product.MaxOrderQty.Value > 0 ? Model.Product.MaxOrderQty.Value : "null");
+        const warning = document.getElementById('stockWarning');
+        
+        if (val > stock) {
+            warning.innerText = `Sorry, only ${stock} units are in stock for this size.`;
+            warning.style.display = 'block';
+        } else if (maxOrderLimit !== null && val > maxOrderLimit) {
+            warning.innerHTML = `Maximum purchase limit is ${maxOrderLimit} units. If you need more than ${maxOrderLimit} products then <a href="/Home/Contact" class="btn btn-sm btn-link text-danger p-0 fw-bold">Contact Us</a>`;
+            warning.style.display = 'block';
+        } else {
+            warning.style.display = 'none';
+        }
+    }
+
+    function reactToReview(reviewId, reactionType) {
+        @if (!User.Identity?.IsAuthenticated == true)
+        {
+            <text>window.location.href = '/Account/Login'; return;</text>
+        }
+        
+        $.post('/Review/React', { reviewId: reviewId, reactionType: reactionType }, function(data) {
+            if (data.success) {
+                location.reload(); // Simplest way to update UI
+            }
+        });
+    }
+
+    function toggleReplyBox(reviewId) {
+        const box = document.getElementById(`reply-box-${reviewId}`);
+        box.style.display = box.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function submitReply(reviewId) {
+        const text = document.getElementById(`reply-text-${reviewId}`).value;
+        if (!text.trim()) return;
+
+        $.post('/Review/Reply', { reviewId: reviewId, replyText: text }, function(data) {
+            if (data.success) {
+                location.reload();
+            }
+        });
+    }
+
+    document.querySelectorAll('.size-select').forEach(radio => {
+        radio.addEventListener('change', function() {
+            const size = this.value;
+            const sizeStockData = document.querySelector(`.size-data[data-size="${size}"]`);
+            const display = document.getElementById('sizeStockDisplay');
+            const qtyInput = document.getElementById('quantityInput');
+            const limitMsg = document.getElementById('stockLimitMsg');
+            
+            if (sizeStockData) {
+                const stock = parseInt(sizeStockData.getAttribute('data-stock'));
+                display.innerText = stock > 0 ? `${stock} units currently in stock` : 'Out of Stock';
+                display.style.color = stock > 0 ? '#198754' : '#dc3545';
+                
+                qtyInput.setAttribute('max', stock);
+                limitMsg.innerText = `(Stock: ${stock} units | Max: @(Model.Product.MaxOrderQty > 0 ? Model.Product.MaxOrderQty.ToString() : "No Limit"))`;
+                
+                if (parseInt(qtyInput.value) > stock) {
+                    qtyInput.value = stock > 0 ? 1 : 0;
+                }
+            } else {
+                display.innerText = 'Stock information not available';
+                display.style.color = '#6c757d';
+            }
+            checkStock(qtyInput);
+        });
+    });
+
+    let selectedFiles = [];
+
+    function previewImages(input) {
+        const preview = document.getElementById('imagePreview');
+        const dt = new DataTransfer();
+        
+        if (input.files) {
+            selectedFiles = Array.from(input.files).slice(0, 5);
+            renderPreviews();
+        }
+    }
+
+    function renderPreviews() {
+        const preview = document.getElementById('imagePreview');
+        const input = document.querySelector('input[name="images"]');
+        preview.innerHTML = '';
+        
+        const dt = new DataTransfer();
+        selectedFiles.forEach((file, index) => {
+            dt.items.add(file);
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const container = document.createElement('div');
+                container.className = 'position-relative';
+                container.style.width = '80px';
+                container.style.height = '80px';
+
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.width = '100%';
+                img.style.height = '100%';
+                img.style.objectFit = 'cover';
+                img.style.borderRadius = '8px';
+                img.style.border = '2px solid #ddd';
+                
+                const delBtn = document.createElement('button');
+                delBtn.innerHTML = '×';
+                delBtn.className = 'btn btn-danger btn-sm position-absolute top-0 end-0 p-0';
+                delBtn.style.width = '20px';
+                delBtn.style.height = '20px';
+                delBtn.style.fontSize = '14px';
+                delBtn.style.lineHeight = '1';
+                delBtn.onclick = (e) => {
+                    e.preventDefault();
+                    selectedFiles.splice(index, 1);
+                    renderPreviews();
+                };
+
+                container.appendChild(img);
+                container.appendChild(delBtn);
+                preview.appendChild(container);
+            };
+            reader.readAsDataURL(file);
+        });
+        input.files = dt.files;
+    }
+</script>

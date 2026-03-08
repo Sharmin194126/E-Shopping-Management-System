@@ -1,0 +1,79 @@
+﻿@model IEnumerable<E_ShoppingManagement.ViewModels.EmployeeOrderListViewModel>
+
+@{
+    ViewData["Title"] = "Manage Orders";
+    Layout = "~/Views/Shared/_EmployeeLayout.cshtml";
+}
+
+<h2 class="mb-3">Manage Orders</h2>
+
+<div class="page-card p-3 mb-3">
+    <form asp-action="Index" method="get" class="row g-2">
+        <div class="col-md-3">
+            <select name="status" class="form-control">
+                <option value="">All Status</option>
+                <option value="Pending" selected="@(ViewBag.SelectedStatus == "Pending")">Pending</option>
+                <option value="Processing" selected="@(ViewBag.SelectedStatus == "Processing")">Processing</option>
+                <option value="Shipped" selected="@(ViewBag.SelectedStatus == "Shipped")">Shipped</option>
+                <option value="Delivered" selected="@(ViewBag.SelectedStatus == "Delivered")">Delivered</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-secondary w-100">Filter</button>
+        </div>
+    </form>
+</div>
+
+<div class="page-card p-3">
+    <table class="table table-hover table-bordered align-middle ">
+        <thead class="table-primary">
+            <tr>
+                <th>ID</th>
+                <th>Order Id</th>
+                <th>Customer</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Created</th>
+                <th style="width:140px;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var i = 1;
+            }
+            @if (!Model.Any())
+            {
+                <tr><td colspan="7" class="text-center text-muted">No orders found.</td></tr>
+            }
+            else
+            {
+                foreach (var o in Model)
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td>@o.OrderId</td>
+                        <td>@o.CustomerName</td>
+                        <td><span class="fw-bold">৳@o.TotalAmount</span></td>
+                        <td>
+                            @switch (o.OrderStatus)
+                            {
+                                case "Pending": <span class="badge bg-warning text-dark">Pending</span> break;
+                                case "Processing": <span class="badge bg-info">Processing</span> break;
+                                case "Shipped": <span class="badge bg-primary">Shipped</span> break;
+                                case "Delivered": <span class="badge bg-success">Delivered</span> break;
+                                case "Cancelled": <span class="badge bg-danger">Cancelled</span> break;
+                                default: <span class="badge bg-secondary">@o.OrderStatus</span> break;
+                            }
+                        </td>
+                        <td>@o.CreatedAt.ToLocalTime().ToString("dd-MM-yyyy, hh:mm tt")</td>
+                        <td>
+                            <a href="/EmployeeOrder/Details/@o.OrderId"
+                               class="btn btn-sm btn-outline-info">View Details</a>
+                        </td>
+                    </tr>
+                    i++;
+                }
+            }
+        </tbody>
+    </table>
+</div>

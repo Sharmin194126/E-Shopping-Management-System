@@ -1,0 +1,41 @@
+@{
+    ViewData["Title"] = "Track Your Order";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5 mb-5" style="max-width: 600px;">
+    <div class="card shadow-lg border-0">
+        <div class="card-body p-5 text-center">
+            <i class="bi bi-truck display-1 text-primary mb-4"></i>
+            <h2 class="mb-3">Track Your Order</h2>
+            <p class="text-muted mb-4">Enter your Order ID to see the current status of your delivery.</p>
+            
+            <form id="trackForm" class="text-start">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Order ID</label>
+                    <input type="number" id="orderIdInput" class="form-control form-control-lg" placeholder="e.g. 1024" required />
+                </div>
+                <button type="submit" class="btn btn-primary w-100 btn-lg">Track Now</button>
+            </form>
+            
+            <div id="trackResult" class="mt-4 text-start" style="display: none;">
+                <div class="alert alert-info">
+                    <h5 class="alert-heading">Order #<span id="resId"></span></h5>
+                    <p class="mb-0">Status: <strong id="resStatus"></strong></p>
+                    <hr>
+                    <p class="mb-0 small">Last update: <span id="resDate"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Ideally this would be an AJAX call to an API endpoint
+        document.getElementById('trackForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert("Tracking functionality requires backend integration. For now, please check your Order History in your Dashboard.");
+        });
+    </script>
+}

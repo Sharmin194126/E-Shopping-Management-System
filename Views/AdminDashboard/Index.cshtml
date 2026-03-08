@@ -1,0 +1,204 @@
+﻿@model E_ShoppingManagement.ViewModels.AdminStatsViewModel
+@{
+    ViewData["Title"] = "Admin Dashboard";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    .stat-card {
+        padding: 20px;
+        border-radius: 10px;
+        color: white;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .bg-delivered { background-color: #28a745; }
+    .bg-pending { background-color: #ffc107; color: #333; }
+    .bg-processing { background-color: #17a2b8; }
+    .bg-revenue { background-color: #6f42c1; }
+    
+    .table-container {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 12px;
+        margin-top: 30px;
+        border: 1px solid #dee2e6;
+    }
+    .table-container h4 {
+        color: #333;
+        margin-bottom: 20px;
+    }
+    .nav-shortcuts .dash-card {
+        padding: 15px;
+        text-align: center;
+        border-radius: 8px;
+        transition: 0.3s;
+    }
+    .nav-shortcuts .dash-card:hover {
+        transform: translateY(-5px);
+    }
+</style>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="mb-0">📊 Admin Dashboard Overview</h3>
+    <a asp-action="Profile" class="btn btn-warning fw-bold text-dark shadow-sm">
+        <i class="bi bi-person-circle me-1"></i> Account Profille
+    </a>
+</div>
+
+<!-- KEY STATS -->
+<div class="row">
+    <div class="col-md-3">
+        <a asp-action="OrdersByStatus" asp-route-status="Delivered" style="text-decoration: none;">
+            <div class="stat-card bg-delivered">
+                <h4>@Model.TotalDelivered</h4>
+                <p>Delivered Orders</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-3">
+        <a asp-action="OrdersByStatus" asp-route-status="Pending" style="text-decoration: none;">
+            <div class="stat-card bg-pending">
+                <h4>@Model.TotalPending</h4>
+                <p>Pending Orders</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-3">
+        <a asp-action="OrdersByStatus" asp-route-status="Processing" style="text-decoration: none;">
+            <div class="stat-card bg-processing">
+                <h4>@Model.TotalProcessing</h4>
+                <p>Processing Orders</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-3">
+        <a asp-action="OrdersByStatus" asp-route-status="Shipped" style="text-decoration: none;">
+            <div class="stat-card bg-primary">
+                <h4>@Model.TotalShipped</h4>
+                <p>Shipped Orders</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card bg-revenue">
+            <h4>৳ @Model.TotalRevenue</h4>
+            <p>Total Revenue</p>
+        </div>
+    </div>
+</div>
+
+<!-- MANAGEMENT LINKS -->
+<div class="row g-3 nav-shortcuts mb-4">
+    <div class="col-6 col-md-2">
+        <a asp-controller="Category" asp-action="Index" class="btn btn-primary w-100">Categories</a>
+    </div>
+    <div class="col-6 col-md-2">
+        <a asp-controller="Product" asp-action="Index" class="btn btn-success w-100">Products</a>
+    </div>
+    <div class="col-6 col-md-2">
+        <a asp-controller="Customer" asp-action="Index" class="btn btn-info w-100">Customers</a>
+    </div>
+    <div class="col-6 col-md-2">
+        <a asp-controller="Employee" asp-action="Index" class="btn btn-dark w-100">Employees</a>
+    </div>
+    <div class="col-6 col-md-2">
+        <a asp-controller="AdminReport" asp-action="Index" class="btn btn-secondary w-100">Reports</a>
+    </div>
+    <div class="col-6 col-md-2">
+        <a asp-controller="AdminDashboard" asp-action="FooterSettings" class="btn btn-warning w-100">Footer Settings</a>
+    </div>
+    <div class="col-6 col-md-2">
+        <a asp-controller="AdminDashboard" asp-action="PaymentMethods" class="btn btn-info w-100">Payment Methods</a>
+    </div>
+    <div class="col-6 col-md-2">
+        <a asp-controller="DeliveryMan" asp-action="Index" class="btn btn-secondary w-100">Delivery Men</a>
+    </div>
+</div>
+
+<div class="row">
+    <!-- ORDER DETAILS TABLE -->
+    <div class="col-md-8">
+        <div class="table-container">
+            <h4>Recent Orders Detailed View</h4>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle" style="background: white;">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Ref</th>
+                            <th>Customer</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Payment</th>
+                            <th>Location</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var order in Model.RecentOrders)
+                        {
+                            <tr>
+                                <td>#@order.OrderId</td>
+                                <td>@order.CustomerName</td>
+                                <td>@order.OrderDate.ToString("MMM dd, yyyy")</td>
+                                <td>৳ @order.Amount</td>
+                                <td>
+                                    @switch (order.Status)
+                                    {
+                                        case "Delivered": <span class="badge bg-success">Delivered</span> break;
+                                        case "Pending": <span class="badge bg-warning text-dark">Pending</span> break;
+                                        case "Processing": <span class="badge bg-info">Processing</span> break;
+                                        case "Shipped": <span class="badge bg-primary">Shipped</span> break;
+                                        default: <span class="badge bg-secondary">@order.Status</span> break;
+                                    }
+                                </td>
+                                <td>
+                                    <small class="badge bg-light text-dark">@order.PaymentStatus (@order.PaymentMethod)</small>
+                                </td>
+                                <td><small>@order.ShippingAddress</small></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- EMPLOYEE PERFORMANCE -->
+    <div class="col-md-4">
+        <div class="table-container">
+            <h4>Employee Stats</h4>
+            <table class="table table-sm" style="background: white;">
+                <thead>
+                    <tr>
+                        <th>Employee</th>
+                        <th>Products</th>
+                        <th>Sold</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var emp in Model.EmployeePerformances)
+                    {
+                        <tr>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                        <a asp-action="EmployeeDashboard" asp-route-employeeId="@emp.EmployeeId" style="text-decoration:none; color:inherit;">@emp.EmployeeName</a>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" asp-action="EmployeeProducts" asp-route-employeeId="@emp.EmployeeId">View Managed Products</a></li>
+                                        <li><a class="dropdown-item" asp-action="EmployeeSalesDetails" asp-route-employeeId="@emp.EmployeeId">View Sales Report</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                            <td>@emp.TotalProductsManaged</td>
+                            <td>@emp.ProductsSold</td>
+                            <td style="font-weight: 600;">৳@emp.TotalSalesValue</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

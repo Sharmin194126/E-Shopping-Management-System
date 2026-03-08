@@ -1,0 +1,50 @@
+@model E_ShoppingManagement.Models.Users
+@{
+    ViewData["Title"] = "Admin Profile";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="page-card p-5">
+                <div class="text-center mb-4">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 100px; height: 100px; font-size: 3rem;">
+                        @(Model.FullName?[0] ?? 'A')
+                    </div>
+                    <h2 class="mt-3">@Model.FullName</h2>
+                    <span class="badge bg-danger">Administrator</span>
+                </div>
+
+                <hr />
+
+                <div class="row mt-4">
+                    <div class="col-md-6 mb-3">
+                        <label class="fw-bold text-muted small text-uppercase">User Name</label>
+                        <p class="fs-5">@Model.UserName</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="fw-bold text-muted small text-uppercase">Email Address</label>
+                        <p class="fs-5">@Model.Email</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="fw-bold text-muted small text-uppercase">Account Role</label>
+                        <p class="fs-5">@Model.Role</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="fw-bold text-muted small text-uppercase">Security Status</label>
+                        <p class="fs-5 text-success"><i class="bi bi-shield-check"></i> Active & Secured</p>
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex gap-2">
+                    <a asp-controller="Account" asp-action="ChangePassword" asp-route-username="@Model.UserName" class="btn btn-warning">Change Password</a>
+                    <a asp-action="Index" class="btn btn-secondary">Back to Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

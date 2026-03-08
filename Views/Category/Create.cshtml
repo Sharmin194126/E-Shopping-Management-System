@@ -1,0 +1,84 @@
+﻿@model E_ShoppingManagement.Models.Category
+
+@{
+    ViewData["Title"] = "Create Category";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="mb-3">Create Category</h2>
+
+<div class="page-card p-4">
+    <form asp-action="Create" method="post" enctype="multipart/form-data">
+
+        <div class="row g-3">
+
+            <!-- NAME -->
+            <div class="col-md-6">
+                <label asp-for="Name" class="fw-bold mb-1"></label>
+                <input asp-for="Name" class="form-control input-visible" placeholder="Enter category name" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <!-- DESCRIPTION -->
+            <div class="col-md-6">
+                <label asp-for="Description" class="fw-bold mb-1"></label>
+                <textarea asp-for="Description"
+                          class="form-control input-visible"
+                          rows="3"
+                          placeholder="Write category description..."></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <!-- STATUS -->
+            <div class="col-md-6">
+                <label asp-for="Status" class="fw-bold mb-1"></label>
+                <select asp-for="Status" class="form-control input-visible">
+                    <option value="">Select Status</option>
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                </select>
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+
+            <!-- IMAGE -->
+            <div class="col-md-6">
+                <label class="fw-bold mb-1">Image</label>
+                <input type="file"
+                       name="ImageFile"
+                       class="form-control input-visible"
+                       accept="image/*"
+                       onchange="previewImage(event)" />
+            </div>
+
+            <!-- IMAGE PREVIEW -->
+            <div class="col-md-12">
+                <label class="fw-bold mb-1">Image Preview</label>
+                <img id="imagePreview"
+                     style="display:none; width:150px; height:150px; object-fit:cover; border-radius:6px; border:1px solid #ddd;" />
+            </div>
+
+        </div>
+
+        <div class="mt-4 d-flex justify-content-between">
+            <a asp-action="Index" class="btn btn-secondary">↩ Back</a>
+            <button type="submit" class="btn btn-success">💾 Save Category</button>
+        </div>
+
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        function previewImage(event) {
+            const img = document.getElementById('imagePreview');
+            if (event.target.files && event.target.files[0]) {
+                img.src = URL.createObjectURL(event.target.files[0]);
+                img.style.display = 'block';
+            } else {
+                img.style.display = 'none';
+            }
+        }
+    </script>
+}

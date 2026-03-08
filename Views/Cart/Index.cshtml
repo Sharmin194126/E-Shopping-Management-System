@@ -1,0 +1,112 @@
+﻿@model E_ShoppingManagement.ViewModels.CartViewModel
+
+@{
+    ViewData["Title"] = "My Cart";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // customer layout
+}
+
+<h2 class="mb-3">My Cart</h2>
+
+<div class="page-card p-4" style="background: #f8f9fa; border-radius: 12px; border: 1px solid #ddd;">
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert @(TempData["IsSuccess"] != null && (TempData["IsSuccess"] as bool? == true) ? "alert-success" : "alert-info")">
+            @TempData["Message"]
+        </div>
+    }
+
+    @if (Model.Items == null || !Model.Items.Any())
+    {
+        <p class="text-muted" style="color: #666 !important;">Your cart is empty.</p>
+    }
+    else
+    {
+            <div class="table-responsive">
+                <table class="table table-hover align-middle" style="background: white; border-radius: 8px; overflow: hidden;">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Image</th>
+                            <th>Product</th>
+                            <th style="width:120px;">Price</th>
+                            <th style="width:150px;">Size</th>
+                            <th style="width:150px;">Quantity</th>
+                            <th style="width:120px;">Total</th>
+                            <th style="width:120px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Items)
+                        {
+                            <tr>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(item.ImageUrl))
+                                    {
+                                        <img src="@(item.ImageUrl.StartsWith("/") ? item.ImageUrl : "/images/products/" + item.ImageUrl)"
+                                             style="width:60px;height:60px;object-fit:cover;border-radius:4px; border: 1px solid #eee;" />
+                                    }
+                                </td>
+                                <td>
+                                    <div style="font-weight: 600; color: #333;">@item.ProductName</div>
+                                </td>
+                                <td style="color: #d9534f; font-weight: bold;">
+                                    ৳@item.UnitPrice
+                                    @if(item.VatAmount > 0) {
+                                        <div class="small text-muted" style="font-size: 10px;">+ ৳@item.VatAmount VAT</div>
+                                    }
+                                </td>
+                                <td>
+                                    <form asp-action="UpdateSize" method="post">
+                                        <input type="hidden" name="cartItemId" value="@item.CartItemId" />
+                                        <select name="size" class="form-select form-select-sm" onchange="this.form.submit()" style="background: #fff; color: #333; border: 1px solid #ccc;">
+                                            <option value="">Select Size</option>
+                                            @foreach (var s in new[] { "L", "M", "XL", "XXL" })
+                                            {
+                                                <option value="@s" selected="@(item.Size == s)">@s</option>
+                                            }
+                                        </select>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form asp-action="Update" method="post" class="d-flex align-items-center">
+                                        <input type="hidden" name="cartItemId" value="@item.CartItemId" />
+                                        <div class="d-flex align-items-center" style="border: 1px solid #999; border-radius: 5px; overflow: hidden; width: fit-content;">
+                                            <input type="number" name="quantity" value="@item.Quantity" min="1" 
+                                                   class="form-control text-center fw-bold border-0" 
+                                                   style="background: #fff; color: #000 !important; font-size: 1.2rem; width: 80px; padding: 5px;" 
+                                                   onchange="this.form.submit()" />
+                                            <div class="d-flex flex-column bg-light border-start">
+                                                <button type="button" onclick="this.parentNode.previousElementSibling.stepUp(); this.parentNode.previousElementSibling.dispatchEvent(new Event('change'));" class="btn btn-sm btn-light border-bottom py-0 px-2" style="font-size: 0.8rem; line-height: 1;">▲</button>
+                                                <button type="button" onclick="this.parentNode.previousElementSibling.stepDown(); this.parentNode.previousElementSibling.dispatchEvent(new Event('change'));" class="btn btn-sm btn-light py-0 px-2" style="font-size: 0.8rem; line-height: 1;">▼</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </td>
+                                <td style="font-weight: bold; color: #2c3e50;">৳@item.LineTotal</td>
+                                <td>
+                                    <form asp-action="Remove" method="post">
+                                        <input type="hidden" name="cartItemId" value="@item.CartItemId" />
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Remove</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        <div class="d-flex justify-content-between align-items-center mt-4 p-3" style="background: #eee; border-radius: 8px;">
+            <div>
+                <form asp-action="Clear" method="post">
+                    <button type="submit" class="btn btn-danger btn-sm">Clear Cart</button>
+                </form>
+            </div>
+            <div class="d-flex align-items-center gap-4">
+                <span class="fs-4" style="color: #333;"><strong>Total: </strong> <span style="color: #d9534f; font-weight: 800;">@Model.Total</span></span>
+                <a href="/Order/Checkout" class="btn btn-success px-4 py-2" style="font-weight: bold;">Checkout Now</a>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+}

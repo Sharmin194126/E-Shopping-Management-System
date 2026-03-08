@@ -1,0 +1,149 @@
+@model E_ShoppingManagement.Models.Order
+@{
+    ViewData["Title"] = "Money Receipt";
+    Layout = null; // No layout for printable receipt
+    var company = ViewBag.CompanyInfo as E_ShoppingManagement.Models.FooterInfo;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Money Receipt - @Model.Id</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 30px; background: #f0f2f5; }
+        .receipt-container { 
+            background: white; 
+            padding: 40px; 
+            border-radius: 15px; 
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: auto;
+        }
+        .receipt-header { border-bottom: 2px solid #eee; padding-bottom: 20px; margin-bottom: 30px; }
+        .company-name { font-family: 'French Script MT', cursive; font-size: 48px; color: #007bff; font-weight: bold; }
+        .receipt-title { font-size: 24px; font-weight: bold; color: #333; text-transform: uppercase; letter-spacing: 2px; }
+        .info-label { font-weight: bold; color: #666; width: 150px; display: inline-block; }
+        .table thead { background: #007bff; color: white; }
+        .total-section { border-top: 2px solid #eee; margin-top: 20px; padding-top: 10px; }
+        .paid-stamp { 
+            border: 3px solid #28a745; 
+            color: #28a745; 
+            padding: 5px 15px; 
+            display: inline-block; 
+            font-size: 32px; 
+            font-weight: 800; 
+            transform: rotate(-15deg); 
+            border-radius: 10px;
+            opacity: 0.8;
+        }
+        @@media print {
+            .no-print { display: none; }
+            body { background: white; padding: 0; }
+            .receipt-container { box-shadow: none; border: 1px solid #eee; }
+        }
+    </style>
+</head>
+<body>
+    <div class="no-print text-center mb-4">
+        <button onclick="window.print()" class="btn btn-primary btn-lg px-5 shadow">Print / Download Receipt</button>
+        <a href="/CustomerDashboard/Orders" class="btn btn-secondary btn-lg px-5 shadow ms-3">Back to Dashboard</a>
+    </div>
+
+    <div class="receipt-container">
+        <div class="receipt-header d-flex justify-content-between align-items-center">
+            <div>
+                <div class="company-name">EShop</div>
+                <div>@company?.Address</div>
+                <div>Phone: @company?.ContactNumber</div>
+                <div>Email: @company?.Email</div>
+            </div>
+            <div class="text-end">
+                <div class="receipt-title">Money Receipt</div>
+                <div class="mt-2 text-muted">Date: @Model.CreatedAt.ToString("dd MMM yyyy")</div>
+                <div class="mt-1"><strong>Invoice: #@Model.Id</strong></div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-6">
+                <h5 class="mb-3 text-primary">Customer Details</h5>
+                <div><span class="info-label">Name:</span> @(Model.Customer?.Name ?? Model.CreatedBy)</div>
+                <div><span class="info-label">Phone:</span> @Model.PhoneNumber</div>
+                <div><span class="info-label">Address:</span> @Model.ShippingAddress</div>
+            </div>
+            <div class="col-6 text-end d-flex align-items-center justify-content-end">
+                @if (Model.PaymentStatus == "Paid")
+                {
+                    <div class="paid-stamp">PAID</div>
+                }
+            </div>
+        </div>
+
+        <table class="table table-bordered mt-4">
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th class="text-center">Price</th>
+                    <th class="text-center">Quantity</th>
+                    <th class="text-end">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.OrderDetails != null)
+                {
+                    foreach (var item in Model.OrderDetails)
+                    {
+                        <tr>
+                            <td>
+                                @(item.Product?.Name ?? "Product") (@(item.Size ?? "N/A"))
+                                @if (item.OfferPercentage > 0)
+                                {
+                                    <br /><small class="text-success fw-bold">(@item.OfferPercentage% Offer applied)</small>
+                                }
+                            </td>
+                            <td class="text-center">
+                                ৳@item.Price <br />
+                                <small class="text-muted">+ ৳@item.VatAmount VAT</small>
+                            </td>
+                            <td class="text-center">@item.Quantity</td>
+                            <td class="text-end">৳@(item.PriceWithVat * item.Quantity)</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3" class="text-end font-weight-bold">Subtotal (Excl. VAT)</td>
+                    <td class="text-end">৳@Model.OrderDetails?.Sum(i => i.Price * i.Quantity)</td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="text-end font-weight-bold">Total VAT</td>
+                    <td class="text-end">৳@Model.OrderDetails?.Sum(i => i.VatAmount * i.Quantity)</td>
+                </tr>
+                <tr class="table-info">
+                    <td colspan="3" class="text-end fw-bold fs-5">Total Paid</td>
+                    <td class="text-end fw-bold fs-5">৳@Model.TotalAmount</td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <div class="mt-5 pt-5 d-flex justify-content-between">
+            <div class="text-center" style="border-top: 1px solid #000; width: 150px;">
+                Customer Signature
+            </div>
+            <div class="text-center" style="border-top: 1px solid #000; width: 150px;">
+                Authorized Signature
+            </div>
+        </div>
+
+        <div class="mt-5 text-center text-muted small">
+            Thank you for shopping with EShop! This is a computer generated receipt.
+        </div>
+    </div>
+
+    <script>
+        // Auto-print if needed can be added here
+    </script>
+</body>
+</html>

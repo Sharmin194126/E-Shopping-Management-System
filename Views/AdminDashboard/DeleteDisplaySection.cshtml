@@ -1,0 +1,19 @@
+@model E_ShoppingManagement.Models.DisplaySection
+@{
+    ViewData["Title"] = "Delete Display Section";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="mb-3 text-danger">Delete Display Section</h2>
+
+<div class="page-card text-center" style="max-width: 500px; margin: 0 auto; border-color: #dc3545;">
+    <h4 class="mb-3">Are you sure?</h4>
+    <p>You are about to delete the section: <strong>@Model.Name</strong></p>
+    <p class="text-muted mb-4">This action cannot be undone.</p>
+
+    <form asp-action="DeleteDisplaySection" method="post">
+        <input type="hidden" asp-for="Id" />
+        <a asp-action="ManageDisplaySections" class="btn btn-secondary me-2">Cancel</a>
+        <button type="submit" class="btn btn-danger">Confirm Delete</button>
+    </form>
+</div>

@@ -1,0 +1,173 @@
+@model IEnumerable<E_ShoppingManagement.Models.Order>
+@{
+    ViewData["Title"] = "Delivery Dashboard";
+    var dm = ViewBag.DeliveryMan as E_ShoppingManagement.Models.DeliveryMan;
+}
+
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-card p-4 mb-4" style="border-left: 5px solid #6f42c1;">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h2 class="mb-1 text-primary">Welcome, @dm?.Name!</h2>
+                        <p class="text-muted mb-0">Vehicle: @(dm?.VehicleInfo ?? "N/A") | Status: <span class="badge bg-success">@dm?.Status</span></p>
+                    </div>
+                    <div class="text-end">
+                        <div class="clock-display" id="dm-clock"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="page-card text-center p-3 bg-white shadow-sm">
+                <h3 class="text-primary">৳@(dm?.TotalEarnings ?? 0)</h3>
+                <p class="mb-0 fw-bold">Total Earnings</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="page-card text-center p-3 shadow-sm"
+                 style="background: #e6fff2; border-left: 5px solid #28a745;">
+                <h3 class="text-success fw-bold"> ৳@(dm?.PendingAmount ?? 0)</h3>
+                <p class="mb-0 fw-bold text-success">Pending Payment</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="page-card text-center p-3 bg-white shadow-sm">
+                <h3 class="text-success">@Model.Count(o => o.OrderStatus == "Delivered")</h3>
+                <p class="mb-0 fw-bold">Total Deliveries</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="page-card text-center p-3 shadow-sm"
+                 style="background: #ffe6e6; border-left: 5px solid #dc3545;">
+                <h3 class="text-danger fw-bold">@Model.Count(o => o.OrderStatus == "Returned")
+                </h3>
+                <p class="mb-0 fw-bold text-danger">Returned Parcels</p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="page-card p-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="mb-0">My Assigned Orders</h4>
+            <a asp-action="Profile" asp-route-id="@dm?.Id" class="btn btn-outline-primary"><i class="bi bi-person-badge"></i> My Profile</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Order #</th>
+                        <th>Customer</th>
+                        <th>Address</th>
+                        <th>Contact</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Payment</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var order in Model)
+                    {
+                        <tr>
+                            <td>#@order.Id</td>
+                            <td><span class="fw-bold">@order.Customer?.Name</span></td>
+                            <td><small>@order.ShippingAddress, @order.City</small></td>
+                            <td>@order.PhoneNumber</td>
+                            <td>৳@order.TotalAmount</td>
+                            <td>
+                                @switch(order.OrderStatus)
+                                {
+                                    case "Delivered": <span class="badge bg-success">Delivered</span> break;
+                                    case "Returned": <span class="badge bg-danger">Returned</span> break;
+                                    case "On the way": <span class="badge bg-info">On the way</span> break;
+                                    case "Waiting": <span class="badge bg-secondary">Waiting (Cust. not received)</span> break;
+                                    default: <span class="badge bg-warning text-dark">@order.OrderStatus</span> break;
+                                }
+                                @if(!string.IsNullOrEmpty(order.ReturnReason))
+                                {
+                                    <br/><small class="text-danger">Reason: @order.ReturnReason</small>
+                                }
+                            </td>
+                            <td>
+                                <span class="badge @(order.PaymentStatus == "Paid" ? "bg-success" : "bg-warning")">@order.PaymentStatus</span>
+                            </td>
+                            <td>
+                                <div class="d-flex gap-1">
+                                    <a asp-controller="Order" asp-action="Details" asp-route-id="@order.Id" class="btn btn-sm btn-info text-white">View</a>
+                                    
+                                    @if (order.OrderStatus != "Delivered" && order.OrderStatus != "Returned")
+                                    {
+                                        <button class="btn btn-sm btn-warning text-dark fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#update-@order.Id">Update Status</button>
+                                    }
+                                </div>
+                                <div class="collapse mt-2" id="update-@order.Id">
+                                    <form asp-action="UpdateStatus" method="post" class="p-2 border rounded bg-light">
+                                        <input type="hidden" name="orderId" value="@order.Id" />
+                                        <div class="mb-2">
+                                            <label class="small fw-bold">Change Status:</label>
+                                            <select name="status" class="form-select form-select-sm" onchange="toggleReason(this, @order.Id)">
+                                                <option value="On the way">On the way</option>
+                                                <option value="Delivered">Delivered</option>
+                                                <option value="Waiting">Waiting (Not received)</option>
+                                                <option value="Returned">Return Parcel</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-2 d-none" id="reason-div-@order.Id">
+                                            <label class="small fw-bold text-danger">Return Reason:</label>
+                                            <input type="text" name="reason" class="form-control form-control-sm" placeholder="Why returned?" />
+                                        </div>
+                                        @if(order.PaymentStatus != "Paid")
+                                        {
+                                            <div class="form-check mb-2 bg-success text-white p-2 rounded">
+                                                <input class="form-check-input ms-1" type="checkbox" name="paymentStatus" value="Paid" id="pay-@order.Id">
+                                                <label class="form-check-label small fw-bold ms-1" for="pay-@order.Id">Mark Payment as Received</label>
+                                            </div>
+                                        }
+                                        <button type="submit" class="btn btn-sm btn-success w-100 mt-1">Submit Update</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="8" class="text-center py-5">
+                                <i class="bi bi-box-seam fs-1 text-muted"></i>
+                                <p class="mt-2">No orders assigned to you yet.</p>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleReason(select, orderId) {
+        const div = document.getElementById('reason-div-' + orderId);
+        if (select.value === 'Returned') {
+            div.classList.remove('d-none');
+        } else {
+            div.classList.add('d-none');
+        }
+    }
+</script>
+
+@section Scripts {
+    <script>
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('dm-clock').innerText = now.toLocaleTimeString();
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+}

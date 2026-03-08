@@ -1,0 +1,59 @@
+@model IEnumerable<E_ShoppingManagement.Models.Order>
+@{
+    ViewData["Title"] = "Employee Sales Details";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="mb-4">Sales Report: @ViewBag.EmployeeName</h2>
+
+<div class="page-card p-4" style="background: white; border-radius: 12px; border: 1px solid #eee;">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer</th>
+                    <th>Date</th>
+                    <th>Products</th>
+                    <th>Total Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in Model)
+                {
+                    <tr>
+                        <td>@order.Id</td>
+                        <td>@order.Customer?.Name</td>
+                        <td>@order.CreatedAt.ToString("MMM dd, yyyy")</td>
+                        <td>
+                            <div class="d-flex flex-column gap-2">
+                                @foreach (var item in order.OrderDetails)
+                                {
+                                    <div class="d-flex align-items-center gap-2 p-1" style="background: #f8f9fa; border-radius: 4px; border: 1px solid #eee;">
+                                        @if (!string.IsNullOrEmpty(item.Product?.ImageUrl))
+                                        {
+                                            <img src="@item.Product.ImageUrl" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;" />
+                                        }
+                                        else
+                                        {
+                                            <div style="width: 40px; height: 40px; background: #ddd; border-radius: 4px;"></div>
+                                        }
+                                        <div>
+                                            <div style="font-size: 0.85rem; font-weight: 600;">@item.Product?.Name</div>
+                                            <small class="text-muted">@item.Quantity × ৳@item.Price</small>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </td>
+                        <td style="font-weight: bold; color: #2c3e50;">৳@order.TotalAmount</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mt-4">
+        <a asp-action="Index" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+</div>

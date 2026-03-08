@@ -1,0 +1,52 @@
+﻿@model IEnumerable<E_ShoppingManagement.ViewModels.EmployeeOrderListViewModel>
+
+@{
+    ViewData["Title"] = "Pending Orders";
+    Layout = "~/Views/Shared/_EmployeeLayout.cshtml";
+}
+
+<h2 class="mb-3">Pending Orders</h2>
+
+<div class="page-card p-3">
+    <table class="table table-hover table-bordered align-middle">
+        <thead>
+            <tr>
+                <th>SL</th>
+                <th>Order Id</th>
+                <th>Customer</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Created</th>
+                <th style="width:140px;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var i = 1;
+            }
+            @if (!Model.Any())
+            {
+                <tr><td colspan="7" class="text-center text-muted">No pending orders.</td></tr>
+            }
+            else
+            {
+                foreach (var o in Model)
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td>@o.OrderId</td>
+                        <td>@o.CustomerName</td>
+                        <td>@o.TotalAmount</td>
+                        <td>@o.OrderStatus</td>
+                        <td>@o.CreatedAt.ToLocalTime().ToString("dd-MM-yyyy, hh:mm tt")</td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@o.OrderId"
+                               class="btn btn-sm btn-secondary">Details</a>
+                        </td>
+                    </tr>
+                    i++;
+                }
+            }
+        </tbody>
+    </table>
+</div>

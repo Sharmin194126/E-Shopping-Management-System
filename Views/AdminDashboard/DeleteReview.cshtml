@@ -1,0 +1,35 @@
+@model E_ShoppingManagement.Models.Review
+@{
+    ViewData["Title"] = "Delete Review";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Confirm Delete Review</h2>
+    <a asp-action="ManageReviews" class="btn btn-secondary">Back to List</a>
+</div>
+
+<div class="page-card" style="max-width: 600px;">
+    <div class="alert alert-danger">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        Are you sure you want to delete this review? This action cannot be undone.
+    </div>
+
+    <div class="mb-4">
+        <p><strong>Customer:</strong> @Model.UserId</p>
+        <p><strong>Rating:</strong> 
+            <span class="text-warning">
+                @for(int i=0; i<Model.Rating; i++) { <text>★</text> }
+                @for(int i=Model.Rating; i<5; i++) { <text>☆</text> }
+            </span>
+        </p>
+        <p><strong>Comment:</strong> @Model.Comment</p>
+        <p><strong>Date:</strong> @Model.CreatedAt.ToString("MMM dd, yyyy")</p>
+    </div>
+
+    <form asp-action="DeleteReview" method="post">
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger px-4 py-2 fw-bold">Delete Permanently</button>
+        <a asp-action="ManageReviews" class="btn btn-outline-secondary px-4 py-2">Cancel</a>
+    </form>
+</div>

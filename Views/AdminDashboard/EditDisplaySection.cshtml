@@ -1,0 +1,35 @@
+@model E_ShoppingManagement.Models.DisplaySection
+@{
+    ViewData["Title"] = "Edit Display Section";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="mb-3">Edit Display Section</h2>
+
+<div class="page-card" style="max-width: 600px;">
+    <form asp-action="EditDisplaySection" method="post">
+        <input type="hidden" asp-for="Id" />
+
+        <div class="form-group mb-3">
+            <label asp-for="Name" class="form-label">Section Name</label>
+            <input asp-for="Name" class="form-control" required />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="DisplayOrder" class="form-label">Display Order</label>
+            <input asp-for="DisplayOrder" class="form-control" />
+            <span asp-validation-for="DisplayOrder" class="text-danger"></span>
+        </div>
+
+        <div class="form-check form-switch mb-4">
+            <input asp-for="IsActive" class="form-check-input" />
+            <label asp-for="IsActive" class="form-check-label">Active / Visible</label>
+        </div>
+
+        <div class="d-flex justify-content-between">
+            <a asp-action="ManageDisplaySections" class="btn btn-secondary">Back to List</a>
+            <button type="submit" class="btn btn-success">Update Section</button>
+        </div>
+    </form>
+</div>

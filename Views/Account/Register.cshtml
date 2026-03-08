@@ -1,0 +1,51 @@
+﻿@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_AccountLayout.cshtml";
+}
+
+<div class="register-bg">
+    <div class="register-card text-center">
+        <h2 class="mb-3">Create Account</h2>
+        <p class="mb-4 opacity-75">Choose your account type to proceed</p>
+
+        <!-- Customer Register -->
+        <a asp-controller="Account"
+           asp-action="UserRegister"
+           class="btn btn-primary w-100 mb-3 fw-bold">
+            Register as Customer
+        </a>
+
+        <!-- Employee Register -->
+        <a asp-controller="Account"
+           asp-action="EmployeeRegister"
+           class="btn btn-outline-light w-100 mb-3">
+            Register as Employee
+        </a>
+
+        <!-- Delivery Man Register -->
+        <a asp-controller="Account"
+           asp-action="DeliveryManRegister"
+           class="btn btn-outline-light w-100 mb-3">
+            Join as Delivery Man
+        </a>
+
+        <hr class="my-4" style="border-color: rgba(255,255,255,0.3);" />
+
+        <!-- Login Button -->
+        <p class="mb-2 small">Already have an account?</p>
+        <a asp-controller="Account"
+           asp-action="Login"
+           class="text-decoration-none fw-bold text-white fs-5">
+            Login Here
+        </a>
+
+        <!-- Back Button -->
+        <div class="mt-4">
+            <a asp-controller="Home"
+               asp-action="Index"
+               class="small text-light text-decoration-none opacity-75">
+                &larr; Back to Home
+            </a>
+        </div>
+    </div>
+</div>

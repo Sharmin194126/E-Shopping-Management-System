@@ -1,0 +1,24 @@
+﻿@model E_ShoppingManagement.Models.Product
+@{
+    ViewData["Title"] = "Update Stock";
+    Layout = "~/Views/Shared/_EmployeeLayout.cshtml";
+}
+
+<h3>Update Stock: @Model.Name</h3>
+
+<div class="page-card p-4" style="background: #f8f9fa; border-radius: 12px; max-width: 500px; margin-top: 20px;">
+    <form asp-action="UpdateStock" method="post">
+        <input type="hidden" name="id" value="@Model.Id" />
+        
+        <div class="mb-3">
+            <label class="form-label">Current Stock: <strong>@Model.StockQty</strong></label>
+            <input type="number" name="stockQty" class="form-control" value="@Model.StockQty" min="0" required />
+            <small class="text-muted">Enter the new total stock quantity.</small>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary">Update Stock</button>
+            <a asp-action="Index" class="btn btn-secondary">Back to Products</a>
+        </div>
+    </form>
+</div>

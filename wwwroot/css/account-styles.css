@@ -1,0 +1,95 @@
+/* =====================
+   GLOBAL ACCOUNT STYLES
+   ===================== */
+.account-bg {
+    min-height: 100vh;
+    width: 100%;
+    background-image: url('https://wallpapers.com/images/hd/vibrant-mountain-lake-scenic-yif3zbqokb0oq5yw.jpg');
+    /* Unified generic background */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.account-card {
+    width: 100%;
+    max-width: 450px;
+    padding: 2.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 16px;
+    background: rgba(0, 0, 0, 0.4);
+    /* Transparent black */
+    color: #fff;
+}
+
+/* Hide spin buttons */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.account-card h2,
+.account-card h3,
+.account-card h4,
+.account-card h5,
+.account-card p,
+.account-card label {
+    color: #fff !important;
+}
+
+.account-card .form-control {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+}
+
+.account-card .form-control:focus {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: #fff;
+    color: #fff;
+    box-shadow: none;
+}
+
+.account-card .form-control::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.account-card a {
+    color: #ddd;
+    transition: 0.3s;
+}
+
+.account-card a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+/* PASSWORD EYE ICON */
+.password-container {
+    position: relative;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.7);
+    z-index: 10;
+}
+
+.password-toggle:hover {
+    color: #fff;
+}

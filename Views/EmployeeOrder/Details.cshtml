@@ -1,0 +1,81 @@
+﻿@model E_ShoppingManagement.ViewModels.EmployeeOrderDetailsViewModel
+
+@{
+    ViewData["Title"] = "Order Details";
+    Layout = "~/Views/Shared/_EmployeeLayout.cshtml";
+}
+
+<h2 class="mb-3">Order #@Model.OrderId</h2>
+
+<div class="page-card p-3 mb-3">
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert @(TempData["IsSuccess"] != null && (bool)TempData["IsSuccess"] ? "alert-success" : "alert-info")">
+            @TempData["Message"]
+        </div>
+    }
+
+    <dl class="row">
+        <dt class="col-sm-3">Customer</dt>
+        <dd class="col-sm-9">@Model.CustomerName</dd>
+
+        <dt class="col-sm-3">Total Amount</dt>
+        <dd class="col-sm-9">@Model.TotalAmount</dd>
+
+        <dt class="col-sm-3">Status</dt>
+        <dd class="col-sm-9">@Model.OrderStatus</dd>
+
+        <dt class="col-sm-3">Created</dt>
+        <dd class="col-sm-9">@Model.CreatedAt.ToLocalTime().ToString("dd-MM-yyyy, hh:mm tt")</dd>
+    </dl>
+
+    <form asp-action="UpdateStatus" method="post" class="row g-2 mt-2">
+        <input type="hidden" name="id" value="@Model.OrderId" />
+        <div class="col-md-4">
+            <select name="newStatus" class="form-control">
+                <option value="Pending" selected="@(Model.OrderStatus == "Pending")">Pending</option>
+                <option value="Processing" selected="@(Model.OrderStatus == "Processing")">Processing</option>
+                <option value="Shipped" selected="@(Model.OrderStatus == "Shipped")">Shipped</option>
+                <option value="Delivered" selected="@(Model.OrderStatus == "Delivered")">Delivered</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-primary w-100">Update Status</button>
+        </div>
+        <div class="col-md-3">
+            <a asp-action="Index" class="btn btn-secondary w-100">Back to Orders</a>
+        </div>
+    </form>
+</div>
+
+<div class="page-card p-3">
+    <h5 class="mb-2"><b>Items</b></h5>
+    <table class="table table-sm table-bordered align-middle">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th style="width:120px;">Quantity</th>
+                <th style="width:120px;">Price</th>
+                <th style="width:120px;">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Items.Any())
+            {
+                <tr><td colspan="4" class="text-center text-muted">No items.</td></tr>
+            }
+            else
+            {
+                foreach (var item in Model.Items)
+                {
+                    <tr>
+                        <td>@item.ProductName</td>
+                        <td>@item.Quantity</td>
+                        <td>@item.Price</td>
+                        <td>@item.LineTotal</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

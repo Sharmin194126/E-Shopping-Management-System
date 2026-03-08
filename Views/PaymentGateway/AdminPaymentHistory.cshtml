@@ -1,0 +1,73 @@
+@model IEnumerable<E_ShoppingManagement.Models.PaymentHistory>
+@{
+    ViewData["Title"] = "Payment History";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="mb-4">💰 Payment Transaction History</h2>
+
+<div class="page-card shadow-sm">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="mb-0">Merchant Account Transactions</h5>
+        <div class="text-muted small">All payments are processed via external gateways.</div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Order #</th>
+                    <th>Gateway</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="6" class="text-center py-4 text-muted">No transactions found.</td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var tx in Model)
+                    {
+                        <tr>
+                            <td><strong>#@tx.Id</strong></td>
+                            <td><a asp-controller="Order" asp-action="Details" asp-route-id="@tx.OrderId">#@tx.OrderId</a></td>
+                            <td>
+                                <span class="badge bg-light text-dark border">@tx.GatewayName</span>
+                            </td>
+                            <td class="fw-bold">৳@tx.Amount</td>
+                            <td>
+                                @if (tx.Status == "Success")
+                                {
+                                    <span class="badge bg-success-subtle text-success border border-success px-3">Success</span>
+                                }
+                                else if (tx.Status == "Pending")
+                                {
+                                    <span class="badge bg-warning-subtle text-warning border border-warning px-3">Pending</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger-subtle text-danger border border-danger px-3">@tx.Status</span>
+                                }
+                            </td>
+                            <td>
+                                <small class="text-muted">@tx.PaymentDate.ToString("MMM dd, yyyy HH:mm")</small>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .table thead th { border-top: none; }
+    .page-card { border-radius: 15px; border: none; }
+</style>

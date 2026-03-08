@@ -1,0 +1,79 @@
+﻿@model IEnumerable<E_ShoppingManagement.Models.ProductType>
+
+@{
+    ViewData["Title"] = "Product Types";
+    Layout = User.IsInRole("Admin") ? "~/Views/Shared/_AdminLayout.cshtml" : "~/Views/Shared/_EmployeeLayout.cshtml";
+}
+
+<h2 class="mb-3">Product Types</h2>
+
+<div class="page-card mb-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="mb-0">All Product Types</h5>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Add New
+        </a>
+    </div>
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert @(TempData["IsSuccess"] != null && (TempData["IsSuccess"] as bool? == true) ? "alert-success" : "alert-danger")">
+            @TempData["Message"]
+        </div>
+    }
+
+    <table class="table table-hover table-bordered">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Approval</th>
+                <th style="width: 180px;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="5" class="text-center text-muted">No product types found.</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.Description</td>
+                        <td>
+                            @if (item.Status == "Active")
+                            {
+                                <span class="badge bg-success">Active</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">@item.Status</span>
+                            }
+                        </td>
+                        <td>
+                            @if (item.IsApproved)
+                            {
+                                <span class="badge bg-success">Approved</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning text-dark">Pending</span>
+                            }
+                        </td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-secondary">Details</a>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-success">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,96 @@
+@model E_ShoppingManagement.Models.Order
+@{
+    ViewData["Title"] = "Money Receipt";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    decimal subtotal = Model.OrderDetails?.Sum(i => i.Price * i.Quantity) ?? 0;
+    decimal discount = Model.OrderDetails?.Sum(i => (i.OfferPercentage/100 * i.Price) * i.Quantity) ?? 0;
+    decimal vat = Model.OrderDetails?.Sum(i => i.VatAmount * i.Quantity) ?? 0;
+}
+
+<div class="container mt-5 mb-5">
+    <div class="card border-0">
+        <div class="card-header bg-success text-white">
+            <h3 class="mb-0 text-center"><i class="bi bi-receipt-cutoff"></i> Payment Receipt</h3>
+        </div>
+        <div class="card-body p-5">
+            <div class="row mb-5">
+                <div class="col-md-6">
+                    <h5 class="fw-bold text-success">EShop</h5>
+                    <p>123 E-Shop Street<br>Dhaka, Bangladesh<br>Phone: +880 1234-567890</p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <h5 class="fw-bold">Receipt #@Model.Id</h5>
+                    <p>Date: @Model.CreatedAt.ToString("MMM dd, yyyy")<br>
+                    Status: <span class="badge bg-success">@Model.PaymentStatus</span><br>
+                    Trx ID: @Model.PaymentMethod</p>
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-md-6">
+                    <h6 class="fw-bold">Bill To:</h6>
+                    <p class="mb-0">@Model.Customer?.Name</p>
+                    <p class="mb-0">@Model.PhoneNumber</p>
+                    <p>@Model.ShippingAddress, @Model.City</p>
+                </div>
+            </div>
+
+            <table class="table table-bordered mb-4">
+                <thead class="table-light">
+                    <tr>
+                        <th>Item</th>
+                        <th class="text-center">Qty</th>
+                        <th class="text-center">Price</th>
+                        <th class="text-center">VAT (%)</th>
+                        <th class="text-end">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.OrderDetails != null)
+                    {
+                        foreach (var item in Model.OrderDetails)
+                        {
+                            <tr>
+                                <td>@item.Product?.Name <small>(Size: @item.Size)</small></td>
+                                <td class="text-center">@item.Quantity</td>
+                                <td class="text-center">৳@item.Price</td>
+                                <td class="text-center">@item.VatPercentage %</td>
+                                <td class="text-end">৳@(item.PriceWithVat * item.Quantity)</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+                <tfoot>
+                     <tr>
+                        <td colspan="4" class="text-end">Subtotal:</td>
+                        <td class="text-end">৳@subtotal</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="text-end">Total VAT:</td>
+                        <td class="text-end">৳@vat</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="text-end fw-bold fs-5">Grand Total:</td>
+                        <td class="text-end fw-bold fs-5">৳@Model.TotalAmount</td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" class="bg-light">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span><strong>Payment System:</strong> @(Model.PaymentMethod == "COD" ? "Cash on Delivery" : "Online Payment (" + Model.PaymentMethod + ")")</span>
+                                <span><strong>Payment Status:</strong> <span class="badge bg-success">@Model.PaymentStatus</span></span>
+                            </div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+            
+            <div class="text-center mt-5">
+                <p class="text-muted small">Thank you for your purchase!</p>
+                <div class="d-print-none">
+                    <a href="javascript:window.print()" class="btn btn-outline-secondary"><i class="bi bi-printer"></i> Print Receipt</a>
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-primary">Continue Shopping</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

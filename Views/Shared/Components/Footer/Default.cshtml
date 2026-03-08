@@ -1,0 +1,117 @@
+@model E_ShoppingManagement.ViewComponents.FooterViewModel
+
+@{
+    string RenderStars(double rating) {
+        int fullStars = (int)rating;
+        string stars = "";
+        for(int i=0; i<fullStars; i++) stars += "★";
+        for(int i=fullStars; i<5; i++) stars += "☆";
+        return stars;
+    }
+}
+
+<footer class="home-footer">
+    <div class="container">
+        <div class="footer-top row g-4">
+            <!-- Brand & Payments -->
+            <div class="col-md-3">
+                <h4 class="brand-text" style="font-family: 'French Script MT', cursive; color: #6f42c1;">EShop</h4>
+                <p class="small text-muted">Direct Merchant Payments for Secure Shopping.</p>
+                
+                <div class="mt-4">
+                    <h6 class="small fw-bold text-uppercase mb-2">Secure Payments</h6>
+                    <div class="footer-payments d-flex flex-wrap gap-2">
+                        @if (Model.PaymentMethods != null)
+                        {
+                            foreach (var pm in Model.PaymentMethods)
+                            {
+                                <div class="payment-icon" title="@pm.Name">
+                                    @if(!string.IsNullOrEmpty(pm.LogoUrl)) {
+                                        <img src="@pm.LogoUrl" alt="@pm.Name" style="height: 30px; object-fit: contain;">
+                                    } else {
+                                        <span class="badge border text-dark">@pm.Name</span>
+                                    }
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Links -->
+            <div class="col-md-3">
+                <h5>Help & Services</h5>
+                <ul class="list-unstyled mt-3 footer-nav-links">
+                    <li><a asp-controller="Home" asp-action="HelpCenter">Help Center</a></li>
+                    <li><a asp-controller="Home" asp-action="Returns">Returns & Refunds</a></li>
+                    <li><a asp-controller="Home" asp-action="Tracking">Track Your Order</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact -->
+            <div class="col-md-6">
+                <h5>Address & Contact</h5>
+                <div class="mt-3">
+                    <p class="mb-1"><strong>@Model.Info.Address</strong></p>
+                    <div class="d-flex flex-column gap-1">
+                        <span class="small">Email: @Model.Info.Email</span>
+                        <span class="small">Phone: @Model.Info.ContactNumber</span>
+                    </div>
+                    <div class="social-links mt-3">
+                        @if (!string.IsNullOrEmpty(Model.Info.FacebookUrl)) { <a href="@Model.Info.FacebookUrl" class="btn btn-sm btn-outline-primary rounded-circle">FB</a> }
+                        @if (!string.IsNullOrEmpty(Model.Info.InstagramUrl)) { <a href="@Model.Info.InstagramUrl" class="btn btn-sm btn-outline-danger rounded-circle ms-2">IG</a> }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reviews -->
+        @if (Model.RecentReviews.Any())
+        {
+            <hr class="my-5 border-secondary">
+            <h5 class="text-center mb-4">What Our Customers Say</h5>
+            <div class="reviews row g-3">
+                @foreach (var r in Model.RecentReviews)
+                {
+                    <div class="col-md-4">
+                        <div class="review-box">
+                            <div class="review-head d-flex align-items-center mb-2">
+                                <strong class="small">@r.CustomerName</strong>
+                            </div>
+                            <div class="rating text-warning small mb-1">@RenderStars(r.Rating)</div>
+                            <p class="small text-muted mb-0">"@r.Comment"</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</footer>
+
+<style>
+    .home-footer {
+        background-color: #ffffff;
+        color: #333333;
+        padding: 60px 0;
+    }
+    .payment-badge {
+        background: #f8f9fa;
+        padding: 5px 12px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid #dee2e6;
+        color: #333;
+    }
+    .payment-badge img { height: 20px; }
+    .footer-nav-links a { display: block; margin-bottom: 8px; color: #555; }
+    .footer-nav-links a:hover { color: #6f42c1; text-decoration: underline; }
+    .review-box {
+        background: #fdfdfd;
+        padding: 15px;
+        border-radius: 12px;
+        border: 1px solid #eeeeee;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    }
+</style>

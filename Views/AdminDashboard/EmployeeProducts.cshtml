@@ -1,0 +1,56 @@
+@model IEnumerable<E_ShoppingManagement.Models.Product>
+@{
+    ViewData["Title"] = "Managed Products - " + ViewBag.EmployeeName;
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2>Products by @ViewBag.EmployeeName</h2>
+        <p class="text-muted">Total: @ViewBag.TotalProducts products | Stock Value: ৳ @ViewBag.TotalValue</p>
+    </div>
+    <a asp-action="Index" class="btn btn-secondary">Back to Dashboard</a>
+</div>
+
+<div class="page-card">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Image</th>
+                    <th>Product Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Status</th>
+                    <th>Section</th>
+                    <th>Created</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var p in Model)
+                {
+                    <tr>
+                        <td>
+                            @if (!string.IsNullOrEmpty(p.ImageUrl))
+                            {
+                                <img src="@(p.ImageUrl.StartsWith("/") ? p.ImageUrl : "/images/products/" + p.ImageUrl)" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd;" />
+                            }
+                        </td>
+                        <td>@p.Name</td>
+                        <td>@p.Category?.Name</td>
+                        <td>৳ @p.Price</td>
+                        <td>@p.StockQty</td>
+                        <td>
+                            <span class="badge @(p.Status == "Approved" ? "bg-success" : p.Status == "Pending" ? "bg-warning text-dark" : "bg-danger")">
+                                @p.Status
+                            </span>
+                        </td>
+                        <td>@p.DisplayCategory</td>
+                        <td>@p.CreatedAt.ToString("dd MMM yyyy")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

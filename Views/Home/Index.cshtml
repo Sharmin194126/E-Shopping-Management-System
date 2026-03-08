@@ -1,0 +1,268 @@
+﻿@model E_ShoppingManagement.ViewModels.HomeIndexViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var isLoggedIn = User.Identity?.IsAuthenticated ?? false;
+
+    var banners = Model.Banners;
+
+    // Distribute products based on DisplayCategory
+    var allProducts = Model.Products.ToList();
+    var featured = allProducts.Where(p => p.DisplayCategory == "Featured").ToList();
+    var exclusive = allProducts.Where(p => p.DisplayCategory == "Exclusive").ToList();
+    var offer = allProducts.Where(p => p.DisplayCategory == "Offer").ToList();
+    var justForYou = allProducts.Where(p => p.DisplayCategory == "JustForYou").ToList();
+    var restock = allProducts.Where(p => p.DisplayCategory == "Restock").ToList();
+
+    // Helper to render stars
+    string RenderStars(double rating) {
+        int fullStars = (int)rating;
+        string stars = "";
+        for(int i=0; i<fullStars; i++) stars += "★";
+        for(int i=fullStars; i<5; i++) stars += "☆";
+        return stars;
+    }
+}
+
+<style>
+    .product-actions {
+        display: flex;
+        gap: 5px;
+        margin-top: 10px;
+        justify-content: center;
+    }
+    .btn-action {
+        padding: 5px 10px;
+        font-size: 12px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: 0.3s;
+        text-decoration: none;
+        display: inline-block;
+    }
+    .btn-cart {
+        background-color: #ff9900;
+        color: white;
+    }
+    .btn-cart:hover {
+        background-color: #e68a00;
+    }
+    .btn-buy {
+        background-color: #ff4d4d;
+        color: white;
+    }
+    .btn-buy:hover {
+        background-color: #cc0000;
+    }
+    .product-card {
+        padding-bottom: 15px; 
+        text-align: center;
+    }
+    .product-card img {
+        width: 100%;
+        max-height: 200px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+    .price-old {
+        text-decoration: line-through;
+        color: #888;
+        font-size: 14px;
+        margin-right: 5px;
+    }
+    .price-new {
+        color: #d9534f;
+        font-weight: bold;
+        font-size: 18px;
+    }
+    .review-user-img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 5px;
+    }
+    .payment-method-img {
+        height: 30px;
+        margin-right: 10px;
+    }
+</style>
+
+<div class="page-wrapper">
+
+    <!-- SIDE NAV (fixed) -->
+    <div class="side-nav">
+        @foreach (var dispSection in Model.DisplaySections)
+        {
+            var sectionId = dispSection.Name.Replace(" ", "").ToLower();
+            <a href="#@sectionId">
+                @if (dispSection.Name.Contains("Featured")) { <text>⭐</text> }
+                else if (dispSection.Name.Contains("Exclusive")) { <text>💎</text> }
+                else if (dispSection.Name.Contains("Offer")) { <text>🔥</text> }
+                else if (dispSection.Name.Contains("You")) { <text>❤️</text> }
+                else if (dispSection.Name.Contains("Restock")) { <text>🔁</text> }
+                else { <text>📦</text> }
+                <span>@dispSection.Name</span>
+            </a>
+        }
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <!-- ===== BANNER ===== -->
+        <div class="banner">
+            <button class="banner-btn left" onclick="prevBanner()">‹</button>
+            <button class="banner-btn right" onclick="nextBanner()">›</button>
+
+            @if (banners != null && banners.Any())
+            {
+                for (int i = 0; i < banners.Count; i++)
+                {
+                    <img src="@banners[i]" class="@(i == 0 ? "active" : "")">
+                }
+            }
+            else
+            {
+                <img src="~/images/banners/banner1.jpg" class="active">
+            }
+        </div>
+
+        <!-- WELCOME -->
+        <div class="welcome">
+            <h2>Welcome to EShop</h2>
+            <p>Your trusted online shopping destination for fashion, beauty and electronics. Enjoy premium products, exclusive deals and fast delivery.</p>
+        </div>
+
+        @foreach (var dispSection in Model.DisplaySections)
+        {
+            var sectionId = dispSection.Name.Replace(" ", "").ToLower();
+            var sectionProducts = allProducts.Where(p => p.DisplayCategory == dispSection.Name || (dispSection.Name == "Featured Items" && p.DisplayCategory == "Featured")).ToList();
+            
+            <section class="section" id="@sectionId">
+                <h2>@dispSection.Name</h2>
+                
+                @{
+                    // Fallback logic to ensure sections are populated
+                    if (!sectionProducts.Any())
+                    {
+                        if (dispSection.Name.Contains("Exclusive"))
+                        {
+                            sectionProducts = allProducts.Where(p => p.Price > 5000 || p.ProductType?.Name == "Electronics").OrderByDescending(p => p.Price).Take(8).ToList();
+                            if (!sectionProducts.Any()) sectionProducts = allProducts.OrderByDescending(p => p.Price).Take(4).ToList();
+                        }
+                        else if (dispSection.Name.Contains("Offer"))
+                        {
+                            sectionProducts = allProducts.Where(p => p.OfferPercentage > 0).OrderByDescending(p => p.OfferPercentage).Take(8).ToList();
+                        }
+                        else if (dispSection.Name.Contains("You"))
+                        {
+                            sectionProducts = allProducts.OrderBy(x => Guid.NewGuid()).Take(8).ToList();
+                        }
+                        else if (dispSection.Name.Contains("Featured"))
+                        {
+                            sectionProducts = allProducts.OrderByDescending(p => p.AverageRating).Take(8).ToList();
+                        }
+                    }
+                }
+
+                <div class="product-grid">
+                    @if (sectionProducts.Any())
+                    {
+                        @foreach (var item in sectionProducts)
+                        {
+                            <div class="product-card">
+                                <a href="/Home/Details/@item.Id">
+                                    <img src="@(string.IsNullOrEmpty(item.ImageUrl) ? "/images/no-image.png" : (item.ImageUrl.StartsWith("/") ? item.ImageUrl : "/images/products/" + item.ImageUrl))" alt="@item.Name">
+                                    <div class="desc">@item.Name</div>
+                                </a>
+                                <div class="price-area">
+                                    @if (item.OfferPercentage > 0)
+                                    {
+                                        <div class="offer-badge" style="font-size: 11px; color: #ff0000; font-weight: bold; margin-bottom: 3px;">@item.OfferPercentage% offer price</div>
+                                    }
+                                    @if (item.RegularPrice > item.Price) {
+                                        <span class="price-old">৳ @item.RegularPrice</span>
+                                    }
+                                    <span class="price-new">৳ @item.Price</span>
+                                </div>
+                                <div class="rating">Ratings @RenderStars(item.AverageRating) (@item.AverageRating)</div>
+                                <div class="sizes" style="font-size:12px; color:#555;">Size: @(item.AvailableSizes ?? "N/A")</div>
+                                
+                                <div class="product-actions">
+                                    <a href="/Home/Details/@item.Id" class="btn-action btn-cart">Add to Cart</a>
+                                    <a href="/Home/Details/@item.Id" class="btn-action btn-buy">Buy Now</a>
+                                    <a href="/Home/CategoryProducts?typeId=@item.ProductTypeId" class="btn-action btn-view" style="background:#6c757d;">View More</a>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p>No items available in this section.</p>
+                    }
+                </div>
+            </section>
+        }
+
+        <!-- Rest of content will be followed by layout footer -->
+    </div>
+</div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+@*  FOR BANNER PAGE *@
+<script>
+    let currentBanner = 0;
+    let banners = [];
+    let bannerInterval = null;
+
+    function showBanner(index) {
+        banners.forEach((img, i) => {
+            img.classList.remove("active");
+            if (i === index) img.classList.add("active");
+        });
+    }
+
+    function nextBanner(manual = false) {
+        currentBanner = (currentBanner + 1) % banners.length;
+        showBanner(currentBanner);
+
+        if (manual) restartAutoSlide();
+    }
+
+    function prevBanner() {
+        currentBanner = (currentBanner - 1 + banners.length) % banners.length;
+        showBanner(currentBanner);
+        restartAutoSlide();
+    }
+
+    function startAutoSlide() {
+        bannerInterval = setInterval(() => {
+            nextBanner(false);
+        }, 3000);
+    }
+
+    function restartAutoSlide() {
+        clearInterval(bannerInterval);
+        startAutoSlide();
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        banners = document.querySelectorAll(".banner img");
+
+        currentBanner = 0;
+        showBanner(currentBanner);
+
+        setTimeout(() => {
+            nextBanner(false);
+            startAutoSlide();
+        }, 3000);
+    });
+</script>
+
+
+

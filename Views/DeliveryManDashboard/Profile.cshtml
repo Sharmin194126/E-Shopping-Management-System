@@ -1,0 +1,60 @@
+@model E_ShoppingManagement.Models.DeliveryMan
+@{
+    ViewData["Title"] = "My Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml"; 
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white text-center py-4">
+                    <h3 class="mb-0">Delivery Man Profile</h3>
+                </div>
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <div class="avatar-placeholder rounded-circle bg-light d-inline-flex align-items-center justify-content-center mb-3" style="width: 100px; height: 100px; font-size: 40px; color: #aaa;">
+                            <i class="bi bi-person"></i>
+                        </div>
+                        <h4>@Model.Name</h4>
+                        @if (Model.Status == "Active")
+                        {
+                            <span class="badge bg-success">Active</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-dark">@Model.Status</span>
+                        }
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-md-6 border-bottom pb-3">
+                            <small class="text-muted d-block">Contact Number</small>
+                            <span class="fw-bold">@Model.ContactNumber</span>
+                        </div>
+                        <div class="col-md-6 border-bottom pb-3">
+                            <small class="text-muted d-block">Vehicle Info</small>
+                            <span class="fw-bold">@Model.VehicleInfo</span>
+                        </div>
+                        <div class="col-md-6 border-bottom pb-3">
+                            <small class="text-muted d-block">Email</small>
+                            <span class="fw-bold">@(Model.Email ?? "N/A")</span>
+                        </div>
+                        <div class="col-md-6">
+                            <small class="text-muted d-block">Total Earnings</small>
+                            <span class="fw-bold text-success">৳@Model.TotalEarnings</span>
+                        </div>
+                         <div class="col-md-6">
+                            <small class="text-muted d-block">Commission Rate</small>
+                            <span class="fw-bold text-info">@Model.CommissionRate%</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-5 text-center">
+                        <a asp-action="Index" class="btn btn-outline-primary">Back to Dashboard</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

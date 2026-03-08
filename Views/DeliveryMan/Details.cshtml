@@ -1,0 +1,88 @@
+@model IEnumerable<E_ShoppingManagement.Models.Order>
+@{
+    ViewData["Title"] = "Delivery Performance";
+    Layout = User.IsInRole("Admin") ? "~/Views/Shared/_AdminLayout.cshtml" : "~/Views/Shared/_EmployeeLayout.cshtml";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Performance Report: @ViewBag.DeliveryMan?.Name</h2>
+    <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="page-card text-center p-3" style="background: #e8f5e9; border-left: 5px solid #2e7d32;">
+            <h3 class="text-success">@ViewBag.Delivered</h3>
+            <p class="mb-0 fw-bold">Successfully Received</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="page-card text-center p-3" style="background: #fff3e0; border-left: 5px solid #ef6c00;">
+            <h3 class="text-warning">@ViewBag.Pending</h3>
+            <p class="mb-0 fw-bold">In Transit / Pending</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="page-card text-center p-3" style="background: #ffebee; border-left: 5px solid #c62828;">
+            <h3 class="text-danger">@ViewBag.Returned</h3>
+            <p class="mb-0 fw-bold">Returned Parcels</p>
+        </div>
+    </div>
+</div>
+
+<div class="page-card p-4">
+    <h4>Assigned Order History</h4>
+    <div class="table-responsive mt-3">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Order #</th>
+                    <th>Customer</th>
+                    <th>Status</th>
+                    <th>Amount</th>
+                    <th>Payment</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in Model)
+                {
+                    <tr>
+                        <td>#@order.Id</td>
+                        <td>@order.Customer?.Name</td>
+                        <td>
+                            <span class="badge @(order.OrderStatus == "Delivered" ? "bg-success" : (order.OrderStatus == "Returned" ? "bg-danger" : "bg-warning"))">
+                                @order.OrderStatus
+                            </span>
+                        </td>
+                        <td>৳@order.TotalAmount</td>
+                        <td>
+                            @if (order.PaymentStatus == "Paid")
+                            {
+                                <span class="badge bg-success">Paid (@order.PaymentMethod)</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">Pending (@order.PaymentMethod)</span>
+                                @if (order.PaymentMethod?.Contains("COD") == true || order.PaymentMethod?.Contains("Cash") == true)
+                                {
+                                    <!-- Button to mark as received -->
+                                     <form asp-controller="Order" asp-action="UpdatePaymentStatus" method="post" class="d-inline ms-1">
+                                        <input type="hidden" name="id" value="@order.Id" />
+                                        <input type="hidden" name="status" value="Paid" />
+                                        <button type="submit" class="btn btn-xs btn-outline-primary p-0 px-1" style="font-size: 0.7rem;">Mark Paid</button>
+                                    </form>
+                                }
+                            }
+                        </td>
+                        <td>@order.CreatedAt.ToString("MMM dd, yyyy")</td>
+                    </tr>
+                }
+                @if (!Model.Any())
+                {
+                    <tr><td colspan="5" class="text-center text-muted py-4">No delivery history found.</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,182 @@
+﻿@model E_ShoppingManagement.ViewModels.ReportsViewModel
+
+@{
+    ViewData["Title"] = "Reports";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="mb-3">📈 Sales & Operations Reports</h2>
+
+<!-- Filter -->
+<div class="page-card p-3 mb-3">
+    <form asp-action="Index" method="get" class="row g-2">
+        <div class="col-md-3">
+            <label class="form-label">From</label>
+            <input type="date" name="fromDate" class="form-control"
+                   value="@Model.FromDate?.ToString("yyyy-MM-dd")" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">To</label>
+            <input type="date" name="toDate" class="form-control"
+                   value="@Model.ToDate?.ToString("yyyy-MM-dd")" />
+        </div>
+        <div class="col-md-3 d-flex align-items-end gap-2">
+            <button type="submit" class="btn btn-primary w-100">Filter</button>
+            <a asp-action="Index" class="btn btn-outline-secondary w-100">Clear</a>
+        </div>
+    </form>
+</div>
+
+<!-- Summary cards -->
+<div class="row g-3 mb-3">
+    <div class="col-md-4">
+        <div class="dash-card bg-success text-white position-relative p-3">
+            <h5>Total Products Sold</h5>
+            <p class="fs-4 mb-0">@Model.Summary.TotalProductsSold</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="dash-card bg-primary text-white position-relative p-3">
+            <h5>Total Revenue</h5>
+            <p class="fs-4 mb-0">@Model.Summary.TotalRevenue</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="dash-card bg-info text-dark position-relative p-3">
+            <h5>Total Orders</h5>
+            <p class="fs-4 mb-0">@Model.Summary.TotalOrders</p>
+        </div>
+    </div>
+</div>
+
+<!-- Date-wise sales -->
+<div class="page-card p-3 mb-3">
+    <h5 class="mb-2">📆 Date-wise Sales</h5>
+    <table class="table table-sm table-bordered align-middle">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Orders</th>
+                <th>Products Sold</th>
+                <th>Revenue</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.DateWiseSales.Any())
+            {
+                <tr><td colspan="4" class="text-muted text-center">No data.</td></tr>
+            }
+            else
+            {
+                foreach (var row in Model.DateWiseSales)
+                {
+                    <tr>
+                        <td>@row.Date.ToString("dd-MM-yyyy")</td>
+                        <td>@row.OrdersCount</td>
+                        <td>@row.ProductsSold</td>
+                        <td>@row.Revenue</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Employee-wise sales -->
+<div class="page-card p-3 mb-3">
+    <h5 class="mb-2">👨‍💼 Employee-wise Sales</h5>
+    <table class="table table-sm table-bordered align-middle">
+        <thead>
+            <tr>
+                <th>Employee</th>
+                <th>Orders Handled</th>
+                <th>Products Sold</th>
+                <th>Revenue</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.EmployeeSales.Any())
+            {
+                <tr><td colspan="4" class="text-muted text-center">No data.</td></tr>
+            }
+            else
+            {
+                foreach (var row in Model.EmployeeSales)
+                {
+                    <tr>
+                        <td>@row.EmployeeName (@row.EmployeeId)</td>
+                        <td>@row.OrdersHandled</td>
+                        <td>@row.ProductsSold</td>
+                        <td>@row.Revenue</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Pending stock -->
+<div class="page-card p-3 mb-3">
+    <h5 class="mb-2">📦 Pending Stock (Low stock / pending orders)</h5>
+    <table class="table table-sm table-bordered align-middle">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Stock Qty</th>
+                <th>Pending Order Qty</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.PendingStock.Any())
+            {
+                <tr><td colspan="3" class="text-muted text-center">No pending stock alerts.</td></tr>
+            }
+            else
+            {
+                foreach (var row in Model.PendingStock)
+                {
+                    <tr>
+                        <td>@row.ProductName (@row.ProductId)</td>
+                        <td>@row.StockQty</td>
+                        <td>@row.PendingOrderQty</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Pending delivery -->
+<div class="page-card p-3 mb-3">
+    <h5 class="mb-2">🚚 Pending Delivery</h5>
+    <table class="table table-sm table-bordered align-middle">
+        <thead>
+            <tr>
+                <th>Order Id</th>
+                <th>Customer</th>
+                <th>Created At</th>
+                <th>Status</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.PendingDelivery.Any())
+            {
+                <tr><td colspan="5" class="text-muted text-center">No pending deliveries.</td></tr>
+            }
+            else
+            {
+                foreach (var row in Model.PendingDelivery)
+                {
+                    <tr>
+                        <td>@row.OrderId</td>
+                        <td>@row.CustomerName</td>
+                        <td>@row.CreatedAt.ToLocalTime().ToString("dd-MM-yyyy, hh:mm tt")</td>
+                        <td>@row.OrderStatus</td>
+                        <td>@row.TotalAmount</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

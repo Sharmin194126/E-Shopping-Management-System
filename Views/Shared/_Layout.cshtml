@@ -1,0 +1,111 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - E_ShoppingManagement</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/E_ShoppingManagement.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="logo" style="font-family: 'French Script MT', cursive; font-style: italic; color: blue;">
+                <h3><b>EShop</b></h3>
+            </div>
+            <div class="container-fluid">
+                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Contact">Contact Us</a>
+                        </li>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="AdminDashboard" asp-action="Index">Admin</a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Employee"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="EmployeeDashboard" asp-action="Index">Employee</a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Customer"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="CustomerDashboard" asp-action="Index">Dashboard</a>
+                            </li>
+                        }
+                        @if (User.IsInRole("DeliveryMan"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="DeliveryManDashboard" asp-action="Index">Dashboard</a>
+                            </li>
+                        }
+                        @if (User.IsInRole("User"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Home" asp-action="User">Users</a>
+                            </li>
+                        }
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                             @await Component.InvokeAsync("CartSummary")
+                        }
+
+                        <div id="realtime-clock" class="clock-display mx-3 d-none d-md-block"></div>
+             
+                        <form class="d-flex mx-auto" asp-controller="Home" asp-action="Search" method="get" style="max-width: 400px; width: 100%;">
+                            <input class="form-control me-2" type="search" name="query" placeholder="Search products..." aria-label="Search">
+                            <button class="btn btn-outline-success" type="submit">Search</button>
+                        </form>
+             
+                        <partial name="_LoginPartial" />
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    @await Component.InvokeAsync("Footer")
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const options = { 
+                weekday: 'short', 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric',
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit' 
+            };
+            document.getElementById('realtime-clock').innerText = now.toLocaleString('en-US', options);
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

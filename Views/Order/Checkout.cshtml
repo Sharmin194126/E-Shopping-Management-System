@@ -1,0 +1,184 @@
+@model E_ShoppingManagement.Models.Cart
+@{
+    ViewData["Title"] = "Checkout";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    decimal total = Model?.Items?.Sum(i => i.Price * i.Quantity) ?? 0;
+    var paymentMethods = ViewBag.PaymentMethods as List<E_ShoppingManagement.Models.PaymentMethod>;
+}
+
+<style>
+    .checkout-container {
+        background: #fdfdfd;
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: none;
+        color: #333;
+    }
+    .form-control, .form-select {
+        background-color: #f8f9fa !important;
+        color: #212529 !important;
+        border: 1px solid #ced4da !important;
+    }
+    .form-control:focus, .form-select:focus {
+        background-color: #fff !important;
+        border-color: #86b7fe !important;
+    }
+    .order-summary {
+        background: #eee;
+        padding: 20px;
+        border-radius: 8px;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="checkout-container">
+        <h2 class="mb-4 text-center">Checkout</h2>
+
+        <div class="row">
+            <!-- Order Summary -->
+            <div class="col-md-5 order-md-2 mb-4">
+                <div class="order-summary">
+                    <h4 class="d-flex justify-content-between align-items-center mb-3">
+                        <span style="color: #555;">Your Summary</span>
+                        <span class="badge bg-primary rounded-pill">@(Model.Items?.Count ?? 0)</span>
+                    </h4>
+                    <ul class="list-group mb-3">
+                        @foreach (var item in Model.Items)
+                        {
+                            <li class="list-group-item d-flex justify-content-between lh-condensed" style="background: transparent; border-color: #ccc;">
+                                <div>
+                                    <h6 class="my-0">@item.Product?.Name</h6>
+                                    <small class="text-muted">Qty: @item.Quantity</small>
+                                    @if(!string.IsNullOrEmpty(item.Size))
+                                    {
+                                        <br/><small class="text-muted">Size: @item.Size</small>
+                                    }
+                                </div>
+                                <div class="text-end">
+                                    <span style="font-weight: bold; color: #2c3e50; display: block;">৳@(item.PriceWithVat * item.Quantity)</span>
+                                    <small class="text-success" style="font-size: 0.7rem;">(incl. VAT: ৳@(item.VatAmount * item.Quantity))</small>
+                                </div>
+                            </li>
+                        }
+                        @{
+                            decimal subtotal = Model.Items.Sum(i => i.Price * i.Quantity);
+                            decimal totalVat = Model.Items.Sum(i => i.VatAmount * i.Quantity);
+                            decimal grandTotal = Model.Items.Sum(i => i.PriceWithVat * i.Quantity);
+                        }
+                        <li class="list-group-item d-flex justify-content-between lh-condensed" style="background: transparent;">
+                            <span>Subtotal</span>
+                            <span class="fw-bold">৳@subtotal</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between lh-condensed" style="background: transparent;">
+                            <span>Total VAT</span>
+                            <span class="fw-bold">৳@totalVat</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between" style="background: #ddd;">
+                            <span style="font-weight: bold;">Grand Total (with VAT)</span>
+                            <strong style="color: #d9534f; font-size: 1.2rem;">৳@grandTotal</strong>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Billing Info Form -->
+            <div class="col-md-7 order-md-1">
+                <h4 class="mb-3 border-bottom pb-2">Step 1: Shipping Details</h4>
+                <form asp-action="CheckoutConfirmed" method="post">
+                    <!-- Name Box -->
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="fullName" class="form-label fw-bold text-primary">Customer Full Name</label>
+                            <input type="text" class="form-control fw-bold" id="fullName" value="@Model.Customer?.Name" readonly placeholder="Name" style="background:#eee !important;">
+                        </div>
+                    </div>
+
+                    <!-- Contact Box -->
+                    <div class="mb-3">
+                        <label for="phone" class="form-label fw-bold text-primary">Active Contact Number</label>
+                        <input type="text" class="form-control" id="phone" name="phone" 
+                               placeholder="e.g. 017xxxxxxxx" 
+                               pattern="^(?:\+88|88)?(01[3-9]\d{8})$" 
+                               title="Please enter a valid BD phone number (e.g. 017xxxxxxxx)" 
+                               required 
+                               style="color: #000 !important; font-weight: 500;">
+                        <small class="text-muted">Must be a valid Bangladesh phone number</small>
+                    </div>
+
+                    <!-- Address Box -->
+                    <div class="mb-3">
+                        <label for="address" class="form-label fw-bold text-primary">Full Delivery Address</label>
+                        <textarea class="form-control" id="address" name="address" rows="3" placeholder="Address (House, Road, Area)" required style="color: #000 !important; font-weight: 500;"></textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="city" class="form-label fw-bold text-primary">City Name</label>
+                            <input type="text" class="form-control" id="city" name="city" placeholder="City" required style="color: #000 !important;">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="zipCode" class="form-label fw-bold text-primary">Zip/Postal Code</label>
+                            <input type="text" class="form-control" id="zipCode" name="zipCode" placeholder="Zip Code" required style="color: #000 !important;">
+                        </div>
+                    </div>
+
+                    <hr class="mb-4">
+
+                    <h4 class="mb-3 border-bottom pb-2">Step 2: Payment Method</h4>
+
+                    <div class="d-block my-3">
+                        @{
+                            var codMethod = paymentMethods?.FirstOrDefault(pm => 
+                                pm.Name.Equals("COD", StringComparison.OrdinalIgnoreCase) || 
+                                pm.Name.Contains("Cash on Delivery", StringComparison.OrdinalIgnoreCase));
+                            
+                            var onlineMethods = paymentMethods?.Where(pm => 
+                                pm.IsActive && 
+                                pm != codMethod).ToList();
+                        }
+
+                        <!-- COD Option -->
+                        <div class="form-check mb-3 p-3 border rounded bg-white box-shadow-sm">
+                            <input id="cod" name="paymentMethod" type="radio" class="form-check-input" value="@(codMethod?.Name ?? "COD")" checked required>
+                            <label class="form-check-label d-flex align-items-center gap-2" for="cod">
+                                <span class="fw-bold fs-5 text-dark"><i class="bi bi-cash-stack me-2"></i>@(codMethod?.Name ?? "Cash on Delivery")</span>
+                                <span class="badge bg-secondary text-white p-1 ms-auto">PAY ON RECEIVE</span>
+                            </label>
+                            <div class="ms-4 mt-2 text-muted small">
+                                @(codMethod?.Details ?? "Pay with cash when you receive the parcel at your doorstep.")
+                            </div>
+                        </div>
+
+                        <!-- Online Payment Options -->
+                        <h6 class="mt-4 mb-2 fw-bold text-success"><i class="bi bi-wallet2"></i> Online Payment</h6>
+                        <div class="online-payments border p-3 rounded bg-white">
+                            @if (onlineMethods != null && onlineMethods.Any())
+                            {
+                                foreach (var pm in onlineMethods)
+                                {
+                                    <div class="form-check mb-3 p-2 border-bottom">
+                                        <input id="pm-@pm.Id" name="paymentMethod" type="radio" class="form-check-input" value="@pm.Name" required>
+                                        <label class="form-check-label d-flex align-items-center gap-2" for="pm-@pm.Id">
+                                            @if (!string.IsNullOrEmpty(pm.LogoUrl)) {
+                                                <img src="@pm.LogoUrl" alt="@pm.Name" style="height: 30px; border-radius: 4px;">
+                                            }
+                                            <span class="fw-bold text-dark">Pay with @pm.Name</span>
+                                        </label>
+                                        <div class="ms-4 small text-muted">@pm.Details</div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="text-muted small">Online payment methods are currently being updated by Admin.</div>
+                            }
+                        </div>
+                    </div>
+
+                    <hr class="mb-4">
+                    <button class="btn btn-success btn-lg w-100 py-3" type="submit" style="font-weight: 800; font-size: 1.2rem;">Confirm Order & Proceed</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

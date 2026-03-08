@@ -1,0 +1,56 @@
+﻿@model E_ShoppingManagement.Models.Employee
+
+@{
+    ViewData["Title"] = "Employee Details";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="mb-3">Employee Details</h2>
+
+<div class="page-card">
+    <dl class="row">
+        <dt class="col-sm-3">Name</dt>
+        <dd class="col-sm-9">@Model.Name</dd>
+
+        <dt class="col-sm-3">Email</dt>
+        <dd class="col-sm-9">@Model.Email</dd>
+
+        <dt class="col-sm-3">Phone</dt>
+        <dd class="col-sm-9">@Model.PhoneNumber</dd>
+
+        <dt class="col-sm-3">Designation</dt>
+        <dd class="col-sm-9">@Model.Designation</dd>
+
+        <dt class="col-sm-3">Joining Date</dt>
+        <dd class="col-sm-9">@Model.JoiningDate.ToShortDateString()</dd>
+
+        <dt class="col-sm-3">Salary</dt>
+        <dd class="col-sm-9">@Model.Salary</dd>
+
+        <dt class="col-sm-3">Status</dt>
+        <dd class="col-sm-9">
+            @if (Model.Status == "Active")
+            {
+                <span class="badge badge-approved">Active</span>
+            }
+            else
+            {
+                <span class="badge badge-rejected">@Model.Status</span>
+            }
+        </dd>
+
+        <dt class="col-sm-3">Created At</dt>
+        <dd class="col-sm-9">@Model.CreatedAt</dd>
+
+        @if (Model.ModifiedAt.HasValue)
+        {
+            <dt class="col-sm-3">Modified At</dt>
+            <dd class="col-sm-9">@Model.ModifiedAt</dd>
+        }
+    </dl>
+
+    <div class="mt-3 d-flex justify-content-between">
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-success">Edit</a>
+    </div>
+</div>

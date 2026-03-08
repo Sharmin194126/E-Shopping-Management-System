@@ -1,0 +1,109 @@
+@model E_ShoppingManagement.Models.Order
+@{
+    ViewData["Title"] = "Order Details";
+    Layout = User.IsInRole("Admin") || User.IsInRole("Employee") ? "~/Views/Shared/_AdminLayout.cshtml" : "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Order #@Model.Id Details</h2>
+        <div class="d-flex gap-2">
+            @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+            {
+                <a href="javascript:history.back()" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Back</a>
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit / Manage</a>
+            }
+            <button onclick="window.print()" class="btn btn-outline-primary"><i class="bi bi-printer"></i> Print</button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Order Items</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table align-middle">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Size</th>
+                                <th>Price</th>
+                                <th>Qty</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.OrderDetails!)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            @if (!string.IsNullOrEmpty(item.Product?.ImageUrl))
+                                            {
+                                                <img src="@(item.Product.ImageUrl.StartsWith("/") ? item.Product.ImageUrl : "/images/products/" + item.Product.ImageUrl)" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;" />
+                                            }
+                                            <span>@item.Product?.Name</span>
+                                        </div>
+                                    </td>
+                                    <td>@(item.Size ?? "N/A")</td>
+                                    <td>৳@item.Price</td>
+                                    <td>@item.Quantity</td>
+                                    <td class="fw-bold">৳@(item.Price * item.Quantity)</td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="4" class="text-end fw-bold">Grand Total:</td>
+                                <td class="fw-bold text-danger" style="font-size: 1.2rem;">৳@Model.TotalAmount</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm border-primary">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Order Status</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="text-muted small d-block">Status</label>
+                        <span class="badge @(Model.OrderStatus == "Delivered" ? "bg-success" : (Model.OrderStatus == "Cancelled" ? "bg-danger" : "bg-warning")) fs-6">
+                            @Model.OrderStatus
+                        </span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="text-muted small d-block">Payment Status</label>
+                        <span class="badge @(Model.PaymentStatus == "Paid" ? "bg-success" : "bg-warning")">@Model.PaymentStatus</span>
+                        <small class="ms-1">(@Model.PaymentMethod)</small>
+                    </div>
+                    <div class="mb-3">
+                        <label class="text-muted small d-block">Assigned Employee</label>
+                        <span class="fw-bold text-info">@(Model.AssignedEmployee?.Name ?? "Not Assigned")</span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="text-muted small d-block">Delivery Man</label>
+                        <span class="fw-bold text-success">@(Model.DeliveryMan?.Name ?? "Not Assigned")</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Shipping Info</h5>
+                </div>
+                <div class="card-body">
+                    <p class="mb-1"><strong>Customer:</strong> @Model.Customer?.Name</p>
+                    <p class="mb-1"><strong>Phone:</strong> @Model.PhoneNumber</p>
+                    <p class="mb-1"><strong>Address:</strong> @Model.ShippingAddress</p>
+                    <p class="mb-0"><strong>City:</strong> @Model.City, @Model.ZipCode</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

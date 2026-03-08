@@ -1,0 +1,60 @@
+﻿@model E_ShoppingManagement.Models.Category
+
+@{
+    ViewData["Title"] = "Category Details";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="mb-3 text-center">Category Details</h2>
+
+<div class="page-card p-4">
+
+    <!-- CATEGORY IMAGE -->
+    <div class="text-center mb-4">
+        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+        {
+            <img src="~/images/categories/@Model.ImageUrl"
+                 alt="@Model.Name"
+                 class="category-details-image" />
+        }
+        else
+        {
+            <span class="text-muted">No Image Available</span>
+        }
+    </div>
+
+    <!-- CATEGORY INFO -->
+    <dl class="row">
+        <dt class="col-sm-3">Name</dt>
+        <dd class="col-sm-9">@Model.Name</dd>
+
+        <dt class="col-sm-3">Description</dt>
+        <dd class="col-sm-9">@Model.Description</dd>
+
+        <dt class="col-sm-3">Status</dt>
+        <dd class="col-sm-9">@Model.Status</dd>
+
+        <dt class="col-sm-3">Created At</dt>
+        <dd class="col-sm-9">
+            @Model.CreatedAt.ToLocalTime().ToString("dd-MM-yyyy, hh:mm tt")
+        </dd>
+    </dl>
+
+    <div class="mt-3 text-center">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary btn-sm">Update Details</a>
+        <a asp-action="Index" class="btn btn-secondary btn-sm">↩ Back</a>
+    </div>
+</div>
+
+<style>
+    .category-details-image {
+        width: 100%;
+        max-width: 600px;
+        height: 400px;
+        object-fit: contain;
+        border-radius: 10px;
+        border: 1px solid #ddd;
+        background-color: #fafafa;
+        padding: 10px;
+    }
+</style>

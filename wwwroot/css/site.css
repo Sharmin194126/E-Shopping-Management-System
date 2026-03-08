@@ -1,0 +1,1084 @@
+/* =====================
+   CSS VARIABLES
+===================== */
+:root {
+    --bg: #f4f6f9;
+    --text: #2c3e50;
+    --nav-bg: #ffffff;
+    --border: #dee2e6;
+    --hover-purple: #6f42c1;
+    --footer-bg: #ffffff;
+    --footer-text: #2c3e50;
+}
+
+body.dark {
+    --bg: #1a1a1a;
+    --text: #ecf0f1;
+    --nav-bg: #2d2d2d;
+    --border: #444;
+    --footer-bg: #000000;
+}
+
+/* =====================
+   GLOBAL RESET
+===================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-width: 1200px;
+}
+
+a {
+    color: var(--hover-purple);
+    text-decoration: none;
+}
+
+button {
+    cursor: pointer;
+}
+
+/* =====================
+   NAVBAR
+===================== */
+.main-navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--nav-bg);
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+/* LEFT NAV */
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+/* RIGHT NAV */
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    /* same as left side */
+}
+
+/* NAV LINKS  */
+.nav-left a,
+.nav-right a,
+.nav-right button {
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 6px 8px;
+    color: var(--text) !important;
+    display: inline-flex;
+    align-items: center;
+    transition: color 0.3s ease;
+}
+
+/* Hover ? Purple text only */
+.nav-left a:hover,
+.nav-right a:hover,
+.nav-right button:hover {
+    color: var(--hover-purple) !important;
+}
+
+/* =====================
+   SEARCH
+===================== */
+.nav-middle {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.search-box {
+    position: relative;
+    width: 60%;
+}
+
+#searchInput {
+    width: 100%;
+    padding: 8px 40px 8px 10px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+}
+
+#searchBtn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* SEARCH DROPDOWN */
+#searchDropdown {
+    position: absolute;
+    top: 100%;
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    display: none;
+    z-index: 9999;
+}
+
+#searchDropdown li {
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+#searchDropdown li:hover {
+    color: var(--hover-purple);
+}
+
+/* =====================
+   DROPDOWNS
+===================== */
+.dropdown {
+    position: relative;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 180px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    display: none;
+    z-index: 999;
+}
+
+.dropdown:hover>.dropdown-menu {
+    display: block;
+}
+
+/* SUB MENU */
+.dropdown-sub {
+    position: relative;
+}
+
+.dropdown-sub ul {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    min-width: 180px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    display: none;
+}
+
+.dropdown-sub:hover>ul {
+    display: block;
+}
+
+.dropdown-menu a {
+    display: block;
+    padding: 8px 12px;
+}
+
+.dropdown-menu a:hover {
+    color: var(--hover-purple);
+}
+
+/* =====================
+   WELCOME SECTION
+===================== */
+.welcome p {
+    color: #ffffff;
+}
+
+/* =====================
+   FOOTER
+===================== */
+.footer,
+.home-footer {
+    background: var(--footer-bg);
+    color: var(--text);
+    padding: 20px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+}
+
+
+/* Login PAGE BACKGROUND */
+html,
+body {
+    height: 100%;
+    margin: 0;
+}
+
+.login-bg,
+.register-bg,
+.forgot-bg,
+.reset-bg {
+    min-height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    /* Ensure blurred edges don't overflow */
+}
+
+/* Pseudo-element for the background image with blur */
+.login-bg::before,
+.register-bg::before,
+.forgot-bg::before,
+.reset-bg::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: -1;
+    transform: scale(1.05);
+    /* Prevent white edges */
+}
+
+.login-bg::before {
+    background-image: url('https://depositphotos-blog.s3.eu-west-1.amazonaws.com/uploads/2017/07/Soothing-nature-backgrounds-2.jpg');
+}
+
+.register-bg::before {
+    background-image: url('https://wallpapers.com/images/hd/vibrant-mountain-lake-scenic-yif3zbqokb0oq5yw.jpg');
+}
+
+.forgot-bg::before,
+.reset-bg::before {
+    background-image: url('https://depositphotos-blog.s3.eu-west-1.amazonaws.com/uploads/2017/07/Soothing-nature-backgrounds-2.jpg');
+}
+
+/* CARDS */
+.login-box,
+.register-card,
+.forgot-card,
+.reset-card {
+    width: 100%;
+    max-width: 450px;
+    padding: 30px;
+    border-radius: 12px;
+    color: #fff;
+    /* Clearer form visibility */
+    background: rgba(0, 0, 0, 0.6);
+    /* Darker semi-transparent bg for contrast */
+    backdrop-filter: none;
+    /* Removed blur from card itself */
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+
+/* INPUTS - High Visibility */
+.form-control,
+.login-input {
+    background-color: #ffffff !important;
+    /* Solid white background */
+    border: 1px solid #ced4da;
+    color: #000 !important;
+    /* Pure black text */
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 12px;
+    padding-right: 45px !important;
+    /* Space for eye icon inside box */
+}
+
+/* Force White Background on Autofill */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    background-color: #ffffff !important;
+    -webkit-text-fill-color: #000 !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+.form-control::placeholder,
+.login-input::placeholder {
+    color: #555 !important;
+    font-weight: 500;
+    opacity: 1;
+}
+
+.form-control:focus,
+.login-input:focus {
+    background-color: #ffffff !important;
+    /* Ensuring white on focus */
+    border-color: #ff6a00;
+    color: #000 !important;
+    outline: none;
+}
+
+label {
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 5px;
+    display: block;
+}
+
+/* PASSWORD ICON */
+.password-box,
+.password-wrapper,
+.password-container {
+    position: relative;
+    /* Removed display flex to rely on absolute positioning */
+}
+
+.eye-icon,
+.password-toggle {
+    position: absolute;
+    right: 15px;
+    /* Stay inside right padding of input */
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 20px;
+    color: #000 !important;
+    background: transparent;
+    /* Transparent to blend with white input */
+    z-index: 100;
+}
+
+.eye-icon:hover {
+    color: #ff6a00 !important;
+}
+
+/* BUTTONS */
+.btn-login,
+.btn-register,
+.btn-reset,
+.btn-primary {
+    background-color: #ff6a00;
+    border: none;
+    font-weight: bold;
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
+.btn-login:hover,
+.btn-register:hover,
+.btn-reset:hover,
+.btn-primary:hover {
+    background-color: #e65c00;
+    transform: translateY(-2px);
+}
+
+.btn-outline-light:hover {
+    color: #333;
+    background-color: #fff;
+}
+
+
+
+/* ---------- GLOBAL FIX (Desktop view on mobile) ---------- */
+body {
+    min-width: 1200px;
+    overflow-x: auto;
+}
+
+/* ===== SIDE NAV ===== */
+.side-nav {
+    position: fixed;
+    left: 10px;
+    bottom: 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 1000;
+}
+
+.side-nav a {
+    width: 42px;
+    height: 42px;
+    background: #6f42c1;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    position: relative;
+}
+
+.side-nav a span {
+    position: absolute;
+    left: 50px;
+    background: black;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: none;
+    white-space: nowrap;
+    font-size: 13px;
+}
+
+.side-nav a:hover span {
+    display: block;
+}
+
+/* ===== BANNER ===== */
+.banner {
+    width: 100%;
+    height: 500px;
+    /* ?? increase height (you can use 550px / 600px if needed) */
+    position: relative;
+    overflow: hidden;
+}
+
+.banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    /* ? shows full image without cutting */
+    display: none;
+}
+
+.banner img.active {
+    display: block;
+}
+
+.banner-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, .6);
+    color: #fff;
+    border: none;
+    font-size: 28px;
+    padding: 10px 18px;
+    cursor: pointer;
+}
+
+.banner-btn.left {
+    left: 15px;
+}
+
+.banner-btn.right {
+    right: 15px;
+}
+
+/* ===== WELCOME ===== */
+.welcome {
+    padding: 35px 70px;
+    text-align: center;
+}
+
+.welcome h2 {
+    font-weight: bold;
+}
+
+.welcome p {
+    font-size: 16px;
+    color: #555;
+    max-width: 800px;
+    margin: auto;
+}
+
+/*AFTER REMOVING 2 BUTTONS  ADDING RATTING input small ITEMS */
+.product-card a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.rating {
+    font-size: 13px;
+    margin-top: 6px;
+    color: #f5b301;
+}
+
+
+/* ===== SECTIONS ===== */
+.section {
+    padding: 50px 70px;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 18px;
+}
+
+.product-card {
+    border: 1px solid #ddd;
+    padding: 12px;
+    border-radius: 8px;
+    background: #fff;
+}
+
+.product-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.section-name {
+    font-size: 12px;
+    color: #6f42c1;
+    font-weight: bold;
+    margin-top: 6px;
+}
+
+.desc {
+    font-size: 13px;
+    margin: 6px 0;
+}
+
+/*Buy NOW button color-profile input HOME PAGE */
+
+.buy-now-btn {
+    background-color: #7a1cff;
+    /* same purple as before */
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+    transition: 0.3s;
+}
+
+.buy-now-btn:hover {
+    background-color: #5c10d6;
+}
+
+.price-old {
+    text-decoration: line-through;
+    color: #888;
+    font-size: 13px;
+}
+
+.price-new {
+    color: #d63384;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+
+/* =====================
+   FOOTER
+===================== */
+.home-footer {
+    background: var(--footer-bg);
+    color: var(--footer-text);
+    padding: 50px 70px;
+}
+
+.home-footer a {
+    color: var(--footer-text);
+    text-decoration: none;
+}
+
+.home-footer a:hover {
+    color: #6f42c1;
+    text-decoration: underline;
+}
+
+::placeholder {
+    color: #888 !important;
+    opacity: 0.8 !important;
+}
+
+::-ms-input-placeholder {
+    color: #888 !important;
+}
+
+.home-footer {
+    border-top: 1px solid var(--border);
+}
+
+.payments img {
+    height: 42px;
+    margin-right: 12px;
+}
+
+.reviews {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin: 30px 0;
+}
+
+.review-box {
+    border: 1px solid var(--border);
+    padding: 15px;
+    border-radius: 8px;
+    background: var(--bg);
+    color: var(--text);
+}
+
+.review-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.review-head img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+}
+
+.rating {
+    color: #ffc107;
+    font-size: 14px;
+}
+
+.footer-bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-top: 30px;
+}
+
+/* ===== FIX: FOOTER BESIDE SIDE NAV ===== */
+.page-wrapper {
+    position: relative;
+}
+
+.main-content {
+    margin-left: 60px;
+    /* space for side-nav */
+}
+
+/* side-nav width reference */
+.side-nav {
+    width: 60px;
+}
+
+/* ===== SIDE NAV AUTO HIDE ===== */
+.side-nav {
+    position: fixed;
+    left: 10px;
+    bottom: 80px;
+    /* original position */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 1000;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.side-nav.hide {
+    transform: translateY(100px);
+    /* moves down out of view */
+    opacity: 0;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 18px;
+}
+
+.product-card {
+    border: 1px solid #ddd;
+    padding: 12px;
+    border-radius: 8px;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    /* push Add to Cart to bottom */
+    min-height: 380px;
+    /* ensures all cards have same height */
+}
+
+.product-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    display: block;
+    margin-bottom: 10px;
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover img {
+    transform: scale(1.05);
+}
+
+.desc {
+    font-size: 13px;
+    margin: 6px 0;
+    flex-grow: 1;
+    /* makes description take remaining space */
+}
+
+.price-new {
+    color: #d63384;
+    font-weight: bold;
+    font-size: 15px;
+    margin-bottom: 10px;
+}
+
+.add-to-cart-btn {
+    background-color: #7a1cff;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+    width: 100%;
+}
+
+.add-to-cart-btn:hover {
+    background-color: #5c10d6;
+}
+
+/*product details page */
+.product-details-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    padding: 30px;
+}
+
+.product-image img {
+    max-width: 400px;
+    width: 100%;
+    border-radius: 8px;
+}
+
+.product-info {
+    flex: 1;
+    min-width: 300px;
+}
+
+.product-rating span {
+    font-size: 18px;
+}
+
+.product-price {
+    font-size: 20px;
+    margin: 10px 0;
+}
+
+.price-old {
+    text-decoration: line-through;
+    margin-right: 10px;
+    color: #888;
+}
+
+.quantity-selector button {
+    width: 30px;
+    height: 30px;
+}
+
+.quantity-selector input {
+    width: 50px;
+    text-align: center;
+}
+
+.product-buttons button {
+    margin-right: 15px;
+    padding: 10px 20px;
+    background: #6f42c1;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.product-buttons button:hover {
+    background: #5930a0;
+}
+
+@media (max-width: 768px) {
+    .product-details-wrapper {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+/*form PRODUCT PAGE*/
+/* =========================
+   GLOBAL STYLE
+========================= */
+body {
+    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+    background-color: #f5f7fb;
+    color: #333;
+}
+
+h2 {
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+/* =========================
+   CARD CONTAINER
+========================= */
+.page-card {
+    background: #fdfdfd;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e9ecef;
+}
+
+input,
+textarea,
+select {
+    color: #000000 !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: #666666 !important;
+    opacity: 1 !important;
+}
+
+.product-actions .btn-view:hover {
+    background: #5a6268 !important;
+    transform: scale(1.05);
+}
+
+.payment-badge {
+    background: #fff;
+    padding: 8px 15px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid #eee;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.payment-badge:hover {
+    border-color: #6f42c1;
+    transform: translateY(-2px);
+}
+
+.payment-badge img {
+    height: 25px;
+    width: auto;
+    object-fit: contain;
+}
+
+.clock-display {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    color: #6f42c1;
+    background: #f8f9fa;
+    padding: 5px 15px;
+    border-radius: 20px;
+    border: 1px solid #dee2e6;
+    display: inline-block;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+.btn {
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-size: 14px;
+}
+
+.btn-primary {
+    background-color: #2563eb;
+    border-color: #2563eb;
+}
+
+.btn-primary:hover {
+    background-color: #1e40af;
+}
+
+.btn-success {
+    background-color: #16a34a;
+    border-color: #16a34a;
+}
+
+.btn-danger {
+    background-color: #dc2626;
+}
+
+.btn-secondary {
+    background-color: #6b7280;
+}
+
+/* =========================
+   TABLE
+========================= */
+.table {
+    background: #fff;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.table thead {
+    background-color: #f1f5f9;
+}
+
+.table th {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.table td {
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+/* =========================
+   FORM
+========================= */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-control {
+    border-radius: 6px;
+    border: 1px solid #d1d5db;
+}
+
+.form-control:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 0.15rem rgba(37, 99, 235, .25);
+}
+
+/* =========================
+   STATUS BADGES
+========================= */
+.badge {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+}
+
+.badge-pending {
+    background-color: #facc15;
+    color: #000;
+}
+
+.badge-approved {
+    background-color: #22c55e;
+    color: #fff;
+}
+
+.badge-rejected {
+    background-color: #ef4444;
+    color: #fff;
+}
+
+/* =========================
+   IMAGE PREVIEW
+========================= */
+.product-image {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+}
+
+/* ===== ADMIN / FORM PAGES FIX ===== */
+.page-card .form-control,
+.page-card input,
+.page-card textarea,
+.page-card select {
+    background-color: #f1f3f5 !important;
+    color: #212529 !important;
+    border: 1px solid #ced4da !important;
+}
+
+.page-card .form-control:focus,
+.page-card input:focus,
+.page-card textarea:focus,
+.page-card select:focus {
+    background-color: #fff !important;
+    border-color: #6f42c1 !important;
+    box-shadow: 0 0 0 0.2rem rgba(111, 66, 193, 0.25) !important;
+}
+
+
+/* FINAL OVERRIDE FOR INPUT VISIBILITY */
+/* Default State: Transparent BG, White Text */
+.login-box input,
+.register-card input,
+.forgot-card input,
+.reset-card input,
+.account-card input {
+    background-color: transparent !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.6) !important;
+    transition: all 0.3s ease;
+}
+
+/* Focus State: White BG, Black Text (When writing) */
+.login-box input:focus,
+.register-card input:focus,
+.forgot-card input:focus,
+.reset-card input:focus,
+.account-card input:focus {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border-color: #ff6a00 !important;
+    box-shadow: 0 0 10px rgba(255, 106, 0, 0.3);
+}
+
+/* Placeholder: Light when transparent, Dark when focused */
+.login-box input::placeholder,
+.register-card input::placeholder,
+.forgot-card input::placeholder,
+.reset-card input::placeholder,
+.account-card input::placeholder {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.login-box input:focus::placeholder,
+.register-card input:focus::placeholder,
+.forgot-card input:focus::placeholder,
+.reset-card input:focus::placeholder,
+.account-card input:focus::placeholder {
+    color: #666 !important;
+}
+
+/* Eye Icon Visibility Logic: White on Transparent, Black on White */
+.password-wrapper input:not(:focus)~.eye-icon,
+.password-container input:not(:focus)~.eye-icon {
+    color: #ffffff !important;
+    background: transparent;
+}
+
+.password-wrapper input:focus~.eye-icon,
+.password-container input:focus~.eye-icon {
+    color: #000000 !important;
+}
+
+/* Autofill: Force White BG + Black Text (Readable) */
+.login-box input:-webkit-autofill,
+.register-card input:-webkit-autofill,
+.forgot-card input:-webkit-autofill,
+.reset-card input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
+    -webkit-text-fill-color: #000 !important;
+    transition: background-color 5000s ease-in-out 0s;
+}

@@ -1,0 +1,105 @@
+﻿@model IEnumerable<E_ShoppingManagement.Models.Product>
+
+@{
+    ViewData["Title"] = "Manage Products";
+    Layout = "~/Views/Shared/_EmployeeLayout.cshtml";
+}
+
+<h2 class="mb-3">Manage Products</h2>
+
+<div class="page-card mb-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="mb-0">All Products</h5>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Add New Product
+        </a>
+    </div>
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert @(TempData["IsSuccess"] != null && (TempData["IsSuccess"] as bool? == true) ? "alert-success" : "alert-danger")">
+            @TempData["Message"]
+        </div>
+    }
+
+    <table class="table table-hover table-bordered">
+        <thead class="table-primary">
+            <tr>
+                <th style="width:60px;">Product Id</th>
+                <th style="width:80px;">Image</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Type</th>
+                <th>Price</th>
+                <th>Offer %</th>
+                <th>Offer Price</th>
+                <th>Stock</th>
+                <th>Status</th>
+                <th style="width: 190px;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var index = 1;
+            }
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="11" class="text-center text-muted">No products found.</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@index</td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(item.ImageUrl))
+                            {
+                                <img src="@(item.ImageUrl.StartsWith("/") ? item.ImageUrl : "/images/products/" + item.ImageUrl)" class="product-image-small" />
+                            }
+                            else
+                            {
+                                 <img src="/images/no-image.png" class="product-image-small" />
+                            }
+                        </td>
+                        <td class="fw-bold">@item.Name</td>
+                        <td>@item.Category?.Name</td>
+                        <td><span class="badge bg-light text-dark border">@item.ProductType?.Name</span></td>
+                        <td>
+                            @if (item.OfferPercentage > 0)
+                            {
+                                <del class="text-muted">৳@item.RegularPrice</del>
+                            }
+                            else
+                            {
+                                <span>৳@item.RegularPrice</span>
+                            }
+                        </td>
+                        <td class="text-success fw-bold">@(item.OfferPercentage > 0 ? item.OfferPercentage + "%" : "")</td>
+                        <td class="fw-bold text-danger">
+                            @(item.OfferPercentage > 0 ? "৳" + item.Price : "")
+                        </td>
+                        <td>
+                            <span class="badge @(item.StockQty <= 10 ? "badge-stock-low" : "badge-stock-ok")">
+                                @item.StockQty Units
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge @(item.Status == "Active" ? "bg-success" : "bg-danger")">
+                                @item.Status
+                            </span>
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-success">Edit</a>
+                            <a asp-action="EditStock" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Stock</a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-secondary">Details</a>
+                        </td>
+                    </tr>
+                    index++;
+                }
+            }
+        </tbody>
+    </table>
+</div>

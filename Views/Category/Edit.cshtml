@@ -1,0 +1,96 @@
+﻿@model E_ShoppingManagement.Models.Category
+
+@{
+    ViewData["Title"] = "Edit Category";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="mb-3 text-center">Edit Category</h2>
+
+<div class="page-card p-4" style="max-width: 700px; margin:auto;">
+
+    @if (ViewBag.Message != null)
+    {
+        <div class="alert @(ViewBag.IsSuccess == true ? "alert-success" : "alert-danger") text-center mb-3">
+            @ViewBag.Message
+        </div>
+    }
+
+    <form asp-action="Edit" method="post" enctype="multipart/form-data">
+        <input type="hidden" asp-for="Id" />
+
+        <div class="row g-3">
+            <!-- Name -->
+            <div class="col-md-6">
+                <label asp-for="Name" class="fw-bold mb-1"></label>
+                <input asp-for="Name" class="form-control input-visible" placeholder="Enter category name" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <!-- Status -->
+            <div class="col-md-6">
+                <label asp-for="Status" class="fw-bold mb-1"></label>
+                <select asp-for="Status" class="form-control input-visible">
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                    <option value="Pending">Pending</option>
+                </select>
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+
+            <!-- Description -->
+            <div class="col-12">
+                <label asp-for="Description" class="fw-bold mb-1"></label>
+                <textarea asp-for="Description"
+                          class="form-control input-visible"
+                          rows="3"
+                          placeholder="Enter category description"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <!-- Image -->
+            <div class="col-md-6">
+                <label class="fw-bold mb-1">Image</label>
+                <input type="file"
+                       name="ImageFile"
+                       class="form-control input-visible"
+                       accept="image/*"
+                       onchange="previewImage(event)" />
+            </div>
+
+            <!-- Image Preview -->
+            <div class="col-md-6 text-center">
+                <label class="fw-bold mb-1 d-block">Preview</label>
+                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                {
+                    <img id="imagePreview"
+                         src="~/images/categories/@Model.ImageUrl"
+                         style="width:200px;height:200px;object-fit:cover;border-radius:8px;border:1px solid #ddd;" />
+                }
+                else
+                {
+                    <img id="imagePreview"
+                         style="display:none;width:200px;height:200px;object-fit:cover;border-radius:8px;border:1px solid #ddd;" />
+                }
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <a asp-action="Index" class="btn btn-secondary px-4 me-2">↩ Back</a>
+            <button type="submit" class="btn btn-primary px-4">🔄 Update</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function previewImage(event) {
+            const img = document.getElementById('imagePreview');
+            if (event.target.files && event.target.files[0]) {
+                img.src = URL.createObjectURL(event.target.files[0]);
+                img.style.display = 'block';
+            }
+        }
+    </script>
+}

@@ -1,0 +1,11 @@
+@model int
+
+<li class="nav-item">
+    <a class="nav-link text-dark" href="/Cart">
+        🛒 Cart <span class="badge bg-warning text-dark">@Model</span>
+        @if (ViewBag.TotalAmount > 0)
+        {
+            <span class="badge bg-success">৳@ViewBag.TotalAmount</span>
+        }
+    </a>
+</li>

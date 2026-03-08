@@ -1,0 +1,142 @@
+﻿@model IEnumerable<E_ShoppingManagement.Models.Product>
+
+@{
+    ViewData["Title"] = "Products";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="mb-3">Products</h2>
+
+<div class="page-card mb-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="mb-0">All Products</h5>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Add New Product
+        </a>
+    </div>
+
+    <form method="get" asp-action="Index" class="row g-2 mb-3">
+        <div class="col-md-3">
+            <select class="form-control"
+                    name="categoryId"
+                    asp-items="@(ViewBag.CategoryList as SelectList)">
+                <option value="">All Categories</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <select class="form-control"
+                    name="productTypeId"
+                    asp-items="@(ViewBag.ProductTypeList as SelectList)">
+                <option value="">All Product Types</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <input type="text" name="query" class="form-control" placeholder="Search product name..." value="@ViewBag.CurrentQuery" />
+        </div>
+        <div class="col-md-3 d-flex gap-2">
+            <button type="submit" class="btn btn-secondary flex-grow-1">Filter</button>
+            <a asp-action="Index" class="btn btn-outline-danger flex-grow-1">Clear Filter</a>
+        </div>
+    </form>
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert @(TempData["IsSuccess"] != null && (TempData["IsSuccess"] as bool? == true) ? "alert-success" : "alert-danger")">
+            @TempData["Message"]
+        </div>
+    }
+
+    <table class="table table-hover table-bordered">
+        <thead class="table-header-dark">
+            <tr>
+                <th style="width:60px;">Product Id</th>
+                <th style="width:100px;">Image</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Type</th>
+                <th>Price</th>
+                <th>Offer %</th>
+                <th>Offer Price</th>
+                <th>Stock</th>
+                <th>Status</th>
+                <th>Approval</th>
+                <th style="width: 190px;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var index = 1;
+            }
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="12" class="text-center text-muted">No products found.</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@index</td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(item.ImageUrl))
+                            {
+                                <img src="@(item.ImageUrl.StartsWith("/") ? item.ImageUrl : "/images/products/" + item.ImageUrl)" 
+                                     style="width: 80px; height: 80px; object-fit: cover; border-radius: 6px; border: 1px solid #ddd;" />
+                            }
+                            else
+                            {
+                                 <img src="/images/no-image.png" 
+                                      style="width: 80px; height: 80px; object-fit: cover; border-radius: 6px; border: 1px solid #ddd;" />
+                            }
+                        </td>
+                        <td class="fw-bold">@item.Name</td>
+                        <td>@item.Category?.Name</td>
+                        <td><span class="badge bg-light text-dark border">@item.ProductType?.Name</span></td>
+                        <td>
+                            @if (item.OfferPercentage > 0)
+                            {
+                                <del class="text-muted">৳@item.RegularPrice</del>
+                            }
+                            else
+                            {
+                                <span>৳@item.RegularPrice</span>
+                            }
+                        </td>
+                        <td class="text-success fw-bold">@(item.OfferPercentage > 0 ? item.OfferPercentage + "%" : "")</td>
+                        <td class="fw-bold text-danger">
+                            @(item.OfferPercentage > 0 ? "৳" + item.Price : "")
+                        </td>
+                        <td>
+                            <span class="badge @(item.StockQty <= 10 ? "badge-stock-low" : "badge-stock-ok")">
+                                @item.StockQty Units
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge @(item.Status == "Active" ? "badge-status-active" : (item.Status == "Pending" ? "bg-warning text-dark" : "badge-status-inactive"))">
+                                @item.Status
+                            </span>
+                        </td>
+                        <td>
+                            @if (item.IsApproved)
+                            {
+                                <span class="badge bg-success"><i class="bi bi-check-circle"></i> Yes</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning text-dark"><i class="bi bi-clock"></i> Pending</span>
+                            }
+                        </td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-secondary">Details</a>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-success">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                    index++;
+                }
+            }
+        </tbody>
+    </table>
+</div>

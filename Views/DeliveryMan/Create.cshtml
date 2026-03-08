@@ -1,0 +1,34 @@
+@model E_ShoppingManagement.Models.DeliveryMan
+@{
+    ViewData["Title"] = "Add Delivery Man";
+    Layout = User.IsInRole("Admin") ? "~/Views/Shared/_AdminLayout.cshtml" : "~/Views/Shared/_EmployeeLayout.cshtml";
+}
+
+<h2>Add New Delivery Man</h2>
+
+<div class="page-card p-4" style="background: #f8f9fa; border-radius: 8px; max-width: 600px;">
+    <form asp-action="Create" method="post">
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label"></label>
+            <input asp-for="Name" class="form-control" required />
+        </div>
+        <div class="mb-3">
+            <label asp-for="ContactNumber" class="form-label">Contact Number</label>
+            <input asp-for="ContactNumber" class="form-control" pattern="[0-9]{11}" maxlength="11" minlength="11" placeholder="01XXXXXXXXX" title="Please enter exactly 11 digits" required />
+            <small class="text-muted">Must be exactly 11 digits</small>
+        </div>
+        <div class="mb-3">
+            <label asp-for="VehicleInfo" class="form-label"></label>
+            <input asp-for="VehicleInfo" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="Status" class="form-label"></label>
+            <select asp-for="Status" class="form-control">
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>

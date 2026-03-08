@@ -1,0 +1,92 @@
+﻿@model IEnumerable<E_ShoppingManagement.ViewModels.EmployeeOrderListViewModel>
+
+@{
+    ViewData["Title"] = "My Sales";
+    Layout = "~/Views/Shared/_EmployeeLayout.cshtml";
+}
+
+<h2 class="mb-3">My Sales</h2>
+
+<div class="row g-3 mb-3">
+    <div class="col-md-4">
+        <div class="dash-card bg-success text-white position-relative p-3">
+            <h5>Orders Handled</h5>
+            <p class="fs-4 mb-0">@ViewBag.TotalOrders</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="dash-card bg-primary text-white position-relative p-3">
+            <h5>Total Revenue</h5>
+            <p class="fs-4 mb-0">@ViewBag.TotalRevenue</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="dash-card bg-info text-dark position-relative p-3">
+            <h5>Products Sold</h5>
+            <p class="fs-4 mb-0">@ViewBag.TotalProducts</p>
+        </div>
+    </div>
+</div>
+
+<div class="page-card p-3">
+    <table class="table table-hover table-bordered align-middle" style="background: white; color: #333;">
+        <thead class="table-primary">
+            <tr>
+                <th style="width: 50px;">SL</th>
+                <th style="width: 100px;">Order Id</th>
+                <th>Products Sold</th>
+                <th>Customer</th>
+                <th style="width: 120px;">Total</th>
+                <th style="width: 120px;">Status</th>
+                <th>Created At</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ var i = 1; }
+            @if (!Model.Any())
+            {
+                <tr><td colspan="7" class="text-center text-muted">No orders found.</td></tr>
+            }
+            else
+            {
+                foreach (var o in Model)
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td><strong>#@o.OrderId</strong></td>
+                        <td>
+                            <div class="d-flex flex-column gap-2">
+                                @foreach (var item in o.Items)
+                                {
+                                    <div class="d-flex align-items-center gap-2 p-1" style="background: #f1f1f1; border-radius: 4px;">
+                                        @if (!string.IsNullOrEmpty(item.ProductImageUrl))
+                                        {
+                                            <img src="@(item.ProductImageUrl.StartsWith("/") ? item.ProductImageUrl : "/images/products/" + item.ProductImageUrl)" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;" />
+                                        }
+                                        else
+                                        {
+                                            <div style="width: 40px; height: 40px; background: #ddd; border-radius: 4px;"></div>
+                                        }
+                                        <div>
+                                            <div style="font-size: 0.9rem; font-weight: 500;">@item.ProductName</div>
+                                            <small class="text-muted">Qty: @item.Quantity × ৳@item.Price</small>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </td>
+                        <td>@o.CustomerName</td>
+                        <td style="font-weight: bold;">৳@o.TotalAmount</td>
+                        <td><span class="badge @(o.OrderStatus == "Delivered" ? "bg-success" : "bg-warning")">@o.OrderStatus</span></td>
+                        <td><small>@o.CreatedAt.ToString("MMM dd, yyyy HH:mm") UTC</small></td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@o.OrderId" class="btn btn-sm btn-info text-white">Details</a>
+                        </td>
+                    </tr>
+                    i++;
+                }
+            }
+        </tbody>
+    </table>
+</div>

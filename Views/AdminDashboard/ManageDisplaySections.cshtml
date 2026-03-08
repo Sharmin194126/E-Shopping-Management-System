@@ -1,0 +1,154 @@
+@model IEnumerable<E_ShoppingManagement.Models.DisplaySection>
+@{
+    ViewData["Title"] = "Manage Homepage Sections";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Manage Homepage Display Sections</h2>
+    <a asp-action="CreateDisplaySection" class="btn btn-primary">
+        <i class="bi bi-plus-circle me-1"></i> Add New Section
+    </a>
+</div>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert @(TempData["IsSuccess"]?.ToString() == "True" ? "alert-success" : "alert-danger") alert-dismissible fade show" role="alert">
+        @TempData["Message"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th style="width: 80px;">Order</th>
+                        <th>Section Name</th>
+                        <th>Status</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <span class="badge bg-secondary">@item.DisplayOrder</span>
+                            </td>
+                            <td>
+                                <span class="fw-bold text-dark">@item.Name</span>
+                            </td>
+                            <td>
+                                @if (item.IsActive)
+                                {
+                                    <span class="badge bg-success">Active</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">Hidden</span>
+                                }
+                            </td>
+                            <td class="text-end">
+                                <a asp-action="EditDisplaySection" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary me-1">Edit</a>
+                                <a asp-action="DeleteDisplaySection" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="4" class="text-center py-4 text-muted">No display sections found. Default sections will be used on homepage.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <div class="alert alert-info small">
+        <i class="bi bi-info-circle me-1"></i> 
+        <strong>Note:</strong> These sections define the dynamic categories on the homepage sidebar and product grids. 
+        Products must have their "Home Display Section" set to match these names exactly (or "Featured" for "Featured Items").
+    </div>
+</div>
+
+<!-- Add Modal -->
+<div class="modal fade" id="addSectionModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-action="AddDisplaySection" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Display Section</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Section Name</label>
+                        <input type="text" name="Name" class="form-control" required placeholder="e.g. Featured Items" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Display Order</label>
+                        <input type="number" name="DisplayOrder" class="form-control" value="0" />
+                        <small class="text-muted">Lower numbers appear first on homepage sidebar.</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save Section</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editSectionModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-action="UpdateDisplaySection" method="post">
+                <input type="hidden" name="Id" id="editId" />
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Display Section</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Section Name</label>
+                        <input type="text" name="Name" id="editName" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Display Order</label>
+                        <input type="number" name="DisplayOrder" id="editOrder" class="form-control" />
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" name="IsActive" id="editActive" value="true" checked />
+                        <label class="form-check-label" for="editActive">Active / Visible on Homepage</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Update Section</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function editSection(id, name, order, isActive) {
+            document.getElementById('editId').value = id;
+            document.getElementById('editName').value = name;
+            document.getElementById('editOrder').value = order;
+            document.getElementById('editActive').checked = isActive;
+            
+            var modal = new bootstrap.Modal(document.getElementById('editSectionModal'));
+            modal.show();
+        }
+    </script>
+}

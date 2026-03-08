@@ -1,0 +1,111 @@
+@model IEnumerable<E_ShoppingManagement.Models.ContactMessage>
+@{
+    ViewData["Title"] = "Customer Messages";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Customer Messages & Inquiries</h2>
+    <a asp-action="Index" class="btn btn-secondary">Back to Dashboard</a>
+</div>
+
+<div class="page-card mb-5">
+    <h4 class="mb-3 text-primary"><i class="bi bi-envelope-plus me-2"></i>New Inquiries</h4>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="bg-light">
+                <tr>
+                    <th>Date</th>
+                    <th>Customer</th>
+                    <th>Subject</th>
+                    <th>Message</th>
+                    <th>Attachment</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var m in Model.Where(m => m.Status == "Active"))
+                {
+                    <tr>
+                        <td>@m.CreatedAt.ToLocalTime().ToString("MMM dd, yyyy HH:mm")</td>
+                        <td>
+                            <div class="fw-bold">@m.Name</div>
+                            <div class="small text-muted">@m.Email</div>
+                        </td>
+                        <td>@m.Subject</td>
+                        <td>
+                            <div class="text-truncate" style="max-width: 250px;" title="@m.Message">
+                                @m.Message
+                            </div>
+                        </td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(m.AttachmentUrl))
+                            {
+                                <a href="@m.AttachmentUrl" target="_blank" class="btn btn-sm btn-outline-info">
+                                    <i class="bi bi-paperclip"></i> View
+                                </a>
+                            }
+                            else
+                            {
+                                <span class="text-muted">None</span>
+                            }
+                        </td>
+                        <td class="text-end">
+                            <a asp-action="ReplyMessage" asp-route-id="@m.Id" class="btn btn-sm btn-primary">Reply</a>
+                        </td>
+                    </tr>
+                }
+                @if (!Model.Any(m => m.Status == "Active"))
+                {
+                    <tr>
+                        <td colspan="6" class="text-center py-4 text-muted">No new messages.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="page-card">
+    <h4 class="mb-3 text-success"><i class="bi bi-envelope-check me-2"></i>Replied Messages</h4>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="bg-light">
+                <tr>
+                    <th>Date</th>
+                    <th>Customer</th>
+                    <th>Subject</th>
+                    <th>Message</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var m in Model.Where(m => m.Status == "Replied"))
+                {
+                    <tr>
+                        <td>@m.CreatedAt.ToLocalTime().ToString("MMM dd, yyyy HH:mm")</td>
+                        <td>
+                            <div class="fw-bold">@m.Name</div>
+                            <div class="small text-muted">@m.Email</div>
+                        </td>
+                        <td>@m.Subject</td>
+                        <td>
+                            <div class="text-truncate" style="max-width: 350px;" title="@m.Message">
+                                @m.Message
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge bg-success">Replied</span>
+                        </td>
+                    </tr>
+                }
+                @if (!Model.Any(m => m.Status == "Replied"))
+                {
+                    <tr>
+                        <td colspan="5" class="text-center py-4 text-muted">No replied messages yet.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

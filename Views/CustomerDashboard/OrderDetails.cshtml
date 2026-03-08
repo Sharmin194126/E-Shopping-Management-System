@@ -1,0 +1,76 @@
+@model E_ShoppingManagement.Models.Order
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Order Details";
+}
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Order Details #@Model.Id</h2>
+        <div class="d-flex gap-2">
+            @if (Model.PaymentStatus == "Paid")
+            {
+                <a href="/CustomerDashboard/MoneyReceipt/@Model.Id" class="btn btn-success">View Money Receipt</a>
+            }
+            <a href="/CustomerDashboard/Orders" class="btn btn-outline-secondary">Back to Orders</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Order Items</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table align-middle">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.OrderDetails)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="@(string.IsNullOrEmpty(item.Product?.ImageUrl) ? "/images/no-image.png" : (item.Product.ImageUrl.StartsWith("/") ? item.Product.ImageUrl : "/images/products/" + item.Product.ImageUrl))" 
+                                                 style="width: 50px; height: 50px; object-fit: cover; margin-right: 10px;" />
+                                            <div>@(item.Product?.Name ?? "Product")</div>
+                                        </div>
+                                    </td>
+                                    <td>৳@item.Price</td>
+                                    <td>@item.Quantity</td>
+                                    <td>৳@(item.Price * item.Quantity)</td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" class="text-end fw-bold">Grand Total:</td>
+                                <td class="fw-bold">৳@Model.TotalAmount</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Order Summary</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Order Date:</strong> @Model.CreatedAt.ToString("MMM dd, yyyy h:mm tt")</p>
+                    <p><strong>Status:</strong> <span class="badge @(Model.OrderStatus == "Delivered" ? "bg-success text-white" : "bg-warning text-dark")">@Model.OrderStatus</span></p>
+                     <p><strong>Payment Method:</strong> Cash on Delivery</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

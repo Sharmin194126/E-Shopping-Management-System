@@ -1,0 +1,24 @@
+@model E_ShoppingManagement.Models.Cart
+@{
+    ViewData["Title"] = "Delete Cart";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="mb-3 text-danger">Delete Cart</h2>
+
+<div class="page-card text-center" style="max-width: 500px; margin: 0 auto; border-color: #dc3545;">
+    <h4 class="mb-3">Are you sure you want to delete this cart?</h4>
+    
+    <div class="alert alert-warning">
+        <strong>Customer:</strong> @(Model.Customer?.Name ?? "Unknown")<br/>
+        <strong>Cart ID:</strong> #@Model.Id
+    </div>
+
+    <p class="text-muted mb-4">This will remove all items in the cart permanently.</p>
+
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="Id" />
+        <a asp-action="Index" class="btn btn-secondary me-2">Cancel</a>
+        <button type="submit" class="btn btn-danger">Confirm Delete</button>
+    </form>
+</div>

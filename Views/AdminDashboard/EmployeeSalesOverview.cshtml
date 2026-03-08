@@ -1,0 +1,94 @@
+@model IEnumerable<E_ShoppingManagement.ViewModels.EmployeePerformanceViewModel>
+@{
+    ViewData["Title"] = "Employee Performance Overview";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Employee Performance Overview</h2>
+    <a asp-action="Index" class="btn btn-secondary">Back to Dashboard</a>
+</div>
+
+<div class="page-card mb-5">
+    <h4 class="mb-4">Summary Table</h4>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="bg-dark text-white">
+                <tr>
+                    <th>Employee Name</th>
+                    <th class="text-center">Products Managed</th>
+                    <th class="text-center">Total Stock Value</th>
+                    <th class="text-center">Products Sold</th>
+                    <th class="text-center">Total Sales Value</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var emp in Model)
+                {
+                    <tr>
+                        <td class="fw-bold">@emp.EmployeeName</td>
+                        <td class="text-center">@emp.TotalProductsManaged</td>
+                        <td class="text-center text-primary">৳ @emp.TotalStockValue.ToString("N2")</td>
+                        <td class="text-center">@emp.ProductsSold</td>
+                        <td class="text-center text-success fw-bold">৳ @emp.TotalSalesValue.ToString("N2")</td>
+                        <td class="text-end">
+                            <a href="#emp-@emp.EmployeeId" class="btn btn-sm btn-outline-primary">View Products</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<h4 class="mb-4">Employee-wise Product Assignments</h4>
+
+@foreach (var emp in Model)
+{
+    <div class="page-card mb-5" id="emp-@emp.EmployeeId">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0 text-primary">Products Assigned to: @emp.EmployeeName</h5>
+            <span class="badge bg-info">Total: @emp.TotalProductsManaged Products</span>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-sm table-bordered">
+                <thead class="bg-light">
+                    <tr>
+                        <th>Product ID</th>
+                        <th>Product Name</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Stock</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (emp.ManagedProducts != null && emp.ManagedProducts.Any())
+                    {
+                        foreach (var p in emp.ManagedProducts)
+                        {
+                            <tr>
+                                <td>@p.Id</td>
+                                <td class="fw-bold">@p.Name</td>
+                                <td>@p.Category?.Name</td>
+                                <td>৳ @p.Price</td>
+                                <td>@p.StockQty</td>
+                                <td>
+                                    @if(p.Status == "Active") { <span class="badge bg-success">Active</span> }
+                                    else { <span class="badge bg-warning text-dark">@p.Status</span> }
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center text-muted">No products assigned.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

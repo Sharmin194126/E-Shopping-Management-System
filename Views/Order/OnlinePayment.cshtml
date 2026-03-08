@@ -1,0 +1,312 @@
+@model E_ShoppingManagement.Models.Cart
+@{
+    var paymentMethod = ViewBag.PaymentMethod as string ?? "Online";
+    ViewData["Title"] = paymentMethod + " Payment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+    // Dynamic styling based on payment method
+    string primaryColor = "#e81828"; // Default (bKash)
+    string secondaryColor = "#c41212";
+    string logoIcon = "📱";
+    
+    if (paymentMethod.Contains("Nagad", StringComparison.OrdinalIgnoreCase)) {
+        primaryColor = "#EC2B2B";
+        secondaryColor = "#AD2020";
+        logoIcon = "📱";
+    } else if (paymentMethod.Contains("Rocket", StringComparison.OrdinalIgnoreCase)) {
+        primaryColor = "#8E2DE2";
+        secondaryColor = "#4A00E0";
+        logoIcon = "📱";
+    } else if (paymentMethod.Contains("Card", StringComparison.OrdinalIgnoreCase) || paymentMethod.Contains("Credit", StringComparison.OrdinalIgnoreCase)) {
+        primaryColor = "#007bff";
+        secondaryColor = "#0056b3";
+        logoIcon = "💳";
+    }
+}
+
+<style>
+    :root {
+        --payment-primary: @primaryColor;
+        --payment-secondary: @secondaryColor;
+    }
+
+    .payment-wrapper {
+        background: #f4f7f6;
+        min-height: 80vh;
+        padding: 40px 0;
+    }
+
+    .payment-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 30px;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .payment-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        margin-bottom: 30px;
+    }
+
+    .order-summary {
+        background: linear-gradient(135deg, var(--payment-primary) 0%, var(--payment-secondary) 100%);
+        color: white;
+        padding: 25px;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .order-summary h3 {
+        color: white;
+        margin-bottom: 20px;
+        font-weight: 700;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        padding-bottom: 10px;
+    }
+
+    .order-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 12px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .order-item:last-child {
+        border-bottom: none;
+    }
+
+    .order-total {
+        display: flex;
+        justify-content: space-between;
+        font-size: 20px;
+        font-weight: bold;
+        margin-top: auto;
+        padding-top: 20px;
+        border-top: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .payment-form-section {
+        background: #f8f9fa;
+        padding: 25px;
+        border-radius: 10px;
+        border: 1px solid #eee;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: all 0.3s;
+    }
+
+    .form-group input:focus {
+        outline: none;
+        border-color: var(--payment-primary);
+        box-shadow: 0 0 0 0.2rem rgba(232, 24, 40, 0.1);
+    }
+
+    .payment-header {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .payment-logo-icon {
+        font-size: 48px;
+        margin-bottom: 10px;
+    }
+
+    .pay-button {
+        background: linear-gradient(135deg, var(--payment-primary) 0%, var(--payment-secondary) 100%);
+        color: white;
+        padding: 15px 30px;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        width: 100%;
+        margin-top: 20px;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .pay-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .info-box {
+        background: #e7f3ff;
+        color: #004085;
+        padding: 15px;
+        border-radius: 8px;
+        margin-top: 20px;
+        border-left: 4px solid #004085;
+        font-size: 0.9rem;
+    }
+
+    .button-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #ddd;
+    }
+
+    .back-link {
+        color: #6c757d;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.2s;
+    }
+
+    .back-link:hover {
+        color: var(--payment-primary);
+    }
+
+    @@media (max-width: 768px) {
+        .payment-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="payment-wrapper">
+    <div class="payment-container">
+        <h2 style="text-align: center; margin-bottom: 30px; color: var(--payment-primary);">
+            <span style="font-size: 36px;">@logoIcon</span> @paymentMethod Payment
+        </h2>
+
+        <div class="payment-grid">
+            <!-- Order Summary -->
+            <div class="order-summary">
+                <h3>📋 Order Summary</h3>
+                @if(Model.Items != null)
+                {
+                    @foreach (var item in Model.Items)
+                    {
+                        <div class="order-item">
+                            <div>
+                                <span>@item.Product?.Name x @item.Quantity</span>
+                                <br/><small style="opacity: 0.8;">VAT: @item.Product?.VatPercentage% (৳@((item.Quantity * item.VatAmount).ToString("N2")))</small>
+                            </div>
+                            <span>৳@((item.Quantity * item.Price).ToString("N2"))</span>
+                        </div>
+                    }
+                }
+                <div class="order-total" style="border-top: 2px solid rgba(255, 255, 255, 0.3); margin-top: 20px; padding-top: 10px; font-size: 16px;">
+                    <span>Subtotal:</span>
+                    <span>৳@Model.Items?.Sum(i => i.Quantity * i.Price).ToString("N2")</span>
+                </div>
+                <div class="order-total" style="border-top: none; padding-top: 5px; font-size: 16px;">
+                    <span>Total VAT:</span>
+                    <span>৳@Model.Items?.Sum(i => i.Quantity * i.VatAmount).ToString("N2")</span>
+                </div>
+                <div class="order-total" style="border-top: 2px solid rgba(255, 255, 255, 0.5); padding-top: 15px; font-size: 22px;">
+                    <span>Total Amount:</span>
+                    <span>৳@Model.Items?.Sum(i => i.Quantity * i.PriceWithVat).ToString("N2")</span>
+                </div>
+            </div>
+
+            <!-- Payment Form -->
+            <div class="payment-form-section">
+                <div class="payment-header">
+                    <div class="payment-logo-icon">@logoIcon</div>
+                    <h3 style="color: var(--payment-primary); margin-bottom: 20px;">@paymentMethod Details</h3>
+                </div>
+
+                <form asp-action="ConfirmOnlinePayment" method="post">
+                    @if (paymentMethod.Contains("Card", StringComparison.OrdinalIgnoreCase) || paymentMethod.Contains("Credit", StringComparison.OrdinalIgnoreCase))
+                    {
+                        <div class="form-group">
+                            <label>Card Holder Name</label>
+                            <input type="text" name="cardHolder" placeholder="FULL NAME ON CARD" required />
+                        </div>
+                        <div class="form-group">
+                            <label>Card Number</label>
+                            <input type="text" name="transactionId" placeholder="XXXX XXXX XXXX XXXX" required pattern="[0-9\s]{13,19}" />
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label>Expiry Date</label>
+                                    <input type="text" placeholder="MM/YY" required />
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label>CVV</label>
+                                    <input type="password" placeholder="***" required maxlength="4" />
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" name="fullName" placeholder="Enter Full Name" required />
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" name="email" placeholder="Enter Email Address" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label>@paymentMethod Account Number</label>
+                            <input type="tel" name="phoneNumber" placeholder="e.g., 01XXXXXXXXX" pattern="01[0-9]{9}" maxlength="11" required />
+                            <small class="text-muted">Enter your 11-digit @paymentMethod account number</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label>@paymentMethod PIN/Security Code</label>
+                            <input type="password" name="pin" placeholder="Enter PIN" required maxlength="5" />
+                            <small class="text-muted">Security: Your PIN is encrypted and not stored on our server.</small>
+                        </div>
+                    }
+
+                    <button type="submit" class="pay-button">Confirm & Complete Payment</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <strong>Security Note:</strong> Your payment information is secure and encrypted. We do not store your PIN or sensitive account details. Please ensure you have completed the payment via your mobile app before submitting the Transaction ID.
+        </div>
+
+        <div class="button-container">
+            <a href="/Order/Checkout" class="back-link">← Back to Checkout</a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Auto-uppercase transaction ID if it exists
+        const trxInput = document.getElementById('transactionId');
+        if (trxInput) {
+            trxInput.addEventListener('input', function(e) {
+                e.target.value = e.target.value.toUpperCase();
+            });
+        }
+    </script>
+}

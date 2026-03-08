@@ -1,0 +1,51 @@
+@model E_ShoppingManagement.Models.Customer
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "My Profile";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <!-- Sidebar / Menu -->
+        <div class="col-md-3">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body text-center">
+                     <img src="~/images/user-avatar.png" class="rounded-circle mb-3" style="width: 100px; height: 100px; object-fit: cover;" onerror="this.src='https://via.placeholder.com/100'" />
+                    <h5>@Model.Name</h5>
+                    <p class="text-muted">Customer</p>
+                </div>
+                <div class="list-group list-group-flush">
+                    <a href="/CustomerDashboard" class="list-group-item list-group-item-action">Dashboard</a>
+                    <a href="/CustomerDashboard/Profile" class="list-group-item list-group-item-action active">My Profile</a>
+                    <a href="/CustomerDashboard/Orders" class="list-group-item list-group-item-action">My Orders</a>
+                    <a href="/Cart" class="list-group-item list-group-item-action">My Cart</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <h2 class="mb-4">My Profile</h2>
+            
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-4 font-weight-bold">Name:</div>
+                        <div class="col-md-8">@Model.Name</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4 font-weight-bold">Email:</div>
+                        <div class="col-md-8">@Model.Email</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4 font-weight-bold">Status:</div>
+                        <div class="col-md-8"><span class="badge bg-success">@Model.Status</span></div>
+                    </div>
+                     <div class="row mb-3">
+                        <div class="col-md-4 font-weight-bold">Member Since:</div>
+                        <div class="col-md-8">@Model.CreatedAt.ToString("MMMM dd, yyyy")</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
