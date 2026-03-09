@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -6,78 +6,70 @@
     <title>@ViewData["Title"] - E_ShoppingManagement</title>
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/E_ShoppingManagement.styles.css" asp-append-version="true" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="logo" style="font-family: 'French Script MT', cursive; font-style: italic; color: blue;">
-                <h3><b>EShop</b></h3>
-            </div>
-            <div class="container-fluid">
-                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Contact">Contact Us</a>
-                        </li>
-                        @if (User.IsInRole("Admin"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="AdminDashboard" asp-action="Index">Admin</a>
-                            </li>
-                        }
-                        @if (User.IsInRole("Employee"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="EmployeeDashboard" asp-action="Index">Employee</a>
-                            </li>
-                        }
-                        @if (User.IsInRole("Customer"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="CustomerDashboard" asp-action="Index">Dashboard</a>
-                            </li>
-                        }
-                        @if (User.IsInRole("DeliveryMan"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="DeliveryManDashboard" asp-action="Index">Dashboard</a>
-                            </li>
-                        }
-                        @if (User.IsInRole("User"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Home" asp-action="User">Users</a>
-                            </li>
-                        }
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                             @await Component.InvokeAsync("CartSummary")
-                        }
-
-                        <div id="realtime-clock" class="clock-display mx-3 d-none d-md-block"></div>
-             
-                        <form class="d-flex mx-auto" asp-controller="Home" asp-action="Search" method="get" style="max-width: 400px; width: 100%;">
-                            <input class="form-control me-2" type="search" name="query" placeholder="Search products..." aria-label="Search">
-                            <button class="btn btn-outline-success" type="submit">Search</button>
-                        </form>
-             
-                        <partial name="_LoginPartial" />
-                    </ul>
+    <header class="shoegee-header">
+        <div class="shoegee-topbar">
+            <div class="container-fluid d-flex justify-content-between align-items-center px-4 py-3">
+                
+                <div class="topbar-left" style="width: 250px;">
+                    <a href="#" onclick="document.getElementById('searchForm').classList.toggle('d-none'); return false;" class="topbar-link">Search</a>
+                    <form id="searchForm" class="d-none position-absolute mt-2" asp-controller="Home" asp-action="Search" method="get" style="z-index: 1000; display:flex;">
+                        <input class="form-control form-control-sm me-1 border-0" type="search" name="query" placeholder="Type to search..." style="border-radius:20px; width: 180px; padding-left: 15px;">
+                        <button class="btn btn-sm" type="submit" style="background: #e5e2db; color: #3c3935; border-radius:20px; padding: 0 15px;">Go</button>
+                    </form>
                 </div>
+                
+                <div class="topbar-center text-center flex-grow-1">
+                    <a href="/Home/Index" class="text-decoration-none">
+                        <h2 class="shoegee-brand mb-0">EShop</h2>
+                    </a>
+                </div>
+                
+                <div class="topbar-right d-flex justify-content-end align-items-center gap-4" style="width: 250px;">
+                    <a href="#" onclick="document.getElementById('searchForm').classList.toggle('d-none'); return false;" class="topbar-link"><i class="bi bi-search" style="font-size: 1.1rem;"></i></a>
+                    
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <div class="cart-wrapper">
+                            @await Component.InvokeAsync("CartSummary")
+                        </div>
+                        <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline m-0 p-0">
+                            <button type="submit" class="btn btn-link topbar-link p-0 text-decoration-none border-0" style="font-size: 14px;">Logout</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <a class="topbar-link" asp-controller="Account" asp-action="Login">Login</a>
+                        <span class="text-white mx-2">|</span>
+                        <a class="topbar-link fw-bold text-white text-decoration-none" asp-controller="Account" asp-action="Register">Sign Up</a>
+                    }
+                </div>
+                
             </div>
-        </nav>
+        </div>
+
+        <div class="shoegee-nav-container">
+            <nav class="shoegee-pill-nav">
+                <ul class="d-flex list-unstyled mb-0 gap-5 justify-content-center w-100">
+                    <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li><a asp-controller="Home" asp-action="CategoryProducts" asp-route-typeId="">Categories</a></li>
+                    <li><a asp-controller="Home" asp-action="Contact">Deals</a></li>
+                    <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
+                    
+                    @if (User.IsInRole("Admin")) { <li><a asp-controller="AdminDashboard" asp-action="Index">Dashboard</a></li> }
+                    else if (User.IsInRole("Employee")) { <li><a asp-controller="EmployeeDashboard" asp-action="Index">Dashboard</a></li> }
+                    else if (User.IsInRole("DeliveryMan")) { <li><a asp-controller="DeliveryManDashboard" asp-action="Index">Dashboard</a></li> }
+                    else if (User.Identity.IsAuthenticated) { <li><a asp-controller="CustomerDashboard" asp-action="Index">Dashboard</a></li> }
+                </ul>
+            </nav>
+        </div>
     </header>
     <div class="container">
         <main role="main" class="pb-3">

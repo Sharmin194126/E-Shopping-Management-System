@@ -1,4 +1,4 @@
-﻿@model E_ShoppingManagement.ViewModels.HomeIndexViewModel
+@model E_ShoppingManagement.ViewModels.HomeIndexViewModel
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     var isLoggedIn = User.Identity?.IsAuthenticated ?? false;
@@ -110,27 +110,33 @@
     <!-- MAIN CONTENT -->
     <div class="main-content">
         <!-- ===== BANNER ===== -->
-        <div class="banner">
-            <button class="banner-btn left" onclick="prevBanner()">‹</button>
-            <button class="banner-btn right" onclick="nextBanner()">›</button>
+        <div class="banner" style="position: relative;">
+            <button class="banner-btn left" onclick="prevBanner()" style="z-index: 5;">‹</button>
+            <button class="banner-btn right" onclick="nextBanner()" style="z-index: 5;">›</button>
 
             @if (banners != null && banners.Any())
             {
                 for (int i = 0; i < banners.Count; i++)
                 {
-                    <img src="@banners[i]" class="@(i == 0 ? "active" : "")">
+                    <img src="@banners[i]" class="@(i == 0 ? "active" : "")" style="filter: brightness(0.85);">
                 }
             }
             else
             {
-                <img src="~/images/banners/banner1.jpg" class="active">
+                <img src="~/images/banners/banner1.jpg" class="active" style="filter: brightness(0.85);">
             }
+
+            <!-- WELCOME TEXT OVERLAY -->
+            <div class="welcome-overlay" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: white; width: 100%; z-index: 2;">
+                <h2 style="font-family: 'Playfair Display', serif; font-size: 58px; font-weight: 500; margin-bottom: 15px; color: #fff; text-shadow: 0 4px 12px rgba(0,0,0,0.3);">Discover Your Style</h2>
+                <p style="font-size: 16px; font-weight: 500; letter-spacing: 0.5px; opacity: 0.95; color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.3); margin-bottom: 25px;">Your ultimate destination for fashion, beauty and pure luxury.</p>
+                <a href="#featureditems" class="btn" style="background: #ffffff; color: #33312e; padding: 12px 35px; border-radius: 30px; font-weight: 600; font-size: 14px; text-decoration: none;">Shop Now</a>
+            </div>
         </div>
 
-        <!-- WELCOME -->
-        <div class="welcome">
-            <h2>Welcome to EShop</h2>
-            <p>Your trusted online shopping destination for fashion, beauty and electronics. Enjoy premium products, exclusive deals and fast delivery.</p>
+        <div class="welcome" style="margin-top: 50px;">
+            <h2 style="font-family: 'Playfair Display', serif; text-align: center; color: #33312e; font-size: 42px; margin-bottom: 12px;">Welcome to EShop</h2>
+            <p style="text-align: center; color: #55534e; font-size: 16px; font-family: 'Inter', sans-serif;">Your trusted online shopping destination for fashion, beauty and electronics. Enjoy premium products, exclusive deals and fast delivery.</p>
         </div>
 
         @foreach (var dispSection in Model.DisplaySections)
@@ -138,8 +144,8 @@
             var sectionId = dispSection.Name.Replace(" ", "").ToLower();
             var sectionProducts = allProducts.Where(p => p.DisplayCategory == dispSection.Name || (dispSection.Name == "Featured Items" && p.DisplayCategory == "Featured")).ToList();
             
-            <section class="section" id="@sectionId">
-                <h2>@dispSection.Name</h2>
+            <section class="section" id="@sectionId" style="margin-bottom: 60px;">
+                <h2 style="text-align: center; margin-bottom: 30px; font-size: 32px;">@dispSection.Name</h2>
                 
                 @{
                     // Fallback logic to ensure sections are populated
@@ -163,35 +169,49 @@
                             sectionProducts = allProducts.OrderByDescending(p => p.AverageRating).Take(8).ToList();
                         }
                     }
+
+                    // Strict limit for featured items to fit precisely in the custom grid image view
+                    if (dispSection.Name.Contains("Featured"))
+                    {
+                        sectionProducts = sectionProducts.Take(4).ToList();
+                    }
                 }
 
-                <div class="product-grid">
+                <div class="@(dispSection.Name.Contains("Featured") ? "featured-grid" : "product-grid")">
                     @if (sectionProducts.Any())
                     {
                         @foreach (var item in sectionProducts)
                         {
                             <div class="product-card">
-                                <a href="/Home/Details/@item.Id">
-                                    <img src="@(string.IsNullOrEmpty(item.ImageUrl) ? "/images/no-image.png" : (item.ImageUrl.StartsWith("/") ? item.ImageUrl : "/images/products/" + item.ImageUrl))" alt="@item.Name">
-                                    <div class="desc">@item.Name</div>
-                                </a>
-                                <div class="price-area">
+                                <a href="/Home/Details/@item.Id" style="position: relative; display: block;">
                                     @if (item.OfferPercentage > 0)
                                     {
-                                        <div class="offer-badge" style="font-size: 11px; color: #ff0000; font-weight: bold; margin-bottom: 3px;">@item.OfferPercentage% offer price</div>
+                                        <div style="position: absolute; top: 12px; left: 12px; font-size: 11px; background: #3c3935; color: white; padding: 3px 8px; border-radius: 4px; font-weight: 600;">-@item.OfferPercentage% OFF</div>
                                     }
-                                    @if (item.RegularPrice > item.Price) {
-                                        <span class="price-old">৳ @item.RegularPrice</span>
-                                    }
-                                    <span class="price-new">৳ @item.Price</span>
-                                </div>
-                                <div class="rating">Ratings @RenderStars(item.AverageRating) (@item.AverageRating)</div>
-                                <div class="sizes" style="font-size:12px; color:#555;">Size: @(item.AvailableSizes ?? "N/A")</div>
-                                
-                                <div class="product-actions">
-                                    <a href="/Home/Details/@item.Id" class="btn-action btn-cart">Add to Cart</a>
-                                    <a href="/Home/Details/@item.Id" class="btn-action btn-buy">Buy Now</a>
-                                    <a href="/Home/CategoryProducts?typeId=@item.ProductTypeId" class="btn-action btn-view" style="background:#6c757d;">View More</a>
+                                    <img src="@(string.IsNullOrEmpty(item.ImageUrl) ? "/images/no-image.png" : (item.ImageUrl.StartsWith("/") ? item.ImageUrl : "/images/products/" + item.ImageUrl))" alt="@item.Name">
+                                </a>
+                                <div class="card-bottom-row">
+                                    <div class="card-text-col">
+                                        <div class="desc">
+                                            <a href="/Home/Details/@item.Id" style="text-decoration:none;">
+                                                <h6>@item.Name</h6>
+                                            </a>
+                                        </div>
+                                        <div class="rating" style="font-size: 11px; margin-bottom: 3px; color: #bca05b;">
+                                            @Html.Raw(RenderStars(item.AverageRating)) <span style="color:#8b7d6b">(@item.AverageRating)</span>
+                                        </div>
+                                        <div class="price-new">
+                                            @if (item.RegularPrice > item.Price) {
+                                                <span class="price-old" style="font-size: 12px; font-weight: 500; color: #8b7d6b; margin-right: 4px; text-decoration: line-through;">৳@item.RegularPrice</span>
+                                            }
+                                            ৳@item.Price
+                                        </div>
+                                    </div>
+                                    <form asp-controller="Cart" asp-action="AddToCart" method="get" class="m-0 p-0">
+                                        <input type="hidden" name="productId" value="@item.Id" />
+                                        <input type="hidden" name="qty" value="1" />
+                                        <button type="submit" class="border-0 add-btn-pill">Add to Cart</button>
+                                    </form>
                                 </div>
                             </div>
                         }

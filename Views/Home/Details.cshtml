@@ -110,19 +110,43 @@
     }
         box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
-    .zoom-container {
-        overflow: hidden;
-        border-radius: 8px;
-        cursor: crosshair;
-    }
-    .zoom-container img {
-        transition: transform 0.3s ease;
+    /* Daraz Style Zoom */
+    .img-zoom-container {
+        position: relative;
         width: 100%;
-        height: 100%;
-        object-fit: contain;
+        cursor: zoom-in !important;
     }
-    .zoom-container:hover img {
-        transform: scale(2.0);
+    .img-zoom-lens {
+        position: absolute;
+        border: 1px solid #d4d4d4;
+        width: 150px;
+        height: 150px;
+        background-color: rgba(255, 255, 255, 0.4);
+        display: none;
+        z-index: 10;
+        pointer-events: none; /* Allows cursor to interact with image below */
+        cursor: zoom-in !important; /* Strict cursor requirement */
+    }
+    .img-zoom-result {
+        position: absolute;
+        top: 0;
+        left: 105%;
+        border: 1px solid #e0e0e0;
+        width: 450px;
+        height: 450px;
+        background-color: #fff;
+        display: none; /* hidden until hover */
+        z-index: 999;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        background-repeat: no-repeat;
+    }
+    input[type="number"].no-spin::-webkit-inner-spin-button,
+    input[type="number"].no-spin::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    input[type="number"].no-spin {
+        -moz-appearance: textfield;
     }
 </style>
 
@@ -139,11 +163,69 @@
 <div class="container mt-2">
     <div class="row">
         <!-- Image Section -->
-        <div class="col-md-5">
-            <div class="zoom-container" style="max-height: 500px; width: 100%;">
-                <img src="@(string.IsNullOrEmpty(Model.Product.ImageUrl) ? "/images/no-image.png" : (Model.Product.ImageUrl.StartsWith("/") ? Model.Product.ImageUrl : "/images/products/" + Model.Product.ImageUrl))" 
-                     class="img-fluid rounded" alt="@Model.Product.Name" />
+        <div class="col-md-5 position-relative">
+            <div class="img-zoom-container" id="zoomContainer" onmouseenter="showZoom()" onmousemove="moveZoom(event)" onmouseleave="hideZoom()">
+                <img id="myimage" src="@(string.IsNullOrEmpty(Model.Product.ImageUrl) ? "/images/no-image.png" : (Model.Product.ImageUrl.StartsWith("/") ? Model.Product.ImageUrl : "/images/products/" + Model.Product.ImageUrl))" 
+                     class="img-fluid rounded border" alt="@Model.Product.Name" style="height: 500px; width: 100%; object-fit: contain; background: #fff; cursor: zoom-in !important;" />
+                <div id="mylens" class="img-zoom-lens"></div>
             </div>
+            <!-- Daraz zoomed result pops out to the right here -->
+            <div id="myresult" class="img-zoom-result"></div>
+            
+            <script>
+                function showZoom() {
+                    const img = document.getElementById('myimage');
+                    const lens = document.getElementById('mylens');
+                    const result = document.getElementById('myresult');
+                    
+                    if(!img.src || img.src.includes('no-image.png')) return;
+                    
+                    lens.style.display = 'block';
+                    result.style.display = 'block';
+                    
+                    result.style.backgroundImage = "url('" + img.src + "')";
+                    updateZoom(img, lens, result, null);
+                }
+                
+                function moveZoom(event) {
+                    const img = document.getElementById('myimage');
+                    const lens = document.getElementById('mylens');
+                    const result = document.getElementById('myresult');
+                    if (lens.style.display === 'block') {
+                        updateZoom(img, lens, result, event);
+                    }
+                }
+                
+                function hideZoom() {
+                    document.getElementById('mylens').style.display = 'none';
+                    document.getElementById('myresult').style.display = 'none';
+                }
+                
+                function updateZoom(img, lens, result, e) {
+                    const cx = result.offsetWidth / lens.offsetWidth;
+                    const cy = result.offsetHeight / lens.offsetHeight;
+                    result.style.backgroundSize = (img.width * cx) + "px " + (img.height * cy) + "px";
+                    
+                    if(!e) return;
+                    
+                    const rect = img.getBoundingClientRect();
+                    let x = e.clientX - rect.left;
+                    let y = e.clientY - rect.top;
+                    
+                    let xPos = x - (lens.offsetWidth / 2);
+                    let yPos = y - (lens.offsetHeight / 2);
+                    
+                    if (xPos > img.width - lens.offsetWidth) { xPos = img.width - lens.offsetWidth; }
+                    if (xPos < 0) { xPos = 0; }
+                    if (yPos > img.height - lens.offsetHeight) { yPos = img.height - lens.offsetHeight; }
+                    if (yPos < 0) { yPos = 0; }
+                    
+                    lens.style.left = xPos + "px";
+                    lens.style.top = yPos + "px";
+                    
+                    result.style.backgroundPosition = "-" + (xPos * cx) + "px -" + (yPos * cy) + "px";
+                }
+            </script>
         </div>
         
         <!-- Details Section -->
@@ -207,29 +289,67 @@
                 <div class="mb-3">
                     <label class="form-label fw-bold text-dark fs-5">Quantity:</label>
                     <div class="d-flex align-items-center gap-3">
-                        <div class="input-group" style="width: 140px; border: 1px solid #333; border-radius: 5px; overflow: hidden;">
-                            <button class="btn btn-light px-3" type="button" onclick="changeQty(-1)">-</button>
-                            <input type="number" id="quantityInput" name="qty" value="1" min="1" 
-                                    max="@Model.Product.StockQty" 
-                                    class="form-control text-center fw-bold border-0" 
-                                    style="color: #000 !important; background-color: #fff;"
-                                    oninput="checkStock(this)" readonly />
-                            <button class="btn btn-light px-3" type="button" onclick="changeQty(1)">+</button>
+                        <div class="input-group" style="width: 130px; border: 1px solid #ccc; border-radius: 4px; overflow: hidden; background: #fff; height: 38px;">
+                            <button class="btn btn-light px-2 fw-bold border-end" type="button" onclick="changeQty(-1)" style="font-size: 16px; color: #333; padding-bottom: 2px; width: 35px;">-</button>
+                            <input type="number" id="quantityInput" name="qty" value="1" min="1"
+                                    class="form-control text-center fw-bold border-0 p-0 no-spin" 
+                                    style="color: #000 !important; background-color: #fff !important; font-size: 1.1rem;"
+                                    onchange="validateQty()" oninput="validateQty()" />
+                            <button class="btn btn-light px-2 fw-bold border-start" type="button" onclick="changeQty(1)" style="font-size: 16px; color: #333; padding-bottom: 2px; width: 35px;">+</button>
                         </div>
                         <span id="stockLimitMsg" class="text-muted small">
                             (Stock: @Model.Product.StockQty units | Max: @(Model.Product.MaxOrderQty > 0 ? Model.Product.MaxOrderQty.ToString() : "No Limit"))
                         </span>
                     </div>
-                    <div id="stockWarning" class="text-danger small mt-1 fw-bold" style="display: none;"></div>
+                    <div id="qtyMessage" class="text-danger small fw-bold mt-2" style="display: none;"></div>
                 </div>
 
                 <script>
+                    function showMessage(msg) {
+                        const msgBox = document.getElementById('qtyMessage');
+                        msgBox.innerText = msg;
+                        msgBox.style.display = 'block';
+                        
+                        // Clear message after 4 seconds
+                        setTimeout(() => {
+                            msgBox.style.display = 'none';
+                        }, 4000);
+                    }
+
                     function changeQty(amt) {
                         const input = document.getElementById('quantityInput');
-                        let val = parseInt(input.value) + amt;
+                        let val = parseInt(input.value);
+                        if(isNaN(val)) val = 0;
+                        val += amt;
+                        applyValidation(val, input);
+                    }
+
+                    function validateQty() {
+                        const input = document.getElementById('quantityInput');
+                        let val = parseInt(input.value);
+                        if(isNaN(val)) val = 1;
+                        applyValidation(val, input);
+                    }
+
+                    function applyValidation(val, input) {
+                        let maxStock = parseInt('@Model.Product.StockQty') || 0;
+                        let maxOrder = parseInt('@(Model.Product.MaxOrderQty ?? 0)') || 0;
+                        
+                        // If it's pure zero or lower, restrict to 1 unless there is zero stock
                         if (val < 1) val = 1;
+
+                        if (maxStock === 0) {
+                            val = 0;
+                            showMessage("Sorry, this product is currently out of stock.");
+                        } else if (maxOrder > 0 && maxOrder < maxStock && val > maxOrder) {
+                            val = maxOrder;
+                            showMessage("Maximum purchase order limit is " + maxOrder + ". If you need more products, please Contact Us.");
+                        } else if (val > maxStock) {
+                            val = maxStock;
+                            showMessage("Requested quantity exceeds available stock of " + maxStock + " units.");
+                        }
+                        
                         input.value = val;
-                        checkStock(input);
                     }
                 </script>
                 
@@ -430,11 +550,6 @@
     </div>
 </div>
 
-<!-- Live Chat Floating Button -->
-<button onclick="window.location.href='/Home/Contact'" class="live-chat-btn" title="Contact Us">
-    <i class="bi bi-chat-dots-fill"></i>
-    <span>Message</span>
-</button>
 
 <!-- Chat Box -->
 <div id="chatBox" class="chat-box">

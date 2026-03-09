@@ -1,22 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+
 /* =====================
    CSS VARIABLES
 ===================== */
 :root {
-    --bg: #f4f6f9;
-    --text: #2c3e50;
+    --bg: #f8f6f0;
+    /* Elegant warm cream solid background */
+    --bg-gradient: #f8f6f0;
+    --text: #33312e;
     --nav-bg: #ffffff;
-    --border: #dee2e6;
-    --hover-purple: #6f42c1;
-    --footer-bg: #ffffff;
-    --footer-text: #2c3e50;
+    --border: #e6e2db;
+    --hover-purple: #8b7d6b;
+    --footer-bg: #f2efe9;
+    --footer-text: #3d2255;
+    --card-bg: #ffffff;
+    --card-border: rgba(180, 120, 255, 0.25);
+    --card-shadow: 0 6px 24px rgba(124, 58, 237, 0.12);
 }
 
 body.dark {
-    --bg: #1a1a1a;
-    --text: #ecf0f1;
-    --nav-bg: #2d2d2d;
-    --border: #444;
-    --footer-bg: #000000;
+    --bg: #1a0a2e;
+    --bg-gradient: linear-gradient(135deg, #1a0a2e 0%, #3d1060 40%, #0d2b4b 70%, #062a22 100%);
+    --nav-bg: rgba(26, 10, 46, 0.97);
+    --border: #4a2070;
+    --footer-bg: #12061e;
+    --footer-text: #e0c8ff;
 }
 
 /* =====================
@@ -29,9 +37,10 @@ body.dark {
 }
 
 body {
-    background-color: var(--bg);
+    background: var(--bg-gradient);
+    background-attachment: fixed;
     color: var(--text);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     min-width: 1200px;
 }
 
@@ -40,20 +49,150 @@ a {
     text-decoration: none;
 }
 
+/* =====================
+   TEXT READABILITY ON GRADIENT
+===================== */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+    color: #33312e;
+    font-weight: 500;
+}
+
+p, span, li, td, th, label {
+    color: #55534e;
+}
+
+/* =====================
+   BOOTSTRAP NAVBAR OVERRIDE (for _Layout.cshtml)
+===================== */
+.navbar {
+    background: #ffffff !important;
+    border: none !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+.navbar .nav-link,
+.navbar-brand,
+.navbar .text-dark {
+    color: #33312e !important;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.navbar .nav-link:hover {
+    color: #c471ed !important;
+}
+
+.navbar .btn-outline-success {
+    border-color: #21d4fd !important;
+    color: #0891b2 !important;
+    background: transparent !important;
+}
+
+.navbar .btn-outline-success:hover {
+    background: rgba(33, 212, 253, 0.12) !important;
+    color: #0e7490 !important;
+}
+
+.navbar .form-control {
+    background: #fff !important;
+    border: 1px solid #d8b4fe !important;
+    color: #3d1a6e !important;
+}
+
+/* =====================
+   MAIN CONTAINER GLASS (for pages using _Layout)
+===================== */
+.container {
+    max-width: 1450px !important;
+}
+
+.container > main {
+    background: transparent;
+    border: none;
+    padding: 10px 0;
+    margin-top: 0;
+    box-shadow: none;
+    color: #33312e;
+}
+
 button {
     cursor: pointer;
 }
 
 /* =====================
-   NAVBAR
+   SHOEGEE CUSTOM HEADER
 ===================== */
-.main-navbar {
+.shoegee-header {
+    position: relative;
+    background: #3c3935; /* dark charcoal */
+    padding-bottom: 25px; /* space for the floating pill nav */
+    margin-bottom: 40px;
+}
+
+.shoegee-topbar {
+    width: 100%;
+}
+
+.topbar-link {
+    color: #e5e2db !important;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s ease;
+}
+
+.topbar-link:hover {
+    color: #ffffff !important;
+}
+
+.shoegee-brand {
+    font-family: 'Playfair Display', serif;
+    color: #ffffff !important;
+    font-size: 38px;
+    letter-spacing: 0.5px;
+}
+
+/* Float the pill nav over the bottom edge */
+.shoegee-nav-container {
+    position: absolute;
+    bottom: -22px; 
+    width: 100%;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: var(--nav-bg);
-    padding: 12px 20px;
-    border-bottom: 1px solid var(--border);
+    justify-content: center;
+    z-index: 10;
+}
+
+.shoegee-pill-nav {
+    background: #ffffff;
+    border-radius: 30px;
+    padding: 14px 40px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    max-width: 900px;
+    width: 90%;
+}
+
+.shoegee-pill-nav ul li a {
+    color: #33312e;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    transition: color 0.2s ease;
+}
+
+.shoegee-pill-nav ul li a:hover {
+    color: #8b7d6b;
+}
+
+.cart-wrapper a, .cart-wrapper i {
+    color: #e5e2db !important;
+}
+
+.cart-wrapper .badge {
+    background: #ffffff !important;
+    color: #3c3935 !important;
 }
 
 /* LEFT NAV */
@@ -370,10 +509,11 @@ label {
 .btn-register,
 .btn-reset,
 .btn-primary {
-    background-color: #ff6a00;
+    background-color: #3c3935;
     border: none;
-    font-weight: bold;
+    font-weight: 500;
     color: #fff;
+    border-radius: 6px;
     transition: all 0.3s ease;
 }
 
@@ -381,8 +521,8 @@ label {
 .btn-register:hover,
 .btn-reset:hover,
 .btn-primary:hover {
-    background-color: #e65c00;
-    transform: translateY(-2px);
+    background-color: #1a1816;
+    transform: translateY(-1px);
 }
 
 .btn-outline-light:hover {
@@ -398,21 +538,24 @@ body {
     overflow-x: auto;
 }
 
-/* ===== SIDE NAV ===== */
+/* ===== SIDE NAV — Always Fixed, Never Scrolls ===== */
 .side-nav {
     position: fixed;
-    left: 10px;
-    bottom: 80px;
+    left: 14px;
+    bottom: 20px;
+    top: auto;
+    transform: none;
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    z-index: 1000;
+    gap: 25px; /* Added more gap per user request */
+    z-index: 9999;
+    /* No transition that could hide it */
 }
 
 .side-nav a {
-    width: 42px;
-    height: 42px;
-    background: #6f42c1;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #1e1b4b, #3b82f6);
     color: white;
     border-radius: 50%;
     display: flex;
@@ -420,38 +563,49 @@ body {
     justify-content: center;
     text-decoration: none;
     position: relative;
+    font-size: 18px;
+    box-shadow: 0 3px 12px rgba(30, 27, 75, 0.40);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.side-nav a:hover {
+    transform: scale(1.18);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.50);
+    background: linear-gradient(135deg, #3b82f6, #0ea5e9);
 }
 
 .side-nav a span {
     position: absolute;
     left: 50px;
-    background: black;
+    background: rgba(30,30,30,0.92);
     color: white;
-    padding: 5px 10px;
-    border-radius: 5px;
+    padding: 5px 12px;
+    border-radius: 6px;
     display: none;
     white-space: nowrap;
-    font-size: 13px;
+    font-size: 12px;
+    font-weight: 600;
+    pointer-events: none;
 }
 
 .side-nav a:hover span {
     display: block;
 }
 
-/* ===== BANNER ===== */
+/* ===== BANNER — Fits inside container ===== */
 .banner {
-    width: 100%;
-    height: 500px;
-    /* ?? increase height (you can use 550px / 600px if needed) */
     position: relative;
+    width: 100%;
+    height: 480px;
     overflow: hidden;
+    border-radius: 12px;
+    border: none;
 }
 
 .banner img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
-    /* ? shows full image without cutting */
+    object-fit: cover;
     display: none;
 }
 
@@ -479,6 +633,11 @@ body {
     right: 15px;
 }
 
+/* Custom Side Nav overrides for clean integration */
+.side-nav {
+    display: block !important;
+}
+
 /* ===== WELCOME ===== */
 .welcome {
     padding: 35px 70px;
@@ -486,12 +645,14 @@ body {
 }
 
 .welcome h2 {
-    font-weight: bold;
+    font-weight: 600;
+    font-size: 36px;
+    margin-bottom: 12px;
 }
 
 .welcome p {
     font-size: 16px;
-    color: #555;
+    color: #55534e;
     max-width: 800px;
     margin: auto;
 }
@@ -511,7 +672,7 @@ body {
 
 /* ===== SECTIONS ===== */
 .section {
-    padding: 50px 70px;
+    padding: 20px 70px;
 }
 
 .product-grid {
@@ -521,10 +682,13 @@ body {
 }
 
 .product-card {
-    border: 1px solid #ddd;
+    border: 1px solid rgba(196, 113, 237, 0.22);
     padding: 12px;
-    border-radius: 8px;
-    background: #fff;
+    border-radius: 12px;
+    background: #ffffff;
+    color: #2d2d2d;
+    box-shadow: 0 4px 18px rgba(196, 113, 237, 0.12);
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
 }
 
 .product-card img {
@@ -582,19 +746,23 @@ body {
    FOOTER
 ===================== */
 .home-footer {
-    background: var(--footer-bg);
-    color: var(--footer-text);
-    padding: 50px 70px;
+    background: brown; /* User requested literally brown */
+    color: #e5e2db;
+    padding: 50px 70px 50px 96px;
+    border-top: none;
+}
+
+.home-footer h5, .home-footer strong {
+    color: #ffffff !important;
+    font-family: 'Playfair Display', serif;
 }
 
 .home-footer a {
-    color: var(--footer-text);
+    color: #e5e2db;
     text-decoration: none;
 }
-
 .home-footer a:hover {
-    color: #6f42c1;
-    text-decoration: underline;
+    color: #ffffff;
 }
 
 ::placeholder {
@@ -623,11 +791,12 @@ body {
 }
 
 .review-box {
-    border: 1px solid var(--border);
+    border: 1px solid rgba(196, 113, 237, 0.22);
     padding: 15px;
-    border-radius: 8px;
-    background: var(--bg);
-    color: var(--text);
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow: 0 3px 16px rgba(196, 113, 237, 0.10);
+    color: #2d2d2d;
 }
 
 .review-head {
@@ -657,98 +826,158 @@ body {
 /* ===== FIX: FOOTER BESIDE SIDE NAV ===== */
 .page-wrapper {
     position: relative;
+    /* Left and right rainbow bars */
 }
 
-.main-content {
-    margin-left: 60px;
-    /* space for side-nav */
+/* ===== LEFT RAINBOW BAR ===== */
+.page-wrapper::before {
+    display: none;
 }
+
+/* ===== RIGHT RAINBOW BAR ===== */
+.page-wrapper::after {
+    display: none;
+}
+
+
 
 /* side-nav width reference */
 .side-nav {
-    width: 60px;
+    width: 52px;
 }
 
-/* ===== SIDE NAV AUTO HIDE ===== */
-.side-nav {
-    position: fixed;
-    left: 10px;
-    bottom: 80px;
-    /* original position */
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    z-index: 1000;
-    transition: transform 0.3s ease, opacity 0.3s ease;
-}
-
+/* ===== SIDE NAV — Remove any hide/show transitions ===== */
+/* Icons must always be visible and NEVER scroll away */
 .side-nav.hide {
-    transform: translateY(100px);
-    /* moves down out of view */
-    opacity: 0;
+    /* Disable the old auto-hide — icons must stay fixed always */
+    transform: translateY(-50%) !important;
+    opacity: 1 !important;
 }
 
 .product-grid {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 18px;
+    grid-template-columns: repeat(6, 1fr); /* Default grid has 6 items per row */
+    gap: 12px; /* reduced gap */
+}
+
+.featured-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: auto auto;
+    gap: 12px; /* reduced gap */
+}
+
+.featured-grid .product-card:nth-child(1) {
+    grid-column: span 2;
+    grid-row: span 2;
+}
+
+.featured-grid .product-card:nth-child(1) img {
+    height: auto; 
+    max-height: 520px; /* limits to a smaller size */
+    aspect-ratio: auto;
+    object-fit: contain; /* does not crop */
+}
+
+.featured-grid .product-card:nth-child(2) {
+    grid-column: span 2;
+    grid-row: span 1;
+}
+
+.featured-grid .product-card:nth-child(2) img {
+    aspect-ratio: auto;
+    height: auto;
+    max-height: 250px; 
+    object-fit: contain; /* does not crop */
+}
+
+.featured-grid .product-card:nth-child(3),
+.featured-grid .product-card:nth-child(4) {
+    grid-column: span 1;
+    grid-row: span 1;
 }
 
 .product-card {
-    border: 1px solid #ddd;
-    padding: 12px;
-    border-radius: 8px;
-    background: #fff;
+    border: none;
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    /* push Add to Cart to bottom */
-    min-height: 380px;
-    /* ensures all cards have same height */
+    justify-content: flex-start;
+    box-shadow: none;
+    transition: transform 0.3s ease;
+    color: #33312e;
 }
 
 .product-card img {
     width: 100%;
-    height: 200px;
+    aspect-ratio: 1; /* Squarish like reference */
     object-fit: cover;
-    border-radius: 8px;
+    border-radius: 12px;
     display: block;
     margin-bottom: 10px;
+    background: #edeadd; /* elegant placeholder tint */
+    padding: 0; /* flat image without frame */
     transition: transform 0.3s ease;
 }
 
 .product-card:hover img {
-    transform: scale(1.05);
+    transform: scale(1.02);
+}
+
+.card-bottom-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0 5px;
+    margin-top: auto;
+}
+
+.card-text-col {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
 }
 
 .desc {
+    margin: 0;
+    padding: 0;
+}
+
+.desc h6 {
     font-size: 13px;
-    margin: 6px 0;
-    flex-grow: 1;
-    /* makes description take remaining space */
+    font-weight: 500;
+    color: #33312e;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-bottom: 4px;
+    font-family: 'Inter', sans-serif;
+    max-width: 180px;
 }
 
 .price-new {
-    color: #d63384;
-    font-weight: bold;
-    font-size: 15px;
-    margin-bottom: 10px;
+    color: #33312e;
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 0;
 }
 
-.add-to-cart-btn {
-    background-color: #7a1cff;
+.add-btn-pill {
+    background: #464440;
     color: #fff;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: 0.3s;
-    width: 100%;
+    font-size: 11px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    text-decoration: none;
+    transition: 0.2s;
+    font-weight: 500;
 }
 
-.add-to-cart-btn:hover {
-    background-color: #5c10d6;
+.add-btn-pill:hover {
+    background: #1a1816;
+    color: #fff;
 }
 
 /*product details page */
@@ -821,25 +1050,30 @@ body {
    GLOBAL STYLE
 ========================= */
 body {
-    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
-    background-color: #f5f7fb;
-    color: #333;
+    font-family: 'Inter', "Segoe UI", Tahoma, Arial, sans-serif;
+    background: var(--bg-gradient);
+    background-attachment: fixed;
+    color: #2d2d2d;
 }
 
 h2 {
     font-weight: 600;
     margin-bottom: 20px;
+    color: #2d2d2d;
 }
 
 /* =========================
    CARD CONTAINER
 ========================= */
 .page-card {
-    background: #fdfdfd;
-    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 14px;
     padding: 25px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-    border: 1px solid #e9ecef;
+    box-shadow: 0 6px 28px rgba(196, 113, 237, 0.16);
+    border: 1px solid rgba(196, 113, 237, 0.20);
+    color: #2d2d2d;
 }
 
 input,
@@ -928,13 +1162,15 @@ textarea::placeholder {
    TABLE
 ========================= */
 .table {
-    background: #fff;
-    border-radius: 6px;
+    background: #ffffff;
+    border-radius: 10px;
     overflow: hidden;
+    color: #2d2d2d;
 }
 
 .table thead {
-    background-color: #f1f5f9;
+    background: linear-gradient(90deg, #c471ed 0%, #f64f59 50%, #f7971e 100%);
+    color: #ffffff;
 }
 
 .table th {

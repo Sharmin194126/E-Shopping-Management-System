@@ -220,8 +220,7 @@ namespace E_ShoppingManagement.Controllers
                     case "low": productsQuery = productsQuery.Where(p => p.Price < 500); break;
                     case "mid": productsQuery = productsQuery.Where(p => p.Price >= 500 && p.Price <= 2000); break;
                     case "high": productsQuery = productsQuery.Where(p => p.Price > 2000); break;
-                    case "low-mid": productsQuery = productsQuery.Where(p => p.Price <= 1500); break;
-                    case "mid-high": productsQuery = productsQuery.Where(p => p.Price >= 1200); break;
+                    case "very-high": productsQuery = productsQuery.Where(p => p.Price > 10000); break;
                 }
             }
 
