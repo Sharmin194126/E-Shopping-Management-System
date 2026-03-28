@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -99,9 +99,12 @@ namespace E_ShoppingManagement.Controllers
         {
             var product = _context.Products
                 .Include(p => p.Category)
+                .Include(p => p.ProductType)
                 .FirstOrDefault(p => p.Id == id);
 
             if (product == null) return NotFound();
+
+            ViewBag.SizeStocks = _context.ProductSizeStocks.Where(ss => ss.ProductId == id).ToList();
             return View(product);
         }
 

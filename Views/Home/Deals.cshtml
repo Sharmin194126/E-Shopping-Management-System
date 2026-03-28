@@ -1,0 +1,270 @@
+@model List<E_ShoppingManagement.Models.Product>
+@{
+    ViewData["Title"] = "Deals & Offers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    string RenderStars(double rating) {
+        int fullStars = (int)rating;
+        string stars = "";
+        for(int i=0; i<fullStars; i++) stars += "★";
+        for(int i=fullStars; i<5; i++) stars += "☆";
+        return stars;
+    }
+}
+
+<style>
+    .deals-hero {
+        background: linear-gradient(135deg, #532374 0%, #8b1a6b 50%, #c0392b 100%);
+        padding: 60px 40px;
+        text-align: center;
+        border-radius: 16px;
+        margin-bottom: 40px;
+        position: relative;
+        overflow: hidden;
+    }
+    .deals-hero::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%);
+        animation: pulse-glow 4s ease-in-out infinite;
+    }
+    @@keyframes pulse-glow {
+        0%, 100% { transform: scale(1); opacity: 0.5; }
+        50% { transform: scale(1.1); opacity: 1; }
+    }
+    .deals-hero h1 {
+        font-family: 'Playfair Display', serif;
+        color: #FFD700;
+        font-size: 52px;
+        font-weight: 700;
+        margin-bottom: 12px;
+        position: relative;
+        z-index: 1;
+    }
+    .deals-hero p {
+        color: rgba(255,255,255,0.9);
+        font-size: 18px;
+        position: relative;
+        z-index: 1;
+    }
+    .deals-badge {
+        display: inline-block;
+        background: #FFD700;
+        color: #532374;
+        font-weight: 800;
+        font-size: 11px;
+        padding: 3px 10px;
+        border-radius: 20px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-bottom: 16px;
+    }
+    .deals-grid {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 18px;
+        padding: 0 10px;
+    }
+    .deal-card {
+        background: #ffffff;
+        border: 1px solid rgba(83, 35, 116, 0.15);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 18px rgba(83, 35, 116, 0.10);
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+        position: relative;
+    }
+    .deal-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 30px rgba(83, 35, 116, 0.22);
+    }
+    .deal-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+    .deal-card .card-body {
+        padding: 12px;
+    }
+    .deal-card h6 {
+        font-size: 13px;
+        color: #33312e;
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+        margin-bottom: 6px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .discount-badge {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: linear-gradient(135deg, #c0392b, #e74c3c);
+        color: white;
+        font-size: 11px;
+        font-weight: 700;
+        padding: 4px 10px;
+        border-radius: 20px;
+        z-index: 2;
+        box-shadow: 0 2px 8px rgba(192,57,43,0.4);
+    }
+    .deal-price-old {
+        text-decoration: line-through;
+        color: #999;
+        font-size: 12px;
+        margin-right: 4px;
+    }
+    .deal-price-new {
+        color: #c0392b;
+        font-weight: 700;
+        font-size: 15px;
+    }
+    .deal-stars {
+        color: #f5b301;
+        font-size: 11px;
+        margin-bottom: 4px;
+    }
+    .deals-add-btn {
+        display: block;
+        width: 100%;
+        background: linear-gradient(135deg, #532374, #8b1a6b);
+        color: white;
+        border: none;
+        padding: 8px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: opacity 0.2s;
+        text-align: center;
+        text-decoration: none;
+        margin-top: 8px;
+    }
+    .deals-add-btn:hover {
+        opacity: 0.85;
+        color: white;
+    }
+    .deals-section-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 28px;
+        color: #33312e;
+        font-weight: 600;
+        margin-bottom: 24px;
+        padding-bottom: 10px;
+        border-bottom: 3px solid #532374;
+        display: inline-block;
+    }
+    .no-deals {
+        text-align: center;
+        padding: 80px 40px;
+        background: #fff;
+        border-radius: 16px;
+        border: 2px dashed #e0c8ff;
+    }
+    .no-deals h3 {
+        color: #532374;
+        margin-bottom: 12px;
+    }
+    .no-deals p {
+        color: #888;
+        margin-bottom: 24px;
+    }
+    .savings-tag {
+        background: #f0fdf4;
+        color: #16a34a;
+        font-size: 11px;
+        font-weight: 600;
+        padding: 2px 8px;
+        border-radius: 4px;
+        display: inline-block;
+        margin-bottom: 4px;
+    }
+</style>
+
+<div class="container" style="padding: 20px 10px;">
+
+    <!-- Hero Banner -->
+    <div class="deals-hero">
+        <div class="deals-badge">🔥 Limited Time Offers</div>
+        <h1>Today's Best Deals</h1>
+        <p>Discover incredible savings on top products — grab them before they're gone!</p>
+    </div>
+
+    <!-- Deals Section -->
+    <div class="mb-4 d-flex justify-content-between align-items-center">
+        <span class="deals-section-title">🏷️ Exclusive Discounts</span>
+        <span class="text-muted small fw-bold">@(Model?.Count ?? 0) deals found</span>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="deals-grid">
+            @foreach (var item in Model)
+            {
+                <div class="deal-card">
+                    @if (item.OfferPercentage > 0)
+                    {
+                        <div class="discount-badge">-@item.OfferPercentage% OFF</div>
+                    }
+                    else if (item.RegularPrice > item.Price)
+                    {
+                        int savingPct = (int)Math.Round((item.RegularPrice - item.Price) / item.RegularPrice * 100);
+                        <div class="discount-badge">-@savingPct% OFF</div>
+                    }
+
+                    <a href="/Home/Details/@item.Id">
+                        <img src="@(string.IsNullOrEmpty(item.ImageUrl) ? "/images/no-image.png" : (item.ImageUrl.StartsWith("/") ? item.ImageUrl : "/images/products/" + item.ImageUrl))"
+                             alt="@item.Name" />
+                    </a>
+
+                    <div class="card-body">
+                        <h6 title="@item.Name">@item.Name</h6>
+
+                        <div class="deal-stars">
+                            @Html.Raw(RenderStars(item.AverageRating))
+                            <span style="color:#8b7d6b; font-size:10px;">(@item.AverageRating.ToString("0.0"))</span>
+                        </div>
+
+                        @if (item.RegularPrice > item.Price)
+                        {
+                            decimal savings = item.RegularPrice - item.Price;
+                            <div class="savings-tag">Save ৳@savings</div>
+                            <div>
+                                <span class="deal-price-old">৳@item.RegularPrice</span>
+                                <span class="deal-price-new">৳@item.Price</span>
+                            </div>
+                        }
+                        else
+                        {
+                            <div>
+                                <span class="deal-price-new">৳@item.Price</span>
+                            </div>
+                        }
+
+                        <form asp-controller="Cart" asp-action="AddToCart" method="get" class="m-0 p-0">
+                            <input type="hidden" name="productId" value="@item.Id" />
+                            <input type="hidden" name="qty" value="1" />
+                            <button type="submit" class="deals-add-btn">🛒 Add to Cart</button>
+                        </form>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="no-deals">
+            <div style="font-size: 64px; margin-bottom: 20px;">🏷️</div>
+            <h3>No Deals Available Right Now</h3>
+            <p>Check back soon — new deals are added regularly. In the meantime, browse our full collection!</p>
+            <a href="/Home/CategoryProducts" class="btn btn-lg px-5" style="background: #532374; color: white; border-radius: 30px; font-weight: 600;">
+                Browse All Products
+            </a>
+        </div>
+    }
+</div>

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using E_ShoppingManagement.Data;
@@ -100,10 +100,10 @@ namespace E_ShoppingManagement.Controllers
                 return View(model);
             }
 
-            string? fileName = null;
+            string? fileName = "/images/products/no-image.png";
             if (model.ImageFile != null)
             {
-                string uploadsFolder = Path.Combine(_env.WebRootPath, "images", "products");
+                string uploadsFolder = Path.Combine(_env.WebRootPath, "images/products");
                 if (!Directory.Exists(uploadsFolder)) Directory.CreateDirectory(uploadsFolder);
 
                 fileName = Guid.NewGuid().ToString() + Path.GetExtension(model.ImageFile.FileName);
@@ -159,6 +159,20 @@ namespace E_ShoppingManagement.Controllers
             TempData["IsSuccess"] = true;
 
             return RedirectToAction(nameof(Index));
+        }
+
+        // DETAILS
+        public async Task<IActionResult> Details(int id)
+        {
+            var product = await _context.Products
+                .Include(p => p.Category)
+                .Include(p => p.ProductType)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (product == null) return NotFound();
+
+            ViewBag.SizeStocks = await _context.ProductSizeStocks.Where(ss => ss.ProductId == id).ToListAsync();
+            return View(product);
         }
 
         public async Task<IActionResult> Edit(int id)

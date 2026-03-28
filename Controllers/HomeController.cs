@@ -309,6 +309,30 @@ namespace E_ShoppingManagement.Controllers
         public IActionResult Contact() => View();
         public IActionResult Email() => View();
 
+        public async Task<IActionResult> Deals()
+        {
+            var dealProducts = await _context.Products
+                .Include(p => p.Category)
+                .Include(p => p.ProductType)
+                .Where(p => (p.Status == "Active" || p.Status == "Approved") && p.OfferPercentage > 0)
+                .OrderByDescending(p => p.OfferPercentage)
+                .ToListAsync();
+
+            // If no explicit offer products, show top-discounted by price diff
+            if (!dealProducts.Any())
+            {
+                dealProducts = await _context.Products
+                    .Include(p => p.Category)
+                    .Include(p => p.ProductType)
+                    .Where(p => p.Status == "Active" || p.Status == "Approved")
+                    .OrderByDescending(p => p.RegularPrice - p.Price)
+                    .Take(12)
+                    .ToListAsync();
+            }
+
+            return View(dealProducts);
+        }
+
         [HttpPost]
         public async Task<IActionResult> SendMessage(string name, string email, string subject, string message, IFormFile? attachment)
         {

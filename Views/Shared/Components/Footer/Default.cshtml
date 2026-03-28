@@ -15,11 +15,11 @@
         <div class="footer-top row g-4">
             <!-- Brand & Payments -->
             <div class="col-md-3">
-                <h4 class="brand-text" style="font-family: 'French Script MT', cursive; color: #6f42c1;">EShop</h4>
-                <p class="small text-muted">Direct Merchant Payments for Secure Shopping.</p>
+                <h4 class="brand-text" style="font-family: 'French Script MT', cursive; color: #FF6B35; font-size: 2rem;">EShop</h4>
+                <p class="small" style="color: #FFD700;">Direct Merchant Payments for Secure Shopping.</p>
                 
                 <div class="mt-4">
-                    <h6 class="small fw-bold text-uppercase mb-2">Secure Payments</h6>
+                    <h6 class="small fw-bold text-uppercase mb-2" style="color: #FFD700;">Secure Payments</h6>
                     <div class="footer-payments d-flex flex-wrap gap-2">
                         @if (Model.PaymentMethods != null)
                         {
@@ -54,8 +54,8 @@
                 <div class="mt-3">
                     <p class="mb-1"><strong>@Model.Info.Address</strong></p>
                     <div class="d-flex flex-column gap-1">
-                        <span class="small">Email: @Model.Info.Email</span>
-                        <span class="small">Phone: @Model.Info.ContactNumber</span>
+                        <span class="small fw-semibold" style="color: #FFD700;">Email: @Model.Info.Email</span>
+                        <span class="small fw-semibold" style="color: #FFD700;">Phone: @Model.Info.ContactNumber</span>
                     </div>
                     <div class="social-links mt-3">
                         @if (!string.IsNullOrEmpty(Model.Info.FacebookUrl)) { <a href="@Model.Info.FacebookUrl" class="btn btn-sm btn-outline-primary rounded-circle">FB</a> }
@@ -76,7 +76,7 @@
                     <div class="col-md-4">
                         <div class="review-box">
                             <div class="review-head d-flex align-items-center mb-2">
-                                <strong class="small">@r.CustomerName</strong>
+                                <strong class="small" style="color: #FF6B35;">@r.CustomerName</strong>
                             </div>
                             <div class="rating text-warning small mb-1">@RenderStars(r.Rating)</div>
                             <p class="small text-muted mb-0">"@r.Comment"</p>
@@ -90,23 +90,23 @@
 
 <style>
     .home-footer {
-        background-color: #ffffff;
-        color: #333333;
-        padding: 60px 0;
+        background-color: #532374;
+        color: #e5e2db;
+        padding: 60px 0 60px 10%; /* Shifted right by increasing left padding */
     }
     .payment-badge {
-        background: #f8f9fa;
+        background: rgba(255,255,255,0.1);
         padding: 5px 12px;
         border-radius: 20px;
         display: flex;
         align-items: center;
         gap: 8px;
-        border: 1px solid #dee2e6;
-        color: #333;
+        border: 1px solid rgba(255,255,255,0.2);
+        color: #e5e2db;
     }
-    .payment-badge img { height: 20px; }
-    .footer-nav-links a { display: block; margin-bottom: 8px; color: #555; }
-    .footer-nav-links a:hover { color: #6f42c1; text-decoration: underline; }
+    .payment-badge img { height: 20px; filter: brightness(0) invert(1); }
+    .footer-nav-links a { display: block; margin-bottom: 8px; color: #e5e2db; }
+    .footer-nav-links a:hover { color: #ffffff; text-decoration: underline; }
     .review-box {
         background: #fdfdfd;
         padding: 15px;

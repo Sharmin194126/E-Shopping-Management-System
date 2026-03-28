@@ -144,8 +144,8 @@
             var sectionId = dispSection.Name.Replace(" ", "").ToLower();
             var sectionProducts = allProducts.Where(p => p.DisplayCategory == dispSection.Name || (dispSection.Name == "Featured Items" && p.DisplayCategory == "Featured")).ToList();
             
-            <section class="section" id="@sectionId" style="margin-bottom: 60px;">
-                <h2 style="text-align: center; margin-bottom: 30px; font-size: 32px;">@dispSection.Name</h2>
+            <section class="section" id="@sectionId" style="margin-bottom: 30px;">
+                <h2 style="text-align: center; margin-bottom: 15px; font-size: 32px;">@dispSection.Name</h2>
                 
                 @{
                     // Fallback logic to ensure sections are populated
@@ -170,10 +170,14 @@
                         }
                     }
 
-                    // Strict limit for featured items to fit precisely in the custom grid image view
+                    // Strict limit for featured items to fit precisely in the custom grid image view (1 left, 3+3 right)
                     if (dispSection.Name.Contains("Featured"))
                     {
-                        sectionProducts = sectionProducts.Take(4).ToList();
+                        sectionProducts = sectionProducts.Take(7).ToList();
+                    }
+                    else
+                    {
+                        sectionProducts = sectionProducts.Take(6).ToList();
                     }
                 }
 

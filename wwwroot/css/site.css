@@ -127,7 +127,7 @@ button {
 ===================== */
 .shoegee-header {
     position: relative;
-    background: #3c3935; /* dark charcoal */
+    background: #532374;
     padding-bottom: 25px; /* space for the floating pill nav */
     margin-bottom: 40px;
 }
@@ -672,7 +672,7 @@ body {
 
 /* ===== SECTIONS ===== */
 .section {
-    padding: 20px 70px;
+    padding: 10px 70px;
 }
 
 .product-grid {
@@ -746,9 +746,9 @@ body {
    FOOTER
 ===================== */
 .home-footer {
-    background: brown; /* User requested literally brown */
+    background: #532374; 
     color: #e5e2db;
-    padding: 50px 70px 50px 96px;
+    padding: 50px 70px 50px 150px;
     border-top: none;
 }
 
@@ -856,46 +856,48 @@ body {
 
 .product-grid {
     display: grid;
-    grid-template-columns: repeat(6, 1fr); /* Default grid has 6 items per row */
-    gap: 12px; /* reduced gap */
+    grid-template-columns: repeat(6, 1fr); /* 6 items per row */
+    gap: 6px; 
 }
 
 .featured-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: auto auto;
-    gap: 12px; /* reduced gap */
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 12px; 
 }
 
 .featured-grid .product-card:nth-child(1) {
-    grid-column: span 2;
+    grid-column: span 1;
     grid-row: span 2;
+    height: 100%;
 }
 
 .featured-grid .product-card:nth-child(1) img {
-    height: auto; 
-    max-height: 520px; /* limits to a smaller size */
+    height: 100%; 
+    width: 100%;
+    object-fit: cover;
+    max-height: none;
     aspect-ratio: auto;
-    object-fit: contain; /* does not crop */
 }
 
-.featured-grid .product-card:nth-child(2) {
-    grid-column: span 2;
-    grid-row: span 1;
+.add-btn-pill {
+    background: #3c3935;
+    color: #ffffff;
+    padding: 6px 15px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
 }
 
-.featured-grid .product-card:nth-child(2) img {
-    aspect-ratio: auto;
-    height: auto;
-    max-height: 250px; 
-    object-fit: contain; /* does not crop */
+.add-btn-pill:hover {
+    background: #FF6B35;
+    color: white;
+    transform: translateY(-2px);
 }
 
-.featured-grid .product-card:nth-child(3),
-.featured-grid .product-card:nth-child(4) {
-    grid-column: span 1;
-    grid-row: span 1;
-}
 
 .product-card {
     border: none;

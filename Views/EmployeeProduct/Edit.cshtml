@@ -236,7 +236,15 @@
                 $('.size-stock-input').each(function() {
                     total += parseInt($(this).val()) || 0;
                 });
-                $('input[name="StockQty"]').val(total);
+                
+                var stockInput = $('input[name="StockQty"]');
+                stockInput.val(total);
+                
+                if ($('.size-stock-input').length > 0) {
+                    stockInput.prop('readonly', true).css('background-color', '#e9ecef');
+                } else {
+                    stockInput.prop('readonly', false).css('background-color', '#fff');
+                }
             }
 
             calculateOffer();
