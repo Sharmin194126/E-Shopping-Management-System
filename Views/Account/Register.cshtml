@@ -1,12 +1,12 @@
-﻿@{
+@{
     ViewData["Title"] = "Register";
     Layout = "~/Views/Shared/_AccountLayout.cshtml";
 }
 
 <div class="register-bg">
     <div class="register-card text-center">
-        <h2 class="mb-3">Create Account</h2>
-        <p class="mb-4 opacity-75">Choose your account type to proceed</p>
+        <h2 class="mb-3 accent-heading">Create Account</h2>
+        <p class="mb-4 accent-subtext">Choose your account type to proceed</p>
 
         <!-- Customer Register -->
         <a asp-controller="Account"
@@ -32,10 +32,10 @@
         <hr class="my-4" style="border-color: rgba(255,255,255,0.3);" />
 
         <!-- Login Button -->
-        <p class="mb-2 small">Already have an account?</p>
+        <p class="mb-2 small accent-subtext">Already have an account?</p>
         <a asp-controller="Account"
            asp-action="Login"
-           class="text-decoration-none fw-bold text-white fs-5">
+           class="text-decoration-none fw-bold accent-link fs-5">
             Login Here
         </a>
 

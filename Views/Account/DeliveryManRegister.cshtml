@@ -6,8 +6,8 @@
 
 <div class="register-bg">
     <div class="register-card" style="max-width: 600px;">
-        <h2 class="text-center mb-3">Join as Delivery Man</h2>
-        <p class="text-center mb-4 opacity-75 small">Register your vehicle and start delivering</p>
+        <h2 class="text-center mb-3 accent-heading">Join as Delivery Man</h2>
+        <p class="text-center mb-4 accent-subtext small">Register your vehicle and start delivering</p>
 
         <form asp-action="DeliveryManRegister" method="post">
             <div asp-validation-summary="ModelOnly" class="text-warning small mb-3"></div>
@@ -60,7 +60,7 @@
         </form>
 
         <div class="mt-4 text-center">
-            <p class="small mb-1 opacity-75">Already have an account? <a asp-action="Login" class="fw-bold text-white text-decoration-none">Login</a></p>
+            <p class="small mb-1 accent-subtext">Already have an account? <a asp-action="Login" class="fw-bold accent-link text-decoration-none">Login</a></p>
             <a asp-action="Register" class="text-decoration-none small text-light opacity-75">&larr; Back to selection</a>
         </div>
     </div>

@@ -454,6 +454,69 @@ input:-webkit-autofill:active {
     transition: background-color 5000s ease-in-out 0s;
 }
 
+/* =====================
+   ACCENT COLORS (Professional Standard)
+===================== */
+.accent-heading {
+    color: #4e73df !important; /* Professional Indigo */
+    font-weight: 700 !important;
+    text-transform: none; /* Removed uppercase for a more standard look */
+    letter-spacing: normal;
+}
+
+.accent-subtext {
+    color: #5a5c69 !important; /* Slate Gray */
+    font-weight: 400 !important;
+    opacity: 1 !important;
+}
+
+.accent-link {
+    color: #4e73df !important;
+    font-weight: 600 !important;
+    transition: all 0.2s ease;
+}
+
+.accent-link:hover {
+    color: #2e59d9 !important;
+    text-decoration: underline !important;
+}
+
+/* CONTACT PAGE PROFESSIONAL COLORS */
+.contact-heading {
+    color: #ffffff !important;
+    font-weight: 700;
+}
+
+.contact-card-gradient {
+    background: linear-gradient(135deg, #4e73df 0%, #224abe 100%) !important;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.contact-label {
+    color: #ffffff !important;
+    font-weight: 700;
+}
+
+.contact-value {
+    color: #f8f9fa !important;
+    font-weight: 400;
+    opacity: 0.9;
+}
+
+.image-preview-container {
+    width: 100%;
+    margin-top: 10px;
+}
+
+#imagePreview {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    display: none;
+    margin-top: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
 .form-control::placeholder,
 .login-input::placeholder {
     color: #555 !important;

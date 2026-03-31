@@ -6,82 +6,121 @@
 <div class="container mt-5 mb-5">
     <div class="row">
         <div class="col-md-5 mb-4">
-            <div class="card h-100 border-0 bg-primary text-white">
+            <div class="card h-100 border-0 contact-card-gradient text-white shadow-lg" style="border-radius: 20px;">
                 <div class="card-body p-5">
-                    <h2 class="fw-bold mb-4">Get in Touch</h2>
-                    <p class="lead mb-5">Have a question or just want to say hi? We'd love to hear from you.</p>
+                    <h2 class="fw-bold mb-4 contact-heading">Get in Touch</h2>
+                    <p class="lead mb-5 accent-subtext" style="color:rgba(255,255,255,0.85) !important;">We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
                     
-                    <div class="mb-4">
-                        <h5><i class="bi bi-geo-alt me-2"></i> Address</h5>
-                        <p class="ms-4">123 E-Shop Street, Dhaka, Bangladesh</p>
+                    <div class="mb-4 d-flex align-items-start">
+                        <div class="me-3 fs-4" style="color: #ffffff; opacity:0.8;"><i class="bi bi-geo-alt"></i></div>
+                        <div>
+                            <h5 class="mb-1 contact-label">Address</h5>
+                            <p class="contact-value">123 E-Shop Street, Dhaka, Bangladesh</p>
+                        </div>
                     </div>
                     
-                    <div class="mb-4">
-                        <h5><i class="bi bi-telephone me-2"></i> Phone</h5>
-                        <p class="ms-4">+880 1234-567890</p>
+                    <div class="mb-4 d-flex align-items-start">
+                        <div class="me-3 fs-4" style="color: #ffffff; opacity:0.8;"><i class="bi bi-telephone"></i></div>
+                        <div>
+                            <h5 class="mb-1 contact-label">Phone</h5>
+                            <p class="contact-value">+880 1234-567890</p>
+                        </div>
                     </div>
                     
-                    <div class="mb-4">
-                        <h5><i class="bi bi-envelope me-2"></i> Email</h5>
-                        <p class="ms-4">eshop@gmail.com</p>
+                    <div class="mb-4 d-flex align-items-start">
+                        <div class="me-3 fs-4" style="color: #ffffff; opacity:0.8;"><i class="bi bi-envelope"></i></div>
+                        <div>
+                            <h5 class="mb-1 contact-label">Email</h5>
+                            <p class="contact-value">eshop@gmail.com</p>
+                        </div>
                     </div>
 
-                    <div class="mb-4">
-                        <h5><i class="bi bi-envelope-check me-2"></i> Direct Email Support</h5>
-                        <p class="ms-4">
-                            <a asp-action="Email" class="btn btn-sm btn-outline-light">Click here to Send Email</a>
-                        </p>
+                    <div class="mb-4 d-flex align-items-start">
+                        <div class="me-3 fs-4" style="color: #ffffff; opacity:0.8;"><i class="bi bi-envelope-check"></i></div>
+                        <div>
+                            <h5 class="mb-1 contact-label">Support</h5>
+                            <p class="mt-2">
+                                <a asp-action="Email" class="btn btn-sm btn-outline-light rounded-pill px-4 fw-bold">Send Direct Email</a>
+                            </p>
+                        </div>
                     </div>
                     
-                    <div class="mt-5">
-                        <a href="#" class="text-white me-3 fs-4"><i class="bi bi-facebook"></i></a>
-                        <a href="#" class="text-white me-3 fs-4"><i class="bi bi-twitter"></i></a>
-                        <a href="#" class="text-white fs-4"><i class="bi bi-instagram"></i></a>
+                    <div class="mt-5 pt-3">
+                        <a href="#" class="btn btn-outline-light border-0 rounded-circle me-3 fs-4"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="btn btn-outline-light border-0 rounded-circle me-3 fs-4"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="btn btn-outline-light border-0 rounded-circle fs-4"><i class="bi bi-instagram"></i></a>
                     </div>
                 </div>
             </div>
         </div>
         
         <div class="col-md-7">
-            <div class="card h-100 border-0">
+            <div class="card h-100 border-0 shadow" style="border-radius: 20px;">
                 <div class="card-body p-5">
-                    <h3 class="mb-4">Send us a Message</h3>
+                    <h3 class="mb-4 fw-bold" style="color: #532374;">Send us a Message</h3>
                     @if (TempData["Message"] != null)
                     {
-                        <div class="alert alert-success">@TempData["Message"]</div>
+                        <div class="alert alert-success border-0 shadow-sm rounded-3">@TempData["Message"]</div>
                     }
                     <form asp-action="SendMessage" method="post" enctype="multipart/form-data">
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Name</label>
-                                <input type="text" name="name" class="form-control" placeholder="John Doe" required />
+                                <label class="form-label fw-semibold">Name</label>
+                                <input type="text" name="name" class="form-control rounded-3" placeholder="John Doe" required />
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Email Address</label>
-                                <input type="email" name="email" class="form-control" placeholder="john@example.com" required />
+                                <label class="form-label fw-semibold">Email Address</label>
+                                <input type="email" name="email" class="form-control rounded-3" placeholder="john@example.com" required />
                             </div>
                         </div>
                         
                         <div class="mb-3">
-                            <label class="form-label">Subject</label>
-                            <input type="text" name="subject" class="form-control" placeholder="How can we help?" required />
+                            <label class="form-label fw-semibold">Subject</label>
+                            <input type="text" name="subject" class="form-control rounded-3" placeholder="How can we help?" required />
                         </div>
                         
                         <div class="mb-3">
-                            <label class="form-label">Message</label>
-                            <textarea name="message" class="form-control" rows="5" placeholder="Write your message here..." required></textarea>
+                            <label class="form-label fw-semibold">Message</label>
+                            <textarea name="message" class="form-control rounded-3" rows="5" placeholder="Write your message here..." required></textarea>
                         </div>
 
                         <div class="mb-4">
-                            <label class="form-label">Attachment (Optional)</label>
-                            <input type="file" name="attachment" class="form-control" />
-                            <small class="text-muted">You can add any files or screenshots here.</small>
+                            <label class="form-label fw-semibold">Attachment (Optional)</label>
+                            <input type="file" name="attachment" id="attachmentInput" class="form-control rounded-3" onchange="previewImage(event)" />
+                            <small class="text-muted">Upload an image or screenshot for reference.</small>
+                            <div class="image-preview-container">
+                                <img id="imagePreview" src="#" alt="Preview" />
+                            </div>
                         </div>
                         
-                        <button type="submit" class="btn btn-primary px-5 py-2 fw-bold">Send Message</button>
+                        <button type="submit" class="btn btn-primary px-5 py-3 fw-bold rounded-pill" style="background: #532374; border: none;">
+                            Send Message <i class="bi bi-send ms-2"></i>
+                        </button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        function previewImage(event) {
+            const input = event.target;
+            const preview = document.getElementById('imagePreview');
+            
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                }
+                
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                preview.style.display = 'none';
+            }
+        }
+    </script>
+}

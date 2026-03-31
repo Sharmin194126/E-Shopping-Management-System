@@ -1,4 +1,4 @@
-﻿@using E_ShoppingManagement.ViewModels
+@using E_ShoppingManagement.ViewModels
 @model EmployeeRegisterViewModel
 
 @{
@@ -8,8 +8,8 @@
 
 <div class="register-bg">
     <div class="register-card" style="max-width: 600px;">
-        <h2 class="text-center mb-4">Employee Sign Up</h2>
-        <p class="text-center mb-4 opacity-75 small">Join our team</p>
+        <h2 class="text-center mb-4 accent-heading">Employee Sign Up</h2>
+        <p class="text-center mb-4 accent-subtext small">Join our team</p>
 
         <form asp-action="EmployeeRegister" asp-controller="Account" method="post">
             @Html.AntiForgeryToken()

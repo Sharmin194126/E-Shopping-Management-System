@@ -1,4 +1,4 @@
-﻿﻿@using E_ShoppingManagement.ViewModels;
+﻿@using E_ShoppingManagement.ViewModels;
 @model VerifyEmailViewModel;
 
 @{
@@ -8,7 +8,7 @@
 
 <div class="forgot-bg">
     <div class="forgot-card">
-        <h2 class="text-center mb-4">Verify Email</h2>
+        <h2 class="text-center mb-4 accent-heading">Verify Email</h2>
         <form asp-action="VerifyEmail" method="post">
             @Html.AntiForgeryToken()
             <div asp-validation-summary="ModelOnly" class="text-warning"></div>

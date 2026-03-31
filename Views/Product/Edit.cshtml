@@ -95,13 +95,29 @@
 
         <div class="form-group">
             <label asp-for="AvailableSizes"></label>
-            <input asp-for="AvailableSizes" id="availableSizes" class="form-control" placeholder="e.g. L, M, XL" />
+            <div class="input-group mb-2">
+                <input asp-for="AvailableSizes" id="availableSizes" class="form-control" placeholder="e.g. L, M, XL" />
+                <button type="button" class="btn btn-outline-secondary" onclick="document.getElementById('availableSizes').value=''; updateSizeFields();">Clear</button>
+            </div>
+            <div class="mb-3 d-flex flex-wrap gap-2">
+                <button type="button" class="btn btn-sm btn-outline-primary size-preset" data-size="S">S</button>
+                <button type="button" class="btn btn-sm btn-outline-primary size-preset" data-size="M">M</button>
+                <button type="button" class="btn btn-sm btn-outline-primary size-preset" data-size="L">L</button>
+                <button type="button" class="btn btn-sm btn-outline-primary size-preset" data-size="XL">XL</button>
+                <button type="button" class="btn btn-sm btn-outline-primary size-preset" data-size="XXL">XXL</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary size-preset" data-size="36">36</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary size-preset" data-size="38">38</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary size-preset" data-size="40">40</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary size-preset" data-size="42">42</button>
+            </div>
             <span asp-validation-for="AvailableSizes" class="text-danger"></span>
         </div>
 
-        <div id="sizeStockContainer" class="mt-3" style="display:none; background: #f8f9fa; padding: 15px; border-radius: 8px; border: 1px solid #dee2e6;">
-            <label class="fw-bold mb-2">Inventory by Size</label>
-            <div id="sizeStockInputs"></div>
+        <div id="sizeStockContainer" class="mt-4 mb-4" style="display:none; background: #ffffff; padding: 20px; border-radius: 12px; border: 2px solid #28a745; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+            <div class="d-flex align-items-center mb-3">
+                <i class="bi bi-box-seam me-2 fs-4 text-success"></i>
+                <h5 class="fw-bold mb-0">Edit Inventory by Size</h5>
+            </div>
             
             @if (Model.SizeStocks != null && Model.SizeStocks.Any())
             {
@@ -113,7 +129,11 @@
                 </div>
             }
 
-            <p class="small text-muted mt-2">Note: Total Stock Quantity will be auto-calculated from these values.</p>
+            <div class="row g-3" id="sizeStockInputs"></div>
+            
+            <div class="mt-3 p-2 bg-light rounded border border-dashed text-center">
+                <span class="text-muted small">Total stock quantity will be automatically updated based on your changes above.</span>
+            </div>
         </div>
         
         <div class="form-group">
@@ -200,6 +220,16 @@
             });
             
             // Size-wise stock logic
+            $('.size-preset').on('click', function() {
+                var size = $(this).data('size');
+                var current = $('#availableSizes').val();
+                if (current.includes(size)) return;
+                
+                if (current && !current.endsWith(',')) current += ', ';
+                $('#availableSizes').val(current + size);
+                updateSizeFields();
+            });
+
             $('#availableSizes').on('input', function() {
                 updateSizeFields();
             });
@@ -212,6 +242,7 @@
                 if (!sizesStr || sizesStr.trim() === '') {
                     container.hide();
                     inputsDiv.empty();
+                    calculateTotalStock();
                     return;
                 }
 
@@ -219,6 +250,7 @@
                 if (sizes.length === 0) {
                     container.hide();
                     inputsDiv.empty();
+                    calculateTotalStock();
                     return;
                 }
 
@@ -243,30 +275,34 @@
                 sizes.forEach((size, index) => {
                     var val = existingValues[size] || 0;
                     var html = `
-                        <div class="row align-items-center mb-2">
-                            <div class="col-4"><span class="badge bg-info">${size}</span></div>
-                            <div class="col-8">
-                                <input type="number" name="SizeStocks[${index}].StockQty" 
-                                       data-size="${size}" value="${val}" class="form-control form-control-sm size-stock-input" min="0" />
-                                <input type="hidden" name="SizeStocks[${index}].Size" value="${size}" />
+                        <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="card bg-light border-0">
+                                <div class="card-body p-2 text-center">
+                                    <label class="fw-bold small d-block mb-1 text-success text-uppercase">${size}</label>
+                                    <input type="number" name="SizeStocks[${index}].StockQty" 
+                                           data-size="${size}" value="${val}" class="form-control form-control-sm size-stock-input text-center" min="0" />
+                                    <input type="hidden" name="SizeStocks[${index}].Size" value="${size}" />
+                                </div>
                             </div>
                         </div>`;
                     inputsDiv.append(html);
                 });
 
                 $('.size-stock-input').off('input').on('input', calculateTotalStock);
+                calculateTotalStock();
             }
 
             function calculateTotalStock() {
                 var total = 0;
-                $('.size-stock-input').each(function() {
+                var inputs = $('.size-stock-input');
+                inputs.each(function() {
                     total += parseInt($(this).val()) || 0;
                 });
                 
                 var stockInput = $('input[name="StockQty"]');
                 stockInput.val(total);
                 
-                if ($('.size-stock-input').length > 0) {
+                if (inputs.length > 0) {
                     stockInput.prop('readonly', true).css('background-color', '#e9ecef');
                 } else {
                     stockInput.prop('readonly', false).css('background-color', '#fff');
