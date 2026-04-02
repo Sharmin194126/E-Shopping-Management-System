@@ -314,7 +314,7 @@
                 <script>
                     function showMessage(msg) {
                         const msgBox = document.getElementById('qtyMessage');
-                        msgBox.innerText = msg;
+                        msgBox.innerHTML = msg;
                         msgBox.style.display = 'block';
                         
                         // Clear message after 4 seconds
@@ -352,7 +352,7 @@
                             showMessage("Sorry, this product/size is currently out of stock.");
                         } else if (maxOrder > 0 && maxOrder < maxStock && val > maxOrder) {
                             val = maxOrder;
-                            showMessage("Maximum purchase order limit is " + maxOrder + ". If you need more products, please Contact Us.");
+                            showMessage("Maximum purchase order limit is " + maxOrder + ". If you need more products, please <a href='/Home/Contact' class='text-primary text-decoration-underline fw-bold'>Contact Us</a>.");
                         } else if (val > maxStock) {
                             val = maxStock;
                             showMessage("Requested quantity exceeds available stock of " + maxStock + " units for this selection.");

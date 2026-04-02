@@ -8,6 +8,36 @@
 <h2 class="mb-3">Create Product</h2>
 
 <style>
+    .size-toggle-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 5px 14px;
+        border: 1.5px solid #ced4da;
+        border-radius: 20px;
+        background: #fff;
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        color: #555;
+        transition: all 0.18s ease;
+    }
+    .size-toggle-btn .size-check-icon {
+        display: none;
+        color: #28a745;
+        font-weight: 700;
+    }
+    .size-toggle-btn.active {
+        background: #e6f4ea;
+        border-color: #28a745;
+        color: #1a7c35;
+    }
+    .size-toggle-btn.active .size-check-icon {
+        display: inline;
+    }
+    .size-stock-input::-webkit-outer-spin-button,
+    .size-stock-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .size-stock-input { -moz-appearance: textfield; }
     .page-card {
         background: #f8f9fa;
         padding: 30px;
@@ -95,8 +125,6 @@
                     <input asp-for="VatPercentage" class="form-control" type="number" step="0.01" />
                 </div>
             </div>
-
-        <div class="row">
             <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label asp-for="DisplayCategory" class="form-label">Home Display Section</label>
@@ -107,37 +135,47 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group mb-3">
-                    <label asp-for="AvailableSizes" class="form-label font-weight-bold">Available Sizes</label>
-                    <div class="input-group mb-2">
-                        <input asp-for="AvailableSizes" id="availableSizes" class="form-control" placeholder="e.g. L, M, XL" />
-                        <button type="button" class="btn btn-outline-secondary" onclick="document.getElementById('availableSizes').value=''; updateSizeFields();">Clear</button>
-                    </div>
-                    <div class="mb-3 d-flex flex-wrap gap-2">
-                        <button type="button" class="btn btn-sm btn-outline-primary size-preset" data-size="S">S</button>
-                        <button type="button" class="btn btn-sm btn-outline-primary size-preset" data-size="M">M</button>
-                        <button type="button" class="btn btn-sm btn-outline-primary size-preset" data-size="L">L</button>
-                        <button type="button" class="btn btn-sm btn-outline-primary size-preset" data-size="XL">XL</button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary size-preset" data-size="36">36</button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary size-preset" data-size="38">38</button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary size-preset" data-size="40">40</button>
-                    </div>
-                </div>
+        <input type="hidden" asp-for="AvailableSizes" id="availableSizesHidden" />
+
+        <div class="form-group mb-3">
+            <label>Available Sizes</label>
+            <div class="d-flex flex-wrap gap-2 mt-1">
+                @{
+                    var sizesList = new[] { "S", "M", "L", "XL", "XXL", "3XL" };
+                }
+                @foreach (var sz in sizesList)
+                {
+                    <button type="button" class="size-toggle-btn" data-size="@sz">
+                        <span class="size-check-icon">&#10003;</span> @sz
+                    </button>
+                    <input type="hidden" class="size-checkbox" id="sizeCheck_@sz" value="@sz" />
+                }
             </div>
-            <div class="col-md-6">
-                <div id="sizeStockContainer" class="mt-2 mb-3 shadow-sm" style="display:none; background: #ffffff; padding: 20px; border-radius: 12px; border: 2px solid #007bff;">
-                    <div class="d-flex align-items-center mb-3">
-                        <i class="bi bi-box-seam me-2 fs-5 text-primary"></i>
-                        <h6 class="fw-bold mb-0">Inventory by Size</h6>
+        </div>
+
+        <div class="form-group mb-3">
+            <label>Size Wise Quantity</label>
+            <div class="d-flex flex-wrap gap-3 mt-1">
+                @{
+                    int idx = 0;
+                }
+                @foreach (var size in sizesList)
+                {
+                    <div class="size-stock-row" data-size="@size" style="display:none;">
+                        <div class="d-flex flex-column align-items-center">
+                            <small class="text-muted mb-1 fw-semibold">@size</small>
+                            <div class="input-group" style="width:110px;">
+                                <button type="button" class="btn btn-outline-secondary btn-sm size-dec" data-target="sizeQty_@size">&#8722;</button>
+                                <input type="number" id="sizeQty_@size" name="SizeStocks[@idx].StockQty" value="0" class="form-control form-control-sm size-stock-input text-center" min="0" />
+                                <button type="button" class="btn btn-outline-secondary btn-sm size-inc" data-target="sizeQty_@size">&#43;</button>
+                            </div>
+                            <input type="hidden" name="SizeStocks[@idx].Size" value="@size" />
+                        </div>
                     </div>
-                    <div class="row g-2" id="sizeStockInputs"></div>
-                    <div class="mt-2 text-center">
-                        <span class="text-muted extra-small">Total Stock: <span id="totalStockDisplay" class="fw-bold text-dark">0</span></span>
-                    </div>
-                </div>
+                    idx++;
+                }
             </div>
+            <small class="text-muted mt-2 d-block">Total stock quantity will be automatically calculated.</small>
         </div>
 
         <div class="form-group mb-3">
@@ -173,86 +211,55 @@
                 calculateOffer();
             });
 
-            // Size-wise stock logic
-            $('.size-preset').off('click').on('click', function() {
+            // Size toggle button click
+            $(document).on('click', '.size-toggle-btn', function() {
+                $(this).toggleClass('active');
                 var size = $(this).data('size');
-                var current = $('#availableSizes').val();
-                if (current.includes(size)) return;
-                
-                if (current && !current.endsWith(',')) current += ', ';
-                $('#availableSizes').val(current + size);
-                updateSizeFields();
-            });
-
-            $('#availableSizes').on('input', function() {
-                updateSizeFields();
-            });
-
-            function updateSizeFields() {
-                var sizesStr = $('#availableSizes').val();
-                var container = $('#sizeStockContainer');
-                var inputsDiv = $('#sizeStockInputs');
-                
-                if (!sizesStr || sizesStr.trim() === '') {
-                    container.hide();
-                    inputsDiv.empty();
-                    calculateTotalStock();
-                    return;
+                var row = $('.size-stock-row[data-size="' + size + '"]');
+                if ($(this).hasClass('active')) {
+                    row.show();
+                } else {
+                    row.hide();
+                    row.find('.size-stock-input').val(0);
                 }
-
-                var sizes = sizesStr.split(',').map(s => s.trim()).filter(s => s !== '');
-                if (sizes.length === 0) {
-                    container.hide();
-                    inputsDiv.empty();
-                    calculateTotalStock();
-                    return;
-                }
-
-                container.show();
-                var existingValues = {};
-                inputsDiv.find('input.size-stock-input').each(function() {
-                    existingValues[$(this).attr('data-size')] = $(this).val();
-                });
-
-                inputsDiv.empty();
-                sizes.forEach((size, index) => {
-                    var val = existingValues[size] || 0;
-                    var html = `
-                        <div class="col-6 mb-3">
-                            <div class="p-2 border rounded text-center bg-light">
-                                <label class="small fw-bold d-block mb-1 text-uppercase">${size}</label>
-                                <input type="number" name="SizeStocks[${index}].StockQty" 
-                                       data-size="${size}" value="${val}" class="form-control form-control-sm size-stock-input text-center" min="0" />
-                                <input type="hidden" name="SizeStocks[${index}].Size" value="${size}" />
-                            </div>
-                        </div>`;
-                    inputsDiv.append(html);
-                });
-
-                $('.size-stock-input').off('input').on('input', calculateTotalStock);
                 calculateTotalStock();
-            }
+            });
+
+            // +/- buttons
+            $(document).on('click', '.size-inc', function() {
+                var inp = $('#' + $(this).data('target'));
+                inp.val((parseInt(inp.val()) || 0) + 1);
+                calculateTotalStock();
+            });
+            $(document).on('click', '.size-dec', function() {
+                var inp = $('#' + $(this).data('target'));
+                var v = (parseInt(inp.val()) || 0) - 1;
+                inp.val(v < 0 ? 0 : v);
+                calculateTotalStock();
+            });
 
             function calculateTotalStock() {
                 var total = 0;
-                var inputs = $('.size-stock-input');
-                inputs.each(function() {
+                var availSizes = [];
+                $('.size-toggle-btn.active').each(function() {
+                    availSizes.push($(this).data('size'));
+                });
+                $('.size-stock-row:visible .size-stock-input').each(function() {
                     total += parseInt($(this).val()) || 0;
                 });
-                
+
                 var stockInput = $('input[name="StockQty"]');
                 stockInput.val(total);
-                $('#totalStockDisplay').text(total);
-                
-                if (inputs.length > 0) {
-                    stockInput.prop('readonly', true).css('background-color', '#e9ecef');
-                } else {
-                    stockInput.prop('readonly', false).css('background-color', '#fff');
-                }
+                $('#availableSizesHidden').val(availSizes.join(', '));
+
+                var anyActive = $('.size-toggle-btn.active').length > 0;
+                stockInput.prop('readonly', anyActive).css('background-color', anyActive ? '#e9ecef' : '');
             }
 
+            $(document).on('input', '.size-stock-input', calculateTotalStock);
+
             calculateOffer();
-            updateSizeFields();
+            calculateTotalStock();
         });
     </script>
 }

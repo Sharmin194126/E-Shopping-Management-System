@@ -7,6 +7,58 @@
 
 <h2 class="mb-3">Create Product</h2>
 
+<style>
+    /* Square checkbox style */
+    .size-chk-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: #333;
+        user-select: none;
+    }
+    .size-chk-label input[type="checkbox"] {
+        display: none;
+    }
+    .size-chk-box {
+        width: 20px;
+        height: 20px;
+        border: 2px solid #6c757d;
+        border-radius: 3px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: #fff;
+        flex-shrink: 0;
+        transition: border-color 0.15s;
+    }
+    .size-chk-label input[type="checkbox"]:checked + .size-chk-box {
+        border-color: #333;
+    }
+    .size-chk-label input[type="checkbox"]:checked + .size-chk-box::after {
+        content: '\2713';
+        font-size: 13px;
+        font-weight: 700;
+        color: #333;
+    }
+    /* Size quantity input group */
+    .size-qty-group {
+        display: none;
+    }
+    .size-qty-group .input-group-text {
+        min-width: 42px;
+        justify-content: center;
+        font-weight: 600;
+        background: #fff;
+    }
+    .size-qty-group input[type=number] {
+        width: 70px;
+        text-align: center;
+    }
+</style>
+
 <div class="page-card">
     <form asp-action="Create" method="post" enctype="multipart/form-data">
 
@@ -85,35 +137,48 @@
             <span asp-validation-for="DisplayCategory" class="text-danger"></span>
         </div>
 
+        <input type="hidden" asp-for="AvailableSizes" id="availableSizesHidden" />
+
         <div class="form-group">
-            <label asp-for="AvailableSizes"></label>
-            <div class="input-group mb-2">
-                <input asp-for="AvailableSizes" id="availableSizes" class="form-control" placeholder="e.g. L, M, XL" />
-                <button type="button" class="btn btn-outline-secondary" onclick="document.getElementById('availableSizes').value=''; updateSizeFields();">Clear</button>
+            <label>Available Sizes</label>
+            <div class="d-flex flex-wrap gap-4 mt-2">
+                @{
+                    var sizesList = new[] { "S", "M", "L", "XL", "XXL", "3XL" };
+                }
+                @foreach (var sz in sizesList)
+                {
+                    <label class="size-chk-label">
+                        <input type="checkbox" class="size-checkbox" value="@sz" id="sizeChk_@sz" />
+                        <span class="size-chk-box"></span>
+                        @sz
+                    </label>
+                }
             </div>
-            <div class="mb-3 d-flex flex-wrap gap-2">
-                <button type="button" class="btn btn-sm btn-outline-primary size-preset" data-size="S">S</button>
-                <button type="button" class="btn btn-sm btn-outline-primary size-preset" data-size="M">M</button>
-                <button type="button" class="btn btn-sm btn-outline-primary size-preset" data-size="L">L</button>
-                <button type="button" class="btn btn-sm btn-outline-primary size-preset" data-size="XL">XL</button>
-                <button type="button" class="btn btn-sm btn-outline-primary size-preset" data-size="XXL">XXL</button>
-                <button type="button" class="btn btn-sm btn-outline-secondary size-preset" data-size="36">36</button>
-                <button type="button" class="btn btn-sm btn-outline-secondary size-preset" data-size="38">38</button>
-                <button type="button" class="btn btn-sm btn-outline-secondary size-preset" data-size="40">40</button>
-                <button type="button" class="btn btn-sm btn-outline-secondary size-preset" data-size="42">42</button>
-            </div>
-            <span asp-validation-for="AvailableSizes" class="text-danger"></span>
         </div>
 
-        <div id="sizeStockContainer" class="mt-4 mb-4" style="display:none; background: #ffffff; padding: 20px; border-radius: 12px; border: 2px solid #4e73df; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-            <div class="d-flex align-items-center mb-3">
-                <i class="bi bi-box-seam me-2 fs-4 text-primary"></i>
-                <h5 class="fw-bold mb-0">Inventory by Size</h5>
+        <div class="form-group">
+            <label>Size Wise Quantity</label>
+            <div class="d-flex flex-wrap gap-3 mt-2">
+                @{
+                    int idx = 0;
+                }
+                @foreach (var size in sizesList)
+                {
+                    <div class="size-qty-group" data-size="@size">
+                        <div class="input-group">
+                            <span class="input-group-text">@size</span>
+                            <input type="number" id="sizeQty_@size"
+                                   name="SizeStocks[@idx].StockQty"
+                                   value="0"
+                                   class="form-control size-stock-input text-center"
+                                   min="0" style="width:70px;" />
+                        </div>
+                        <input type="hidden" name="SizeStocks[@idx].Size" value="@size" />
+                    </div>
+                    idx++;
+                }
             </div>
-            <div class="row g-3" id="sizeStockInputs"></div>
-            <div class="mt-3 p-2 bg-light rounded border border-dashed text-center">
-                <span class="text-muted small">Total stock quantity will be automatically updated based on the quantities entered above.</span>
-            </div>
+            <small class="text-muted mt-2 d-block">Total stock quantity will be automatically calculated.</small>
         </div>
         
         <div class="form-group">
@@ -199,88 +264,42 @@
                 calculateOffer();
             });
             
-            // Size-wise stock logic
-            $('.size-preset').on('click', function() {
-                var size = $(this).data('size');
-                var current = $('#availableSizes').val();
-                if (current.includes(size)) return;
-                
-                if (current && !current.endsWith(',')) current += ', ';
-                $('#availableSizes').val(current + size);
-                updateSizeFields();
-            });
-
-            $('#availableSizes').on('input', function() {
-                updateSizeFields();
-            });
-
-            function updateSizeFields() {
-                var sizesStr = $('#availableSizes').val();
-                var container = $('#sizeStockContainer');
-                var inputsDiv = $('#sizeStockInputs');
-                
-                if (!sizesStr || sizesStr.trim() === '') {
-                    container.hide();
-                    inputsDiv.empty();
-                    calculateTotalStock();
-                    return;
+            // Size checkbox → show/hide quantity row
+            $(document).on('change', '.size-checkbox', function() {
+                var size = $(this).val();
+                var row = $('.size-qty-group[data-size="' + size + '"]');
+                if ($(this).is(':checked')) {
+                    row.show();
+                } else {
+                    row.hide();
+                    row.find('.size-stock-input').val(0);
                 }
-
-                var sizes = sizesStr.split(',').map(s => s.trim()).filter(s => s !== '');
-                if (sizes.length === 0) {
-                    container.hide();
-                    inputsDiv.empty();
-                    calculateTotalStock();
-                    return;
-                }
-
-                container.show();
-                var existingValues = {};
-                inputsDiv.find('input.size-stock-input').each(function() {
-                    existingValues[$(this).attr('data-size')] = $(this).val();
-                });
-
-                inputsDiv.empty();
-                sizes.forEach((size, index) => {
-                    var val = existingValues[size] || 0;
-                    var html = `
-                        <div class="col-md-4 col-sm-6 mb-3">
-                            <div class="card bg-light border-0">
-                                <div class="card-body p-2 text-center">
-                                    <label class="fw-bold small d-block mb-1 text-primary text-uppercase">${size}</label>
-                                    <input type="number" name="SizeStocks[${index}].StockQty" 
-                                           data-size="${size}" value="${val}" class="form-control form-control-sm size-stock-input text-center" min="0" />
-                                    <input type="hidden" name="SizeStocks[${index}].Size" value="${size}" />
-                                </div>
-                            </div>
-                        </div>`;
-                    inputsDiv.append(html);
-                });
-
-                $('.size-stock-input').off('input').on('input', calculateTotalStock);
                 calculateTotalStock();
-            }
+            });
 
             function calculateTotalStock() {
                 var total = 0;
-                var inputs = $('.size-stock-input');
-                inputs.each(function() {
+                var availSizes = [];
+                $('.size-checkbox:checked').each(function() {
+                    availSizes.push($(this).val());
+                });
+                $('.size-qty-group:visible .size-stock-input').each(function() {
                     total += parseInt($(this).val()) || 0;
                 });
-                
+
                 var stockInput = $('input[name="StockQty"]');
                 stockInput.val(total);
-                
-                if (inputs.length > 0) {
-                    stockInput.prop('readonly', true).css('background-color', '#e9ecef');
-                } else {
-                    stockInput.prop('readonly', false).css('background-color', '#fff');
-                }
+                $('#availableSizesHidden').val(availSizes.join(', '));
+
+                var anyChecked = $('.size-checkbox:checked').length > 0;
+                stockInput.prop('readonly', anyChecked).css('background-color', anyChecked ? '#e9ecef' : '');
             }
 
-            // In case of validation reload
+            $(document).on('input', '.size-stock-input', calculateTotalStock);
+
+            // Initial calculation
             calculateOffer();
-            updateSizeFields();
+            calculateTotalStock();
         });
     </script>
 }
