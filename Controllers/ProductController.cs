@@ -226,7 +226,8 @@ namespace E_ShoppingManagement.Controllers
                 OfferPercentage = product.OfferPercentage,
                 MaxOrderQty = product.MaxOrderQty,
                 AssignedEmployeeId = product.AssignedEmployeeId,
-                SizeStocks = _context.ProductSizeStocks.Where(s => s.ProductId == id).ToList()
+                SizeStocks = _context.ProductSizeStocks.Where(s => s.ProductId == id).ToList(),
+                ExistingImageUrl = product.ImageUrl
             };
 
             // Fix for legacy data: if RegularPrice is 0 but Price is set, assume Price is the Regular Price
@@ -321,6 +322,7 @@ namespace E_ShoppingManagement.Controllers
             model.ProductTypeList = GetProductTypeList();
             model.DisplayCategoryList = GetDisplayCategoryList();
             model.EmployeeList = GetEmployeeList();
+            model.ExistingImageUrl = product.ImageUrl;
 
             return View(model);
         }

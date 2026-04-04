@@ -116,7 +116,7 @@ namespace E_ShoppingManagement.Controllers
                 .Include(p => p.Category)
                 .Include(p => p.ProductType)
                 .Where(p => p.Status == "Approved" || p.Status == "Pending" || p.Status == "Active")
-                .OrderByDescending(p => p.CreatedAt)
+                .OrderBy(p => p.CreatedAt)
                 .ToListAsync();
 
             viewModel.DisplaySections = await _context.DisplaySections

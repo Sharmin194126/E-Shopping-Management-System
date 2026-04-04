@@ -3,8 +3,8 @@
     ViewData["Title"] = Model.Product.Name;
     Layout = "~/Views/Shared/_Layout.cshtml";
     
-    var sizes = !string.IsNullOrEmpty(Model.Product.AvailableSizes) 
-        ? Model.Product.AvailableSizes.Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries) 
+    var sizes = !string.IsNullOrEmpty(Model.Product.AvailableSizes)
+        ? Model.Product.AvailableSizes.Split(',').Select(s => s.Trim()).Where(s => !string.IsNullOrEmpty(s)).ToArray()
         : null;
 
     string RenderStars(double rating) {

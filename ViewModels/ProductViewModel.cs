@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -50,6 +50,9 @@ namespace E_ShoppingManagement.ViewModels
         public bool IsApproved { get; set; }
 
         public IFormFile? ImageFile { get; set; }
+
+        // Used by Edit view to show the currently saved image
+        public string? ExistingImageUrl { get; set; }
 
         [Display(Name = "Display Section")]
         public string? DisplayCategory { get; set; } // Feature, Exclusive, Offer, JustForYou, Restock

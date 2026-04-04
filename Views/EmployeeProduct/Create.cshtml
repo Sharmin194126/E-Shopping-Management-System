@@ -114,13 +114,6 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group mb-3">
-                    <label asp-for="StockQty" class="form-label">Stock Quantity</label>
-                    <input asp-for="StockQty" class="form-control" type="number" />
-                    <span asp-validation-for="StockQty" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group mb-3">
                     <label asp-for="VatPercentage" class="form-label">VAT %</label>
                     <input asp-for="VatPercentage" class="form-control" type="number" step="0.01" />
                 </div>
@@ -179,6 +172,13 @@
         </div>
 
         <div class="form-group mb-3">
+            <label asp-for="StockQty">Stock Quantity (Auto-calculated)</label>
+            <input asp-for="StockQty" id="stockQtyInput" class="form-control" readonly style="background-color: #e9ecef;" />
+            <small class="text-muted">Automatically summed from size-wise quantities above.</small>
+            <span asp-validation-for="StockQty" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-3">
             <label asp-for="Description" class="form-label"></label>
             <textarea asp-for="Description" rows="3" class="form-control"></textarea>
             <span asp-validation-for="Description" class="text-danger"></span>
@@ -186,7 +186,11 @@
 
         <div class="form-group mb-3">
             <label asp-for="ImageFile" class="form-label">Product Image</label>
-            <input asp-for="ImageFile" type="file" class="form-control" />
+            <input asp-for="ImageFile" type="file" class="form-control" id="imageInput" accept="image/*" />
+            <div id="imagePreviewWrapper" style="display:none; margin-top:10px;">
+                <img id="imagePreview" src="#" alt="Selected Image Preview" style="height: 120px; width: auto; border-radius: 6px; border: 1px solid #ddd; box-shadow: 0 2px 6px rgba(0,0,0,0.1);" />
+                <p class="text-muted mt-1" style="font-size:0.82rem;">Selected image preview</p>
+            </div>
         </div>
 
         <div class="mt-4 d-flex justify-content-between">
@@ -238,6 +242,21 @@
                 calculateTotalStock();
             });
 
+            // Image preview
+            $('#imageInput').on('change', function() {
+                var file = this.files[0];
+                if (file) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        $('#imagePreview').attr('src', e.target.result);
+                        $('#imagePreviewWrapper').show();
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    $('#imagePreviewWrapper').hide();
+                }
+            });
+
             function calculateTotalStock() {
                 var total = 0;
                 var availSizes = [];
@@ -248,12 +267,8 @@
                     total += parseInt($(this).val()) || 0;
                 });
 
-                var stockInput = $('input[name="StockQty"]');
-                stockInput.val(total);
+                $('#stockQtyInput').val(total);
                 $('#availableSizesHidden').val(availSizes.join(', '));
-
-                var anyActive = $('.size-toggle-btn.active').length > 0;
-                stockInput.prop('readonly', anyActive).css('background-color', anyActive ? '#e9ecef' : '');
             }
 
             $(document).on('input', '.size-stock-input', calculateTotalStock);

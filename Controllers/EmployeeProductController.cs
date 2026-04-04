@@ -198,7 +198,8 @@ namespace E_ShoppingManagement.Controllers
                 ProductTypeList = GetProductTypeList(),
                 DisplayCategoryList = GetDisplayCategoryList(),
                 StatusList = GetStatusList(),
-                SizeStocks = await _context.ProductSizeStocks.Where(s => s.ProductId == id).ToListAsync()
+                SizeStocks = await _context.ProductSizeStocks.Where(s => s.ProductId == id).ToListAsync(),
+                ExistingImageUrl = product.ImageUrl
             };
 
             return View(vm);

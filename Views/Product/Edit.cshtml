@@ -8,36 +8,78 @@
 <h2 class="mb-3">Edit Product</h2>
 
 <style>
-    .size-toggle-btn {
+    /* Square checkbox style */
+    .size-chk-label {
         display: inline-flex;
         align-items: center;
-        gap: 4px;
-        padding: 5px 14px;
-        border: 1.5px solid #ced4da;
-        border-radius: 20px;
-        background: #fff;
-        font-size: 0.875rem;
-        font-weight: 500;
+        gap: 6px;
         cursor: pointer;
-        color: #555;
-        transition: all 0.18s ease;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: #333;
+        user-select: none;
     }
-    .size-toggle-btn .size-check-icon {
+    .size-chk-label input[type="checkbox"] {
         display: none;
-        color: #28a745;
+    }
+    .size-chk-box {
+        width: 20px;
+        height: 20px;
+        border: 2px solid #6c757d;
+        border-radius: 3px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: #fff;
+        flex-shrink: 0;
+        transition: border-color 0.15s;
+    }
+    .size-chk-label input[type="checkbox"]:checked + .size-chk-box {
+        border-color: #333;
+    }
+    .size-chk-label input[type="checkbox"]:checked + .size-chk-box::after {
+        content: '\2713';
+        font-size: 13px;
         font-weight: 700;
+        color: #333;
     }
-    .size-toggle-btn.active {
-        background: #e6f4ea;
-        border-color: #28a745;
-        color: #1a7c35;
+    /* Size quantity input group */
+    .size-qty-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 8px;
     }
-    .size-toggle-btn.active .size-check-icon {
-        display: inline;
+    .size-qty-item {
+        display: flex;
+        align-items: stretch;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        overflow: hidden;
     }
-    .size-stock-input::-webkit-outer-spin-button,
-    .size-stock-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-    .size-stock-input { -moz-appearance: textfield; }
+    .size-qty-item .size-label {
+        display: flex;
+        align-items: center;
+        padding: 4px 10px;
+        background: #f8f9fa;
+        border-right: 1px solid #ced4da;
+        font-weight: 700;
+        font-size: 0.9rem;
+        color: #333;
+        min-width: 38px;
+        justify-content: center;
+    }
+    .size-qty-item input[type=number] {
+        width: 70px;
+        border: none;
+        text-align: center;
+        padding: 4px 6px;
+        font-size: 0.9rem;
+        outline: none;
+    }
+    .size-qty-item input[type=number]:focus {
+        background: #f0f4ff;
+    }
 </style>
 
 <div class="page-card">
@@ -107,11 +149,7 @@
             </div>
         </div>
 
-        <div class="form-group">
-            <label asp-for="StockQty"></label>
-            <input asp-for="StockQty" class="form-control" />
-            <span asp-validation-for="StockQty" class="text-danger"></span>
-        </div>
+
 
         <div class="form-group">
             <label asp-for="MaxOrderQty">Max Order limit per Customer (Optional)</label>
@@ -130,46 +168,53 @@
 
         <div class="form-group">
             <label>Available Sizes</label>
-            <div class="d-flex flex-wrap gap-2 mt-1">
+            <div class="d-flex flex-wrap gap-4 mt-2">
                 @{
                     var sizesList = new[] { "S", "M", "L", "XL", "XXL", "3XL" };
                     var savedSizes = (Model?.AvailableSizes ?? "").Split(',').Select(s => s.Trim()).ToList();
                 }
                 @foreach (var sz in sizesList)
                 {
-                    var isActive = savedSizes.Contains(sz);
-                    <button type="button" class="size-toggle-btn @(isActive ? "active" : "")" data-size="@sz">
-                        <span class="size-check-icon">&#10003;</span> @sz
-                    </button>
+                    var isChecked = savedSizes.Contains(sz);
+                    <label class="size-chk-label">
+                        <input type="checkbox" class="size-checkbox" value="@sz" id="sizeChk_@sz" @(isChecked ? "checked" : "") />
+                        <span class="size-chk-box"></span>
+                        @sz
+                    </label>
                 }
             </div>
         </div>
 
         <div class="form-group">
             <label>Size Wise Quantity</label>
-            <div class="d-flex flex-wrap gap-3 mt-1">
+            <div class="size-qty-row">
                 @{
                     int idx = 0;
                 }
                 @foreach (var size in sizesList)
                 {
                     var stockVal = Model?.SizeStocks?.FirstOrDefault(s => s.Size == size)?.StockQty ?? 0;
-                    var isActive2 = savedSizes.Contains(size);
-                    <div class="size-stock-row" data-size="@size" style="display:@(isActive2 ? "flex" : "none");">
-                        <div class="d-flex flex-column align-items-center">
-                            <small class="text-muted mb-1 fw-semibold">@size</small>
-                            <div class="input-group" style="width:110px;">
-                                <button type="button" class="btn btn-outline-secondary btn-sm size-dec" data-target="sizeQty_@size">&#8722;</button>
-                                <input type="number" id="sizeQty_@size" name="SizeStocks[@idx].StockQty" value="@stockVal" class="form-control form-control-sm size-stock-input text-center" min="0" />
-                                <button type="button" class="btn btn-outline-secondary btn-sm size-inc" data-target="sizeQty_@size">&#43;</button>
-                            </div>
-                            <input type="hidden" name="SizeStocks[@idx].Size" value="@size" />
-                        </div>
+                    <div class="size-qty-item">
+                        <span class="size-label">@size</span>
+                        <input type="number" id="sizeQty_@size"
+                               name="SizeStocks[@idx].StockQty"
+                               value="@stockVal"
+                               class="size-stock-input"
+                               min="0" />
                     </div>
+                    <input type="hidden" name="SizeStocks[@idx].Size" value="@size" />
                     idx++;
                 }
             </div>
-            <small class="text-muted mt-2 d-block">Total stock quantity will be automatically calculated.</small>
+            <small class="text-muted mt-2 d-block">Total stock quantity will be automatically calculated from all sizes.</small>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="StockQty">Stock Quantity (Auto-calculated)</label>
+            <input asp-for="StockQty" id="stockQtyInput" class="form-control" readonly
+                   style="background-color: #e9ecef;"
+                   data-val="false" />
+            <small class="text-muted">Automatically summed from size-wise quantities above.</small>
         </div>
         
         <div class="form-group">
@@ -202,10 +247,21 @@
 
         <div class="form-group">
             <label asp-for="ImageFile">Change Image (optional)</label>
-            <div class="d-flex align-items-center gap-3">
-                <input asp-for="ImageFile" type="file" class="form-control" id="imageInput" accept="image/*" style="flex: 1;" />
-                <img id="imagePreview" src="#" alt="Preview" style="display:none; height: 50px; width: auto; border-radius: 4px; border: 1px solid #ddd;" />
-            </div>
+            <input asp-for="ImageFile" type="file" class="form-control" id="imageInput" accept="image/*" />
+            @if (!string.IsNullOrEmpty(Model?.ExistingImageUrl))
+            {
+                <div id="imagePreviewWrapper" style="margin-top:10px;">
+                    <img id="imagePreview" src="@Model.ExistingImageUrl" alt="Current Product Image" style="height: 120px; width: auto; border-radius: 6px; border: 1px solid #ddd; box-shadow: 0 2px 6px rgba(0,0,0,0.1);" />
+                    <p class="text-muted mt-1" style="font-size:0.82rem;" id="imagePreviewLabel">Current image (select a new file to change)</p>
+                </div>
+            }
+            else
+            {
+                <div id="imagePreviewWrapper" style="display:none; margin-top:10px;">
+                    <img id="imagePreview" src="#" alt="Selected Image Preview" style="height: 120px; width: auto; border-radius: 6px; border: 1px solid #ddd; box-shadow: 0 2px 6px rgba(0,0,0,0.1);" />
+                    <p class="text-muted mt-1" style="font-size:0.82rem;" id="imagePreviewLabel">Selected image preview</p>
+                </div>
+            }
         </div>
 
         <div class="mt-3 d-flex justify-content-between">
@@ -218,92 +274,64 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script>
-        $(document).ready(function() {
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // ── Offer Price Calculation ──────────────────────────────────────
             function calculateOffer() {
-                var regPrice = parseFloat($('#regPrice').val()) || 0;
-                var offPercent = parseFloat($('#offPercent').val()) || 0;
-                var offerPrice = regPrice - (regPrice * (offPercent / 100));
-                $('#offPrice').val(offerPrice.toFixed(2));
+                var regPrice = parseFloat(document.getElementById('regPrice').value) || 0;
+                var offPct   = parseFloat(document.getElementById('offPercent').value) || 0;
+                document.getElementById('offPrice').value = (regPrice - regPrice * offPct / 100).toFixed(2);
             }
+            document.getElementById('regPrice').addEventListener('input', calculateOffer);
+            document.getElementById('offPercent').addEventListener('input', calculateOffer);
+            calculateOffer();
 
-            // Approved Checkbox Feedback
-            function toggleApprovedCheck() {
-                if ($('#chkApproved').is(':checked')) {
-                    $('#approvedCheck').show();
-                } else {
-                    $('#approvedCheck').hide();
-                }
+            // ── Approved Checkmark ───────────────────────────────────────────
+            var chkApproved    = document.getElementById('chkApproved');
+            var approvedCheck  = document.getElementById('approvedCheck');
+            function toggleApproved() {
+                approvedCheck.style.display = chkApproved.checked ? 'inline' : 'none';
             }
-            $('#chkApproved').on('change', toggleApprovedCheck);
-            toggleApprovedCheck(); // init on load
+            chkApproved.addEventListener('change', toggleApproved);
+            toggleApproved(); // run on load
 
-            // Image Preview
-            $('#imageInput').on('change', function() {
+            // ── Image Preview ────────────────────────────────────────────────
+            var imageInput          = document.getElementById('imageInput');
+            var imagePreview        = document.getElementById('imagePreview');
+            var imagePreviewWrapper = document.getElementById('imagePreviewWrapper');
+            var imagePreviewLabel   = document.getElementById('imagePreviewLabel');
+            imageInput.addEventListener('change', function () {
                 var file = this.files[0];
                 if (file) {
                     var reader = new FileReader();
-                    reader.onload = function(e) {
-                        $('#imagePreview').attr('src', e.target.result).show();
-                    }
+                    reader.onload = function (e) {
+                        imagePreview.src = e.target.result;
+                        imagePreviewWrapper.style.display = 'block';
+                        if (imagePreviewLabel) imagePreviewLabel.textContent = 'New image preview';
+                    };
                     reader.readAsDataURL(file);
-                } else {
-                    $('#imagePreview').hide();
                 }
             });
 
-            $('#regPrice, #offPercent').on('input keyup change paste', function() {
-                calculateOffer();
-            });
-
-            // Size toggle button click
-            $(document).on('click', '.size-toggle-btn', function() {
-                $(this).toggleClass('active');
-                var size = $(this).data('size');
-                var row = $('.size-stock-row[data-size="' + size + '"]');
-                if ($(this).hasClass('active')) {
-                    row.css('display', 'flex');
-                } else {
-                    row.hide();
-                    row.find('.size-stock-input').val(0);
-                }
-                calculateTotalStock();
-            });
-
-            // +/- buttons
-            $(document).on('click', '.size-inc', function() {
-                var inp = $('#' + $(this).data('target'));
-                inp.val((parseInt(inp.val()) || 0) + 1);
-                calculateTotalStock();
-            });
-            $(document).on('click', '.size-dec', function() {
-                var inp = $('#' + $(this).data('target'));
-                var v = (parseInt(inp.val()) || 0) - 1;
-                inp.val(v < 0 ? 0 : v);
-                calculateTotalStock();
-            });
-
+            // ── Stock Calculation ─────────────────────────────────────────────
             function calculateTotalStock() {
-                var total = 0;
+                var total      = 0;
                 var availSizes = [];
-                $('.size-toggle-btn.active').each(function() {
-                    availSizes.push($(this).data('size'));
+                document.querySelectorAll('.size-checkbox:checked').forEach(function (cb) {
+                    availSizes.push(cb.value);
                 });
-                $('.size-stock-row:visible .size-stock-input').each(function() {
-                    total += parseInt($(this).val()) || 0;
+                document.querySelectorAll('.size-stock-input').forEach(function (inp) {
+                    total += parseInt(inp.value) || 0;
                 });
-
-                var stockInput = $('input[name="StockQty"]');
-                stockInput.val(total);
-                $('#availableSizesHidden').val(availSizes.join(', '));
-
-                var anyActive = $('.size-toggle-btn.active').length > 0;
-                stockInput.prop('readonly', anyActive).css('background-color', anyActive ? '#e9ecef' : '');
+                document.getElementById('stockQtyInput').value = total;
+                document.getElementById('availableSizesHidden').value = availSizes.join(', ');
             }
-
-            $(document).on('input', '.size-stock-input', calculateTotalStock);
-
-            // Initial calculation
-            calculateOffer();
+            document.querySelectorAll('.size-checkbox').forEach(function (cb) {
+                cb.addEventListener('change', calculateTotalStock);
+            });
+            document.querySelectorAll('.size-stock-input').forEach(function (inp) {
+                inp.addEventListener('input', calculateTotalStock);
+            });
             calculateTotalStock();
         });
     </script>
