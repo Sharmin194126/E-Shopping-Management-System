@@ -1,4 +1,4 @@
-﻿@model IEnumerable<E_ShoppingManagement.Models.Order>
+@model IEnumerable<E_ShoppingManagement.Models.Order>
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "My Dashboard";
@@ -19,6 +19,7 @@
                     <a href="/CustomerDashboard/Profile" class="list-group-item list-group-item-action">My Profile </a>
                     <a href="/CustomerDashboard/Orders" class="list-group-item list-group-item-action">My Orders</a>
                     <a href="/Cart" class="list-group-item list-group-item-action">My Cart</a>
+                    <a href="/Home/Tracking" class="list-group-item list-group-item-action fw-bold text-primary"><i class="bi bi-geo-alt"></i> Track Order</a>
                 </div>
             </div>
         </div>

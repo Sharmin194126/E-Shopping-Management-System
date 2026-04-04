@@ -195,6 +195,14 @@
             <span style="font-size: 36px;">@logoIcon</span> @paymentMethod Payment
         </h2>
 
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger text-center">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+
+
         <div class="payment-grid">
             <!-- Order Summary -->
             <div class="order-summary">
@@ -278,9 +286,9 @@
                         </div>
 
                         <div class="form-group">
-                            <label>@paymentMethod PIN/Security Code</label>
-                            <input type="password" name="pin" placeholder="Enter PIN" required maxlength="5" />
-                            <small class="text-muted">Security: Your PIN is encrypted and not stored on our server.</small>
+                            <label>Transaction ID</label>
+                            <input type="text" name="transactionId" id="transactionId" placeholder="Enter Transaction ID" required maxlength="20" />
+                            <small class="text-muted">Enter the transaction ID from your @paymentMethod payment confirmation.</small>
                         </div>
                     }
 

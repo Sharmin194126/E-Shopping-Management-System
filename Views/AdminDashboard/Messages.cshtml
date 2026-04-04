@@ -4,108 +4,406 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
+<style>
+    .messenger-container {
+        display: flex;
+        height: 75vh;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        overflow: hidden;
+        border: 1px solid #eef2f5;
+        margin-bottom: 2rem;
+    }
+    
+    .messenger-sidebar {
+        width: 350px;
+        border-right: 1px solid #eef2f5;
+        display: flex;
+        flex-direction: column;
+        background: #fdfdfd;
+    }
+    
+    .messenger-sidebar-header {
+        padding: 20px;
+        border-bottom: 1px solid #eef2f5;
+        background: #fff;
+    }
+    
+    .messenger-list {
+        flex: 1;
+        overflow-y: auto;
+    }
+    
+    .messenger-item {
+        padding: 15px 20px;
+        border-bottom: 1px solid #f8f9fa;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+    
+    .messenger-item:hover, .messenger-item.active {
+        background: #f1f5fb;
+    }
+    
+    .messenger-item.active {
+        border-left: 4px solid #0d6efd;
+    }
+    
+    .messenger-item.unread .m-name {
+        font-weight: 700;
+        color: #212529;
+    }
+    
+    .messenger-item.unread .m-preview {
+        font-weight: 600;
+        color: #495057;
+    }
+    
+    .m-avatar {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        background: #0d6efd;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        font-weight: bold;
+        flex-shrink: 0;
+    }
+    
+    .messenger-chat {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        background: #fff;
+        position: relative;
+    }
+    
+    .chat-wrapper {
+        flex: 1;
+        flex-direction: column;
+        display: none;
+    }
+
+    .chat-wrapper.active-chat {
+        display: flex;
+    }
+    
+    .chat-header {
+        padding: 15px 25px;
+        background: #fff;
+        border-bottom: 1px solid #eef2f5;
+        display: flex;
+        align-items: center;
+    }
+    
+    .chat-body {
+        flex: 1;
+        padding: 25px;
+        overflow-y: auto;
+        background: #f8f9fa;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .chat-bubble {
+        max-width: 75%;
+        padding: 12px 18px;
+        border-radius: 18px;
+        margin-bottom: 20px;
+        position: relative;
+        font-size: 0.95rem;
+    }
+    
+    .chat-bubble.received {
+        background: #fff;
+        color: #333;
+        align-self: flex-start;
+        border-bottom-left-radius: 4px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    
+    .chat-bubble.sent {
+        background: #0d6efd;
+        color: white;
+        align-self: flex-end;
+        border-bottom-right-radius: 4px;
+        margin-left: auto;
+        box-shadow: 0 2px 5px rgba(13,110,253,0.2);
+    }
+    
+    .chat-footer {
+        padding: 10px 15px;
+        background: #fff;
+        border-top: 1px solid #eef2f5;
+    }
+    
+    .chat-tool-btn {
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        color: #0d6efd;
+        cursor: pointer;
+    }
+    
+    .chat-tool-btn:hover {
+        background: #f0f2f5; 
+        color: #0b5ed7;
+    }
+    
+    .emoji-btn {
+        cursor: pointer;
+        transition: 0.2s;
+    }
+    
+    .emoji-btn:hover {
+        color: #0b5ed7 !important;
+    }
+    
+    .chat-input-wrapper {
+        display: flex;
+        background: #f1f5fb;
+        border-radius: 30px;
+        padding: 5px 15px;
+        align-items: center;
+    }
+    
+    .chat-input {
+        flex: 1;
+        border: none;
+        background: transparent;
+        padding: 10px;
+        outline: none;
+    }
+    
+    .chat-send-btn {
+        background: #0d6efd;
+        color: white;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+        cursor: pointer;
+    }
+    
+    .chat-send-btn:hover {
+        background: #0b5ed7;
+    }
+    
+    .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        color: #adb5bd;
+    }
+    
+    .search-box {
+        background: #f1f5fb;
+        border-radius: 20px;
+        padding: 8px 15px;
+        display: flex;
+        align-items: center;
+        margin-top: 15px;
+    }
+    
+    .search-box input {
+        border: none;
+        background: transparent;
+        outline: none;
+        width: 100%;
+        margin-left: 10px;
+        font-size: 0.9rem;
+    }
+</style>
+
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>Customer Messages & Inquiries</h2>
+    <h2>Messenger</h2>
     <a asp-action="Index" class="btn btn-secondary">Back to Dashboard</a>
 </div>
 
-<div class="page-card mb-5">
-    <h4 class="mb-3 text-primary"><i class="bi bi-envelope-plus me-2"></i>New Inquiries</h4>
-    <div class="table-responsive">
-        <table class="table table-hover align-middle">
-            <thead class="bg-light">
-                <tr>
-                    <th>Date</th>
-                    <th>Customer</th>
-                    <th>Subject</th>
-                    <th>Message</th>
-                    <th>Attachment</th>
-                    <th class="text-end">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var m in Model.Where(m => m.Status == "Active"))
-                {
-                    <tr>
-                        <td>@m.CreatedAt.ToLocalTime().ToString("MMM dd, yyyy HH:mm")</td>
-                        <td>
-                            <div class="fw-bold">@m.Name</div>
-                            <div class="small text-muted">@m.Email</div>
-                        </td>
-                        <td>@m.Subject</td>
-                        <td>
-                            <div class="text-truncate" style="max-width: 250px;" title="@m.Message">
-                                @m.Message
+<div class="messenger-container">
+    <!-- Sidebar -->
+    <div class="messenger-sidebar">
+        <div class="messenger-sidebar-header">
+            <h4 class="mb-0 fw-bold">Chats</h4>
+            <div class="search-box">
+                <i class="bi bi-search text-muted"></i>
+                <input type="text" placeholder="Search Messenger" />
+            </div>
+        </div>
+        <div class="messenger-list">
+            @if(!Model.Any())
+            {
+                <div class="text-center p-4 text-muted">
+                    No messages yet.
+                </div>
+            }
+            @foreach (var m in Model)
+            {
+                <div class="messenger-item @(m.Status == "Active" ? "unread" : "")" onclick="openChat(@m.Id, this)">
+                    <div class="d-flex align-items-center">
+                        <div class="m-avatar">
+                            @(string.IsNullOrEmpty(m.Name) ? "?" : m.Name.Substring(0, 1).ToUpper())
+                        </div>
+                        <div class="ms-3 flex-grow-1 overflow-hidden">
+                            <div class="d-flex justify-content-between align-items-baseline">
+                                <span class="m-name text-truncate d-block" style="max-width: 130px;">@m.Name</span>
+                                <span class="small text-muted" style="font-size: 0.7rem;">@m.CreatedAt.ToString("MMM dd")</span>
                             </div>
-                        </td>
-                        <td>
-                            @if (!string.IsNullOrEmpty(m.AttachmentUrl))
+                            <div class="m-preview text-truncate small" style="color: #6c757d;">
+                                @(m.Status == "Replied" ? "You sent a reply." : m.Subject)
+                            </div>
+                        </div>
+                        @if (m.Status == "Active")
+                        {
+                            <span class="badge bg-primary rounded-pill ms-2" style="width:10px; height: 10px; padding:0;">&nbsp;</span>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Active Chat Area -->
+    <div class="messenger-chat">
+        <div class="empty-state" id="emptyState">
+            <i class="bi bi-chat-dots" style="font-size: 4rem;"></i>
+            <h4 class="mt-3">Select a chat</h4>
+            <p>Choose a conversation from the left to view details</p>
+        </div>
+
+        @foreach(var m in Model)
+        {
+            <div class="chat-wrapper" id="chat-@m.Id">
+                <div class="chat-header">
+                    <div class="m-avatar me-3">
+                        @(string.IsNullOrEmpty(m.Name) ? "?" : m.Name.Substring(0, 1).ToUpper())
+                    </div>
+                    <div>
+                        <h6 class="mb-0 fw-bold">@m.Name</h6>
+                        <small class="text-muted d-block">@m.Email</small>
+                    </div>
+                    <div class="ms-auto">
+                        <span class="badge @(m.Status == "Active" ? "bg-warning text-dark" : "bg-success") rounded-pill px-3">@m.Status</span>
+                    </div>
+                </div>
+                
+                <div class="chat-body" id="chatBody-@m.Id">
+                    <div class="text-center mb-4">
+                        <span class="badge bg-light text-muted border">@m.CreatedAt.ToString("dd MMM yyyy, hh:mm tt")</span>
+                    </div>
+                    
+                    <div class="chat-bubble received">
+                        <strong class="d-block mb-2"><i class="bi bi-chat-quote me-1"></i>Subject: @m.Subject</strong>
+                        <p class="mb-0" style="white-space: pre-line;">@m.Message</p>
+                        
+                        @if (!string.IsNullOrEmpty(m.AttachmentUrl))
+                        {
+                            string ext = System.IO.Path.GetExtension(m.AttachmentUrl).ToLower();
+                            if (ext == ".jpg" || ext == ".jpeg" || ext == ".png" || ext == ".gif" || ext == ".webp")
                             {
-                                <a href="@m.AttachmentUrl" target="_blank" class="btn btn-sm btn-outline-info">
-                                    <i class="bi bi-paperclip"></i> View
-                                </a>
+                                <div class="mt-3">
+                                    <img src="@m.AttachmentUrl" class="img-fluid border" style="border-radius: 16px; max-height: 250px; cursor: pointer;" alt="Attachment" onclick="window.open(this.src, '_blank')" />
+                                </div>
                             }
                             else
                             {
-                                <span class="text-muted">None</span>
+                                <div class="mt-3 p-2 bg-light rounded border">
+                                    <i class="bi bi-paperclip text-primary"></i> <a href="@m.AttachmentUrl" target="_blank" class="text-decoration-none fw-bold">View attached file</a>
+                                </div>
                             }
-                        </td>
-                        <td class="text-end">
-                            <a asp-action="ReplyMessage" asp-route-id="@m.Id" class="btn btn-sm btn-primary">Reply</a>
-                        </td>
-                    </tr>
-                }
-                @if (!Model.Any(m => m.Status == "Active"))
-                {
-                    <tr>
-                        <td colspan="6" class="text-center py-4 text-muted">No new messages.</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+                        }
+                    </div>
+                    
+                    @if (m.Status == "Replied")
+                    {
+                        <div class="text-center mb-4 mt-2">
+                            <span class="badge bg-light text-muted border">Replied</span>
+                        </div>
+                        <div class="chat-bubble sent">
+                            A reply was officially sent and delivered to the customer's email inbox via the system.
+                        </div>
+                    }
+                </div>
+                
+                <div class="chat-footer py-2 px-3">
+                    <form asp-action="ReplyMessage" method="post" class="d-flex w-100 align-items-center m-0" enctype="multipart/form-data">
+                        <input type="hidden" name="id" value="@m.Id" />
+                        
+                        <label class="btn btn-light rounded-circle chat-tool-btn text-primary p-2 m-0 me-1" title="Attach file">
+                            <i class="bi bi-plus-circle-fill fs-5"></i>
+                            <input type="file" name="attachment" class="d-none" />
+                        </label>
+                        <label class="btn btn-light rounded-circle chat-tool-btn text-primary p-2 m-0 me-2" title="Attach photo">
+                            <i class="bi bi-image fs-5"></i>
+                            <input type="file" name="image" accept="image/*" class="d-none" />
+                        </label>
+                        
+                        <div class="chat-input-wrapper flex-grow-1 mx-1">
+                            <input type="text" name="reply" class="chat-input" placeholder="Aa" required autocomplete="off" oninput="toggleSendBtn(this)" />
+                            <i class="bi bi-emoji-smile fs-5 text-primary emoji-btn ms-2"></i>
+                        </div>
+                        
+                        <button type="button" class="btn btn-light rounded-circle chat-tool-btn text-primary p-2 m-0 ms-2 mic-btn" title="Send voice record">
+                            <i class="bi bi-mic-fill fs-5"></i>
+                        </button>
+                        <button type="submit" class="chat-send-btn ms-2 d-none" title="Send Reply">
+                            <i class="bi bi-send-fill fs-5"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        }
     </div>
 </div>
 
-<div class="page-card">
-    <h4 class="mb-3 text-success"><i class="bi bi-envelope-check me-2"></i>Replied Messages</h4>
-    <div class="table-responsive">
-        <table class="table table-hover align-middle">
-            <thead class="bg-light">
-                <tr>
-                    <th>Date</th>
-                    <th>Customer</th>
-                    <th>Subject</th>
-                    <th>Message</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var m in Model.Where(m => m.Status == "Replied"))
-                {
-                    <tr>
-                        <td>@m.CreatedAt.ToLocalTime().ToString("MMM dd, yyyy HH:mm")</td>
-                        <td>
-                            <div class="fw-bold">@m.Name</div>
-                            <div class="small text-muted">@m.Email</div>
-                        </td>
-                        <td>@m.Subject</td>
-                        <td>
-                            <div class="text-truncate" style="max-width: 350px;" title="@m.Message">
-                                @m.Message
-                            </div>
-                        </td>
-                        <td>
-                            <span class="badge bg-success">Replied</span>
-                        </td>
-                    </tr>
-                }
-                @if (!Model.Any(m => m.Status == "Replied"))
-                {
-                    <tr>
-                        <td colspan="5" class="text-center py-4 text-muted">No replied messages yet.</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-</div>
+<script>
+    function openChat(id, element) {
+        // Hide empty state
+        var emptyState = document.getElementById('emptyState');
+        if (emptyState) emptyState.style.display = 'none';
+        
+        // Hide all chats
+        document.querySelectorAll('.chat-wrapper').forEach(el => {
+            el.classList.remove('active-chat');
+        });
+        
+        // Remove active class from all items
+        document.querySelectorAll('.messenger-item').forEach(el => {
+            el.classList.remove('active');
+        });
+        
+        // Show selected chat
+        const targetChat = document.getElementById('chat-' + id);
+        if (targetChat) {
+            targetChat.classList.add('active-chat');
+        }
+        
+        // Highlight active item
+        if(element) {
+            element.classList.add('active');
+        }
+    }
+    
+    function toggleSendBtn(inputEl) {
+        const form = inputEl.closest('form');
+        const micBtn = form.querySelector('.mic-btn');
+        const sendBtn = form.querySelector('.chat-send-btn');
+        if (inputEl.value.trim() !== '') {
+            micBtn.classList.add('d-none');
+            sendBtn.classList.remove('d-none');
+        } else {
+            micBtn.classList.remove('d-none');
+            sendBtn.classList.add('d-none');
+        }
+    }
+</script>

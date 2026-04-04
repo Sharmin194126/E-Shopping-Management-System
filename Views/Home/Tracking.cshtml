@@ -1,9 +1,14 @@
+@model E_ShoppingManagement.Models.Order
 @{
     ViewData["Title"] = "Track Your Order";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="container mt-5 mb-5">
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger text-center">@ViewBag.Error</div>
+    }
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="text-center mb-5">
@@ -12,19 +17,247 @@
                 <p class="text-muted">Enter your order ID and phone number to see current status.</p>
             </div>
 
-            <div class="card border-0 shadow-sm p-4">
-                <form action="#" method="get">
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Order ID</label>
-                        <input type="text" class="form-control py-3" placeholder="e.g. #123456" required />
+            <style>
+                .tracking-container {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    width: 100%;
+                    margin: 2rem auto 3rem auto;
+                    position: relative;
+                }
+                
+                .tracking-step {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    position: relative;
+                    z-index: 2;
+                    width: 100px;
+                }
+                
+                .tracking-step[data-step="1"] { --step-color: #fd7e14; --step-rgb: 253, 126, 20; }
+                .tracking-step[data-step="2"] { --step-color: #0dcaf0; --step-rgb: 13, 202, 240; }
+                .tracking-step[data-step="3"] { --step-color: #0d6efd; --step-rgb: 13, 110, 253; }
+                .tracking-step[data-step="4"] { --step-color: #198754; --step-rgb: 25, 135, 84; }
+                
+                .tracking-icon {
+                    width: 60px;
+                    height: 60px;
+                    border-radius: 50%;
+                    background-color: white;
+                    border: 4px solid #dee2e6;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 28px;
+                    color: #adb5bd;
+                    transition: all 0.5s ease;
+                    position: relative;
+                }
+                
+                .tracking-label {
+                    margin-top: 12px;
+                    font-size: 1rem;
+                    font-weight: bold;
+                    color: #6c757d;
+                    text-align: center;
+                    transition: color 0.5s ease;
+                }
+                
+                .tracking-line-bg {
+                    position: absolute;
+                    top: 30px;
+                    left: 50px;
+                    right: 50px;
+                    height: 6px;
+                    background-color: transparent;
+                    background-image: linear-gradient(to right, #dee2e6 50%, transparent 50%);
+                    background-size: 12px 100%;
+                    z-index: 1;
+                }
+                
+                .tracking-line-fill {
+                    position: absolute;
+                    top: 30px;
+                    left: 50px;
+                    height: 6px;
+                    background: linear-gradient(to right, #fd7e14 0%, #0dcaf0 33%, #0d6efd 66%, #198754 100%);
+                    z-index: 1;
+                    transition: width 1s ease-in-out;
+                    width: 0%;
+                }
+                
+                .tracking-step.completed .tracking-icon {
+                    background-color: var(--step-color);
+                    border-color: var(--step-color);
+                    color: white;
+                }
+                
+                .tracking-step.completed .tracking-label {
+                    color: var(--step-color);
+                }
+                
+                .tracking-step.active .tracking-icon {
+                    border-color: var(--step-color);
+                    color: var(--step-color);
+                    box-shadow: 0 0 0 6px rgba(var(--step-rgb), 0.25);
+                    animation: pulse-glow-custom 1.5s infinite;
+                }
+                
+                .tracking-step.active .tracking-label {
+                    color: var(--step-color);
+                }
+                
+                @@keyframes pulse-glow-custom {
+                    0% { box-shadow: 0 0 0 0 rgba(var(--step-rgb), 0.5); }
+                    70% { box-shadow: 0 0 0 15px rgba(var(--step-rgb), 0); }
+                    100% { box-shadow: 0 0 0 0 rgba(var(--step-rgb), 0); }
+                }
+
+                @@media (max-width: 576px) {
+                    .tracking-label { font-size: 0.8rem; }
+                    .tracking-icon { width: 45px; height: 45px; font-size: 20px; border-width: 3px; }
+                    .tracking-line-bg, .tracking-line-fill { top: 22.5px; left: 22.5px; right: 22.5px; }
+                    .tracking-step { width: 45px; }
+                }
+            </style>
+
+            <div class="tracking-wrapper">
+                <div class="tracking-container" id="trackingComponent">
+                    <div class="tracking-line-bg"></div>
+                    <div class="tracking-line-fill" id="trackingLine"></div>
+                    
+                    <div class="tracking-step" data-step="1">
+                        <div class="tracking-icon"><i class="bi bi-clipboard-check"></i></div>
+                        <div class="tracking-label">Pending</div>
                     </div>
-                    <div class="mb-4">
-                        <label class="form-label fw-bold">Registerd Phone Number</label>
-                        <input type="tel" class="form-control py-3" placeholder="01XXXXXXXXX" required />
+                    
+                    <div class="tracking-step" data-step="2">
+                        <div class="tracking-icon"><i class="bi bi-box-seam"></i></div>
+                        <div class="tracking-label">Processing</div>
                     </div>
-                    <button type="submit" class="btn btn-primary w-100 py-3 fw-bold fs-5">Track My Package</button>
-                </form>
+                    
+                    <div class="tracking-step" data-step="3">
+                        <div class="tracking-icon"><i class="bi bi-truck"></i></div>
+                        <div class="tracking-label">Shipped</div>
+                    </div>
+                    
+                    <div class="tracking-step" data-step="4">
+                        <div class="tracking-icon"><i class="bi bi-bag-check"></i></div>
+                        <div class="tracking-label">Delivered</div>
+                    </div>
+                </div>
             </div>
+
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    const steps = document.querySelectorAll('.tracking-step');
+                    const trackingLine = document.getElementById('trackingLine');
+                    
+                    const statusMap = {
+                        "Pending": 1,
+                        "Processing": 2,
+                        "Shipped": 3,
+                        "Delivered": 4,
+                        "Cancelled": 0 
+                    };
+                    
+                    @if (Model != null)
+                    {
+                        <text>
+                        const orderStatus = "@Model.OrderStatus";
+                        let currentStep = statusMap[orderStatus] || 0;
+                        updateTrackingUI(currentStep);
+                        </text>
+                    }
+                    else
+                    {
+                        <text>
+                        let demoStep = 1;
+                        updateTrackingUI(demoStep);
+                        
+                        setInterval(() => {
+                            demoStep++;
+                            if (demoStep > 4) demoStep = 1;
+                            updateTrackingUI(demoStep);
+                        }, 2500); 
+                        </text>
+                    }
+
+                    function updateTrackingUI(currentStep) {
+                        if (currentStep === 0) {
+                            trackingLine.style.width = '0%';
+                            steps.forEach(s => s.classList.remove('completed', 'active'));
+                            return;
+                        }
+
+                        steps.forEach((stepEl) => {
+                            const stepNum = parseInt(stepEl.getAttribute('data-step'));
+                            stepEl.classList.remove('completed', 'active');
+                            
+                            const iconEl = stepEl.querySelector('.tracking-icon');
+                            const originalIcon = getOriginalIcon(stepNum);
+
+                            if (stepNum < currentStep) {
+                                stepEl.classList.add('completed');
+                                iconEl.innerHTML = '<i class="bi bi-check-lg"></i>';
+                            } else if (stepNum === currentStep) {
+                                stepEl.classList.add('active');
+                                iconEl.innerHTML = originalIcon;
+                                
+                                if (currentStep === 4) {
+                                    stepEl.classList.remove('active');
+                                    stepEl.classList.add('completed');
+                                    iconEl.innerHTML = '<i class="bi bi-check-all"></i>';
+                                }
+                            } else {
+                                iconEl.innerHTML = originalIcon;
+                            }
+                        });
+                        
+                        const percentage = ((currentStep - 1) / (steps.length - 1)) * 100;
+                        trackingLine.style.width = percentage + '%';
+                    }
+
+                    function getOriginalIcon(stepNum) {
+                        if(stepNum === 1) return '<i class="bi bi-clipboard-check"></i>';
+                        if(stepNum === 2) return '<i class="bi bi-box-seam"></i>';
+                        if(stepNum === 3) return '<i class="bi bi-truck"></i>';
+                        if(stepNum === 4) return '<i class="bi bi-bag-check"></i>';
+                        return '';
+                    }
+                });
+            </script>
+            </div>
+
+            @if (Model == null)
+            {
+                <div class="card border-0 shadow-sm p-4">
+                    <form asp-action="Tracking" method="post">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Order ID</label>
+                            <input type="number" name="orderId" class="form-control py-3" placeholder="e.g. 123456" required />
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Registerd Phone Number</label>
+                            <input type="tel" name="phoneNumber" class="form-control py-3" placeholder="01XXXXXXXXX" required />
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 py-3 fw-bold fs-5">Track My Package</button>
+                    </form>
+                </div>
+            }
+            else
+            {
+                <div class="card border-0 shadow-sm p-4 text-center">
+                    <h3 class="mb-3">Order Status: <span class="badge @(Model.OrderStatus == "Delivered" ? "bg-success" : (Model.OrderStatus == "Cancelled" ? "bg-danger" : "bg-warning text-dark"))">@Model.OrderStatus</span></h3>
+                    <p class="fs-5"><strong>Total Amount:</strong> ৳@Model.TotalAmount</p>
+                    <p class="fs-5"><strong>Payment:</strong> @Model.PaymentStatus (@(Model.PaymentMethod == "COD" ? "Cash on Delivery" : Model.PaymentMethod))</p>
+                    <div class="mt-4">
+                        <a href="/Home/Tracking" class="btn btn-outline-primary">Track Another Package</a>
+                    </div>
+                </div>
+            }
 
             <div class="mt-4 text-center">
                 <p class="small text-muted">Usually takes 2-5 business days for delivery after shipment. <br />

@@ -68,7 +68,7 @@
                 <div class="card-body">
                     <p><strong>Order Date:</strong> @Model.CreatedAt.ToString("MMM dd, yyyy h:mm tt")</p>
                     <p><strong>Status:</strong> <span class="badge @(Model.OrderStatus == "Delivered" ? "bg-success text-white" : "bg-warning text-dark")">@Model.OrderStatus</span></p>
-                     <p><strong>Payment Method:</strong> Cash on Delivery</p>
+                     <p><strong>Payment Method:</strong> @(string.IsNullOrEmpty(Model.PaymentMethod) || Model.PaymentMethod == "COD" ? "Cash on Delivery" : Model.PaymentMethod)</p>
                 </div>
             </div>
         </div>

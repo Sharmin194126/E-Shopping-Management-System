@@ -201,10 +201,39 @@ namespace E_ShoppingManagement.Controllers
         // POST: Order/ConfirmOnlinePayment
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ConfirmOnlinePayment(string fullName, string email, string phoneNumber, string pin)
+        public async Task<IActionResult> ConfirmOnlinePayment(string fullName, string email, string phoneNumber, string transactionId, string cardHolder)
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null) return RedirectToAction("Login", "Account");
+
+            var paymentMethod = TempData["PaymentMethod"]?.ToString() ?? "Online";
+            TempData.Keep("PaymentMethod");
+            TempData.Keep("CustomerId");
+            TempData.Keep("Address");
+            TempData.Keep("City");
+            TempData.Keep("ZipCode");
+            TempData.Keep("Phone");
+            TempData.Keep("TotalAmount");
+
+            bool isCard = paymentMethod.Contains("Card", StringComparison.OrdinalIgnoreCase) || paymentMethod.Contains("Credit", StringComparison.OrdinalIgnoreCase);
+
+            if (isCard)
+            {
+                if (string.IsNullOrEmpty(cardHolder) || string.IsNullOrEmpty(transactionId))
+                {
+                    TempData["ErrorMessage"] = "Invalid Card Information.";
+                    return RedirectToAction("OnlinePayment");
+                }
+                fullName = cardHolder;
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(phoneNumber) || phoneNumber.Length != 11 || !phoneNumber.StartsWith("01") || string.IsNullOrEmpty(transactionId))
+                {
+                    TempData["ErrorMessage"] = "Invalid Account/Transaction ID. Please enter a valid account number and Transaction ID.";
+                    return RedirectToAction("OnlinePayment");
+                }
+            }
 
             var customerIdStr = TempData["CustomerId"]?.ToString();
             if (string.IsNullOrEmpty(customerIdStr) || !int.TryParse(customerIdStr, out int customerId)) 
@@ -285,11 +314,11 @@ namespace E_ShoppingManagement.Controllers
             {
                 OrderId = order.Id,
                 Amount = totalAmount,
-                TransactionId = "PIN_" + pin,
+                TransactionId = transactionId,
                 GatewayName = TempData["PaymentMethod"]?.ToString() ?? "Online",
                 Status = "Success",
                 PaymentDate = DateTime.Now,
-                ResponsePayload = $"Payer: {fullName}, Email: {email}, Phone: {phoneNumber}"
+                ResponsePayload = $"Payer: {fullName}, Phone: {phoneNumber ?? "N/A"}"
             };
             _context.PaymentHistories.Add(paymentHistory);
 

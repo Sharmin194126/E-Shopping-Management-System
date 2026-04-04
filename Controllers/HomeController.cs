@@ -305,7 +305,23 @@ namespace E_ShoppingManagement.Controllers
         public IActionResult Privacy() => View();
         public IActionResult HelpCenter() => View();
         public IActionResult Returns() => View();
+        [HttpGet]
         public IActionResult Tracking() => View();
+
+        [HttpPost]
+        public async Task<IActionResult> Tracking(int orderId, string phoneNumber)
+        {
+            var order = await _context.Orders
+                .FirstOrDefaultAsync(o => o.Id == orderId && o.PhoneNumber == phoneNumber);
+
+            if (order == null)
+            {
+                ViewBag.Error = "Order not found or phone number does not match.";
+                return View();
+            }
+
+            return View(order);
+        }
         public IActionResult Contact() => View();
         public IActionResult Email() => View();
 
