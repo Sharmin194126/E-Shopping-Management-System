@@ -7,11 +7,19 @@
 
     // Distribute products based on DisplayCategory
     var allProducts = Model.Products.ToList();
-    var featured = allProducts.Where(p => p.DisplayCategory == "Featured").ToList();
-    var exclusive = allProducts.Where(p => p.DisplayCategory == "Exclusive").ToList();
-    var offer = allProducts.Where(p => p.DisplayCategory == "Offer").ToList();
-    var justForYou = allProducts.Where(p => p.DisplayCategory == "JustForYou").ToList();
-    var restock = allProducts.Where(p => p.DisplayCategory == "Restock").ToList();
+
+    var validSections = new List<E_ShoppingManagement.Models.DisplaySection>();
+    var validSectionProducts = new Dictionary<string, List<E_ShoppingManagement.Models.Product>>();
+
+    foreach (var dispSection in Model.DisplaySections)
+    {
+        var sectionProducts = allProducts.Where(p => p.DisplayCategory == dispSection.Name || (dispSection.Name == "Featured Items" && p.DisplayCategory == "Featured")).ToList();
+        if (sectionProducts.Any())
+        {
+            validSections.Add(dispSection);
+            validSectionProducts[dispSection.Name] = sectionProducts;
+        }
+    }
 
     // Helper to render stars
     string RenderStars(double rating) {
@@ -92,7 +100,7 @@
 
     <!-- SIDE NAV (fixed) -->
     <div class="side-nav">
-        @foreach (var dispSection in Model.DisplaySections)
+        @foreach (var dispSection in validSections)
         {
             var sectionId = dispSection.Name.Replace(" ", "").ToLower();
             <a href="#@sectionId">
@@ -139,44 +147,17 @@
             <p style="text-align: center; color: #55534e; font-size: 16px; font-family: 'Inter', sans-serif;">Your trusted online shopping destination for fashion, beauty and electronics. Enjoy premium products, exclusive deals and fast delivery.</p>
         </div>
 
-        @foreach (var dispSection in Model.DisplaySections)
+        @foreach (var dispSection in validSections)
         {
             var sectionId = dispSection.Name.Replace(" ", "").ToLower();
-            var sectionProducts = allProducts.Where(p => p.DisplayCategory == dispSection.Name || (dispSection.Name == "Featured Items" && p.DisplayCategory == "Featured")).ToList();
+            var sectionProducts = validSectionProducts[dispSection.Name];
             
             <section class="section" id="@sectionId" style="margin-bottom: 30px;">
                 <h2 style="text-align: center; margin-bottom: 15px; font-size: 32px;">@dispSection.Name</h2>
                 
-                @{
-                    // Fallback logic: only applies when NO products are explicitly assigned to this section
-                    if (!sectionProducts.Any())
-                    {
-                        if (dispSection.Name.Contains("Exclusive"))
-                        {
-                            sectionProducts = allProducts.Where(p => p.Price > 5000 || p.ProductType?.Name == "Electronics").OrderByDescending(p => p.Price).Take(8).ToList();
-                            if (!sectionProducts.Any()) sectionProducts = allProducts.OrderByDescending(p => p.Price).Take(4).ToList();
-                        }
-                        else if (dispSection.Name.Contains("Offer"))
-                        {
-                            sectionProducts = allProducts.Where(p => p.OfferPercentage > 0).OrderByDescending(p => p.OfferPercentage).Take(8).ToList();
-                        }
-                        else if (dispSection.Name.Contains("You"))
-                        {
-                            sectionProducts = allProducts.OrderBy(x => Guid.NewGuid()).Take(8).ToList();
-                        }
-                        else if (dispSection.Name.Contains("Featured"))
-                        {
-                            sectionProducts = allProducts.OrderByDescending(p => p.AverageRating).Take(8).ToList();
-                        }
-                    }
-                    // No Take() limit — show ALL products assigned to this section
-                }
-
                 <div class="@(dispSection.Name.Contains("Featured") ? "featured-grid" : "product-grid")">
-                    @if (sectionProducts.Any())
+                    @foreach (var item in sectionProducts)
                     {
-                        @foreach (var item in sectionProducts)
-                        {
                             <div class="product-card">
                                 <a href="/Home/Details/@item.Id" style="position: relative; display: block;">
                                     @if (item.OfferPercentage > 0)
@@ -210,11 +191,6 @@
                                 </div>
                             </div>
                         }
-                    }
-                    else
-                    {
-                        <p>No items available in this section.</p>
-                    }
                 </div>
             </section>
         }
