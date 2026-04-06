@@ -1,153 +1,339 @@
 @model IEnumerable<E_ShoppingManagement.Models.Order>
 @{
     ViewData["Title"] = "Delivery Dashboard";
+    ViewData["ActivePage"] = "Dashboard";
+    Layout = "~/Views/Shared/_DeliveryManLayout.cshtml";
     var dm = ViewBag.DeliveryMan as E_ShoppingManagement.Models.DeliveryMan;
 }
 
-<div class="container-fluid mt-4">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="page-card p-4 mb-4" style="border-left: 5px solid #6f42c1;">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <h2 class="mb-1 text-primary">Welcome, @dm?.Name!</h2>
-                        <p class="text-muted mb-0">Vehicle: @(dm?.VehicleInfo ?? "N/A") | Status: <span class="badge bg-success">@dm?.Status</span></p>
-                    </div>
-                    <div class="text-end">
-                        <div class="clock-display" id="dm-clock"></div>
-                    </div>
-                </div>
+<style>
+    /* ===== CALL CUSTOMER BUTTON ===== */
+    .btn-call-customer {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        background: linear-gradient(135deg, #16a34a, #15803d);
+        color: #ffffff !important;
+        border: none;
+        border-radius: 8px;
+        padding: 5px 12px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+        text-decoration: none !important;
+        box-shadow: 0 3px 10px rgba(22, 163, 74, 0.35);
+        transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+        cursor: pointer;
+        position: relative;
+    }
+    .btn-call-customer:hover {
+        background: linear-gradient(135deg, #15803d, #166534);
+        transform: translateY(-1px);
+        box-shadow: 0 6px 18px rgba(22, 163, 74, 0.45);
+        color: #ffffff !important;
+    }
+    .btn-call-customer:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 6px rgba(22, 163, 74, 0.30);
+    }
+    .btn-call-customer i {
+        font-size: 13px;
+        animation: none;
+    }
+    .btn-call-customer:hover i {
+        animation: phone-ring 0.4s ease infinite alternate;
+    }
+    @@keyframes phone-ring {
+        0%  { transform: rotate(-12deg); }
+        100% { transform: rotate(12deg); }
+    }
+    
+    /* ===== COPY PHONE CHIP ===== */
+    .copy-phone-chip {
+        display: inline-flex;
+        align-items: center;
+        padding: 4px 10px;
+        background: #f1f5f9;
+        border: 1px solid #cbd5e1;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #334155;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    .copy-phone-chip:hover {
+        background: #e2e8f0;
+        color: #0f172a;
+        border-color: #94a3b8;
+    }
+    .copy-phone-chip .copy-icon {
+        font-size: 11px;
+        opacity: 0.6;
+        transition: opacity 0.2s;
+    }
+    .copy-phone-chip:hover .copy-icon {
+        opacity: 1;
+    }
+</style>
+
+<!-- Welcome Banner -->
+<div class="page-card mb-4" style="border-left: 5px solid #6f42c1; background: linear-gradient(135deg, #ffffff 60%, #f3eeff 100%);">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h2 class="mb-1" style="color:#1e293b;">Welcome back, <span style="color:#6f42c1;">@dm?.Name!</span> 👋</h2>
+            <p class="text-muted mb-0" style="font-size:14px;">
+                <i class="bi bi-truck me-1"></i>Vehicle: <strong>@(dm?.VehicleInfo ?? "N/A")</strong>
+                &nbsp;|&nbsp;
+                Status: <span class="badge bg-success">@dm?.Status</span>
+                &nbsp;|&nbsp;
+                Commission: <span class="badge bg-primary">@dm?.CommissionRate%</span>
+            </p>
+        </div>
+        <div class="text-end">
+            <div class="clock-display" id="dm-clock"></div>
+            <div style="font-size:11px; color:#94a3b8; margin-top:4px;">Live Clock</div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== STAT CARDS ===== -->
+<div class="row g-3 mb-4">
+
+    <div class="col">
+        <div class="dm-stat-card dm-card-blue">
+            <div class="dm-card-content">
+                <div class="dm-card-label">Total Orders</div>
+                <div class="dm-card-value">@Model.Count()</div>
             </div>
+            <div class="dm-card-icon"><i class="bi bi-briefcase-fill"></i></div>
         </div>
     </div>
 
-    <div class="row g-4 mb-4">
-        <div class="col-md-3">
-            <div class="page-card text-center p-3 bg-white shadow-sm">
-                <h3 class="text-primary">৳@(dm?.TotalEarnings ?? 0)</h3>
-                <p class="mb-0 fw-bold">Total Earnings</p>
+    <div class="col">
+        <div class="dm-stat-card dm-card-orange">
+            <div class="dm-card-content">
+                <div class="dm-card-label">Pending Deliveries</div>
+                <div class="dm-card-value">@Model.Count(o => o.OrderStatus != "Delivered" && o.OrderStatus != "Returned")</div>
             </div>
+            <div class="dm-card-icon"><i class="bi bi-clock-fill"></i></div>
         </div>
-        <div class="col-md-3">
-            <div class="page-card text-center p-3 shadow-sm"
-                 style="background: #e6fff2; border-left: 5px solid #28a745;">
-                <h3 class="text-success fw-bold"> ৳@(dm?.PendingAmount ?? 0)</h3>
-                <p class="mb-0 fw-bold text-success">Pending Payment</p>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="page-card text-center p-3 bg-white shadow-sm">
-                <h3 class="text-success">@Model.Count(o => o.OrderStatus == "Delivered")</h3>
-                <p class="mb-0 fw-bold">Total Deliveries</p>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="page-card text-center p-3 shadow-sm"
-                 style="background: #ffe6e6; border-left: 5px solid #dc3545;">
-                <h3 class="text-danger fw-bold">@Model.Count(o => o.OrderStatus == "Returned")
-                </h3>
-                <p class="mb-0 fw-bold text-danger">Returned Parcels</p>
-            </div>
-        </div>
-
     </div>
 
-    <div class="page-card p-4">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h4 class="mb-0">My Assigned Orders</h4>
-            <a asp-action="Profile" asp-route-id="@dm?.Id" class="btn btn-outline-primary"><i class="bi bi-person-badge"></i> My Profile</a>
+    <div class="col">
+        <div class="dm-stat-card dm-card-green">
+            <div class="dm-card-content">
+                <div class="dm-card-label">Completed</div>
+                <div class="dm-card-value">@Model.Count(o => o.OrderStatus == "Delivered")</div>
+            </div>
+            <div class="dm-card-icon"><i class="bi bi-patch-check-fill"></i></div>
         </div>
-        <div class="table-responsive">
-            <table class="table table-hover align-middle">
-                <thead class="table-primary">
-                    <tr>
-                        <th>Order #</th>
-                        <th>Customer</th>
-                        <th>Address</th>
-                        <th>Contact</th>
-                        <th>Total</th>
-                        <th>Status</th>
-                        <th>Payment</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var order in Model)
-                    {
+    </div>
+
+    <div class="col">
+        <div class="dm-stat-card dm-card-purple">
+            <div class="dm-card-content">
+                <div class="dm-card-label">Earnings</div>
+                <div class="dm-card-value">৳@(dm?.TotalEarnings ?? 0)</div>
+            </div>
+            <div class="dm-card-icon"><i class="bi bi-cash-coin"></i></div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="dm-stat-card dm-card-red">
+            <div class="dm-card-content">
+                <div class="dm-card-label">Returned Parcels</div>
+                <div class="dm-card-value">@Model.Count(o => o.OrderStatus == "Returned")</div>
+            </div>
+            <div class="dm-card-icon"><i class="bi bi-arrow-return-left"></i></div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ===== MAIN CONTENT ROW ===== -->
+<div class="row g-4">
+
+    <!-- Assigned Orders Table -->
+    <div class="col-lg-8">
+        <div class="page-card">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 class="mb-0 fw-bold"><i class="bi bi-list-check me-2 text-primary"></i>My Assigned Orders</h5>
+                <a asp-action="Profile" class="btn btn-sm btn-outline-primary">
+                    <i class="bi bi-person-badge"></i> My Profile
+                </a>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-primary">
                         <tr>
-                            <td>#@order.Id</td>
-                            <td><span class="fw-bold">@order.Customer?.Name</span></td>
-                            <td><small>@order.ShippingAddress, @order.City</small></td>
-                            <td>@order.PhoneNumber</td>
-                            <td>৳@order.TotalAmount</td>
-                            <td>
-                                @switch(order.OrderStatus)
-                                {
-                                    case "Delivered": <span class="badge bg-success">Delivered</span> break;
-                                    case "Returned": <span class="badge bg-danger">Returned</span> break;
-                                    case "On the way": <span class="badge bg-info">On the way</span> break;
-                                    case "Waiting": <span class="badge bg-secondary">Waiting (Cust. not received)</span> break;
-                                    default: <span class="badge bg-warning text-dark">@order.OrderStatus</span> break;
-                                }
-                                @if(!string.IsNullOrEmpty(order.ReturnReason))
-                                {
-                                    <br/><small class="text-danger">Reason: @order.ReturnReason</small>
-                                }
-                            </td>
-                            <td>
-                                <span class="badge @(order.PaymentStatus == "Paid" ? "bg-success" : "bg-warning")">@order.PaymentStatus</span>
-                            </td>
-                            <td>
-                                <div class="d-flex gap-1">
-                                    <a asp-controller="Order" asp-action="Details" asp-route-id="@order.Id" class="btn btn-sm btn-info text-white">View</a>
-                                    
-                                    @if (order.OrderStatus != "Delivered" && order.OrderStatus != "Returned")
+                            <th>Order #</th>
+                            <th>Customer</th>
+                            <th>Address</th>
+                            <th>Contact</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Payment</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var order in Model)
+                        {
+                            <tr>
+                                <td><strong>#@order.Id</strong></td>
+                                <td><span class="fw-bold">@order.Customer?.Name</span></td>
+                                <td><small>@order.ShippingAddress, @order.City</small></td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(order.PhoneNumber))
                                     {
-                                        <button class="btn btn-sm btn-warning text-dark fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#update-@order.Id">Update Status</button>
+                                        <span class="copy-phone-chip"
+                                              onclick="copyPhone(this, '@order.PhoneNumber')"
+                                              title="Click to copy number"
+                                              data-bs-toggle="tooltip" data-bs-placement="top">
+                                            <i class="bi bi-telephone-fill me-1"></i>@order.PhoneNumber
+                                            <i class="bi bi-clipboard ms-1 copy-icon"></i>
+                                        </span>
                                     }
-                                </div>
-                                <div class="collapse mt-2" id="update-@order.Id">
-                                    <form asp-action="UpdateStatus" method="post" class="p-2 border rounded bg-light">
-                                        <input type="hidden" name="orderId" value="@order.Id" />
-                                        <div class="mb-2">
-                                            <label class="small fw-bold">Change Status:</label>
-                                            <select name="status" class="form-select form-select-sm" onchange="toggleReason(this, @order.Id)">
-                                                <option value="On the way">On the way</option>
-                                                <option value="Delivered">Delivered</option>
-                                                <option value="Waiting">Waiting (Not received)</option>
-                                                <option value="Returned">Return Parcel</option>
-                                            </select>
-                                        </div>
-                                        <div class="mb-2 d-none" id="reason-div-@order.Id">
-                                            <label class="small fw-bold text-danger">Return Reason:</label>
-                                            <input type="text" name="reason" class="form-control form-control-sm" placeholder="Why returned?" />
-                                        </div>
-                                        @if(order.PaymentStatus != "Paid")
+                                    else
+                                    {
+                                        <span class="text-muted">—</span>
+                                    }
+                                </td>
+                                <td>৳@order.TotalAmount</td>
+                                <td>
+                                    @switch(order.OrderStatus)
+                                    {
+                                        case "Delivered": <span class="badge bg-success">Delivered</span> break;
+                                        case "Returned": <span class="badge bg-danger">Returned</span> break;
+                                        case "On the way": <span class="badge bg-info">On the way</span> break;
+                                        case "Waiting": <span class="badge bg-secondary">Waiting</span> break;
+                                        default: <span class="badge bg-warning text-dark">@order.OrderStatus</span> break;
+                                    }
+                                    @if (!string.IsNullOrEmpty(order.ReturnReason))
+                                    {
+                                        <br /><small class="text-danger">Reason: @order.ReturnReason</small>
+                                    }
+                                </td>
+                                <td>
+                                    <span class="badge @(order.PaymentStatus == "Paid" ? "bg-success" : "bg-warning")">@order.PaymentStatus</span>
+                                </td>
+                                <td>
+                                    <div class="d-flex flex-wrap gap-1">
+                                        <a asp-controller="Order" asp-action="Details" asp-route-id="@order.Id"
+                                           class="btn btn-sm btn-info text-white"
+                                           title="View Order Details"
+                                           data-bs-toggle="tooltip" data-bs-placement="top">
+                                            <i class="bi bi-eye-fill"></i> View
+                                        </a>
+
+                                        <!-- Call Customer Button -->
+                                        @if (!string.IsNullOrEmpty(order.PhoneNumber))
                                         {
-                                            <div class="form-check mb-2 bg-success text-white p-2 rounded">
-                                                <input class="form-check-input ms-1" type="checkbox" name="paymentStatus" value="Paid" id="pay-@order.Id">
-                                                <label class="form-check-label small fw-bold ms-1" for="pay-@order.Id">Mark Payment as Received</label>
-                                            </div>
+                                            <a href="tel:@order.PhoneNumber"
+                                               class="btn btn-sm btn-call-customer"
+                                               title="Call Customer"
+                                               data-bs-toggle="tooltip" data-bs-placement="top">
+                                                <i class="bi bi-telephone-fill"></i> Call
+                                            </a>
                                         }
-                                        <button type="submit" class="btn btn-sm btn-success w-100 mt-1">Submit Update</button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                    }
-                    @if (!Model.Any())
-                    {
-                        <tr>
-                            <td colspan="8" class="text-center py-5">
-                                <i class="bi bi-box-seam fs-1 text-muted"></i>
-                                <p class="mt-2">No orders assigned to you yet.</p>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+
+                                        @if (order.OrderStatus != "Delivered" && order.OrderStatus != "Returned")
+                                        {
+                                            <button class="btn btn-sm btn-warning text-dark fw-bold" type="button"
+                                                    data-bs-toggle="collapse" data-bs-target="#update-@order.Id"
+                                                    title="Update Order Status">
+                                                <i class="bi bi-pencil-fill"></i> Update
+                                            </button>
+                                        }
+                                    </div>
+                                    <div class="collapse mt-2" id="update-@order.Id">
+                                        <form asp-action="UpdateStatus" method="post" class="p-2 border rounded bg-light">
+                                            <input type="hidden" name="orderId" value="@order.Id" />
+                                            <div class="mb-2">
+                                                <label class="small fw-bold">Change Status:</label>
+                                                <select name="status" class="form-select form-select-sm" onchange="toggleReason(this, @order.Id)">
+                                                    <option value="On the way">On the way</option>
+                                                    <option value="Delivered">Delivered</option>
+                                                    <option value="Waiting">Waiting (Not received)</option>
+                                                    <option value="Returned">Return Parcel</option>
+                                                </select>
+                                            </div>
+                                            <div class="mb-2 d-none" id="reason-div-@order.Id">
+                                                <label class="small fw-bold text-danger">Return Reason:</label>
+                                                <input type="text" name="reason" class="form-control form-control-sm" placeholder="Why returned?" />
+                                            </div>
+                                            @if (order.PaymentStatus != "Paid")
+                                            {
+                                                <div class="form-check mb-2 bg-success text-white p-2 rounded">
+                                                    <input class="form-check-input ms-1" type="checkbox" name="paymentStatus" value="Paid" id="pay-@order.Id">
+                                                    <label class="form-check-label small fw-bold ms-1" for="pay-@order.Id">Mark Payment as Received</label>
+                                                </div>
+                                            }
+                                            <button type="submit" class="btn btn-sm btn-success w-100 mt-1">Submit Update</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                        @if (!Model.Any())
+                        {
+                            <tr>
+                                <td colspan="8" class="text-center py-5">
+                                    <i class="bi bi-box-seam fs-1 text-muted"></i>
+                                    <p class="mt-2 text-muted">No orders assigned to you yet.</p>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
+
+    <!-- Recent Activity Panel -->
+    <div class="col-lg-4">
+        <div class="page-card h-100">
+            <h5 class="fw-bold mb-3"><i class="bi bi-activity me-2 text-success"></i>Recent Activity</h5>
+
+            @{
+                var recent = Model.Take(6).ToList();
+            }
+
+            @if (recent.Any())
+            {
+                @foreach (var order in recent)
+                {
+                    <div class="activity-item">
+                        <div class="activity-icon" style="background:@(order.OrderStatus == "Delivered" ? "#22c55e" : order.OrderStatus == "Returned" ? "#ef4444" : "#f59e0b");">
+                            <i class="bi @(order.OrderStatus == "Delivered" ? "bi-check-lg" : order.OrderStatus == "Returned" ? "bi-arrow-return-left" : "bi-truck")"></i>
+                        </div>
+                        <div>
+                            <div class="activity-text">
+                                Order <strong>#@order.Id</strong> — @order.Customer?.Name
+                            </div>
+                            <div style="font-size:12px; margin-top:2px;">
+                                <span class="badge @(order.OrderStatus == "Delivered" ? "bg-success" : order.OrderStatus == "Returned" ? "bg-danger" : "bg-warning text-dark")" style="font-size:10px;">
+                                    @order.OrderStatus
+                                </span>
+                                &nbsp;৳@order.TotalAmount
+                            </div>
+                            <div class="activity-time">@order.CreatedAt.ToLocalTime().ToString("MMM dd, hh:mm tt")</div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="text-center py-4">
+                    <i class="bi bi-inbox fs-2 text-muted"></i>
+                    <p class="text-muted mt-2" style="font-size:13px;">No recent activity</p>
+                </div>
+            }
+        </div>
+    </div>
+
 </div>
 
 <script>
@@ -165,9 +351,78 @@
     <script>
         function updateClock() {
             const now = new Date();
-            document.getElementById('dm-clock').innerText = now.toLocaleTimeString();
+            const el = document.getElementById('dm-clock');
+            if (el) el.textContent = now.toLocaleTimeString();
         }
         setInterval(updateClock, 1000);
         updateClock();
+
+        // Initialize Bootstrap tooltips
+        document.addEventListener('DOMContentLoaded', function () {
+            var tooltipEls = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+            tooltipEls.forEach(function (el) {
+                new bootstrap.Tooltip(el, { trigger: 'hover' });
+            });
+        });
+
+        // Copy Phone Number function
+        function copyPhone(element, phone) {
+            navigator.clipboard.writeText(phone).then(function() {
+                // Change icon temporarily to checkmark
+                var icon = element.querySelector('.copy-icon');
+                if(icon) {
+                    icon.classList.remove('bi-clipboard');
+                    icon.classList.add('bi-check2', 'text-success');
+                }
+                
+                // Show toast or alert
+                showToast("Copied!", "Phone number " + phone + " copied to clipboard.", "success");
+                
+                setTimeout(function() {
+                    if(icon) {
+                        icon.classList.remove('bi-check2', 'text-success');
+                        icon.classList.add('bi-clipboard');
+                    }
+                }, 2000);
+            });
+        }
+        
+        // Simple Toast function
+        function showToast(title, message, type) {
+            // Create toast container if it doesn't exist
+            var toastContainer = document.getElementById('toast-container');
+            if (!toastContainer) {
+                toastContainer = document.createElement('div');
+                toastContainer.id = 'toast-container';
+                toastContainer.className = 'toast-container position-fixed bottom-0 end-0 p-3';
+                toastContainer.style.zIndex = '9999';
+                document.body.appendChild(toastContainer);
+            }
+            
+            // Create toast element
+            var toastEl = document.createElement('div');
+            toastEl.className = 'toast align-items-center text-white bg-' + (type === 'success' ? 'success' : 'primary') + ' border-0';
+            toastEl.setAttribute('role', 'alert');
+            toastEl.setAttribute('aria-live', 'assertive');
+            toastEl.setAttribute('aria-atomic', 'true');
+            
+            toastEl.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <strong>${title}</strong> ${message}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            `;
+            
+            toastContainer.appendChild(toastEl);
+            var toast = new bootstrap.Toast(toastEl, { delay: 3000 });
+            toast.show();
+            
+            // Remove after hidden
+            toastEl.addEventListener('hidden.bs.toast', function () {
+                toastEl.remove();
+            });
+        }
     </script>
 }

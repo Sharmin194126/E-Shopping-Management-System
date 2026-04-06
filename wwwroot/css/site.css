@@ -195,6 +195,52 @@ button {
     color: #3c3935 !important;
 }
 
+/* =====================
+   DIGITAL CLOCK WIDGET
+===================== */
+.digital-clock-widget {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 10px;
+    padding: 6px 14px;
+    min-width: 120px;
+    backdrop-filter: blur(4px);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18), 0 0 8px rgba(200, 150, 255, 0.18);
+    line-height: 1.25;
+    gap: 1px;
+    flex-shrink: 0;
+}
+
+.clock-day {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #d4b8f0;
+}
+
+.clock-date {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: #ece8ff;
+    letter-spacing: 0.5px;
+}
+
+.clock-time {
+    font-family: 'Courier New', 'Roboto Mono', monospace;
+    font-size: 16px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 1.5px;
+    text-shadow: 0 0 8px rgba(210, 170, 255, 0.70);
+}
+
 /* LEFT NAV */
 .nav-left {
     display: flex;

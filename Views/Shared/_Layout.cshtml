@@ -18,7 +18,13 @@
         <div class="shoegee-topbar">
             <div class="container-fluid d-flex justify-content-between align-items-center px-4 py-3">
                 
-                <div class="topbar-left" style="width: 250px;">
+                <div class="topbar-left d-flex align-items-center gap-3" style="width: 280px;">
+                    <!-- Digital Clock Widget -->
+                    <div id="digital-clock-widget" class="digital-clock-widget">
+                        <div id="clock-day" class="clock-day"></div>
+                        <div id="clock-date" class="clock-date"></div>
+                        <div id="clock-time" class="clock-time"></div>
+                    </div>
                     <a href="#" onclick="document.getElementById('searchForm').classList.toggle('d-none'); return false;" class="topbar-link">Search</a>
                     <form id="searchForm" class="d-none position-absolute mt-2" asp-controller="Home" asp-action="Search" method="get" style="z-index: 1000; display:flex;">
                         <input class="form-control form-control-sm me-1 border-0" type="search" name="query" placeholder="Type to search..." style="border-radius:20px; width: 180px; padding-left: 15px;">
@@ -84,16 +90,31 @@
     <script>
         function updateClock() {
             const now = new Date();
-            const options = { 
-                weekday: 'short', 
-                year: 'numeric', 
-                month: 'short', 
-                day: 'numeric',
-                hour: '2-digit', 
-                minute: '2-digit', 
-                second: '2-digit' 
-            };
-            document.getElementById('realtime-clock').innerText = now.toLocaleString('en-US', options);
+            const dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+            const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+            const dayEl   = document.getElementById('clock-day');
+            const dateEl  = document.getElementById('clock-date');
+            const timeEl  = document.getElementById('clock-time');
+
+            if (!dayEl) return;
+
+            // Day
+            dayEl.textContent = dayNames[now.getDay()];
+
+            // Date
+            const dd  = String(now.getDate()).padStart(2,'0');
+            const mon = monthNames[now.getMonth()];
+            const yr  = now.getFullYear();
+            dateEl.textContent = `${dd} ${mon} ${yr}`;
+
+            // Time
+            let h   = now.getHours();
+            const m = String(now.getMinutes()).padStart(2,'0');
+            const s = String(now.getSeconds()).padStart(2,'0');
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            h = h % 12 || 12;
+            timeEl.textContent = `${String(h).padStart(2,'0')}:${m}:${s} ${ampm}`;
         }
         setInterval(updateClock, 1000);
         updateClock();

@@ -1,0 +1,202 @@
+@{
+    ViewData["Title"] = "Notifications";
+    ViewData["ActivePage"] = "Notifications";
+    Layout = "~/Views/Shared/_DeliveryManLayout.cshtml";
+
+    // Simulated notifications from orders data
+    var orders = ViewBag.RecentOrders as IEnumerable<E_ShoppingManagement.Models.Order> ?? Enumerable.Empty<E_ShoppingManagement.Models.Order>();
+}
+
+<div class="page-card">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h5 class="fw-bold mb-0"><i class="bi bi-bell-fill me-2 text-primary"></i>Notifications</h5>
+        <form asp-action="MarkAllRead" method="post">
+            <button type="submit" class="btn btn-sm btn-outline-secondary">
+                <i class="bi bi-check2-all"></i> Mark All as Read
+            </button>
+        </form>
+    </div>
+
+    @if (orders.Any())
+    {
+        <div class="notification-list">
+            @foreach (var order in orders.OrderByDescending(o => o.CreatedAt))
+            {
+                bool isRecent = order.CreatedAt >= DateTime.UtcNow.AddDays(-1);
+                // We'll mark the initial classes, but JS will override if it finds it in localStorage
+                string unreadClass = isRecent ? "notif-unread" : "";
+
+                string iconClass, bgColor, label;
+                if (order.OrderStatus == "Delivered")
+                {
+                    iconClass = "bi-check-circle-fill"; bgColor = "#22c55e";
+                    label = "Delivery Completed";
+                }
+                else if (order.OrderStatus == "Returned")
+                {
+                    iconClass = "bi-arrow-return-left"; bgColor = "#ef4444";
+                    label = "Parcel Returned";
+                }
+                else if (order.OrderStatus == "On the way")
+                {
+                    iconClass = "bi-truck"; bgColor = "#3b82f6";
+                    label = "Order On the Way";
+                }
+                else if (order.PaymentStatus == "Paid")
+                {
+                    iconClass = "bi-cash-coin"; bgColor = "#8b5cf6";
+                    label = "Payment Received";
+                }
+                else
+                {
+                    iconClass = "bi-box-seam"; bgColor = "#f59e0b";
+                    label = "New Order Assigned";
+                }
+
+                <div class="notif-item @unreadClass" id="notif-@order.Id" data-is-recent="@(isRecent.ToString().ToLower())">
+                    <div class="notif-icon" style="background:@bgColor;">
+                        <i class="bi @iconClass"></i>
+                    </div>
+                    <div class="notif-body flex-grow-1">
+                        <div class="notif-title">
+                            @label
+                            <span class="badge bg-danger ms-2 new-badge d-none" style="font-size:9px;">NEW</span>
+                        </div>
+                        <div class="notif-msg">
+                            Order <strong>#@order.Id</strong> from <strong>@order.Customer?.Name</strong>
+                            — <span style="color:#64748b;">@order.ShippingAddress, @order.City</span>
+                            | Amount: <strong>৳@order.TotalAmount</strong>
+                        </div>
+                        <div class="notif-time">
+                            <i class="bi bi-clock me-1"></i>@order.CreatedAt.ToLocalTime().ToString("dd MMM yyyy, hh:mm tt")
+                        </div>
+                    </div>
+                    <div class="notif-status flex-column align-items-end gap-2">
+                        <div class="status-indicator">
+                            @if (isRecent)
+                            {
+                                <span class="unread-dot"></span>
+                            }
+                            else
+                            {
+                                <i class="bi bi-check2-all text-success read-check" title="Read"></i>
+                            }
+                        </div>
+                        <a href="/Order/Details/@order.Id" class="btn btn-sm btn-primary view-btn" onclick="markAsRead(@order.Id)">
+                            <i class="bi bi-eye-fill"></i> View
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="text-center py-5">
+            <i class="bi bi-bell-slash fs-1 text-muted"></i>
+            <p class="text-muted mt-3">No notifications yet.</p>
+        </div>
+    }
+
+</div>
+
+<style>
+    .notification-list { display: flex; flex-direction: column; gap: 4px; }
+
+    .notif-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+        padding: 16px;
+        border-radius: 12px;
+        background: #f8fafc;
+        border: 1px solid #e8edf5;
+        transition: background 0.2s;
+    }
+    .notif-item:hover { background: #f0f4ff; }
+    .notif-unread {
+        background: #eff6ff;
+        border-left: 4px solid #3b82f6;
+    }
+
+    .notif-icon {
+        width: 46px; height: 46px; border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 20px; color: #fff; flex-shrink: 0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    .notif-title {
+        font-size: 14px; font-weight: 700; color: #1e293b; margin-bottom: 3px;
+    }
+    .notif-msg { font-size: 13px; color: #475569; margin-bottom: 4px; }
+    .notif-time { font-size: 11px; color: #94a3b8; }
+
+    .notif-status { display: flex; align-items: center; flex-shrink: 0; }
+    .unread-dot {
+        width: 10px; height: 10px; border-radius: 50%;
+        background: #3b82f6;
+        display: inline-block;
+        box-shadow: 0 0 0 3px rgba(59,130,246,0.22);
+    }
+    .view-btn {
+        font-size: 11px; padding: 2px 8px; border-radius: 6px;
+    }
+</style>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Check local storage for read notifications
+            let readNotifs = JSON.parse(localStorage.getItem('dmReadNotifs')) || [];
+
+            document.querySelectorAll('.notif-item').forEach(function(item) {
+                let idParts = item.id.split('-');
+                if (idParts.length < 2) return;
+                
+                let orderId = idParts[1];
+                let isRecent = item.getAttribute('data-is-recent') === 'true';
+                let indicator = item.querySelector('.status-indicator');
+                let newBadge = item.querySelector('.new-badge');
+
+                // If it's technically recent, but already marked read in localstorage
+                if (isRecent && readNotifs.includes(orderId)) {
+                    item.classList.remove('notif-unread');
+                    
+                    // Replace dot with double check
+                    if (indicator) {
+                        indicator.innerHTML = '<i class="bi bi-check2-all text-success read-check" title="Read"></i>';
+                    }
+                } else if (isRecent) {
+                    // Show NEW badge only if it's recent and NOT read
+                    if (newBadge) {
+                        newBadge.classList.remove('d-none');
+                    }
+                }
+            });
+        });
+
+        function markAsRead(orderId) {
+            let readNotifs = JSON.parse(localStorage.getItem('dmReadNotifs')) || [];
+            
+            if (!readNotifs.includes(orderId.toString())) {
+                readNotifs.push(orderId.toString());
+                localStorage.setItem('dmReadNotifs', JSON.stringify(readNotifs));
+            }
+            
+            // visually update immediately before navigating (though navigation usually hides this)
+            let item = document.getElementById('notif-' + orderId);
+            if (item) {
+                item.classList.remove('notif-unread');
+                
+                let newBadge = item.querySelector('.new-badge');
+                if (newBadge) newBadge.classList.add('d-none');
+                
+                let indicator = item.querySelector('.status-indicator');
+                if (indicator) {
+                    indicator.innerHTML = '<i class="bi bi-check2-all text-success read-check" title="Read"></i>';
+                }
+            }
+        }
+    </script>
+}
