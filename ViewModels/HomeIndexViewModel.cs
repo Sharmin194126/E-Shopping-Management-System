@@ -11,5 +11,6 @@ namespace E_ShoppingManagement.ViewModels
         public IEnumerable<PaymentMethod> PaymentMethods { get; set; } = new List<PaymentMethod>();
         public List<string> Banners { get; set; } = new List<string>();
         public List<DisplaySection> DisplaySections { get; set; } = new List<DisplaySection>();
+        public IEnumerable<Category> Categories { get; set; } = new List<Category>();
     }
 }

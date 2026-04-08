@@ -132,14 +132,15 @@ namespace E_ShoppingManagement.Controllers
                 .OrderByDescending(p => p.CreatedAt)
                 .ToListAsync();
 
-            // Build last-7-days chart data
+            // Build last-7-days chart data using Local Times
             var labels = new List<string>();
             var data   = new List<decimal>();
+            var todayDate = DateTime.UtcNow.ToLocalTime().Date;
             for (int i = 6; i >= 0; i--)
             {
-                var day = DateTime.UtcNow.AddDays(-i).Date;
+                var day = todayDate.AddDays(-i);
                 labels.Add(day.ToString("ddd dd"));
-                data.Add(payments.Where(p => p.CreatedAt.Date == day).Sum(p => p.CommissionAmount));
+                data.Add(payments.Where(p => p.CreatedAt.ToLocalTime().Date == day).Sum(p => p.CommissionAmount));
             }
 
             ViewBag.DeliveryMan = dm;
@@ -165,6 +166,7 @@ namespace E_ShoppingManagement.Controllers
                 .ToListAsync();
 
             ViewBag.DmName = dm.Name;
+            ViewBag.DeliveryMan = dm;
             ViewBag.RecentOrders = orders;
             ViewBag.UnreadNotifications = orders.Count(o => o.CreatedAt >= DateTime.UtcNow.AddDays(-1));
             return View();
@@ -197,6 +199,7 @@ namespace E_ShoppingManagement.Controllers
             if (dm == null) return NotFound("Delivery Man Profile not found");
 
             ViewBag.DmName = dm.Name;
+            ViewBag.DeliveryMan = dm;
             ViewBag.UnreadNotifications = 0;
             return View(dm);
         }

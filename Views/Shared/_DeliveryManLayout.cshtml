@@ -328,14 +328,30 @@
                 <i class="bi bi-truck me-2 text-primary"></i>@(ViewData["Title"] ?? "Dashboard")
             </div>
             <div class="topbar-right">
-                <a asp-controller="DeliveryManDashboard" asp-action="Notifications" class="notif-btn" title="Notifications">
+                @{ 
+                    var topbarDm = ViewBag.DeliveryMan as E_ShoppingManagement.Models.DeliveryMan;
+                    string vehicleIcon = "bi-truck"; // default
+                    if (topbarDm != null && !string.IsNullOrEmpty(topbarDm.VehicleInfo))
+                    {
+                        string vi = topbarDm.VehicleInfo.ToLower();
+                        if (vi.Contains("cycle") || vi.Contains("bicycle")) { vehicleIcon = "bi-bicycle"; }
+                        else if (vi.Contains("bike") || vi.Contains("motorcycle") || vi.Contains("scooter")) { vehicleIcon = "bi-scooter"; }
+                        else if (vi.Contains("car")) { vehicleIcon = "bi-car-front"; }
+                    }
+                }
+                <div class="me-2 d-flex align-items-center" title="Vehicle: @(topbarDm?.VehicleInfo ?? "N/A")" data-bs-toggle="tooltip">
+                    <i class="bi @vehicleIcon fs-4 text-secondary" style="background: #f1f5f9; padding: 6px; border-radius: 50%;"></i>
+                </div>
+                <a asp-controller="DeliveryManDashboard" asp-action="Notifications" class="notif-btn mt-1" title="Notifications">
                     <i class="bi bi-bell"></i>
                     @if ((int)(ViewBag.UnreadNotifications ?? 0) > 0)
                     {
                         <span class="dot"></span>
                     }
                 </a>
-                <div class="dm-clock" id="dm-topbar-clock"></div>
+                <a asp-controller="DeliveryManDashboard" asp-action="Profile" class="notif-btn ms-2" title="Profile">
+                    <i class="bi bi-person-circle text-primary fs-3"></i>
+                </a>
             </div>
         </div>
 
@@ -349,15 +365,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script>
-    function updateTopbarClock() {
-        const now = new Date();
-        const el = document.getElementById('dm-topbar-clock');
-        if (el) el.textContent = now.toLocaleTimeString();
-    }
-    setInterval(updateTopbarClock, 1000);
-    updateTopbarClock();
-</script>
 @RenderSection("Scripts", required: false)
 
 </body>

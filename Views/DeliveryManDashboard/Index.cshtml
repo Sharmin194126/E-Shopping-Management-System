@@ -156,7 +156,7 @@
 <div class="row g-4">
 
     <!-- Assigned Orders Table -->
-    <div class="col-lg-8">
+    <div class="col-lg-9">
         <div class="page-card">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h5 class="mb-0 fw-bold"><i class="bi bi-list-check me-2 text-primary"></i>My Assigned Orders</h5>
@@ -266,9 +266,12 @@
                                             </div>
                                             @if (order.PaymentStatus != "Paid")
                                             {
-                                                <div class="form-check mb-2 bg-success text-white p-2 rounded">
-                                                    <input class="form-check-input ms-1" type="checkbox" name="paymentStatus" value="Paid" id="pay-@order.Id">
-                                                    <label class="form-check-label small fw-bold ms-1" for="pay-@order.Id">Mark Payment as Received</label>
+                                                <div class="form-check mb-2 bg-light border border-2 border-primary text-dark p-2 rounded d-flex align-items-center justify-content-between">
+                                                    <div>
+                                                        <input class="form-check-input ms-1" type="checkbox" name="paymentStatus" value="Paid" id="pay-@order.Id" onchange="togglePaymentReceived(this, @order.Id)">
+                                                        <label class="form-check-label small fw-bold ms-1 mt-1" style="cursor:pointer;" for="pay-@order.Id">Mark Payment as Received</label>
+                                                    </div>
+                                                    <i class="bi bi-check-lg fs-4 d-none text-success fw-bold" id="pay-check-icon-@order.Id"></i>
                                                 </div>
                                             }
                                             <button type="submit" class="btn btn-sm btn-success w-100 mt-1">Submit Update</button>
@@ -293,7 +296,7 @@
     </div>
 
     <!-- Recent Activity Panel -->
-    <div class="col-lg-4">
+    <div class="col-lg-3">
         <div class="page-card h-100">
             <h5 class="fw-bold mb-3"><i class="bi bi-activity me-2 text-success"></i>Recent Activity</h5>
 
@@ -343,6 +346,15 @@
             div.classList.remove('d-none');
         } else {
             div.classList.add('d-none');
+        }
+    }
+    
+    function togglePaymentReceived(checkbox, orderId) {
+        const icon = document.getElementById('pay-check-icon-' + orderId);
+        if (checkbox.checked) {
+            icon.classList.remove('d-none');
+        } else {
+            icon.classList.add('d-none');
         }
     }
 </script>

@@ -5,9 +5,10 @@
     Layout = "~/Views/Shared/_DeliveryManLayout.cshtml";
     var dm = ViewBag.DeliveryMan as E_ShoppingManagement.Models.DeliveryMan;
 
-    var today = Model.Where(p => p.CreatedAt.Date == DateTime.UtcNow.Date).Sum(p => p.CommissionAmount);
-    var weekly = Model.Where(p => p.CreatedAt >= DateTime.UtcNow.AddDays(-7)).Sum(p => p.CommissionAmount);
-    var monthly = Model.Where(p => p.CreatedAt >= DateTime.UtcNow.AddDays(-30)).Sum(p => p.CommissionAmount);
+    var nowLocal = DateTime.UtcNow.ToLocalTime();
+    var today = Model.Where(p => p.CreatedAt.ToLocalTime().Date == nowLocal.Date).Sum(p => p.CommissionAmount);
+    var weekly = Model.Where(p => p.CreatedAt.ToLocalTime() >= nowLocal.AddDays(-7)).Sum(p => p.CommissionAmount);
+    var monthly = Model.Where(p => p.CreatedAt.ToLocalTime() >= nowLocal.AddDays(-30)).Sum(p => p.CommissionAmount);
     var total = dm?.TotalEarnings ?? 0;
     var pending = dm?.PendingAmount ?? 0;
     var paid = dm?.PaidAmount ?? 0;

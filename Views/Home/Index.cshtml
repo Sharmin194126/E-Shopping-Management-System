@@ -100,6 +100,10 @@
 
     <!-- SIDE NAV (fixed) -->
     <div class="side-nav">
+        <a href="#shopbycategories">
+            <text>🗂️</text>
+            <span>Categories</span>
+        </a>
         @foreach (var dispSection in validSections)
         {
             var sectionId = dispSection.Name.Replace(" ", "").ToLower();
@@ -146,6 +150,27 @@
             <h2 style="font-family: 'Playfair Display', serif; text-align: center; color: #33312e; font-size: 42px; margin-bottom: 12px;">Welcome to EShop</h2>
             <p style="text-align: center; color: #55534e; font-size: 16px; font-family: 'Inter', sans-serif;">Your trusted online shopping destination for fashion, beauty and electronics. Enjoy premium products, exclusive deals and fast delivery.</p>
         </div>
+
+        @if (Model.Categories != null && Model.Categories.Any())
+        {
+            <section class="section" id="shopbycategories" style="margin-bottom: 40px; margin-top: 30px;">
+                <h2 style="text-align: center; margin-bottom: 20px; font-size: 32px;">Shop by Categories</h2>
+                
+                <div style="display: flex; gap: 20px; overflow-x: auto; padding: 10px 15px; justify-content: center; flex-wrap: wrap;">
+                    @foreach (var cat in Model.Categories)
+                    {
+                        <div style="width: 140px; text-align: center; position: relative; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.15); transition: transform 0.2s ease;">
+                            <a href="/Home/CategoryProducts?categoryId=@cat.Id" style="display: block; position: relative;" onmouseover="this.parentElement.style.transform='translateY(-5px)'" onmouseout="this.parentElement.style.transform='translateY(0)'">
+                                <img src="@(string.IsNullOrEmpty(cat.ImageUrl) ? "/images/no-image.png" : (cat.ImageUrl.StartsWith("/") ? cat.ImageUrl : "/images/categories/" + cat.ImageUrl))" alt="@cat.Name" style="width: 140px; height: 140px; object-fit: cover; filter: brightness(0.6); display: block; border-radius: 12px;" />
+                                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #fff; font-weight: 700; font-size: 16px; text-shadow: 0px 2px 6px rgba(0,0,0,0.8); z-index: 2; width: 90%; text-align: center; letter-spacing: 0.5px; text-transform: uppercase;">
+                                    @cat.Name
+                                </div>
+                            </a>
+                        </div>
+                    }
+                </div>
+            </section>
+        }
 
         @foreach (var dispSection in validSections)
         {

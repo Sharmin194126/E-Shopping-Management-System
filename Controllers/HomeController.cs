@@ -142,6 +142,7 @@ namespace E_ShoppingManagement.Controllers
 
             viewModel.FooterInfo = await _context.FooterInfos.FirstOrDefaultAsync();
             viewModel.PaymentMethods = await _context.PaymentMethods.Where(pm => pm.IsActive).ToListAsync();
+            viewModel.Categories = await _context.Categories.Where(c => c.Status == "Active").ToListAsync();
 
             // Fetch recent reviews with customer details
             var recentReviews = await _context.Reviews
