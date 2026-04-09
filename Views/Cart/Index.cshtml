@@ -1,10 +1,12 @@
-﻿@model E_ShoppingManagement.ViewModels.CartViewModel
+@model E_ShoppingManagement.ViewModels.CartViewModel
 
 @{
     ViewData["Title"] = "My Cart";
     Layout = "~/Views/Shared/_Layout.cshtml"; // customer layout
 }
 
+
+<a href="javascript:history.back()" class="theme-back-btn mb-1"><i class="bi bi-arrow-left"></i> Back</a>
 <h2 class="mb-3">My Cart</h2>
 
 <div class="page-card p-4" style="background: #f8f9fa; border-radius: 12px; border: 1px solid #ddd;">
@@ -22,7 +24,7 @@
     else
     {
             <div class="table-responsive">
-                <table class="table table-hover align-middle" style="background: white; border-radius: 8px; overflow: hidden;">
+                <table class="table table-hover align-middle" style="background: #f8f6f0; border-radius: 8px; overflow: hidden;">
                     <thead class="table-dark">
                         <tr>
                             <th>Image</th>
@@ -49,15 +51,15 @@
                                     <div style="font-weight: 600; color: #333;">@item.ProductName</div>
                                 </td>
                                 <td style="color: #d9534f; font-weight: bold;">
-                                    ৳@item.UnitPrice
+                                    ?@item.UnitPrice
                                     @if(item.VatAmount > 0) {
-                                        <div class="small text-muted" style="font-size: 10px;">+ ৳@item.VatAmount VAT</div>
+                                        <div class="small text-muted" style="font-size: 10px;">+ ?@item.VatAmount VAT</div>
                                     }
                                 </td>
                                 <td>
                                     <form asp-action="UpdateSize" method="post">
                                         <input type="hidden" name="cartItemId" value="@item.CartItemId" />
-                                        <select name="size" class="form-select form-select-sm" onchange="this.form.submit()" style="background: #fff; color: #333; border: 1px solid #ccc;">
+                                        <select name="size" class="form-select form-select-sm" onchange="this.form.submit()" style="background: #f8f6f0; color: #333; border: 1px solid #ccc;">
                                             <option value="">Select Size</option>
                                             @foreach (var s in new[] { "L", "M", "XL", "XXL" })
                                             {
@@ -72,16 +74,16 @@
                                         <div class="d-flex align-items-center" style="border: 1px solid #999; border-radius: 5px; overflow: hidden; width: fit-content;">
                                             <input type="number" name="quantity" value="@item.Quantity" min="1" 
                                                    class="form-control text-center fw-bold border-0" 
-                                                   style="background: #fff; color: #000 !important; font-size: 1.2rem; width: 80px; padding: 5px;" 
+                                                   style="background: #f8f6f0; color: #000 !important; font-size: 1.2rem; width: 80px; padding: 5px;" 
                                                    onchange="this.form.submit()" />
                                             <div class="d-flex flex-column bg-light border-start">
-                                                <button type="button" onclick="this.parentNode.previousElementSibling.stepUp(); this.parentNode.previousElementSibling.dispatchEvent(new Event('change'));" class="btn btn-sm btn-light border-bottom py-0 px-2" style="font-size: 0.8rem; line-height: 1;">▲</button>
-                                                <button type="button" onclick="this.parentNode.previousElementSibling.stepDown(); this.parentNode.previousElementSibling.dispatchEvent(new Event('change'));" class="btn btn-sm btn-light py-0 px-2" style="font-size: 0.8rem; line-height: 1;">▼</button>
+                                                <button type="button" onclick="this.parentNode.previousElementSibling.stepUp(); this.parentNode.previousElementSibling.dispatchEvent(new Event('change'));" class="btn btn-sm btn-light border-bottom py-0 px-2" style="font-size: 0.8rem; line-height: 1;">?</button>
+                                                <button type="button" onclick="this.parentNode.previousElementSibling.stepDown(); this.parentNode.previousElementSibling.dispatchEvent(new Event('change'));" class="btn btn-sm btn-light py-0 px-2" style="font-size: 0.8rem; line-height: 1;">?</button>
                                             </div>
                                         </div>
                                     </form>
                                 </td>
-                                <td style="font-weight: bold; color: #2c3e50;">৳@item.LineTotal</td>
+                                <td style="font-weight: bold; color: #2c3e50;">?@item.LineTotal</td>
                                 <td>
                                     <form asp-action="Remove" method="post">
                                         <input type="hidden" name="cartItemId" value="@item.CartItemId" />
@@ -110,3 +112,7 @@
 
 @section Scripts {
 }
+
+
+
+

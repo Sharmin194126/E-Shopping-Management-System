@@ -12,7 +12,7 @@
         <div class="col-md-4">
             @if (!string.IsNullOrEmpty(Model.ImageUrl))
             {
-                <img src="@(Model.ImageUrl.StartsWith("/") ? Model.ImageUrl : "/images/products/" + Model.ImageUrl)" class="img-fluid rounded border shadow-sm" style="max-height: 400px; width: 100%; object-fit: contain; background: #fff;" />
+                <img src="@(Model.ImageUrl.StartsWith("/") ? Model.ImageUrl : "/images/products/" + Model.ImageUrl)" class="img-fluid rounded border shadow-sm" style="max-height: 400px; width: 100%; object-fit: contain; background: #f8f6f0;" />
             }
             else
             {
@@ -109,3 +109,4 @@
         </div>
     </div>
 </div>
+

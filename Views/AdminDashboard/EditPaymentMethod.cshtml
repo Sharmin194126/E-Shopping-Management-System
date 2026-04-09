@@ -1,0 +1,54 @@
+@model E_ShoppingManagement.Models.PaymentMethod
+@{
+    ViewData["Title"] = "Edit Payment Method";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Edit Payment Method</h2>
+    <a asp-action="PaymentMethods" class="btn btn-secondary">Back to Methods</a>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="page-card mb-4">
+            <form asp-action="EditPaymentMethod" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="Id" value="@Model.Id" />
+                
+                <div class="mb-3">
+                    <label class="form-label">Method Name</label>
+                    <input name="Name" class="form-control" value="@Model.Name" required />
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Details / Instructions</label>
+                    <textarea name="Details" class="form-control" rows="3">@Model.Details</textarea>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Status</label>
+                    <select name="Status" class="form-select">
+                        <option value="Active" selected="@(Model.Status == "Active" ? "selected" : null)">Active</option>
+                        <option value="Inactive" selected="@(Model.Status == "Inactive" ? "selected" : null)">Inactive</option>
+                    </select>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Current Logo</label><br />
+                    @if(!string.IsNullOrEmpty(Model.LogoUrl))
+                    {
+                        <img src="@Model.LogoUrl" style="height: 50px; margin-bottom: 10px; border: 1px solid #ddd; padding: 5px; border-radius: 4px;" />
+                    }
+                    else
+                    {
+                        <span class="text-muted">No logo uploaded.</span><br />
+                    }
+                    <label class="form-label mt-2">Upload New Logo (Optional)</label>
+                    <input type="file" name="logoFile" class="form-control" accept="image/*" />
+                </div>
+                
+                <button type="submit" class="btn btn-primary w-100">Update Method</button>
+            </form>
+        </div>
+    </div>
+</div>

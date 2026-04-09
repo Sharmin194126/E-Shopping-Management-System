@@ -124,8 +124,19 @@ namespace E_ShoppingManagement.Controllers
                 .OrderBy(s => s.DisplayOrder)
                 .ToListAsync();
 
+            // Auto-seed category section so it appears in admin
+            if (!await _context.DisplaySections.AnyAsync(s => s.Name.Contains("Categories")))
+            {
+                var catSection = new DisplaySection { Name = "Shop by Categories", DisplayOrder = 0, IsActive = true };
+                _context.DisplaySections.Add(catSection);
+                await _context.SaveChangesAsync();
+                if (catSection.IsActive) {
+                    viewModel.DisplaySections.Insert(0, catSection);
+                }
+            }
+
             // Seed default sections if none exist
-            if (!viewModel.DisplaySections.Any())
+            if (viewModel.DisplaySections.Count(s => !s.Name.Contains("Categories")) == 0)
             {
                 var defaults = new List<DisplaySection>
                 {
@@ -137,7 +148,8 @@ namespace E_ShoppingManagement.Controllers
                 };
                 _context.DisplaySections.AddRange(defaults);
                 await _context.SaveChangesAsync();
-                viewModel.DisplaySections = defaults;
+                viewModel.DisplaySections.AddRange(defaults);
+                viewModel.DisplaySections = viewModel.DisplaySections.OrderBy(s => s.DisplayOrder).ToList();
             }
 
             viewModel.FooterInfo = await _context.FooterInfos.FirstOrDefaultAsync();

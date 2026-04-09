@@ -1,11 +1,14 @@
-﻿@model IEnumerable<E_ShoppingManagement.Models.Category>
+@model IEnumerable<E_ShoppingManagement.Models.Category>
 
 @{
     ViewData["Title"] = "Categories";
     Layout = User.IsInRole("Admin") ? "~/Views/Shared/_AdminLayout.cshtml" : "~/Views/Shared/_EmployeeLayout.cshtml";
 }
 
-<h2 class="mb-3">Category List</h2>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Category List</h2>
+    <a asp-controller="AdminDashboard" asp-action="Index" class="theme-back-btn">⬅ Back to Dashboard</a>
+</div>
 
 <div class="page-card p-3">
 
@@ -17,7 +20,7 @@
     </div>
 
     <table class="table table-hover table-bordered align-middle text-center">
-        <thead class="table-header">
+        <thead style="background:#532374; color:#fff;">
             <tr>
                 <th style="width:70px;">Category ID</th>
                 <th style="width:90px;">Image</th>

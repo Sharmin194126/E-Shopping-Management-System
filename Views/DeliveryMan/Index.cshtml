@@ -4,15 +4,18 @@
     Layout = User.IsInRole("Admin") ? "~/Views/Shared/_AdminLayout.cshtml" : "~/Views/Shared/_EmployeeLayout.cshtml";
 }
 
-<h2 class="mb-3">Delivery Personnel</h2>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Delivery Personnel</h2>
+    <a asp-controller="AdminDashboard" asp-action="Index" class="theme-back-btn">⬅ Back to Dashboard</a>
+</div>
 
 <div class="mb-3">
     <a asp-action="Create" class="btn btn-primary">Add New Delivery Man</a>
 </div>
 
-<div class="page-card p-3" style="background: white; border-radius: 8px;">
+<div class="page-card p-3">
     <table class="table table-hover align-middle">
-        <thead>
+        <thead style="background:#532374; color:#fff;">
             <tr>
                 <th>Name</th>
                 <th>Phone</th>

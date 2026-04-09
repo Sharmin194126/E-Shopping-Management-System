@@ -1,10 +1,12 @@
-﻿@model IEnumerable<E_ShoppingManagement.ViewModels.EmployeeOrderListViewModel>
+@model IEnumerable<E_ShoppingManagement.ViewModels.EmployeeOrderListViewModel>
 
 @{
     ViewData["Title"] = "My Sales";
     Layout = "~/Views/Shared/_EmployeeLayout.cshtml";
 }
 
+
+<a href="javascript:history.back()" class="theme-back-btn mb-1"><i class="bi bi-arrow-left"></i> Back</a>
 <h2 class="mb-3">My Sales</h2>
 
 <div class="row g-3 mb-3">
@@ -15,7 +17,7 @@
         </div>
     </div>
     <div class="col-md-4">
-        <div class="dash-card bg-primary text-white position-relative p-3">
+        <div class="dash-card p-3" style="background:#532374; color:#fff;">
             <h5>Total Revenue</h5>
             <p class="fs-4 mb-0">@ViewBag.TotalRevenue</p>
         </div>
@@ -29,7 +31,7 @@
 </div>
 
 <div class="page-card p-3">
-    <table class="table table-hover table-bordered align-middle" style="background: white; color: #333;">
+    <table class="table table-hover table-bordered align-middle">
         <thead class="table-primary">
             <tr>
                 <th style="width: 50px;">SL</th>
@@ -59,7 +61,7 @@
                             <div class="d-flex flex-column gap-2">
                                 @foreach (var item in o.Items)
                                 {
-                                    <div class="d-flex align-items-center gap-2 p-1" style="background: #f1f1f1; border-radius: 4px;">
+                                    <div class="d-flex align-items-center gap-2 p-1" style="background: #f2efe9; border-radius: 4px;">
                                         @if (!string.IsNullOrEmpty(item.ProductImageUrl))
                                         {
                                             <img src="@(item.ProductImageUrl.StartsWith("/") ? item.ProductImageUrl : "/images/products/" + item.ProductImageUrl)" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;" />
@@ -90,3 +92,6 @@
         </tbody>
     </table>
 </div>
+
+
+

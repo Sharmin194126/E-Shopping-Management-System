@@ -6,7 +6,7 @@
 
 <h2 class="mb-4">Sales Report: @ViewBag.EmployeeName</h2>
 
-<div class="page-card p-4" style="background: white; border-radius: 12px; border: 1px solid #eee;">
+<div class="page-card p-4">
     <div class="table-responsive">
         <table class="table table-hover align-middle">
             <thead class="table-dark">
@@ -29,7 +29,7 @@
                             <div class="d-flex flex-column gap-2">
                                 @foreach (var item in order.OrderDetails)
                                 {
-                                    <div class="d-flex align-items-center gap-2 p-1" style="background: #f8f9fa; border-radius: 4px; border: 1px solid #eee;">
+                                    <div class="d-flex align-items-center gap-2 p-1" style="background: #f2efe9; border-radius: 4px; border: 1px solid #e6e2db;">
                                         @if (!string.IsNullOrEmpty(item.Product?.ImageUrl))
                                         {
                                             <img src="@item.Product.ImageUrl" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;" />

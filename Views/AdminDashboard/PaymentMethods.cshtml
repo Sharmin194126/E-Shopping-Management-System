@@ -40,6 +40,7 @@
                         <th>Name</th>
                         <th>Status</th>
                         <th>Created</th>
+                        <th class="text-end">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -54,6 +55,9 @@
                             </td>
                             <td><span class="badge bg-success">@m.Status</span></td>
                             <td>@m.CreatedAt.ToString("dd MMM yyyy")</td>
+                            <td class="text-end">
+                                <a asp-action="EditPaymentMethod" asp-route-id="@m.Id" class="btn btn-sm btn-outline-primary">Edit</a>
+                            </td>
                         </tr>
                     }
                 </tbody>

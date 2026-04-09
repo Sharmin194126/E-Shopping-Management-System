@@ -1,15 +1,18 @@
-﻿@model IEnumerable<E_ShoppingManagement.ViewModels.EmployeeOrderListViewModel>
+@model IEnumerable<E_ShoppingManagement.ViewModels.EmployeeOrderListViewModel>
 
 @{
     ViewData["Title"] = "Pending Orders";
     Layout = "~/Views/Shared/_EmployeeLayout.cshtml";
 }
 
-<h2 class="mb-3">Pending Orders</h2>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Pending Orders</h2>
+    <a asp-controller="EmployeeDashboard" asp-action="Index" class="theme-back-btn">⬅ Back to Dashboard</a>
+</div>
 
 <div class="page-card p-3">
     <table class="table table-hover table-bordered align-middle">
-        <thead>
+        <thead style="background:#532374; color:#fff;">
             <tr>
                 <th>SL</th>
                 <th>Order Id</th>

@@ -11,7 +11,7 @@
     --nav-bg: #ffffff;
     --border: #e6e2db;
     --hover-purple: #8b7d6b;
-    --footer-bg: #f2efe9;
+    --footer-bg: #f8f6f0;
     --footer-text: #3d2255;
     --card-bg: #ffffff;
     --card-border: rgba(180, 120, 255, 0.25);
@@ -66,7 +66,7 @@ p, span, li, td, th, label {
    BOOTSTRAP NAVBAR OVERRIDE (for _Layout.cshtml)
 ===================== */
 .navbar {
-    background: #ffffff !important;
+    background: #f8f6f0 !important;
     border: none !important;
     box-shadow: 0 4px 12px rgba(0,0,0,0.03);
     border-radius: 8px;
@@ -191,7 +191,7 @@ button {
 }
 
 .cart-wrapper .badge {
-    background: #ffffff !important;
+    background: #f8f6f0 !important;
     color: #3c3935 !important;
 }
 
@@ -478,7 +478,7 @@ body {
 /* INPUTS - High Visibility */
 .form-control,
 .login-input {
-    background-color: #ffffff !important;
+    background-color: #f8f6f0 !important;
     /* Solid white background */
     border: 1px solid #ced4da;
     color: #000 !important;
@@ -495,7 +495,7 @@ input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-    background-color: #ffffff !important;
+    background-color: #f8f6f0 !important;
     -webkit-text-fill-color: #000 !important;
     transition: background-color 5000s ease-in-out 0s;
 }
@@ -572,7 +572,7 @@ input:-webkit-autofill:active {
 
 .form-control:focus,
 .login-input:focus {
-    background-color: #ffffff !important;
+    background-color: #f8f6f0 !important;
     /* Ensuring white on focus */
     border-color: #ff6a00;
     color: #000 !important;
@@ -664,7 +664,7 @@ body {
 .side-nav a {
     width: 40px;
     height: 40px;
-    background: linear-gradient(135deg, #1e1b4b, #3b82f6);
+    background: #532374;
     color: white;
     border-radius: 50%;
     display: flex;
@@ -673,14 +673,14 @@ body {
     text-decoration: none;
     position: relative;
     font-size: 18px;
-    box-shadow: 0 3px 12px rgba(30, 27, 75, 0.40);
+    box-shadow: 0 3px 12px rgba(83, 35, 116, 0.40);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .side-nav a:hover {
     transform: scale(1.18);
-    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.50);
-    background: linear-gradient(135deg, #3b82f6, #0ea5e9);
+    box-shadow: 0 6px 20px rgba(83, 35, 116, 0.50);
+    background: #3d1a55;
 }
 
 .side-nav a span {
@@ -1177,14 +1177,12 @@ h2 {
    CARD CONTAINER
 ========================= */
 .page-card {
-    background: rgba(255, 255, 255, 0.88);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: #f8f6f0;
     border-radius: 14px;
     padding: 25px;
-    box-shadow: 0 6px 28px rgba(196, 113, 237, 0.16);
-    border: 1px solid rgba(196, 113, 237, 0.20);
-    color: #2d2d2d;
+    box-shadow: 0 6px 28px rgba(83, 35, 116, 0.10);
+    border: 1px solid #e6e2db;
+    color: #33312e;
 }
 
 input,
@@ -1230,11 +1228,11 @@ textarea::placeholder {
 .clock-display {
     font-family: 'Courier New', Courier, monospace;
     font-weight: bold;
-    color: #6f42c1;
-    background: #f8f9fa;
+    color: #532374;
+    background: #f8f6f0;
     padding: 5px 15px;
     border-radius: 20px;
-    border: 1px solid #dee2e6;
+    border: 1px solid #e6e2db;
     display: inline-block;
 }
 
@@ -1248,12 +1246,12 @@ textarea::placeholder {
 }
 
 .btn-primary {
-    background-color: #2563eb;
-    border-color: #2563eb;
+    background-color: #532374;
+    border-color: #532374;
 }
 
 .btn-primary:hover {
-    background-color: #1e40af;
+    background-color: #3d1a55;
 }
 
 .btn-success {
@@ -1273,14 +1271,14 @@ textarea::placeholder {
    TABLE
 ========================= */
 .table {
-    background: #ffffff;
+    background: #f8f6f0;
     border-radius: 10px;
     overflow: hidden;
-    color: #2d2d2d;
+    color: #33312e;
 }
 
 .table thead {
-    background: linear-gradient(90deg, #c471ed 0%, #f64f59 50%, #f7971e 100%);
+    background: #532374;
     color: #ffffff;
 }
 
@@ -1351,18 +1349,18 @@ textarea::placeholder {
 .page-card input,
 .page-card textarea,
 .page-card select {
-    background-color: #f1f3f5 !important;
-    color: #212529 !important;
-    border: 1px solid #ced4da !important;
+    background-color: #f8f6f0 !important;
+    color: #33312e !important;
+    border: 1px solid #e6e2db !important;
 }
 
 .page-card .form-control:focus,
 .page-card input:focus,
 .page-card textarea:focus,
 .page-card select:focus {
-    background-color: #fff !important;
-    border-color: #6f42c1 !important;
-    box-shadow: 0 0 0 0.2rem rgba(111, 66, 193, 0.25) !important;
+    background-color: #f8f6f0 !important;
+    border-color: #532374 !important;
+    box-shadow: 0 0 0 0.2rem rgba(83, 35, 116, 0.25) !important;
 }
 
 
@@ -1385,7 +1383,7 @@ textarea::placeholder {
 .forgot-card input:focus,
 .reset-card input:focus,
 .account-card input:focus {
-    background-color: #ffffff !important;
+    background-color: #f8f6f0 !important;
     color: #000000 !important;
     border-color: #ff6a00 !important;
     box-shadow: 0 0 10px rgba(255, 106, 0, 0.3);
@@ -1420,7 +1418,6 @@ textarea::placeholder {
     color: #000000 !important;
 }
 
-/* Autofill: Force White BG + Black Text (Readable) */
 .login-box input:-webkit-autofill,
 .register-card input:-webkit-autofill,
 .forgot-card input:-webkit-autofill,
@@ -1429,3 +1426,97 @@ textarea::placeholder {
     -webkit-text-fill-color: #000 !important;
     transition: background-color 5000s ease-in-out 0s;
 }
+
+/* ============================================================
+   GLOBAL THEME OVERRIDE FOR _Layout.cshtml PAGES
+   (Customer Dashboard, Home pages, etc.)
+   Homepage theme: bg=#f8f6f0, accent=#532374, card=#f8f6f0
+   ============================================================ */
+
+/* ===== BOOTSTRAP CARDS ===== */
+.card {
+    background: #f8f6f0 !important;
+    border-color: #e6e2db !important;
+    color: #33312e !important;
+}
+.card-header {
+    background: #532374 !important;
+    color: #fff !important;
+    border-color: rgba(255,255,255,0.15) !important;
+}
+.card-footer {
+    background: #f8f6f0 !important;
+    border-color: #e6e2db !important;
+}
+.card-body { background: transparent !important; color: #33312e !important; }
+.card-title, .card-text { color: #33312e !important; }
+
+/* ===== TABLES ===== */
+.table { background: #f8f6f0 !important; color: #33312e !important; }
+.table thead { background: #532374 !important; color: #fff !important; }
+.table thead.table-dark, .table thead.table-light,
+.table thead.bg-dark, .table thead.bg-light,
+thead.table-dark, thead.table-light, thead.bg-dark, thead.bg-light {
+    background: #532374 !important;
+    color: #fff !important;
+}
+.table td { color: #33312e !important; border-color: #e6e2db !important; }
+.table th { color: #fff !important; border-color: rgba(255,255,255,0.15) !important; }
+.table tbody td { color: #33312e !important; }
+.table-striped > tbody > tr:nth-of-type(odd) > * {
+    background-color: rgba(83,35,116,0.04) !important;
+    color: #33312e !important;
+}
+.table-hover > tbody > tr:hover > * {
+    background-color: rgba(83,35,116,0.08) !important;
+    color: #33312e !important;
+}
+
+/* ===== MODALS ===== */
+.modal-content { background: #f8f6f0 !important; border-color: #e6e2db !important; color: #33312e !important; }
+.modal-header { background: #532374 !important; border-color: rgba(255,255,255,0.15) !important; }
+.modal-header .modal-title, .modal-header h5 { color: #fff !important; }
+.modal-header .btn-close { filter: invert(1); }
+.modal-body { background: #f8f6f0 !important; color: #33312e !important; }
+.modal-footer { background: #f8f6f0 !important; border-color: #e6e2db !important; }
+
+/* ===== DROPDOWN ===== */
+.dropdown-menu { background: #f8f6f0 !important; border-color: #e6e2db !important; }
+.dropdown-item { color: #33312e !important; }
+.dropdown-item:hover { background: rgba(83,35,116,0.10) !important; color: #532374 !important; }
+
+/* ===== LIST GROUPS ===== */
+.list-group-item {
+    background: #f8f6f0 !important;
+    border-color: #e6e2db !important;
+    color: #33312e !important;
+}
+.list-group-item.active {
+    background: #532374 !important;
+    border-color: #532374 !important;
+    color: #fff !important;
+}
+.list-group-item:hover { background: rgba(83,35,116,0.08) !important; }
+.list-group-item-action:hover { color: #532374 !important; }
+
+/* ===== PAGINATION ===== */
+.page-item .page-link { background: #f8f6f0 !important; border-color: #e6e2db !important; color: #532374 !important; }
+.page-item.active .page-link { background: #532374 !important; border-color: #532374 !important; color: #fff !important; }
+.page-item.disabled .page-link { color: #8b7d6b !important; }
+
+/* ===== ALERTS ===== */
+.alert-info { background: #f0e8f7 !important; border-color: #c9a8e8 !important; color: #3d1a55 !important; }
+
+/* ===== TABS ===== */
+.nav-tabs { border-color: #e6e2db !important; }
+.nav-tabs .nav-link { color: #532374 !important; }
+.nav-tabs .nav-link.active { background: #f8f6f0 !important; border-color: #e6e2db #e6e2db #f8f6f0 !important; color: #532374 !important; }
+
+/* ===== CUSTOMER DASHBOARD SPECIFIC ===== */
+.card-header.bg-white { background: #532374 !important; color: #fff !important; }
+
+/* Override all white backgrounds to match the theme background homepage */
+.bg-white, .bg-light, body { background-color: #f8f6f0 !important; }
+.modal-content, .offcanvas { background-color: #f8f6f0 !important; }
+
+.card, .table, .table-light, .list-group-item, .dropdown-menu { background-color: #f8f6f0 !important; }

@@ -1,10 +1,12 @@
-﻿@model IEnumerable<E_ShoppingManagement.ViewModels.CartViewModel>
+@model IEnumerable<E_ShoppingManagement.ViewModels.CartViewModel>
 
 @{
     ViewData["Title"] = "Carts";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
+
+<a href="javascript:history.back()" class="theme-back-btn mb-1"><i class="bi bi-arrow-left"></i> Back</a>
 <h2 class="mb-3">Customer Carts</h2>
 
 <div class="page-card p-3">
@@ -57,3 +59,6 @@
         </tbody>
     </table>
 </div>
+
+
+

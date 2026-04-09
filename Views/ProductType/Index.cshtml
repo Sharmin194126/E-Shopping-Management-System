@@ -1,10 +1,12 @@
-﻿@model IEnumerable<E_ShoppingManagement.Models.ProductType>
+@model IEnumerable<E_ShoppingManagement.Models.ProductType>
 
 @{
     ViewData["Title"] = "Product Types";
     Layout = User.IsInRole("Admin") ? "~/Views/Shared/_AdminLayout.cshtml" : "~/Views/Shared/_EmployeeLayout.cshtml";
 }
 
+
+<a href="javascript:history.back()" class="theme-back-btn mb-1"><i class="bi bi-arrow-left"></i> Back</a>
 <h2 class="mb-3">Product Types</h2>
 
 <div class="page-card mb-3">
@@ -77,3 +79,6 @@
         </tbody>
     </table>
 </div>
+
+
+

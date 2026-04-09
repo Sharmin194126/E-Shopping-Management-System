@@ -53,19 +53,19 @@
         display: inline-flex;
         align-items: center;
         padding: 4px 10px;
-        background: #f1f5f9;
-        border: 1px solid #cbd5e1;
+        background: #f2efe9;
+        border: 1px solid #e6e2db;
         border-radius: 20px;
         font-size: 13px;
         font-weight: 600;
-        color: #334155;
+        color: #33312e;
         cursor: pointer;
         transition: all 0.2s ease;
     }
     .copy-phone-chip:hover {
-        background: #e2e8f0;
-        color: #0f172a;
-        border-color: #94a3b8;
+        background: #e6e2db;
+        color: #33312e;
+        border-color: #8b7d6b;
     }
     .copy-phone-chip .copy-icon {
         font-size: 11px;
@@ -78,10 +78,12 @@
 </style>
 
 <!-- Welcome Banner -->
-<div class="page-card mb-4" style="border-left: 5px solid #6f42c1; background: linear-gradient(135deg, #ffffff 60%, #f3eeff 100%);">
+
+<a href="javascript:history.back()" class="theme-back-btn mb-1"><i class="bi bi-arrow-left"></i> Back</a>
+<div class="page-card mb-4" style="border-left: 5px solid #532374; background: linear-gradient(135deg, #f8f6f0 60%, #f0e8f7 100%);">
     <div class="d-flex justify-content-between align-items-center">
         <div>
-            <h2 class="mb-1" style="color:#1e293b;">Welcome back, <span style="color:#6f42c1;">@dm?.Name!</span> 👋</h2>
+            <h2 class="mb-1" style="color:#33312e;">Welcome back, <span style="color:#532374;">@dm?.Name! 👋</span></h2>
             <p class="text-muted mb-0" style="font-size:14px;">
                 <i class="bi bi-truck me-1"></i>Vehicle: <strong>@(dm?.VehicleInfo ?? "N/A")</strong>
                 &nbsp;|&nbsp;
@@ -249,7 +251,7 @@
                                         }
                                     </div>
                                     <div class="collapse mt-2" id="update-@order.Id">
-                                        <form asp-action="UpdateStatus" method="post" class="p-2 border rounded bg-light">
+                                        <form asp-action="UpdateStatus" method="post" class="p-2 border rounded" style="background:#f2efe9;">
                                             <input type="hidden" name="orderId" value="@order.Id" />
                                             <div class="mb-2">
                                                 <label class="small fw-bold">Change Status:</label>
@@ -438,3 +440,6 @@
         }
     </script>
 }
+
+
+

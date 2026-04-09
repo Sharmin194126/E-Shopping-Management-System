@@ -1,11 +1,14 @@
-﻿@model IEnumerable<E_ShoppingManagement.Models.Employee>
+@model IEnumerable<E_ShoppingManagement.Models.Employee>
 
 @{
     ViewData["Title"] = "Employees";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h2 class="mb-3">Employees</h2>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Employees</h2>
+    <a asp-controller="AdminDashboard" asp-action="Index" class="theme-back-btn">⬅ Back to Dashboard</a>
+</div>
 
 <div class="page-card mb-3">
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -23,7 +26,7 @@
     }
 
     <table class="table table-hover table-bordered">
-        <thead>
+        <thead style="background:#532374; color:#fff;">
             <tr>
                 <th>Name</th>
                 <th>Email</th>

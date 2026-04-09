@@ -1,11 +1,14 @@
-﻿@model E_ShoppingManagement.ViewModels.ReportsViewModel
+@model E_ShoppingManagement.ViewModels.ReportsViewModel
 
 @{
     ViewData["Title"] = "Reports";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h2 class="mb-3">📈 Sales & Operations Reports</h2>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>📈 Sales &amp; Operations Reports</h2>
+    <a asp-controller="AdminDashboard" asp-action="Index" class="theme-back-btn">⬅ Back to Dashboard</a>
+</div>
 
 <!-- Filter -->
 <div class="page-card p-3 mb-3">
@@ -36,7 +39,7 @@
         </div>
     </div>
     <div class="col-md-4">
-        <div class="dash-card bg-primary text-white position-relative p-3">
+        <div class="dash-card p-3" style="background:#532374; color:#fff;">
             <h5>Total Revenue</h5>
             <p class="fs-4 mb-0">@Model.Summary.TotalRevenue</p>
         </div>
@@ -53,7 +56,7 @@
 <div class="page-card p-3 mb-3">
     <h5 class="mb-2">📆 Date-wise Sales</h5>
     <table class="table table-sm table-bordered align-middle">
-        <thead>
+        <thead style="background:#532374; color:#fff;">
             <tr>
                 <th>Date</th>
                 <th>Orders</th>
@@ -86,7 +89,7 @@
 <div class="page-card p-3 mb-3">
     <h5 class="mb-2">👨‍💼 Employee-wise Sales</h5>
     <table class="table table-sm table-bordered align-middle">
-        <thead>
+        <thead style="background:#532374; color:#fff;">
             <tr>
                 <th>Employee</th>
                 <th>Orders Handled</th>
@@ -119,7 +122,7 @@
 <div class="page-card p-3 mb-3">
     <h5 class="mb-2">📦 Pending Stock (Low stock / pending orders)</h5>
     <table class="table table-sm table-bordered align-middle">
-        <thead>
+        <thead style="background:#532374; color:#fff;">
             <tr>
                 <th>Product</th>
                 <th>Stock Qty</th>
@@ -150,7 +153,7 @@
 <div class="page-card p-3 mb-3">
     <h5 class="mb-2">🚚 Pending Delivery</h5>
     <table class="table table-sm table-bordered align-middle">
-        <thead>
+        <thead style="background:#532374; color:#fff;">
             <tr>
                 <th>Order Id</th>
                 <th>Customer</th>

@@ -8,26 +8,26 @@
     .messenger-container {
         display: flex;
         height: 75vh;
-        background: #fff;
+        background: #f2efe9;
         border-radius: 12px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        box-shadow: 0 4px 15px rgba(83,35,116,0.08);
         overflow: hidden;
-        border: 1px solid #eef2f5;
+        border: 1px solid #e6e2db;
         margin-bottom: 2rem;
     }
     
     .messenger-sidebar {
         width: 350px;
-        border-right: 1px solid #eef2f5;
+        border-right: 1px solid #e6e2db;
         display: flex;
         flex-direction: column;
-        background: #fdfdfd;
+        background: #f8f6f0;
     }
     
     .messenger-sidebar-header {
         padding: 20px;
-        border-bottom: 1px solid #eef2f5;
-        background: #fff;
+        border-bottom: 1px solid #e6e2db;
+        background: #f2efe9;
     }
     
     .messenger-list {
@@ -43,11 +43,11 @@
     }
     
     .messenger-item:hover, .messenger-item.active {
-        background: #f1f5fb;
+        background: rgba(83,35,116,0.08);
     }
     
     .messenger-item.active {
-        border-left: 4px solid #0d6efd;
+        border-left: 4px solid #532374;
     }
     
     .messenger-item.unread .m-name {
@@ -64,7 +64,7 @@
         width: 45px;
         height: 45px;
         border-radius: 50%;
-        background: #0d6efd;
+        background: #532374;
         color: white;
         display: flex;
         align-items: center;
@@ -78,7 +78,7 @@
         flex: 1;
         display: flex;
         flex-direction: column;
-        background: #fff;
+        background: #f8f6f0;
         position: relative;
     }
     
@@ -94,17 +94,18 @@
     
     .chat-header {
         padding: 15px 25px;
-        background: #fff;
-        border-bottom: 1px solid #eef2f5;
+        background: #532374;
+        border-bottom: 1px solid rgba(255,255,255,0.15);
         display: flex;
         align-items: center;
     }
+    .chat-header h6, .chat-header small { color: #fff !important; }
     
     .chat-body {
         flex: 1;
         padding: 25px;
         overflow-y: auto;
-        background: #f8f9fa;
+        background: #f8f6f0;
         display: flex;
         flex-direction: column;
     }
@@ -119,39 +120,39 @@
     }
     
     .chat-bubble.received {
-        background: #fff;
-        color: #333;
+        background: #f2efe9;
+        color: #33312e;
         align-self: flex-start;
         border-bottom-left-radius: 4px;
         box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     }
     
     .chat-bubble.sent {
-        background: #0d6efd;
+        background: #532374;
         color: white;
         align-self: flex-end;
         border-bottom-right-radius: 4px;
         margin-left: auto;
-        box-shadow: 0 2px 5px rgba(13,110,253,0.2);
+        box-shadow: 0 2px 5px rgba(83,35,116,0.25);
     }
     
     .chat-footer {
         padding: 10px 15px;
-        background: #fff;
-        border-top: 1px solid #eef2f5;
+        background: #f2efe9;
+        border-top: 1px solid #e6e2db;
     }
     
     .chat-tool-btn {
         background: transparent;
         border: none;
         box-shadow: none;
-        color: #0d6efd;
+        color: #532374;
         cursor: pointer;
     }
     
     .chat-tool-btn:hover {
-        background: #f0f2f5; 
-        color: #0b5ed7;
+        background: rgba(83,35,116,0.08);
+        color: #3d1a55;
     }
     
     .emoji-btn {
@@ -165,7 +166,7 @@
     
     .chat-input-wrapper {
         display: flex;
-        background: #f1f5fb;
+        background: #f2efe9;
         border-radius: 30px;
         padding: 5px 15px;
         align-items: center;
@@ -180,7 +181,7 @@
     }
     
     .chat-send-btn {
-        background: #0d6efd;
+        background: #532374;
         color: white;
         border: none;
         width: 40px;
@@ -194,7 +195,7 @@
     }
     
     .chat-send-btn:hover {
-        background: #0b5ed7;
+        background: #3d1a55;
     }
     
     .empty-state {
@@ -207,7 +208,7 @@
     }
     
     .search-box {
-        background: #f1f5fb;
+        background: #f2efe9;
         border-radius: 20px;
         padding: 8px 15px;
         display: flex;

@@ -47,7 +47,7 @@
         right: 20px;
         width: 350px;
         height: 500px;
-        background: white;
+        background: #f8f6f0;
         border-radius: 15px;
         box-shadow: 0 5px 20px rgba(0,0,0,0.3);
         z-index: 9998;
@@ -89,7 +89,7 @@
         margin-left: auto;
     }
     .chat-message.support {
-        background: white;
+        background: #f8f6f0;
     }
     .rating-bar {
         height: 8px;
@@ -134,7 +134,7 @@
         border: 1px solid #e0e0e0;
         width: 450px;
         height: 450px;
-        background-color: #fff;
+        background-color: #f8f6f0;
         display: none; /* hidden until hover */
         z-index: 999;
         box-shadow: 0 5px 20px rgba(0,0,0,0.15);
@@ -166,7 +166,7 @@
         <div class="col-md-5 position-relative">
             <div class="img-zoom-container" id="zoomContainer" onmouseenter="showZoom()" onmousemove="moveZoom(event)" onmouseleave="hideZoom()">
                 <img id="myimage" src="@(string.IsNullOrEmpty(Model.Product.ImageUrl) ? "/images/no-image.png" : (Model.Product.ImageUrl.StartsWith("/") ? Model.Product.ImageUrl : "/images/products/" + Model.Product.ImageUrl))" 
-                     class="img-fluid rounded border" alt="@Model.Product.Name" style="height: 500px; width: 100%; object-fit: contain; background: #fff; cursor: zoom-in !important;" />
+                     class="img-fluid rounded border" alt="@Model.Product.Name" style="height: 500px; width: 100%; object-fit: contain; background: #f8f6f0; cursor: zoom-in !important;" />
                 <div id="mylens" class="img-zoom-lens"></div>
             </div>
             <!-- Daraz zoomed result pops out to the right here -->
@@ -296,11 +296,11 @@
                 <div class="mb-3">
                     <label class="form-label fw-bold text-dark fs-5">Quantity:</label>
                     <div class="d-flex align-items-center gap-3">
-                        <div class="input-group" style="width: 160px; border: 1px solid #ccc; border-radius: 4px; overflow: hidden; background: #fff; height: 38px;">
+                        <div class="input-group" style="width: 160px; border: 1px solid #ccc; border-radius: 4px; overflow: hidden; background: #f8f6f0; height: 38px;">
                             <button class="btn btn-light px-2 fw-bold border-end" type="button" onclick="changeQty(-1)" style="font-size: 16px; color: #333; padding-bottom: 2px; width: 40px;">-</button>
                             <input type="number" id="quantityInput" name="qty" value="1" min="1"
                                     class="form-control text-center fw-bold border-0 p-0 no-spin" 
-                                    style="color: #000 !important; background-color: #fff !important; font-size: 1.1rem; width: 80px;"
+                                    style="color: #000 !important; background-color: #f8f6f0 !important; font-size: 1.1rem; width: 80px;"
                                     onchange="validateQty()" oninput="validateQty()" />
                             <button class="btn btn-light px-2 fw-bold border-start" type="button" onclick="changeQty(1)" style="font-size: 16px; color: #333; padding-bottom: 2px; width: 40px;">+</button>
                         </div>
@@ -781,3 +781,4 @@
         input.files = dt.files;
     }
 </script>
+

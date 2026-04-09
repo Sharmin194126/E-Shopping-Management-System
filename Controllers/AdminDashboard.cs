@@ -1,4 +1,4 @@
-﻿using E_ShoppingManagement.Data;
+using E_ShoppingManagement.Data;
 using E_ShoppingManagement.Models;
 using E_ShoppingManagement.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -268,6 +268,47 @@ namespace E_ShoppingManagement.Controllers
             method.Status = "Active";
             _context.PaymentMethods.Add(method);
             await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(PaymentMethods));
+        }
+
+        public async Task<IActionResult> EditPaymentMethod(int id)
+        {
+            var method = await _context.PaymentMethods.FindAsync(id);
+            if (method == null) return NotFound();
+            return View(method);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditPaymentMethod(PaymentMethod method, IFormFile? logoFile)
+        {
+            var existing = await _context.PaymentMethods.FindAsync(method.Id);
+            if (existing == null) return NotFound();
+
+            existing.Name = method.Name;
+            existing.Details = method.Details;
+            existing.Status = method.Status;
+            
+            // Assume method.IsActive maps from Status if needed, but since it's just Name and Details
+            // Update Active check
+            existing.IsActive = existing.Status != "Inactive";
+
+            if (logoFile != null && logoFile.Length > 0)
+            {
+                string uploadsFolder = Path.Combine(_env.WebRootPath, "images", "logo");
+                if (!Directory.Exists(uploadsFolder)) Directory.CreateDirectory(uploadsFolder);
+
+                string fileName = Guid.NewGuid().ToString() + Path.GetExtension(logoFile.FileName);
+                string filePath = Path.Combine(uploadsFolder, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await logoFile.CopyToAsync(stream);
+                }
+                existing.LogoUrl = "/images/logo/" + fileName;
+            }
+
+            await _context.SaveChangesAsync();
+            TempData["Message"] = "Payment Method updated successfully!";
             return RedirectToAction(nameof(PaymentMethods));
         }
         public async Task<IActionResult> ManageReviews()

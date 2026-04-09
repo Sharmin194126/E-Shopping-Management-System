@@ -11,8 +11,16 @@
     var validSections = new List<E_ShoppingManagement.Models.DisplaySection>();
     var validSectionProducts = new Dictionary<string, List<E_ShoppingManagement.Models.Product>>();
 
+    E_ShoppingManagement.Models.DisplaySection categorySection = null;
+
     foreach (var dispSection in Model.DisplaySections)
     {
+        if (dispSection.Name.Contains("Categories", StringComparison.OrdinalIgnoreCase) || dispSection.Name.Contains("Category", StringComparison.OrdinalIgnoreCase))
+        {
+            categorySection = dispSection;
+            continue;
+        }
+
         var sectionProducts = allProducts.Where(p => p.DisplayCategory == dispSection.Name || (dispSection.Name == "Featured Items" && p.DisplayCategory == "Featured")).ToList();
         if (sectionProducts.Any())
         {
@@ -20,6 +28,14 @@
             validSectionProducts[dispSection.Name] = sectionProducts;
         }
     }
+
+    var allSectionsToRender = new List<E_ShoppingManagement.Models.DisplaySection>();
+    if (categorySection != null && Model.Categories != null && Model.Categories.Any())
+    {
+        allSectionsToRender.Add(categorySection);
+    }
+    allSectionsToRender.AddRange(validSections);
+    allSectionsToRender = allSectionsToRender.OrderBy(s => s.DisplayOrder).ToList();
 
     // Helper to render stars
     string RenderStars(double rating) {
@@ -100,15 +116,12 @@
 
     <!-- SIDE NAV (fixed) -->
     <div class="side-nav">
-        <a href="#shopbycategories">
-            <text>🗂️</text>
-            <span>Categories</span>
-        </a>
-        @foreach (var dispSection in validSections)
+        @foreach (var dispSection in allSectionsToRender)
         {
             var sectionId = dispSection.Name.Replace(" ", "").ToLower();
             <a href="#@sectionId">
-                @if (dispSection.Name.Contains("Featured")) { <text>⭐</text> }
+                @if (dispSection.Name.Contains("Categor", StringComparison.OrdinalIgnoreCase)) { <text>🗂️</text> }
+                else if (dispSection.Name.Contains("Featured")) { <text>⭐</text> }
                 else if (dispSection.Name.Contains("Exclusive")) { <text>💎</text> }
                 else if (dispSection.Name.Contains("Offer")) { <text>🔥</text> }
                 else if (dispSection.Name.Contains("You")) { <text>❤️</text> }
@@ -142,7 +155,7 @@
             <div class="welcome-overlay" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: white; width: 100%; z-index: 2;">
                 <h2 style="font-family: 'Playfair Display', serif; font-size: 58px; font-weight: 500; margin-bottom: 15px; color: #fff; text-shadow: 0 4px 12px rgba(0,0,0,0.3);">Discover Your Style</h2>
                 <p style="font-size: 16px; font-weight: 500; letter-spacing: 0.5px; opacity: 0.95; color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.3); margin-bottom: 25px;">Your ultimate destination for fashion, beauty and pure luxury.</p>
-                <a href="#featureditems" class="btn" style="background: #ffffff; color: #33312e; padding: 12px 35px; border-radius: 30px; font-weight: 600; font-size: 14px; text-decoration: none;">Shop Now</a>
+                <a href="#featureditems" class="btn" style="background: #f8f6f0; color: #33312e; padding: 12px 35px; border-radius: 30px; font-weight: 600; font-size: 14px; text-decoration: none;">Shop Now</a>
             </div>
         </div>
 
@@ -151,38 +164,40 @@
             <p style="text-align: center; color: #55534e; font-size: 16px; font-family: 'Inter', sans-serif;">Your trusted online shopping destination for fashion, beauty and electronics. Enjoy premium products, exclusive deals and fast delivery.</p>
         </div>
 
-        @if (Model.Categories != null && Model.Categories.Any())
-        {
-            <section class="section" id="shopbycategories" style="margin-bottom: 40px; margin-top: 30px;">
-                <h2 style="text-align: center; margin-bottom: 20px; font-size: 32px;">Shop by Categories</h2>
-                
-                <div style="display: flex; gap: 20px; overflow-x: auto; padding: 10px 15px; justify-content: center; flex-wrap: wrap;">
-                    @foreach (var cat in Model.Categories)
-                    {
-                        <div style="width: 140px; text-align: center; position: relative; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.15); transition: transform 0.2s ease;">
-                            <a href="/Home/CategoryProducts?categoryId=@cat.Id" style="display: block; position: relative;" onmouseover="this.parentElement.style.transform='translateY(-5px)'" onmouseout="this.parentElement.style.transform='translateY(0)'">
-                                <img src="@(string.IsNullOrEmpty(cat.ImageUrl) ? "/images/no-image.png" : (cat.ImageUrl.StartsWith("/") ? cat.ImageUrl : "/images/categories/" + cat.ImageUrl))" alt="@cat.Name" style="width: 140px; height: 140px; object-fit: cover; filter: brightness(0.6); display: block; border-radius: 12px;" />
-                                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #fff; font-weight: 700; font-size: 16px; text-shadow: 0px 2px 6px rgba(0,0,0,0.8); z-index: 2; width: 90%; text-align: center; letter-spacing: 0.5px; text-transform: uppercase;">
-                                    @cat.Name
-                                </div>
-                            </a>
-                        </div>
-                    }
-                </div>
-            </section>
-        }
-
-        @foreach (var dispSection in validSections)
+        @foreach (var dispSection in allSectionsToRender)
         {
             var sectionId = dispSection.Name.Replace(" ", "").ToLower();
-            var sectionProducts = validSectionProducts[dispSection.Name];
             
-            <section class="section" id="@sectionId" style="margin-bottom: 30px;">
-                <h2 style="text-align: center; margin-bottom: 15px; font-size: 32px;">@dispSection.Name</h2>
+            if (dispSection.Name.Contains("Category", StringComparison.OrdinalIgnoreCase) || dispSection.Name.Contains("Categories", StringComparison.OrdinalIgnoreCase))
+            {
+                <section class="section" id="@sectionId" style="margin-bottom: 40px; margin-top: 30px;">
+                    <h2 style="text-align: center; margin-bottom: 20px; font-size: 32px;">@dispSection.Name</h2>
+                    
+                    <div style="display: flex; gap: 20px; overflow-x: auto; padding: 10px 15px; justify-content: center; flex-wrap: wrap;">
+                        @foreach (var cat in Model.Categories)
+                        {
+                            <div style="width: 140px; text-align: center; position: relative; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.15); transition: transform 0.2s ease;">
+                                <a href="/Home/CategoryProducts?categoryId=@cat.Id" style="display: block; position: relative;" onmouseover="this.parentElement.style.transform='translateY(-5px)'" onmouseout="this.parentElement.style.transform='translateY(0)'">
+                                    <img src="@(string.IsNullOrEmpty(cat.ImageUrl) ? "/images/no-image.png" : (cat.ImageUrl.StartsWith("/") ? cat.ImageUrl : "/images/categories/" + cat.ImageUrl))" alt="@cat.Name" style="width: 140px; height: 140px; object-fit: cover; filter: brightness(0.6); display: block; border-radius: 12px;" />
+                                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #fff; font-weight: 700; font-size: 16px; text-shadow: 0px 2px 6px rgba(0,0,0,0.8); z-index: 2; width: 90%; text-align: center; letter-spacing: 0.5px; text-transform: uppercase;">
+                                        @cat.Name
+                                    </div>
+                                </a>
+                            </div>
+                        }
+                    </div>
+                </section>
+            }
+            else
+            {
+                var sectionProducts = validSectionProducts[dispSection.Name];
                 
-                <div class="@(dispSection.Name.Contains("Featured") ? "featured-grid" : "product-grid")">
-                    @foreach (var item in sectionProducts)
-                    {
+                <section class="section" id="@sectionId" style="margin-bottom: 30px;">
+                    <h2 style="text-align: center; margin-bottom: 15px; font-size: 32px;">@dispSection.Name</h2>
+                    
+                    <div class="@(dispSection.Name.Contains("Featured") ? "featured-grid" : "product-grid")">
+                        @foreach (var item in sectionProducts)
+                        {
                             <div class="product-card">
                                 <a href="/Home/Details/@item.Id" style="position: relative; display: block;">
                                     @if (item.OfferPercentage > 0)
@@ -216,8 +231,9 @@
                                 </div>
                             </div>
                         }
-                </div>
-            </section>
+                    </div>
+                </section>
+            }
         }
 
         <!-- Rest of content will be followed by layout footer -->
@@ -279,6 +295,7 @@
         }, 3000);
     });
 </script>
+
 
 
 

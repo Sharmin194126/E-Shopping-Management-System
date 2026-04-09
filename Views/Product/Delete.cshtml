@@ -1,10 +1,12 @@
-﻿@model E_ShoppingManagement.Models.Product
+@model E_ShoppingManagement.Models.Product
 
 @{
     ViewData["Title"] = "Delete Product";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
+
+<a href="javascript:history.back()" class="theme-back-btn mb-1"><i class="bi bi-arrow-left"></i> Back</a>
 <h2 class="mb-3 text-danger">Delete Product</h2>
 
 <div class="page-card">
@@ -29,3 +31,6 @@
         </div>
     </form>
 </div>
+
+
+

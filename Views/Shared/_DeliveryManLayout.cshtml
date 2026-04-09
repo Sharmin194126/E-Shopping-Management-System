@@ -12,8 +12,8 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: #f0f2f8;
-            color: #1e293b;
+            background: #f8f6f0;
+            color: #33312e;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -29,7 +29,7 @@
         .dm-sidebar {
             width: 240px;
             flex-shrink: 0;
-            background: linear-gradient(180deg, #1a2342 0%, #1e3269 60%, #1a4070 100%);
+            background: #532374;
             display: flex;
             flex-direction: column;
             position: fixed;
@@ -49,11 +49,11 @@
         .dm-sidebar-brand .dm-avatar {
             width: 72px; height: 72px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            background: #3d1a55;
             display: flex; align-items: center; justify-content: center;
             font-size: 28px; color: #fff;
             margin: 0 auto 10px;
-            box-shadow: 0 4px 14px rgba(59,130,246,0.40);
+            box-shadow: 0 4px 14px rgba(83,35,116,0.40);
         }
         .dm-sidebar-brand .dm-name {
             font-size: 14px; font-weight: 700; color: #fff;
@@ -86,12 +86,12 @@
         .dm-nav a:hover {
             color: #fff;
             background: rgba(255,255,255,0.10);
-            border-left-color: #60a5fa;
+            border-left-color: #e5e2db;
         }
         .dm-nav a.active {
             color: #fff;
-            background: rgba(96,165,250,0.18);
-            border-left-color: #60a5fa;
+            background: rgba(255,255,255,0.18);
+            border-left-color: #e5e2db;
             font-weight: 600;
         }
         .dm-nav a .badge-notif {
@@ -131,11 +131,11 @@
 
         /* ===== TOP NAVBAR ===== */
         .dm-topbar {
-            background: rgba(255,255,255,0.97);
+            background: #f8f6f0;
             backdrop-filter: blur(10px);
             padding: 14px 28px;
-            border-bottom: 1px solid #e2e8f0;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border-bottom: 1px solid #e6e2db;
+            box-shadow: 0 2px 12px rgba(83,35,116,0.06);
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -152,11 +152,11 @@
         .dm-topbar .topbar-right .dm-clock {
             font-family: 'Courier New', monospace;
             font-size: 15px; font-weight: 700;
-            color: #1e3a8a;
-            background: #f1f5f9;
+            color: #532374;
+            background: #f8f6f0;
             padding: 6px 14px;
             border-radius: 8px;
-            border: 1px solid #cbd5e1;
+            border: 1px solid #e6e2db;
         }
         .dm-topbar .topbar-right .notif-btn {
             position: relative;
@@ -178,11 +178,11 @@
 
         /* ===== PAGE CARD ===== */
         .page-card {
-            background: #fff;
+            background: #f8f6f0;
             border-radius: 14px;
             padding: 24px;
             box-shadow: 0 2px 16px rgba(0,0,0,0.06);
-            border: 1px solid #e8edf5;
+            border: 1px solid #e6e2db;
         }
 
         /* ===== STAT CARDS ===== */
@@ -222,7 +222,7 @@
         /* ===== TABLES ===== */
         .table th { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
         .table td { font-size: 14px; vertical-align: middle; }
-        .table-primary th { background: linear-gradient(90deg, #1e1b4b 0%, #3b82f6 100%) !important; color: #fff !important; border-color: rgba(255,255,255,0.15) !important; }
+        .table-primary th { background: #532374 !important; color: #fff !important; border-color: rgba(255,255,255,0.15) !important; }
 
         /* ===== ACTIVITY ITEM ===== */
         .activity-item {
@@ -240,22 +240,22 @@
 
         /* ===== FORM INPUTS ===== */
         .page-card input, .page-card select, .page-card textarea {
-            background: #f8fafc !important;
-            border: 1px solid #e2e8f0 !important;
-            color: #1e293b !important;
+            background: #f8f6f0 !important;
+            border: 1px solid #e6e2db !important;
+            color: #33312e !important;
             border-radius: 8px;
         }
         .page-card input:focus, .page-card select:focus {
-            border-color: #3b82f6 !important;
-            box-shadow: 0 0 0 3px rgba(59,130,246,0.15) !important;
-            background: #fff !important;
+            border-color: #532374 !important;
+            box-shadow: 0 0 0 3px rgba(83,35,116,0.15) !important;
+            background: #f8f6f0 !important;
         }
         .page-card label { color: #475569; font-weight: 600; font-size: 13px; }
 
         /* Clock welcome card */
         .clock-display {
             font-family: 'Courier New', monospace; font-weight: 700;
-            font-size: 20px; color: #6f42c1; letter-spacing: 1px;
+            font-size: 20px; color: #532374; letter-spacing: 1px;
         }
     </style>
 </head>
