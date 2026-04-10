@@ -13,6 +13,7 @@
 }
 
 <div class="container-fluid mt-4">
+    <a href="javascript:history.back()" class="theme-back-btn ms-3"><i class="bi bi-arrow-left"></i> Back</a>
     <div class="row">
         <!-- Sidebar Filter -->
         <aside class="col-md-3">
@@ -59,19 +60,19 @@
                              <span class="text-dark fw-bold">@selectedPriceText</span>
                         </div>
                         <div class="form-check mb-2">
-                            <input class="form-check-input" type="radio" name="priceRange" value="low" id="p-low" onchange="this.form.submit()" @(Model.PriceRange == "low" ? "checked" : "")>
+                            <input class="form-check-input" type="radio" name="priceRange" value="low" id="p-low" onchange="this.form.submit()" style="accent-color: #532374;" @(Model.PriceRange == "low" ? "checked" : "")>
                             <label class="form-check-label fw-bold ps-1" style="color: black !important;" for="p-low">Below ৳500</label>
                         </div>
                         <div class="form-check mb-2">
-                            <input class="form-check-input" type="radio" name="priceRange" value="mid" id="p-mid" onchange="this.form.submit()" @(Model.PriceRange == "mid" ? "checked" : "")>
+                            <input class="form-check-input" type="radio" name="priceRange" value="mid" id="p-mid" onchange="this.form.submit()" style="accent-color: #532374;" @(Model.PriceRange == "mid" ? "checked" : "")>
                             <label class="form-check-label fw-bold ps-1" style="color: black !important;" for="p-mid">Under ৳500 - ৳2000</label>
                         </div>
                         <div class="form-check mb-2">
-                            <input class="form-check-input" type="radio" name="priceRange" value="high" id="p-high" onchange="this.form.submit()" @(Model.PriceRange == "high" ? "checked" : "")>
+                            <input class="form-check-input" type="radio" name="priceRange" value="high" id="p-high" onchange="this.form.submit()" style="accent-color: #532374;" @(Model.PriceRange == "high" ? "checked" : "")>
                             <label class="form-check-label fw-bold ps-1" style="color: black !important;" for="p-high">Above ৳2000</label>
                         </div>
                          <div class="form-check mb-2">
-                            <input class="form-check-input" type="radio" name="priceRange" value="very-high" id="p-vh" onchange="this.form.submit()" @(Model.PriceRange == "very-high" ? "checked" : "")>
+                            <input class="form-check-input" type="radio" name="priceRange" value="very-high" id="p-vh" onchange="this.form.submit()" style="accent-color: #532374;" @(Model.PriceRange == "very-high" ? "checked" : "")>
                             <label class="form-check-label fw-bold ps-1" style="color: black !important;" for="p-vh">Above ৳10000</label>
                         </div>
                     </div>
@@ -80,11 +81,11 @@
                     
                         <h6 class="mb-2">Available Sizes</h6>
                         <div class="d-flex flex-wrap gap-2">
-                            @foreach (var s in new[] { "S", "M", "L", "XL", "XXL" })
+                            @foreach (var s in new[] { "S", "M", "L", "XL", "XXL", "3XL" })
                             {
                                 <div class="form-check">
                                     <input class="form-check-input d-none" type="radio" name="size" value="@s" id="sz-@s" onchange="this.form.submit()" @(Model.SelectedSize == s ? "checked" : "")>
-                                    <label class="btn btn-sm @(Model.SelectedSize == s ? "btn-primary" : "btn-outline-secondary") px-3" for="sz-@s">@s</label>
+                                    <label class="btn btn-sm px-3" style="@(Model.SelectedSize == s ? "background-color: #532374; color: white;" : "color: #532374; border: 1px solid #532374;")" for="sz-@s">@s</label>
                                 </div>
                             }
                         </div>
@@ -112,11 +113,11 @@
                     <div class="col-12 mb-3">
                         @if (User.IsInRole("Employee"))
                         {
-                            <a asp-controller="EmployeeProduct" asp-action="Create" class="btn btn-outline-primary btn-sm">+ Add New Product</a>
+                            <a asp-controller="EmployeeProduct" asp-action="Create" class="btn btn-sm" style="background-color: #532374; color: white;">+ Add New Product</a>
                         }
                         else
                         {
-                            <a asp-controller="Product" asp-action="Create" class="btn btn-outline-primary btn-sm">+ Add New Product</a>
+                            <a asp-controller="Product" asp-action="Create" class="btn btn-sm" style="background-color: #532374; color: white;">+ Add New Product</a>
                         }
                     </div>
                 }
@@ -149,13 +150,13 @@
                                 <div class="d-flex justify-content-between align-items-center mb-1">
                                     <div class="price-area">
                                         @if(item.RegularPrice > item.Price) { 
-                                            <span class="text-decoration-line-through text-muted extra-small me-1" style="font-size: 0.75rem;">৳@item.RegularPrice</span> 
+                                            <span class="text-decoration-line-through text-muted extra-small me-1" style="font-size: 0.75rem;">৳@item.RegularPrice.ToString("#,##0")</span> 
                                         }
-                                        <span class="text-danger fw-bold" style="font-size: 1rem;">৳@item.Price</span>
+                                        <span class="text-danger fw-bold" style="font-size: 1rem;">৳@item.Price.ToString("#,##0")</span>
                                     </div>
                                     <div class="stock-badge">
                                         @if(item.StockQty > 0) {
-                                            <span class="badge bg-info text-white extra-small" style="font-size: 0.7rem; padding: 3px 8px;">STOCK: @item.StockQty</span>
+                                            <span class="badge bg-info text-white extra-small" style="font-size: 0.7rem; padding: 3px 8px;">STOCK: @item.StockQty.ToString("#,##0")</span>
                                         } else {
                                             <span class="badge bg-danger text-white extra-small" style="font-size: 0.7rem; padding: 3px 8px;">EMPTY</span>
                                         }
@@ -169,7 +170,7 @@
                             </a>
 
                             <div class="d-grid gap-2 mt-auto">
-                                <a href="/Home/Details/@item.Id" class="btn btn-primary btn-sm">Add to Cart</a>
+                                <a href="/Home/Details/@item.Id" class="btn btn-sm text-white" style="background-color: #532374;">Add to Cart</a>
                                 <a href="/Home/Details/@item.Id" class="btn btn-outline-danger btn-sm">Buy Now</a>
                             </div>
                         </div>

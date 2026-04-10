@@ -5,7 +5,7 @@
         🛒 Cart <span class="badge bg-warning text-dark">@Model</span>
         @if (ViewBag.TotalAmount > 0)
         {
-            <span class="badge bg-success">৳@ViewBag.TotalAmount</span>
+            <span class="badge bg-success">৳@(ViewBag.TotalAmount is decimal or double or int or float ? ((decimal)ViewBag.TotalAmount).ToString("#,##0") : ViewBag.TotalAmount)</span>
         }
     </a>
 </li>

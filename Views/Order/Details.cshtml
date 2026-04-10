@@ -6,14 +6,14 @@
 
 <style>
     @@media print {
-        body { background-color: #f8f6f0 !important; font-size: 12pt; }
+        body { background-color: #f2efe9 !important; font-size: 12pt; }
         .d-print-none { display: none !important; }
         .d-print-block { display: block !important; }
         .print-container { max-width: 800px; margin: 0 auto; color: #000; }
         .print-header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; }
         .print-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
         .print-table th, .print-table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        .print-table th { background-color: #f8f9fa !important; -webkit-print-color-adjust: exact; }
+        .print-table th { background-color: #f2efe9 !important; -webkit-print-color-adjust: exact; }
     }
 </style>
 
@@ -125,7 +125,7 @@
 <!-- Print-Only Receipt View -->
 <div class="d-none d-print-block print-container">
     <div class="print-header">
-        <h1>EShop Receipt</h1>
+        <h1>E-Shop Receipt</h1>
         <p class="mb-0">Order #@Model.Id | Date: @Model.CreatedAt.ToLocalTime().ToString("dd MMM yyyy, hh:mm tt")</p>
         <p class="mb-0">Status: <strong>@Model.OrderStatus</strong></p>
     </div>
@@ -184,4 +184,6 @@
 
 
 </div>
+
+
 

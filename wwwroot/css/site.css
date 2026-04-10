@@ -18,6 +18,36 @@
     --card-shadow: 0 6px 24px rgba(124, 58, 237, 0.12);
 }
 
+/* ===== BACK BUTTON GLOBAL STYLE ===== */
+.theme-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #532374;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 20px;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(83, 35, 116, 0.2);
+}
+
+.theme-back-btn:hover {
+    background: #3d1a55;
+    color: #FFD700;
+    text-decoration: none;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(83, 35, 116, 0.3);
+}
+
+.theme-back-btn i {
+    font-size: 1.1rem;
+}
+
 body.dark {
     --bg: #1a0a2e;
     --bg-gradient: linear-gradient(135deg, #1a0a2e 0%, #3d1060 40%, #0d2b4b 70%, #062a22 100%);
@@ -991,7 +1021,7 @@ body {
 }
 
 .add-btn-pill {
-    background: #3c3935;
+    background: #532374;
     color: #ffffff;
     padding: 6px 15px;
     border-radius: 20px;
@@ -1002,7 +1032,7 @@ body {
 }
 
 .add-btn-pill:hover {
-    background: #FF6B35;
+    background: #3d1a55;
     color: white;
     transform: translateY(-2px);
 }
@@ -1076,7 +1106,7 @@ body {
 }
 
 .add-btn-pill {
-    background: #464440;
+    background: #532374;
     color: #fff;
     font-size: 11px;
     padding: 8px 16px;
@@ -1087,7 +1117,7 @@ body {
 }
 
 .add-btn-pill:hover {
-    background: #1a1816;
+    background: #3d1a55;
     color: #fff;
 }
 
@@ -1517,6 +1547,6 @@ thead.table-dark, thead.table-light, thead.bg-dark, thead.bg-light {
 
 /* Override all white backgrounds to match the theme background homepage */
 .bg-white, .bg-light, body { background-color: #f8f6f0 !important; }
-.modal-content, .offcanvas { background-color: #f8f6f0 !important; }
+.modal-content, .offcanvas { background-color: #f2efe9 !important; }
 
-.card, .table, .table-light, .list-group-item, .dropdown-menu { background-color: #f8f6f0 !important; }
+.card, .table, .table-light, .list-group-item, .dropdown-menu { background-color: #f2efe9 !important; }

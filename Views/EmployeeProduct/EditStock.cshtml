@@ -1,4 +1,4 @@
-﻿@model E_ShoppingManagement.Models.Product
+@model E_ShoppingManagement.Models.Product
 @{
     ViewData["Title"] = "Update Stock";
     Layout = "~/Views/Shared/_EmployeeLayout.cshtml";
@@ -6,7 +6,7 @@
 
 <h3>Update Stock: @Model.Name</h3>
 
-<div class="page-card p-4" style="background: #f8f9fa; border-radius: 12px; max-width: 500px; margin-top: 20px;">
+<div class="page-card p-4" style="background: #f2efe9; border-radius: 12px; max-width: 500px; margin-top: 20px;">
     <form asp-action="UpdateStock" method="post">
         <input type="hidden" name="id" value="@Model.Id" />
         
@@ -22,3 +22,5 @@
         </div>
     </form>
 </div>
+
+

@@ -6,8 +6,8 @@
 }
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2>📈 Sales &amp; Operations Reports</h2>
-    <a asp-controller="AdminDashboard" asp-action="Index" class="theme-back-btn">⬅ Back to Dashboard</a>
+    <h2 class="mb-0">📈 Sales &amp; Operations Reports</h2>
+    <a asp-controller="AdminDashboard" asp-action="Index" class="theme-back-btn mb-0">Back to Dashboard</a>
 </div>
 
 <!-- Filter -->
@@ -58,6 +58,7 @@
     <table class="table table-sm table-bordered align-middle">
         <thead style="background:#532374; color:#fff;">
             <tr>
+                <th style="width: 70px;">SL No</th>
                 <th>Date</th>
                 <th>Orders</th>
                 <th>Products Sold</th>
@@ -65,15 +66,17 @@
             </tr>
         </thead>
         <tbody>
+            @{ var sl1 = 1; }
             @if (!Model.DateWiseSales.Any())
             {
-                <tr><td colspan="4" class="text-muted text-center">No data.</td></tr>
+                <tr><td colspan="5" class="text-muted text-center">No data.</td></tr>
             }
             else
             {
-                foreach (var row in Model.DateWiseSales)
+                @foreach (var row in Model.DateWiseSales)
                 {
                     <tr>
+                        <td>@(sl1++)</td>
                         <td>@row.Date.ToString("dd-MM-yyyy")</td>
                         <td>@row.OrdersCount</td>
                         <td>@row.ProductsSold</td>
@@ -91,6 +94,7 @@
     <table class="table table-sm table-bordered align-middle">
         <thead style="background:#532374; color:#fff;">
             <tr>
+                <th style="width: 70px;">SL No</th>
                 <th>Employee</th>
                 <th>Orders Handled</th>
                 <th>Products Sold</th>
@@ -98,15 +102,17 @@
             </tr>
         </thead>
         <tbody>
+            @{ var sl2 = 1; }
             @if (!Model.EmployeeSales.Any())
             {
-                <tr><td colspan="4" class="text-muted text-center">No data.</td></tr>
+                <tr><td colspan="5" class="text-muted text-center">No data.</td></tr>
             }
             else
             {
-                foreach (var row in Model.EmployeeSales)
+                @foreach (var row in Model.EmployeeSales)
                 {
                     <tr>
+                        <td>@(sl2++)</td>
                         <td>@row.EmployeeName (@row.EmployeeId)</td>
                         <td>@row.OrdersHandled</td>
                         <td>@row.ProductsSold</td>
@@ -124,21 +130,24 @@
     <table class="table table-sm table-bordered align-middle">
         <thead style="background:#532374; color:#fff;">
             <tr>
+                <th style="width: 70px;">SL No</th>
                 <th>Product</th>
                 <th>Stock Qty</th>
                 <th>Pending Order Qty</th>
             </tr>
         </thead>
         <tbody>
+            @{ var sl3 = 1; }
             @if (!Model.PendingStock.Any())
             {
-                <tr><td colspan="3" class="text-muted text-center">No pending stock alerts.</td></tr>
+                <tr><td colspan="4" class="text-muted text-center">No pending stock alerts.</td></tr>
             }
             else
             {
-                foreach (var row in Model.PendingStock)
+                @foreach (var row in Model.PendingStock)
                 {
                     <tr>
+                        <td>@(sl3++)</td>
                         <td>@row.ProductName (@row.ProductId)</td>
                         <td>@row.StockQty</td>
                         <td>@row.PendingOrderQty</td>
@@ -155,6 +164,7 @@
     <table class="table table-sm table-bordered align-middle">
         <thead style="background:#532374; color:#fff;">
             <tr>
+                <th style="width: 70px;">SL No</th>
                 <th>Order Id</th>
                 <th>Customer</th>
                 <th>Created At</th>
@@ -163,15 +173,17 @@
             </tr>
         </thead>
         <tbody>
+            @{ var sl4 = 1; }
             @if (!Model.PendingDelivery.Any())
             {
-                <tr><td colspan="5" class="text-muted text-center">No pending deliveries.</td></tr>
+                <tr><td colspan="6" class="text-center text-muted">No pending deliveries.</td></tr>
             }
             else
             {
-                foreach (var row in Model.PendingDelivery)
+                @foreach (var row in Model.PendingDelivery)
                 {
                     <tr>
+                        <td>@(sl4++)</td>
                         <td>@row.OrderId</td>
                         <td>@row.CustomerName</td>
                         <td>@row.CreatedAt.ToLocalTime().ToString("dd-MM-yyyy, hh:mm tt")</td>

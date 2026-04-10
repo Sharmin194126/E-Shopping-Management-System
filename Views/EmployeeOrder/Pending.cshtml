@@ -7,14 +7,14 @@
 
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h2>Pending Orders</h2>
-    <a asp-controller="EmployeeDashboard" asp-action="Index" class="theme-back-btn">⬅ Back to Dashboard</a>
+    <a asp-controller="EmployeeDashboard" asp-action="Index" class="theme-back-btn mb-0">Back</a>
 </div>
 
 <div class="page-card p-3">
     <table class="table table-hover table-bordered align-middle">
         <thead style="background:#532374; color:#fff;">
             <tr>
-                <th>SL</th>
+                <th style="width: 70px;">SL No</th>
                 <th>Order Id</th>
                 <th>Customer</th>
                 <th>Total</th>
@@ -24,9 +24,7 @@
             </tr>
         </thead>
         <tbody>
-            @{
-                var i = 1;
-            }
+            @{ var sl = 1; }
             @if (!Model.Any())
             {
                 <tr><td colspan="7" class="text-center text-muted">No pending orders.</td></tr>
@@ -36,7 +34,7 @@
                 foreach (var o in Model)
                 {
                     <tr>
-                        <td>@i</td>
+                        <td>@(sl++)</td>
                         <td>@o.OrderId</td>
                         <td>@o.CustomerName</td>
                         <td>@o.TotalAmount</td>
@@ -47,7 +45,6 @@
                                class="btn btn-sm btn-secondary">Details</a>
                         </td>
                     </tr>
-                    i++;
                 }
             }
         </tbody>

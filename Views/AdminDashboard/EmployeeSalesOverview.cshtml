@@ -6,7 +6,7 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2>Employee Performance Overview</h2>
-    <a asp-action="Index" class="btn btn-secondary">Back to Dashboard</a>
+    <a asp-action="Index" class="theme-back-btn"><i class="bi bi-arrow-left"></i> Back to Dashboard</a>
 </div>
 
 <div class="page-card mb-5">
@@ -15,6 +15,7 @@
         <table class="table table-hover align-middle">
             <thead style="background:#532374; color:#fff;">
                 <tr>
+                    <th style="width: 70px;">SL No</th>
                     <th>Employee Name</th>
                     <th class="text-center">Products Managed</th>
                     <th class="text-center">Total Stock Value</th>
@@ -24,9 +25,11 @@
                 </tr>
             </thead>
             <tbody>
+                @{ var sl = 1; }
                 @foreach (var emp in Model)
                 {
                     <tr>
+                        <td>@(sl++)</td>
                         <td class="fw-bold">@emp.EmployeeName</td>
                         <td class="text-center">@emp.TotalProductsManaged</td>
                         <td class="text-center text-primary">৳ @emp.TotalStockValue.ToString("N2")</td>
@@ -55,6 +58,7 @@
             <table class="table table-sm table-bordered">
                 <thead style="background:#532374; color:#fff;">
                     <tr>
+                    <th style="width: 70px;">SL No</th>
                         <th>Product ID</th>
                         <th>Product Name</th>
                         <th>Category</th>
@@ -66,9 +70,11 @@
                 <tbody>
                     @if (emp.ManagedProducts != null && emp.ManagedProducts.Any())
                     {
-                        foreach (var p in emp.ManagedProducts)
+                        var sl2 = 1;
+                        @foreach (var p in emp.ManagedProducts)
                         {
                             <tr>
+                                <td>@(sl2++)</td>
                                 <td>@p.Id</td>
                                 <td class="fw-bold">@p.Name</td>
                                 <td>@p.Category?.Name</td>
@@ -84,7 +90,7 @@
                     else
                     {
                         <tr>
-                            <td colspan="6" class="text-center text-muted">No products assigned.</td>
+                            <td colspan="7" class="text-center text-muted">No products assigned.</td>
                         </tr>
                     }
                 </tbody>

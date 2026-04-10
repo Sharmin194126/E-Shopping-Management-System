@@ -6,8 +6,10 @@
 }
 
 
-<a href="javascript:history.back()" class="theme-back-btn mb-1"><i class="bi bi-arrow-left"></i> Back</a>
-<h2 class="mb-3">Products</h2>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Products</h2>
+    <a href="javascript:history.back()" class="theme-back-btn mb-0">Back</a>
+</div>
 
 <div class="page-card mb-3">
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -49,9 +51,9 @@
     }
 
     <table class="table table-hover table-bordered">
-        <thead class="table-header-dark">
+        <thead style="background:#532374; color:#fff;">
             <tr>
-                <th style="width:60px;">Product Id</th>
+                <th style="width:60px;">SL No</th>
                 <th style="width:100px;">Image</th>
                 <th>Name</th>
                 <th>Category</th>
@@ -67,7 +69,7 @@
         </thead>
         <tbody>
             @{
-                var index = 1;
+                var sl = 1;
             }
             @if (!Model.Any())
             {
@@ -80,7 +82,7 @@
                 foreach (var item in Model)
                 {
                     <tr>
-                        <td>@index</td>
+                        <td>@(sl++)</td>
                         <td>
                             @if (!string.IsNullOrEmpty(item.ImageUrl))
                             {
@@ -99,16 +101,16 @@
                         <td>
                             @if (item.OfferPercentage > 0)
                             {
-                                <del class="text-muted">?@item.RegularPrice</del>
+                                <del class="text-muted">৳@item.RegularPrice.ToString("#,##0")</del>
                             }
                             else
                             {
-                                <span>?@item.RegularPrice</span>
+                                <span>৳@item.RegularPrice.ToString("#,##0")</span>
                             }
                         </td>
                         <td class="text-success fw-bold">@(item.OfferPercentage > 0 ? item.OfferPercentage + "%" : "")</td>
                         <td class="fw-bold text-danger">
-                            @(item.OfferPercentage > 0 ? "?" + item.Price : "")
+                            @(item.OfferPercentage > 0 ? "৳" + item.Price.ToString("#,##0") : "")
                         </td>
                         <td>
                             <span class="badge @(item.StockQty <= 10 ? "badge-stock-low" : "badge-stock-ok")">
@@ -136,7 +138,6 @@
                             <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
                         </td>
                     </tr>
-                    index++;
                 }
             }
         </tbody>

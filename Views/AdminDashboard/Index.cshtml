@@ -40,109 +40,122 @@
 </style>
 
 <div class="d-flex justify-content-between align-items-center mb-4">
-    
-    <h3 class="mb-0">📊 Admin Dashboard Overview</h3>
-    <a asp-action="Profile" class="btn btn-warning fw-bold text-dark shadow-sm">
-        <i class="bi bi-person-circle me-1"></i> Account Profille
+    <h3 class="fw-bold mb-0" style="color:#532374;">📊 Admin Dashboard Overview</h3>
+    <a asp-action="Profile" class="btn btn-warning fw-bold text-dark shadow-sm px-4">
+        <i class="bi bi-person-circle me-2"></i> Account Profile
     </a>
 </div>
 
-<!-- KEY STATS -->
-<div class="row">
-    <div class="col-md-3">
-        <a asp-action="OrdersByStatus" asp-route-status="Delivered" style="text-decoration: none;">
-            <div class="stat-card bg-delivered">
-                <h4>@Model.TotalDelivered</h4>
-                <p>Delivered Orders</p>
+<!-- KEY STATS (Premium Mode) -->
+<div class="row g-3 mb-5">
+    <div class="col-md">
+        <a asp-action="OrdersByStatus" asp-route-status="Delivered" class="stat-card-premium card-variant-green">
+            <div class="stat-card-content">
+                <div class="stat-card-label">Delivered Orders</div>
+                <div class="stat-card-value">@Model.TotalDelivered.ToString("#,##0")</div>
             </div>
+            <div class="stat-card-icon"><i class="bi bi-bag-check-fill"></i></div>
         </a>
     </div>
-    <div class="col-md-3">
-        <a asp-action="OrdersByStatus" asp-route-status="Pending" style="text-decoration: none;">
-            <div class="stat-card bg-pending">
-                <h4>@Model.TotalPending</h4>
-                <p>Pending Orders</p>
+    <div class="col-md">
+        <a asp-action="OrdersByStatus" asp-route-status="Pending" class="stat-card-premium card-variant-orange">
+            <div class="stat-card-content">
+                <div class="stat-card-label">Pending Orders</div>
+                <div class="stat-card-value">@Model.TotalPending.ToString("#,##0")</div>
             </div>
+            <div class="stat-card-icon"><i class="bi bi-clock-history"></i></div>
         </a>
     </div>
-    <div class="col-md-3">
-        <a asp-action="OrdersByStatus" asp-route-status="Processing" style="text-decoration: none;">
-            <div class="stat-card bg-processing">
-                <h4>@Model.TotalProcessing</h4>
-                <p>Processing Orders</p>
+    <div class="col-md">
+        <a asp-action="OrdersByStatus" asp-route-status="Processing" class="stat-card-premium card-variant-blue">
+            <div class="stat-card-content">
+                <div class="stat-card-label">In Processing</div>
+                <div class="stat-card-value">@Model.TotalProcessing.ToString("#,##0")</div>
             </div>
+            <div class="stat-card-icon"><i class="bi bi-gear-wide-connected"></i></div>
         </a>
     </div>
-    <div class="col-md-3">
-        <a asp-action="OrdersByStatus" asp-route-status="Shipped" style="text-decoration: none;">
-            <div class="stat-card bg-primary">
-                <h4>@Model.TotalShipped</h4>
-                <p>Shipped Orders</p>
+    <div class="col-md">
+        <a asp-action="OrdersByStatus" asp-route-status="Shipped" class="stat-card-premium card-variant-cyan">
+            <div class="stat-card-content">
+                <div class="stat-card-label">Shipped Orders</div>
+                <div class="stat-card-value">@Model.TotalShipped.ToString("#,##0")</div>
             </div>
+            <div class="stat-card-icon"><i class="bi bi-truck"></i></div>
         </a>
     </div>
-    <div class="col-md-3">
-        <div class="stat-card bg-revenue">
-            <h4>৳ @Model.TotalRevenue</h4>
-            <p>Total Revenue</p>
+    <div class="col-md">
+        <div class="stat-card-premium card-variant-purple">
+            <div class="stat-card-content">
+                <div class="stat-card-label">Total Revenue</div>
+                <div class="stat-card-value">৳@Model.TotalRevenue.ToString("#,##0")</div>
+            </div>
+            <div class="stat-card-icon"><i class="bi bi-cash-stack"></i></div>
         </div>
     </div>
 </div>
 
-<!-- MANAGEMENT LINKS -->
-<div class="row g-3 nav-shortcuts mb-4">
-    <div class="col-6 col-md-2">
-        <a asp-controller="Category" asp-action="Index" class="btn btn-primary w-100">Categories</a>
-    </div>
-    <div class="col-6 col-md-2">
-        <a asp-controller="Product" asp-action="Index" class="btn btn-success w-100">Products</a>
-    </div>
-    <div class="col-6 col-md-2">
-        <a asp-controller="Customer" asp-action="Index" class="btn btn-info w-100">Customers</a>
-    </div>
-    <div class="col-6 col-md-2">
-        <a asp-controller="Employee" asp-action="Index" class="btn btn-dark w-100">Employees</a>
-    </div>
-    <div class="col-6 col-md-2">
-        <a asp-controller="AdminReport" asp-action="Index" class="btn btn-secondary w-100">Reports</a>
-    </div>
-    <div class="col-6 col-md-2">
-        <a asp-controller="AdminDashboard" asp-action="FooterSettings" class="btn btn-warning w-100">Footer Settings</a>
-    </div>
-    <div class="col-6 col-md-2">
-        <a asp-controller="AdminDashboard" asp-action="PaymentMethods" class="btn btn-info w-100">Payment Methods</a>
-    </div>
-    <div class="col-6 col-md-2">
-        <a asp-controller="DeliveryMan" asp-action="Index" class="btn btn-secondary w-100">Delivery Men</a>
+
+<!-- MANAGEMENT QUICK LINKS -->
+<div class="mb-4">
+    <h5 class="fw-bold mb-3"><i class="bi bi-lightning-fill text-warning me-2"></i>Quick Management</h5>
+    <div class="row g-2 nav-shortcuts">
+        <div class="col-6 col-md-3">
+            <a asp-controller="Category" asp-action="Index" class="btn btn-outline-primary w-100 py-2">Categories</a>
+        </div>
+        <div class="col-6 col-md-3">
+            <a asp-controller="Product" asp-action="Index" class="btn btn-outline-success w-100 py-2">Products</a>
+        </div>
+        <div class="col-6 col-md-3">
+            <a asp-controller="Customer" asp-action="Index" class="btn btn-outline-info w-100 py-2">Customers</a>
+        </div>
+        <div class="col-6 col-md-3">
+            <a asp-controller="Employee" asp-action="Index" class="btn btn-outline-dark w-100 py-2">Employees</a>
+        </div>
+        <div class="col-6 col-md-3">
+            <a asp-controller="DeliveryMan" asp-action="Index" class="btn btn-outline-secondary w-100 py-2">Delivery Men</a>
+        </div>
+        <div class="col-6 col-md-3">
+            <a asp-controller="AdminReport" asp-action="Index" class="btn btn-outline-danger w-100 py-2">Reports</a>
+        </div>
+        <div class="col-6 col-md-3">
+            <a asp-controller="AdminDashboard" asp-action="FooterSettings" class="btn btn-outline-warning w-100 py-2">Footer Settings</a>
+        </div>
+        <div class="col-6 col-md-3">
+            <a asp-controller="AdminDashboard" asp-action="PaymentMethods" class="btn btn-outline-dark w-100 py-2">Payment Methods</a>
+        </div>
     </div>
 </div>
 
-<div class="row">
-    <!-- ORDER DETAILS TABLE -->
-    <div class="col-md-8">
-        <div class="table-container">
-            <h4>Recent Orders Detailed View</h4>
+
+<div class="row g-4">
+    <!-- RECENT ORDERS (Standardized Card) -->
+    <div class="col-lg-8">
+        <div class="dashboard-table-card">
+            <h4><i class="bi bi-cart-check"></i> Recent Orders Detailed View</h4>
             <div class="table-responsive">
                 <table class="table table-hover align-middle">
-                    <thead class="table-dark">
+                    <thead>
                         <tr>
-                            <th>Ref</th>
+                            <th style="width: 60px;">SL</th>
+                            <th>Order Ref</th>
                             <th>Customer</th>
                             <th>Date</th>
                             <th>Amount</th>
                             <th>Status</th>
-                            <th>Payment</th>
                             <th>Location</th>
                         </tr>
                     </thead>
                     <tbody>
+                        @{ var sl_o = 1; }
                         @foreach (var order in Model.RecentOrders)
                         {
                             <tr>
-                                <td>#@order.OrderId</td>
+                                <td>@(sl_o++)</td>
+                                <td><span class="fw-bold text-primary">#@order.OrderId</span></td>
                                 <td>@order.CustomerName</td>
-                                <td>@order.OrderDate.ToString("MMM dd, yyyy")</td>
-                                <td>৳ @order.Amount</td>
+                                <td><small>@order.OrderDate.ToString("MMM dd, yyyy")</small></td>
+                                <td class="fw-bold">৳@order.Amount.ToString("#,##0")</td>
                                 <td>
                                     @switch (order.Status)
                                     {
@@ -153,10 +166,7 @@
                                         default: <span class="badge bg-secondary">@order.Status</span> break;
                                     }
                                 </td>
-                                <td>
-                                    <small class="badge bg-light text-dark">@order.PaymentStatus (@order.PaymentMethod)</small>
-                                </td>
-                                <td><small>@order.ShippingAddress</small></td>
+                                <td><small class="text-muted">@order.ShippingAddress</small></td>
                             </tr>
                         }
                     </tbody>
@@ -165,44 +175,45 @@
         </div>
     </div>
 
-    <!-- EMPLOYEE PERFORMANCE -->
-    <div class="col-md-4">
-        <div class="table-container">
-            <h4>Employee Stats</h4>
-            <table class="table table-sm">
-                <thead>
-                    <tr>
-                        <th>Employee</th>
-                        <th>Products</th>
-                        <th>Sold</th>
-                        <th>Value</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var emp in Model.EmployeePerformances)
-                    {
+    <!-- EMPLOYEE PERFORMANCE (No Scroll, Full Width Column) -->
+    <div class="col-lg-4">
+        <div class="dashboard-table-card employee-stats-container">
+            <h4><i class="bi bi-people"></i> Employee Stats</h4>
+            <div class="table-responsive">
+                <table class="table table-sm table-hover align-middle" style="font-size: 11px;">
+                    <thead>
                         <tr>
-                            <td>
-                                <div class="dropdown">
-                                    <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                        <a asp-action="EmployeeDashboard" asp-route-employeeId="@emp.EmployeeId" style="text-decoration:none; color:inherit;">@emp.EmployeeName</a>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" asp-action="EmployeeProducts" asp-route-employeeId="@emp.EmployeeId">View Managed Products</a></li>
-                                        <li><a class="dropdown-item" asp-action="EmployeeSalesDetails" asp-route-employeeId="@emp.EmployeeId">View Sales Report</a></li>
-                                    </ul>
-                                </div>
-                            </td>
-                            <td>@emp.TotalProductsManaged</td>
-                            <td>@emp.ProductsSold</td>
-                            <td style="font-weight: 600;">৳@emp.TotalSalesValue</td>
+                            <th style="width: 25px;">SL</th>
+                            <th>Name</th>
+                            <th class="text-center">Prod</th>
+                            <th class="text-center">Sold</th>
+                            <th class="text-end">Value</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @{ var sl_e = 1; }
+                        @foreach (var emp in Model.EmployeePerformances)
+                        {
+                            <tr>
+                                <td>@(sl_e++)</td>
+                                <td>
+                                    <a asp-action="EmployeeDashboard" asp-route-employeeId="@emp.EmployeeId" class="text-decoration-none fw-bold text-dark">
+                                        @emp.EmployeeName
+                                    </a>
+                                </td>
+                                <td class="text-center">@emp.TotalProductsManaged</td>
+                                <td class="text-center">@emp.ProductsSold</td>
+                                <td class="text-end fw-bold text-success">৳@emp.TotalSalesValue.ToString("#,##0")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
+
+
 
 
 

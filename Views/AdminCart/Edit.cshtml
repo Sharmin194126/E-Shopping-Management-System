@@ -5,14 +5,15 @@
 }
 
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>Edit Cart for @Model.CustomerName</h2>
-    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    <h2 class="mb-0">Edit Cart for @Model.CustomerName</h2>
+    <a asp-action="Index" class="theme-back-btn mb-0">Back to List</a>
 </div>
 
 <div class="page-card p-3">
     <table class="table table-hover table-bordered align-middle">
-        <thead>
+        <thead style="background:#532374; color:#fff;">
             <tr>
+                <th style="width: 70px;">SL No</th>
                 <th>Product</th>
                 <th style="width:100px;">Price</th>
                 <th style="width:150px;">Quantity</th>
@@ -21,9 +22,11 @@
             </tr>
         </thead>
         <tbody>
+            @{ var sl = 1; }
             @foreach (var item in Model.Items)
             {
                 <tr>
+                    <td>@sl</td>
                     <td>
                         <div class="d-flex align-items-center gap-2">
                             @if (!string.IsNullOrEmpty(item.ImageUrl))
@@ -33,7 +36,7 @@
                             <span>@item.ProductName</span>
                         </div>
                     </td>
-                    <td>৳@item.UnitPrice</td>
+                    <td>৳@item.UnitPrice.ToString("#,##0")</td>
                     <td>
                         <form asp-action="UpdateItemQuantity" method="post" class="d-flex gap-1">
                             <input type="hidden" name="cartItemId" value="@item.CartItemId" />
@@ -41,7 +44,7 @@
                             <button type="submit" class="btn btn-sm btn-primary">Update</button>
                         </form>
                     </td>
-                    <td>৳@(item.UnitPrice * item.Quantity)</td>
+                    <td>৳@((item.UnitPrice * item.Quantity).ToString("#,##0"))</td>
                     <td>
                         <form asp-action="RemoveItem" method="post">
                             <input type="hidden" name="cartItemId" value="@item.CartItemId" />
@@ -50,6 +53,7 @@
                         </form>
                     </td>
                 </tr>
+                sl++;
             }
         </tbody>
     </table>

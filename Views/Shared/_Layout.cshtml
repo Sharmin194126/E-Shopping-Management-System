@@ -12,6 +12,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/E_ShoppingManagement.styles.css" asp-append-version="true" />
+    <style>
+        /* GLOBAL THEME SYNC */
+        body, .admin-main, .dm-main, .main-content, .admin-content, .dm-content {
+            background-color: #f8f6f0 !important;
+            background: #f8f6f0 !important;
+        }
+        .page-card, .card, .table-container, .table, .modal-content, .list-group-item, .dropdown-menu {
+            background-color: #f2efe9 !important;
+            background: #f2efe9 !important;
+        }
+        /* Ensure no white background in any container */
+        .container, .container-fluid {
+            background-color: transparent !important;
+        }
+    </style>
 </head>
 <body>
     <header class="shoegee-header">
@@ -34,7 +49,7 @@
                 
                 <div class="topbar-center text-center flex-grow-1">
                     <a href="/Home/Index" class="text-decoration-none">
-                        <h2 class="shoegee-brand mb-0">EShop</h2>
+                        <h2 class="shoegee-brand mb-0">E-Shop</h2>
                     </a>
                 </div>
                 
@@ -122,3 +137,4 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+

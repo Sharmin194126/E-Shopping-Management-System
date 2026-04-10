@@ -22,7 +22,7 @@
         bottom: 20px;
         right: 20px;
         z-index: 9999;
-        background: #25D366;
+        background: linear-gradient(135deg, #532374, #8b1a6b);
         color: white;
         padding: 10px 20px;
         border-radius: 30px;
@@ -31,7 +31,7 @@
         gap: 10px;
         font-size: 16px;
         font-weight: bold;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        box-shadow: 0 4px 15px rgba(83, 35, 116, 0.35);
         cursor: pointer;
         transition: transform 0.3s;
         border: none;
@@ -39,7 +39,7 @@
     .live-chat-btn:hover {
         transform: scale(1.05);
         color: white;
-        background: #128C7E;
+        background: linear-gradient(135deg, #3d1a55, #532374);
     }
     .chat-box {
         position: fixed;
@@ -58,7 +58,7 @@
         display: flex;
     }
     .chat-header {
-        background: #25D366;
+        background: linear-gradient(135deg, #532374, #8b1a6b);
         color: white;
         padding: 15px;
         border-radius: 15px 15px 0 0;
@@ -102,11 +102,11 @@
         background: #ffc107;
     }
     .live-chat-banner {
-        background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+        background: linear-gradient(135deg, #532374 0%, #8b1a6b 100%);
         color: white;
         padding: 20px 0;
         margin-bottom: 30px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 15px rgba(83, 35, 116, 0.2);
     }
         box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
@@ -148,19 +148,29 @@
     input[type="number"].no-spin {
         -moz-appearance: textfield;
     }
+    .size-label {
+        border-color: #532374 !important;
+        color: #532374 !important;
+    }
+    .size-label:hover, .size-select:checked + .size-label {
+        background-color: #532374 !important;
+        color: white !important;
+        border-color: #532374 !important;
+    }
 </style>
 
 <div class="live-chat-banner">
     <div class="container d-flex justify-content-between align-items-center">
         <div>
-            <h4 class="mb-1"><i class="bi bi-chat-text-fill me-2"></i>Live Chat Support Available!</h4>
-            <p class="mb-0 small opacity-75">Connect with our product experts instantly via our Live Chat button for real-time assistance.</p>
+            <h4 class="mb-1" style="color: #FFD700 !important; font-weight: 800;"><i class="bi bi-chat-text-fill me-2"></i>Live Chat Support Available!</h4>
+            <p class="mb-0 small" style="color: rgba(255,255,255,0.95) !important; font-weight: 500;">Connect with our product experts instantly via our Live Chat button for real-time assistance.</p>
         </div>
-        <button onclick="toggleChat()" class="btn btn-outline-light fw-bold px-4">Start Chat Now</button>
+        <button onclick="toggleChat()" class="btn btn-warning fw-bold px-4 text-dark shadow-sm">Start Chat Now</button>
     </div>
 </div>
 
 <div class="container mt-2">
+    <a href="javascript:history.back()" class="theme-back-btn"><i class="bi bi-arrow-left"></i> Back to Exploration</a>
     <div class="row">
         <!-- Image Section -->
         <div class="col-md-5 position-relative">
@@ -237,7 +247,7 @@
             <h2>@Model.Product.Name</h2>
             <div class="mb-2">
                 <span class="text-warning fs-5">@Html.Raw(RenderStars(Model.Product.AverageRating))</span>
-                <span class="text-muted">(@Model.Product.AverageRating.ToString("0.0")) | @Model.TotalReviews Reviews</span>
+                <span class="text-muted">(@Model.Product.AverageRating.ToString("0.0")) | @Model.TotalReviews.ToString("#,##0") Reviews</span>
             </div>
             <div class="price-area mb-3">
                 @if (Model.Product.OfferPercentage > 0)
@@ -247,9 +257,9 @@
                 <div class="d-flex align-items-center gap-2">
                     @if (Model.Product.RegularPrice > Model.Product.Price)
                     {
-                        <h4 class="text-muted text-decoration-line-through mb-0">৳ @Model.Product.RegularPrice</h4>
+                        <h4 class="text-muted text-decoration-line-through mb-0">৳ @Model.Product.RegularPrice.ToString("#,##0")</h4>
                     }
-                    <h3 class="text-danger fw-bold mb-0">৳ @Model.Product.Price</h3>
+                    <h3 class="text-danger fw-bold mb-0">৳ @Model.Product.Price.ToString("#,##0")</h3>
                 </div>
                 @if (Model.Product.VatPercentage > 0)
                 {
@@ -273,7 +283,7 @@
                             @foreach (var size in sizes)
                             {
                                 <input type="radio" class="btn-check size-select" name="size" id="size-@size" value="@size" required autocomplete="off">
-                                <label class="btn btn-outline-dark px-3 py-2 fw-bold" for="size-@size">@size</label>
+                                <label class="btn size-label px-3 py-2 fw-bold" for="size-@size">@size</label>
                             }
                         </div>
                         <div id="sizeStockDisplay" class="mt-2 p-2 rounded" style="display:none; background-color: #f8f9fa; border: 1px solid #dee2e6;">
@@ -296,16 +306,16 @@
                 <div class="mb-3">
                     <label class="form-label fw-bold text-dark fs-5">Quantity:</label>
                     <div class="d-flex align-items-center gap-3">
-                        <div class="input-group" style="width: 160px; border: 1px solid #ccc; border-radius: 4px; overflow: hidden; background: #f8f6f0; height: 38px;">
+                        <div class="input-group" style="width: 180px; border: 1px solid #ccc; border-radius: 4px; overflow: hidden; background: #f8f6f0; height: 38px;">
                             <button class="btn btn-light px-2 fw-bold border-end" type="button" onclick="changeQty(-1)" style="font-size: 16px; color: #333; padding-bottom: 2px; width: 40px;">-</button>
                             <input type="number" id="quantityInput" name="qty" value="1" min="1"
                                     class="form-control text-center fw-bold border-0 p-0 no-spin" 
-                                    style="color: #000 !important; background-color: #f8f6f0 !important; font-size: 1.1rem; width: 80px;"
+                                    style="color: #000 !important; background-color: #f8f6f0 !important; font-size: 1.1rem; width: 100px;"
                                     onchange="validateQty()" oninput="validateQty()" />
                             <button class="btn btn-light px-2 fw-bold border-start" type="button" onclick="changeQty(1)" style="font-size: 16px; color: #333; padding-bottom: 2px; width: 40px;">+</button>
                         </div>
                         <span id="stockLimitMsg" class="text-muted small">
-                            (Stock: @Model.Product.StockQty units | Max: @(Model.Product.MaxOrderQty > 0 ? Model.Product.MaxOrderQty.ToString() : "No Limit"))
+                            (Stock: @Model.Product.StockQty.ToString("#,##0") units | Max: @(Model.Product.MaxOrderQty > 0 ? (Model.Product.MaxOrderQty ?? 0).ToString("#,##0") : "No Limit"))
                         </span>
                     </div>
                     <div id="qtyMessage" class="text-danger small fw-bold mt-2" style="display: none;"></div>
@@ -598,7 +608,7 @@
                                      class="card-img-top rounded" style="height: 150px; object-fit: cover;" />
                                 <div class="card-body p-2">
                                     <h6 class="text-dark text-truncate mb-1">@product.Name</h6>
-                                    <div class="text-danger fw-bold">৳ @product.Price</div>
+                                    <div class="text-danger fw-bold">৳ @product.Price.ToString("#,##0")</div>
                                 </div>
                             </a>
                         </div>

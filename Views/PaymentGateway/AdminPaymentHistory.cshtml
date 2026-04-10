@@ -5,8 +5,10 @@
 }
 
 
-<a href="javascript:history.back()" class="theme-back-btn mb-1"><i class="bi bi-arrow-left"></i> Back</a>
-<h2 class="mb-4">💰 Payment Transaction History</h2>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">💰 Payment Transaction History</h2>
+    <a href="javascript:history.back()" class="theme-back-btn mb-0">Back</a>
+</div>
 
 <div class="page-card shadow-sm">
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -16,8 +18,9 @@
 
     <div class="table-responsive">
         <table class="table table-hover align-middle">
-            <thead class="table-dark">
+            <thead style="background:#532374; color:#fff;">
                 <tr>
+                    <th style="width: 70px;">SL No</th>
                     <th>ID</th>
                     <th>Order #</th>
                     <th>Gateway</th>
@@ -27,10 +30,11 @@
                 </tr>
             </thead>
             <tbody>
+                @{ var sl = 1; }
                 @if (!Model.Any())
                 {
                     <tr>
-                        <td colspan="6" class="text-center py-4 text-muted">No transactions found.</td>
+                        <td colspan="7" class="text-center py-4 text-muted">No transactions found.</td>
                     </tr>
                 }
                 else
@@ -38,12 +42,13 @@
                     foreach (var tx in Model)
                     {
                         <tr>
+                            <td>@(sl++)</td>
                             <td><strong>#@tx.Id</strong></td>
                             <td><a asp-controller="Order" asp-action="Details" asp-route-id="@tx.OrderId">#@tx.OrderId</a></td>
                             <td>
                                 <span class="badge bg-light text-dark border">@tx.GatewayName</span>
                             </td>
-                            <td class="fw-bold">৳@tx.Amount</td>
+                            <td class="fw-bold">৳@tx.Amount.ToString("#,##0")</td>
                             <td>
                                 @if (tx.Status == "Success")
                                 {
@@ -62,7 +67,7 @@
                                 <small class="text-muted">@tx.PaymentDate.ToString("MMM dd, yyyy HH:mm")</small>
                             </td>
                         </tr>
-                    }
+                        }
                 }
             </tbody>
         </table>

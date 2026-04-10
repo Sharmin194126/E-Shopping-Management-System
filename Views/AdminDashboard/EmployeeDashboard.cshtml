@@ -6,7 +6,7 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2>Performance: @ViewBag.EmployeeName</h2>
-    <a asp-action="Index" class="btn btn-outline-secondary">Back to Dashboard</a>
+    <a asp-action="Index" class="theme-back-btn mb-0">Back</a>
 </div>
 
 <div class="row g-4 mb-4">
@@ -42,6 +42,7 @@
         <table class="table table-hover align-middle">
             <thead style="background:#532374; color:#fff;">
                 <tr>
+                    <th style="width: 70px;">SL No</th>
                     <th>Order ID</th>
                     <th>Date</th>
                     <th>Items</th>
@@ -49,9 +50,11 @@
                 </tr>
             </thead>
             <tbody>
+                @{ var sl = 1; }
                 @foreach (var order in Model)
                 {
                     <tr>
+                        <td>@(sl++)</td>
                         <td>@order.Id</td>
                         <td>@order.CreatedAt.ToString("dd MMM yyyy")</td>
                         <td>@order.OrderDetails?.Count items</td>

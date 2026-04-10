@@ -7,7 +7,7 @@
 
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h2>Manage Products</h2>
-    <a asp-controller="EmployeeDashboard" asp-action="Index" class="theme-back-btn">⬅ Back to Dashboard</a>
+    <a asp-controller="EmployeeDashboard" asp-action="Index" class="theme-back-btn">Back to Dashboard</a>
 </div>
 
 <div class="page-card mb-3">
@@ -28,7 +28,7 @@
     <table class="table table-hover table-bordered">
         <thead style="background:#532374; color:#fff;">
             <tr>
-                <th style="width:60px;">Product Id</th>
+                <th style="width:60px;">SL No</th>
                 <th style="width:80px;">Image</th>
                 <th>Name</th>
                 <th>Category</th>
@@ -73,20 +73,20 @@
                         <td>
                             @if (item.OfferPercentage > 0)
                             {
-                                <del class="text-muted">৳@item.RegularPrice</del>
+                                <del class="text-muted">৳@item.RegularPrice.ToString("#,##0")</del>
                             }
                             else
                             {
-                                <span>৳@item.RegularPrice</span>
+                                <span>৳@item.RegularPrice.ToString("#,##0")</span>
                             }
                         </td>
                         <td class="text-success fw-bold">@(item.OfferPercentage > 0 ? item.OfferPercentage + "%" : "")</td>
                         <td class="fw-bold text-danger">
-                            @(item.OfferPercentage > 0 ? "৳" + item.Price : "")
+                            @(item.OfferPercentage > 0 ? "৳" + item.Price.ToString("#,##0") : "")
                         </td>
                         <td>
                             <span class="badge @(item.StockQty <= 10 ? "badge-stock-low" : "badge-stock-ok")">
-                                @item.StockQty Units
+                                @item.StockQty.ToString("#,##0") Units
                             </span>
                         </td>
                         <td>

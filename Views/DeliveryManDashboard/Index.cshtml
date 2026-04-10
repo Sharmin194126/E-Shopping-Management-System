@@ -79,7 +79,9 @@
 
 <!-- Welcome Banner -->
 
-<a href="javascript:history.back()" class="theme-back-btn mb-1"><i class="bi bi-arrow-left"></i> Back</a>
+<div class="d-flex justify-content-end mb-1">
+    <a href="javascript:history.back()" class="theme-back-btn mb-0">Back</a>
+</div>
 <div class="page-card mb-4" style="border-left: 5px solid #532374; background: linear-gradient(135deg, #f8f6f0 60%, #f0e8f7 100%);">
     <div class="d-flex justify-content-between align-items-center">
         <div>
@@ -168,8 +170,9 @@
             </div>
             <div class="table-responsive">
                 <table class="table table-hover align-middle">
-                    <thead class="table-primary">
+                    <thead style="background:#532374; color:#fff;">
                         <tr>
+                            <th style="width: 70px;">SL No</th>
                             <th>Order #</th>
                             <th>Customer</th>
                             <th>Address</th>
@@ -181,9 +184,11 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @{ var sl = 1; }
                         @foreach (var order in Model)
                         {
                             <tr>
+                                <td>@(sl++)</td>
                                 <td><strong>#@order.Id</strong></td>
                                 <td><span class="fw-bold">@order.Customer?.Name</span></td>
                                 <td><small>@order.ShippingAddress, @order.City</small></td>

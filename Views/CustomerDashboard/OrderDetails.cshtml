@@ -12,7 +12,7 @@
             {
                 <a href="/CustomerDashboard/MoneyReceipt/@Model.Id" class="btn btn-success">View Money Receipt</a>
             }
-            <a href="/CustomerDashboard/Orders" class="btn btn-outline-secondary">Back to Orders</a>
+            <a href="/CustomerDashboard/Orders" class="theme-back-btn mb-0">Back</a>
         </div>
     </div>
 
@@ -24,8 +24,9 @@
                 </div>
                 <div class="card-body">
                     <table class="table align-middle">
-                        <thead>
+                        <thead style="background:#532374; color:#fff;">
                             <tr>
+                                <th style="width: 70px;">SL No</th>
                                 <th>Product</th>
                                 <th>Price</th>
                                 <th>Quantity</th>
@@ -33,9 +34,11 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @{ var sl = 1; }
                             @foreach (var item in Model.OrderDetails)
                             {
                                 <tr>
+                                    <td>@(sl++)</td>
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <img src="@(string.IsNullOrEmpty(item.Product?.ImageUrl) ? "/images/no-image.png" : (item.Product.ImageUrl.StartsWith("/") ? item.Product.ImageUrl : "/images/products/" + item.Product.ImageUrl))" 
@@ -51,7 +54,7 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="3" class="text-end fw-bold">Grand Total:</td>
+                                <td colspan="4" class="text-end fw-bold">Grand Total:</td>
                                 <td class="fw-bold">৳@Model.TotalAmount</td>
                             </tr>
                         </tfoot>

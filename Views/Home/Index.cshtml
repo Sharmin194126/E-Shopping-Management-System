@@ -160,7 +160,7 @@
         </div>
 
         <div class="welcome" style="margin-top: 50px;">
-            <h2 style="font-family: 'Playfair Display', serif; text-align: center; color: #33312e; font-size: 42px; margin-bottom: 12px;">Welcome to EShop</h2>
+            <h2 style="font-family: 'Playfair Display', serif; text-align: center; color: #532374; margin-bottom: 40px; font-weight: 700;">Welcome To E-Shop</h2>
             <p style="text-align: center; color: #55534e; font-size: 16px; font-family: 'Inter', sans-serif;">Your trusted online shopping destination for fashion, beauty and electronics. Enjoy premium products, exclusive deals and fast delivery.</p>
         </div>
 
@@ -218,9 +218,9 @@
                                         </div>
                                         <div class="price-new">
                                             @if (item.RegularPrice > item.Price) {
-                                                <span class="price-old" style="font-size: 12px; font-weight: 500; color: #8b7d6b; margin-right: 4px; text-decoration: line-through;">৳@item.RegularPrice</span>
+                                                <span class="price-old" style="font-size: 12px; font-weight: 500; color: #8b7d6b; margin-right: 4px; text-decoration: line-through;">৳@item.RegularPrice.ToString("#,##0")</span>
                                             }
-                                            ৳@item.Price
+                                            ৳@item.Price.ToString("#,##0")
                                         </div>
                                     </div>
                                     <form asp-controller="Cart" asp-action="AddToCart" method="get" class="m-0 p-0">

@@ -9,14 +9,15 @@
         <h2>Products by @ViewBag.EmployeeName</h2>
         <p class="text-muted">Total: @ViewBag.TotalProducts products | Stock Value: ৳ @ViewBag.TotalValue</p>
     </div>
-    <a asp-action="Index" class="btn btn-secondary">Back to Dashboard</a>
+    <a asp-action="Index" class="theme-back-btn mb-0">Back</a>
 </div>
 
 <div class="page-card">
     <div class="table-responsive">
         <table class="table table-hover align-middle">
-            <thead class="table-dark">
+            <thead style="background:#532374; color:#fff;">
                 <tr>
+                    <th style="width: 70px;">SL No</th>
                     <th>Image</th>
                     <th>Product Name</th>
                     <th>Category</th>
@@ -28,9 +29,11 @@
                 </tr>
             </thead>
             <tbody>
+                @{ var sl = 1; }
                 @foreach (var p in Model)
                 {
                     <tr>
+                        <td>@(sl++)</td>
                         <td>
                             @if (!string.IsNullOrEmpty(p.ImageUrl))
                             {

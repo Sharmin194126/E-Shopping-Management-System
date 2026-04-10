@@ -7,7 +7,7 @@
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2>Manage Homepage Display Sections</h2>
     <div class="d-flex gap-2">
-        <a asp-action="Index" class="theme-back-btn">⬅ Back to Dashboard</a>
+        <a asp-action="Index" class="theme-back-btn mb-0">Back</a>
         <a asp-action="CreateDisplaySection" class="btn btn-primary">
             <i class="bi bi-plus-circle me-1"></i> Add New Section
         </a>
@@ -26,8 +26,9 @@
     <div class="card-body p-0">
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0">
-                <thead style="background:#532374; color:#fff;">
+                <thead style="background:#532374 !important; color:#fff !important;">
                     <tr>
+                        <th style="width: 70px;">SL No</th>
                         <th style="width: 80px;">Order</th>
                         <th>Section Name</th>
                         <th>Status</th>
@@ -35,9 +36,11 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @{ var sl = 1; }
                     @foreach (var item in Model)
                     {
                         <tr>
+                            <td>@(sl++)</td>
                             <td>
                                 <span class="badge bg-secondary">@item.DisplayOrder</span>
                             </td>
@@ -63,7 +66,7 @@
                     @if (!Model.Any())
                     {
                         <tr>
-                            <td colspan="4" class="text-center py-4 text-muted">No display sections found. Default sections will be used on homepage.</td>
+                            <td colspan="5" class="text-center py-4 text-muted">No display sections found. Default sections will be used on homepage.</td>
                         </tr>
                     }
                 </tbody>
