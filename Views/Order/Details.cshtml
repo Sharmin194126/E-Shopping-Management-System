@@ -24,7 +24,9 @@
         <div class="d-flex gap-2">
             @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
             {
-                <a href="javascript:history.back()" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Back</a>
+                <a href="javascript:history.back()" class="theme-back-btn">
+                    <i class="bi bi-arrow-left"></i> Back
+                </a>
                 <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit / Manage</a>
             }
             <button onclick="window.print()" class="btn btn-outline-primary"><i class="bi bi-printer"></i> Print Receipt</button>
