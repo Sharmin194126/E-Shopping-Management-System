@@ -65,7 +65,7 @@
 </div>
 
 <!-- Summary Premium Stat Cards -->
-<div class="row g-4 mb-4">
+<div class="row g-4 mb-4 d-print-none">
     <div class="col-md-3">
         <div class="stat-card-premium card-variant-green shadow-sm">
             <div class="stat-card-content">
@@ -299,7 +299,7 @@
     .page-card h5 { font-size: 1.1rem; }
     
     @@media print {
-        .admin-sidebar, .dm-sidebar, .admin-header, .shoegee-header, .side-nav, .theme-back-btn, .btn, .input-group, label, .d-print-none {
+        .admin-sidebar, .dm-sidebar, .admin-header, .shoegee-header, .side-nav, .theme-back-btn, .btn, .input-group, label, .d-print-none, .row.g-4.mb-4.d-print-none {
             display: none !important;
         }
         .admin-main, .dm-main, .container-fluid, .container { 
@@ -308,9 +308,14 @@
             width: 100% !important;
         }
         .page-card, .dashboard-table-card { box-shadow: none !important; border: 1px solid #ddd !important; background: white !important; }
-        .stat-card-premium { color: black !important; border: 1px solid #ddd; background: white !important; box-shadow: none !important; }
-        .stat-card-label, .stat-card-value { color: black !important; }
-        .stat-card-icon { display: none; }
         .table thead th { background: #532374 !important; color: white !important; -webkit-print-color-adjust: exact; }
     }
+
+    /* Fix button hover contrast */
+    .btn-outline-dark:hover, .btn-outline-secondary:hover {
+        color: #000 !important;
+        background-color: #f2efe9 !important;
+        border-color: #532374 !important;
+    }
 </style>
+

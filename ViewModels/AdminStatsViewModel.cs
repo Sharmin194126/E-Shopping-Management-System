@@ -19,6 +19,33 @@ namespace E_ShoppingManagement.ViewModels
 
         public List<RecentOrderViewModel> RecentOrders { get; set; } = new List<RecentOrderViewModel>();
         public List<EmployeePerformanceViewModel> EmployeePerformances { get; set; } = new List<EmployeePerformanceViewModel>();
+
+        // Chart Data
+        public List<DailySalesViewModel> DailySales { get; set; } = new List<DailySalesViewModel>();
+        public List<ProductTypeSalesViewModel> ProductTypeSales { get; set; } = new List<ProductTypeSalesViewModel>();
+        public List<MonthlySalesViewModel> MonthlyHistory { get; set; } = new List<MonthlySalesViewModel>();
+    }
+
+    public class DailySalesViewModel
+    {
+        public DateTime Date { get; set; }
+        public decimal Amount { get; set; }
+        public int Pieces { get; set; }
+    }
+
+    public class ProductTypeSalesViewModel
+    {
+        public string ProductTypeName { get; set; } = string.Empty;
+        public decimal Amount { get; set; }
+        public int Pieces { get; set; }
+    }
+
+    public class MonthlySalesViewModel
+    {
+        public string MonthName { get; set; } = string.Empty;
+        public int Year { get; set; }
+        public decimal Amount { get; set; }
+        public int Pieces { get; set; }
     }
 
     public class RecentOrderViewModel

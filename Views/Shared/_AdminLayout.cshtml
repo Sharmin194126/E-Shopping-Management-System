@@ -33,6 +33,12 @@
             background: rgba(255, 255, 255, 0.15) !important;
             color: #ffffff !important;
         }
+        .admin-sidebar a.active {
+            background: rgba(255, 255, 255, 0.25) !important;
+            border-left: 4px solid #fff;
+            color: #ffffff !important;
+            font-weight: bold;
+        }
     </style>
 </head>
 
@@ -49,56 +55,56 @@
                 </a>
             </div>
             
-            <a asp-controller="AdminDashboard" asp-action="Index">
+            <a asp-controller="AdminDashboard" asp-action="Index" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "AdminDashboard" && ViewContext.RouteData.Values["Action"]?.ToString() == "Index" ? "active" : "")">
                 <i class="bi bi-speedometer2 me-2"></i>Dashboard
             </a>
 
             <p class="menu-title">CATEGORY</p>
-            <a asp-controller="Category" asp-action="Index">
+            <a asp-controller="Category" asp-action="Index" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Category" ? "active" : "")">
                 <i class="bi bi-tags me-2"></i>Categories
             </a>
-            <a asp-controller="Product" asp-action="Index">
+            <a asp-controller="Product" asp-action="Index" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Product" ? "active" : "")">
                 <i class="bi bi-box-seam me-2"></i>Products
             </a>
-            <a asp-controller="ProductType" asp-action="Index">
+            <a asp-controller="ProductType" asp-action="Index" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "ProductType" ? "active" : "")">
                 <i class="bi bi-collection me-2"></i>Product Types
             </a>
-            <a asp-controller="AdminDashboard" asp-action="ManageDisplaySections" class="text-warning">
+            <a asp-controller="AdminDashboard" asp-action="ManageDisplaySections" class="text-warning @(ViewContext.RouteData.Values["Action"]?.ToString() == "ManageDisplaySections" ? "active" : "")">
                 <i class="bi bi-house-gear me-2"></i>Homepage Sections
             </a>
 
             <p class="menu-title">SYSTEM</p>
-            <a asp-controller="Customer" asp-action="Index">
+            <a asp-controller="Customer" asp-action="Index" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Customer" ? "active" : "")">
                 <i class="bi bi-people me-2"></i>Manage Customer
             </a>
-            <a asp-controller="Employee" asp-action="Index">
+            <a asp-controller="Employee" asp-action="Index" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Employee" ? "active" : "")">
                 <i class="bi bi-person-badge me-2"></i>Manage Employees
             </a>
-            <a asp-controller="AdminCart" asp-action="Index">
+            <a asp-controller="AdminCart" asp-action="Index" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "AdminCart" ? "active" : "")">
                 <i class="bi bi-cart me-2"></i>Manage Carts
             </a>
-            <a asp-controller="DeliveryMan" asp-action="Index">
+            <a asp-controller="DeliveryMan" asp-action="Index" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "DeliveryMan" ? "active" : "")">
                 <i class="bi bi-truck me-2"></i>Delivery Personnel
             </a>
-            <a asp-controller="AdminReport" asp-action="Index">
+            <a asp-controller="AdminReport" asp-action="Index" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "AdminReport" ? "active" : "")">
                 <i class="bi bi-file-earmark-bar-graph me-2"></i>Reports
             </a>
-            <a asp-controller="AdminDashboard" asp-action="ManageReviews">
+            <a asp-controller="AdminDashboard" asp-action="ManageReviews" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "ManageReviews" ? "active" : "")">
                 <i class="bi bi-star me-2"></i>Manage Reviews
             </a>
-            <a asp-controller="AdminDashboard" asp-action="Messages">
+            <a asp-controller="AdminDashboard" asp-action="Messages" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Messages" ? "active" : "")">
                 <i class="bi bi-envelope me-2"></i>Messages
             </a>
-            <a asp-controller="AdminDashboard" asp-action="EmployeeList">
+            <a asp-controller="AdminDashboard" asp-action="EmployeeList" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "EmployeeList" ? "active" : "")">
                 <i class="bi bi-person-lines-fill me-1"></i>Employee Products-Sales
             </a>
-            <a asp-controller="AdminDashboard" asp-action="Profile" class="fw-bold text-warning">
+            <a asp-controller="AdminDashboard" asp-action="Profile" class="fw-bold text-warning @(ViewContext.RouteData.Values["Action"]?.ToString() == "Profile" ? "active" : "")">
                 <i class="bi bi-person-circle me-2"></i>My Profile
             </a>
-            <a asp-controller="PaymentGateway" asp-action="AdminPaymentHistory" class="text-info">
+            <a asp-controller="PaymentGateway" asp-action="AdminPaymentHistory" class="text-info @(ViewContext.RouteData.Values["Action"]?.ToString() == "AdminPaymentHistory" ? "active" : "")">
                 <i class="bi bi-credit-card me-2"></i>Payment History
             </a>
-            <a asp-controller="Banner" asp-action="Index" class="text-success">
+            <a asp-controller="Banner" asp-action="Index" class="text-success @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Banner" ? "active" : "")">
                 <i class="bi bi-images me-2"></i>Manage Banners
             </a>
         </aside>

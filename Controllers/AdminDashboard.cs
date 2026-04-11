@@ -82,6 +82,66 @@ namespace E_ShoppingManagement.Controllers
                 });
             }
 
+            // 1. Daily Sales (Last 30 Days)
+            var last30Days = DateTime.UtcNow.Date.AddDays(-29);
+            var deliveredOrders = orders.Where(o => o.OrderStatus == "Delivered").ToList();
+            
+            for (int i = 0; i < 30; i++)
+            {
+                var date = last30Days.AddDays(i);
+                var dayOrders = deliveredOrders.Where(o => o.CreatedAt.Date == date).ToList();
+                stats.DailySales.Add(new DailySalesViewModel
+                {
+                    Date = date,
+                    Amount = dayOrders.Sum(o => o.TotalAmount),
+                    Pieces = dayOrders.Sum(o => _context.OrderDetails.Where(od => od.OrderId == o.Id).Sum(od => od.Quantity))
+                });
+            }
+
+            // 2. Product Type Distribution
+            var productTypeData = await _context.OrderDetails
+                .Include(od => od.Order)
+                .Include(od => od.Product)
+                    .ThenInclude(p => p.ProductType)
+                .Where(od => od.Order.OrderStatus == "Delivered")
+                .GroupBy(od => od.Product.ProductType.Name)
+                .Select(g => new ProductTypeSalesViewModel
+                {
+                    ProductTypeName = g.Key ?? "Unspecified",
+                    Amount = g.Sum(od => od.PriceWithVat * od.Quantity),
+                    Pieces = g.Sum(od => od.Quantity)
+                })
+                .ToListAsync();
+            stats.ProductTypeSales = productTypeData;
+
+            // 3. Monthly History (Last 24 Months)
+            var monthRange = DateTime.UtcNow.Date.AddMonths(-23);
+            monthRange = new DateTime(monthRange.Year, monthRange.Month, 1);
+
+            var monthlyGrouped = deliveredOrders
+                .Where(o => o.CreatedAt >= monthRange)
+                .GroupBy(o => new { o.CreatedAt.Year, o.CreatedAt.Month })
+                .Select(g => new
+                {
+                    Year = g.Key.Year,
+                    Month = g.Key.Month,
+                    Amount = g.Sum(o => o.TotalAmount),
+                    Pieces = g.Sum(o => _context.OrderDetails.Where(od => od.OrderId == o.Id).Sum(od => od.Quantity))
+                })
+                .OrderBy(g => g.Year).ThenBy(g => g.Month)
+                .ToList();
+
+            foreach (var item in monthlyGrouped)
+            {
+                stats.MonthlyHistory.Add(new MonthlySalesViewModel
+                {
+                    Year = item.Year,
+                    MonthName = new DateTime(item.Year, item.Month, 1).ToString("MMM"),
+                    Amount = item.Amount,
+                    Pieces = item.Pieces
+                });
+            }
+
             return View(stats);
         }
 

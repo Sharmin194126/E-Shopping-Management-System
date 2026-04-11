@@ -125,8 +125,202 @@
             <a asp-controller="AdminDashboard" asp-action="PaymentMethods" class="btn btn-outline-dark w-100 py-2">Payment Methods</a>
         </div>
     </div>
+</div><!-- SALES ANALYTICS SECTION -->
+<div class="row g-4 mb-5">
+    <div class="col-lg-8">
+        <div class="dashboard-table-card h-100 shadow-sm border-0" style="background: white; border-radius: 15px;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 class="fw-bold mb-0 text-dark">
+                    <i class="bi bi-graph-up-arrow text-primary me-2"></i>Daily Sales Analytics (Last 30 Days)
+                </h5>
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        View Options
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item active" href="#" onclick="toggleChart('daily')">Daily (30 Days)</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="toggleChart('monthly')">Monthly History</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div style="height: 350px;">
+                <canvas id="salesChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="dashboard-table-card h-100 shadow-sm border-0" style="background: white; border-radius: 15px;">
+            <h5 class="fw-bold mb-4 text-dark">
+                <i class="bi bi-pie-chart-fill text-info me-2"></i>Sales by Product Type
+            </h5>
+            <div style="height: 280px; position: relative;">
+                <canvas id="typePieChart"></canvas>
+            </div>
+            <div class="mt-4 border-top pt-3">
+                <div class="small text-muted mb-2 text-uppercase fw-bold" style="font-size: 10px;">Summary Distribution</div>
+                <div id="pieLegend" class="d-flex flex-wrap gap-2"></div>
+            </div>
+        </div>
+    </div>
 </div>
 
+<!-- DETAILED SALES RECORDS (FILTERABLE) -->
+<div class="mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0"><i class="bi bi-calendar-range text-danger me-2"></i>Sales Records & History</h5>
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-sm btn-outline-primary active" onclick="showHistory('monthly')">Monthly History</button>
+            <button type="button" class="btn btn-sm btn-outline-primary" onclick="showHistory('yearly')">Yearly Comparison</button>
+        </div>
+    </div>
+    
+    <div class="page-card shadow-sm border-0 p-0 overflow-hidden" style="background: white; border-radius: 15px;">
+        <div id="monthlyHistoryTable" class="history-view">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead style="background: #532374; color: white;">
+                        <tr>
+                            <th class="ps-4">Month/Year</th>
+                            <th class="text-center">Total Amount (Inc. VAT)</th>
+                            <th class="text-center">Pieces Sold</th>
+                            <th class="text-center">Growth</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{ decimal prevAmount = 0; }
+                        @foreach (var month in Model.MonthlyHistory.OrderByDescending(m => m.Year).ThenByDescending(m => m.MonthName))
+                        {
+                            <tr>
+                                <td class="ps-4 fw-bold">@month.MonthName @month.Year</td>
+                                <td class="text-center fw-bold text-success">৳@month.Amount.ToString("N0")</td>
+                                <td class="text-center">@month.Pieces <small class="text-muted">Units</small></td>
+                                <td class="text-center">
+                                    @if(prevAmount > 0) {
+                                        decimal growth = ((month.Amount - prevAmount) / prevAmount) * 100;
+                                        <span class="@(growth >= 0 ? "text-success" : "text-danger") small">
+                                            <i class="bi bi-caret-@(growth >= 0 ? "up" : "down")-fill"></i> @Math.Abs(growth).ToString("F1")%
+                                        </span>
+                                    } else {
+                                        <span class="text-muted small">--</span>
+                                    }
+                                    @{ prevAmount = month.Amount; }
+                                </td>
+                                <td class="text-center">
+                                    <a asp-controller="AdminReport" asp-action="Index" asp-route-fromDate="@(new DateTime(month.Year, DateTime.ParseExact(month.MonthName, "MMM", null).Month, 1).ToString("yyyy-MM-dd"))" class="btn btn-sm btn-link text-decoration-none p-0">Detailed Report</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Data from Model using System.Text.Json
+            const dailyLabels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.DailySales.Select(s => s.Date.ToString("dd MMM"))));
+            const dailyAmount = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.DailySales.Select(s => s.Amount)));
+            const dailyPieces = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.DailySales.Select(s => s.Pieces)));
+
+            const typeLabels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ProductTypeSales.Select(s => s.ProductTypeName)));
+            const typeAmount = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ProductTypeSales.Select(s => s.Amount)));
+
+            // 1. Line Chart (Daily Sales)
+            const ctxSales = document.getElementById('salesChart').getContext('2d');
+            const salesChart = new Chart(ctxSales, {
+                type: 'line',
+                data: {
+                    labels: dailyLabels,
+                    datasets: [{
+                        label: 'Revenue (৳)',
+                        data: dailyAmount,
+                        borderColor: '#532374',
+                        backgroundColor: 'rgba(83, 35, 116, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        borderWidth: 3,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#532374'
+                    }, {
+                        label: 'Pieces Sold',
+                        data: dailyPieces,
+                        borderColor: '#ffc107',
+                        borderDash: [5, 5],
+                        fill: false,
+                        tension: 0.4,
+                        yAxisID: 'yPieces'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top', labels: { usePointStyle: true, boxWidth: 6 } },
+                        tooltip: { mode: 'index', intersect: false }
+                    },
+                    scales: {
+                        y: { 
+                            beginAtZero: true, 
+                            title: { display: true, text: 'Revenue (৳)' },
+                            grid: { borderDash: [2, 2] }
+                        },
+                        yPieces: { 
+                            beginAtZero: true, 
+                            position: 'right', 
+                            title: { display: true, text: 'Units Sold' },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+
+            // 2. Pie Chart (Product Type Distribution)
+            const ctxPie = document.getElementById('typePieChart').getContext('2d');
+            const colors = ['#532374', '#17a2b8', '#ffc107', '#28a745', '#dc3545', '#fd7e14', '#6610f2', '#e83e8c'];
+            
+            new Chart(ctxPie, {
+                type: 'doughnut',
+                data: {
+                    labels: typeLabels,
+                    datasets: [{
+                        data: typeAmount,
+                        backgroundColor: colors,
+                        borderWidth: 0,
+                        hoverOffset: 15
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '65%',
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+
+            // Generate Custom Legend
+            const legendContainer = document.getElementById('pieLegend');
+            typeLabels.forEach((label, i) => {
+                const item = document.createElement('div');
+                item.className = 'd-flex align-items-center';
+                item.innerHTML = `<span style="width:10px; height:10px; background:${colors[i % colors.length]}; border-radius:50%; display:inline-block; margin-right:5px;"></span> <span style="font-size:11px;">${label}</span>`;
+                legendContainer.appendChild(item);
+            });
+        });
+
+        function showHistory(type) {
+            // In a real app, this might show/hide different tables
+            alert('Switching view to ' + type + '. Yearly aggregate data calculation implementation follows same pattern.');
+        }
+    </script>
+}
 
 <div class="row g-4">
     <!-- RECENT ORDERS (Standardized Card) -->
