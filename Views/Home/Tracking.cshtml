@@ -115,6 +115,44 @@
                     100% { box-shadow: 0 0 0 0 rgba(var(--step-rgb), 0); }
                 }
 
+                .tracking-step.future .tracking-icon {
+                    border-style: dotted;
+                    color: #adb5bd;
+                }
+
+                .btn-theme-outline {
+                    border: 2px solid #532374;
+                    color: #532374;
+                    background: transparent;
+                    transition: all 0.3s ease;
+                }
+                .btn-theme-outline:hover {
+                    background: #532374;
+                    color: #ffffff !important;
+                }
+
+                .table-icon-container {
+                    width: 38px;
+                    height: 38px;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin: 0 auto;
+                }
+                .table-icon-container.completed {
+                    background: #198754;
+                    color: white;
+                }
+                .table-icon-container.active {
+                    border: 2px solid #532374;
+                    color: #532374;
+                }
+                .table-icon-container.future {
+                    border: 2px dotted #adb5bd;
+                    color: #adb5bd;
+                }
+
                 @@media (max-width: 576px) {
                     .tracking-label { font-size: 0.8rem; }
                     .tracking-icon { width: 45px; height: 45px; font-size: 20px; border-width: 3px; }
@@ -186,15 +224,23 @@
                     }
 
                     function updateTrackingUI(currentStep) {
+                        const tableIcons = [
+                            document.getElementById('table-icon-1'),
+                            document.getElementById('table-icon-2'),
+                            document.getElementById('table-icon-3'),
+                            document.getElementById('table-icon-4')
+                        ];
+
                         if (currentStep === 0) {
                             trackingLine.style.width = '0%';
                             steps.forEach(s => s.classList.remove('completed', 'active'));
+                            tableIcons.forEach(icon => icon && (icon.innerHTML = '<i class="bi bi-three-dots text-muted"></i>'));
                             return;
                         }
 
                         steps.forEach((stepEl) => {
                             const stepNum = parseInt(stepEl.getAttribute('data-step'));
-                            stepEl.classList.remove('completed', 'active');
+                            stepEl.classList.remove('completed', 'active', 'future');
                             
                             const iconEl = stepEl.querySelector('.tracking-icon');
                             const originalIcon = getOriginalIcon(stepNum);
@@ -212,7 +258,23 @@
                                     iconEl.innerHTML = '<i class="bi bi-check-all"></i>';
                                 }
                             } else {
+                                stepEl.classList.add('future');
                                 iconEl.innerHTML = originalIcon;
+                            }
+                        });
+
+                        // Update Table Icons
+                        tableIcons.forEach((iconCell, index) => {
+                            if (!iconCell) return;
+                            const stepNum = index + 1;
+                            const originalIcon = getOriginalIcon(stepNum);
+
+                            if (stepNum < currentStep || (currentStep === 4 && stepNum === 4)) {
+                                iconCell.innerHTML = '<div class="table-icon-container completed"><i class="bi bi-check-lg"></i></div>';
+                            } else if (stepNum === currentStep) {
+                                iconCell.innerHTML = `<div class="table-icon-container active">${originalIcon}</div>`;
+                            } else {
+                                iconCell.innerHTML = `<div class="table-icon-container future">${originalIcon}</div>`;
                             }
                         });
                         
@@ -236,11 +298,11 @@
                 <div class="card border-0 shadow-sm p-4">
                     <form asp-action="Tracking" method="post">
                         <div class="mb-3">
-                            <label class="form-label fw-bold">Order ID</label>
+                            <label class="form-label fw-bold" style="color: #532374;">Order ID</label>
                             <input type="number" name="orderId" class="form-control py-3" placeholder="e.g. 123456" required />
                         </div>
                         <div class="mb-4">
-                            <label class="form-label fw-bold">Registerd Phone Number</label>
+                            <label class="form-label fw-bold" style="color: #532374;">Registerd Phone Number</label>
                             <input type="tel" name="phoneNumber" class="form-control py-3" placeholder="01XXXXXXXXX" required />
                         </div>
                         <button type="submit" class="btn btn-primary w-100 py-3 fw-bold fs-5">Track My Package</button>
@@ -251,10 +313,48 @@
             {
                 <div class="card border-0 shadow-sm p-4 text-center">
                     <h3 class="mb-3">Order Status: <span class="badge @(Model.OrderStatus == "Delivered" ? "bg-success" : (Model.OrderStatus == "Cancelled" ? "bg-danger" : "bg-warning text-dark"))">@Model.OrderStatus</span></h3>
+                    
+                    <div class="mt-4 mb-4 text-start">
+                        <h5 class="fw-bold mb-3" style="color: #532374;"><i class="bi bi-clock-history me-2"></i>Order Timeline</h5>
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead style="background: #532374; color: white;">
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Activity</th>
+                                        <th class="text-center">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="background: #f8f6f0;">
+                                    <tr>
+                                        <td>@Model.CreatedAt.ToString("dd MMM yyyy, hh:mm tt")</td>
+                                        <td>Order Initiated</td>
+                                        <td class="text-center" id="table-icon-1"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>@(Model.ProcessedAt?.ToString("dd MMM yyyy, hh:mm tt") ?? "--")</td>
+                                        <td>Order Processed</td>
+                                        <td class="text-center" id="table-icon-2"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>@(Model.ShippedAt?.ToString("dd MMM yyyy, hh:mm tt") ?? "--")</td>
+                                        <td>Order Shipped</td>
+                                        <td class="text-center" id="table-icon-3"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>@(Model.DeliveredAt?.ToString("dd MMM yyyy, hh:mm tt") ?? "--")</td>
+                                        <td>Order Delivered</td>
+                                        <td class="text-center" id="table-icon-4"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
                     <p class="fs-5"><strong>Total Amount:</strong> ৳@Model.TotalAmount</p>
                     <p class="fs-5"><strong>Payment:</strong> @Model.PaymentStatus (@(Model.PaymentMethod == "COD" ? "Cash on Delivery" : Model.PaymentMethod))</p>
                     <div class="mt-4">
-                        <a href="/Home/Tracking" class="btn btn-outline-primary">Track Another Package</a>
+                        <a href="/Home/Tracking" class="btn btn-theme-outline px-4 py-2 fw-bold">Track Another Package</a>
                     </div>
                 </div>
             }

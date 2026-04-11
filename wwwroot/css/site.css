@@ -167,7 +167,7 @@ button {
 }
 
 .topbar-link {
-    color: #e5e2db !important;
+    color: #ffffff !important;
     text-decoration: none;
     font-size: 14px;
     transition: color 0.3s ease;
@@ -217,7 +217,7 @@ button {
 }
 
 .cart-wrapper a, .cart-wrapper i {
-    color: #e5e2db !important;
+    color: #ffffff !important;
 }
 
 .cart-wrapper .badge {
@@ -886,7 +886,7 @@ body {
 ===================== */
 .home-footer {
     background: #532374; 
-    color: #e5e2db;
+    color: #ffffff;
     padding: 50px 70px 50px 150px;
     border-top: none;
 }
@@ -897,7 +897,7 @@ body {
 }
 
 .home-footer a {
-    color: #e5e2db;
+    color: #ffffff;
     text-decoration: none;
 }
 .home-footer a:hover {

@@ -38,7 +38,7 @@
                 <th>Offer Price</th>
                 <th>Stock</th>
                 <th>Status</th>
-                <th style="width: 190px;">Actions</th>
+                <th style="width: 250px;">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -98,6 +98,7 @@
                             <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-success">Edit</a>
                             <a asp-action="EditStock" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Stock</a>
                             <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-secondary">Details</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
                         </td>
                     </tr>
                     index++;

@@ -305,6 +305,47 @@ namespace E_ShoppingManagement.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        // GET: EmployeeProduct/Delete/5
+        public async Task<IActionResult> Delete(int id)
+        {
+            var product = await _context.Products
+                .Include(p => p.Category)
+                .Include(p => p.ProductType)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (product == null) return NotFound();
+
+            // Only allow deleting own products
+            if (product.CreatedBy != User.Identity?.Name) return Unauthorized();
+
+            ViewBag.SizeStocks = await _context.ProductSizeStocks.Where(ss => ss.ProductId == id).ToListAsync();
+            return View(product);
+        }
+
+        // POST: EmployeeProduct/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var product = await _context.Products.FindAsync(id);
+            if (product == null) return NotFound();
+
+            // Security check
+            if (product.CreatedBy != User.Identity?.Name) return Unauthorized();
+
+            // Clear size stocks first
+            var sizeStocks = _context.ProductSizeStocks.Where(ss => ss.ProductId == id);
+            _context.ProductSizeStocks.RemoveRange(sizeStocks);
+
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
+
+            TempData["Message"] = "Product deleted successfully.";
+            TempData["IsSuccess"] = true;
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
 
