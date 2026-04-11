@@ -17,6 +17,11 @@ namespace E_ShoppingManagement.ViewModels
         public int PaidOrders { get; set; }
         public int PendingPaymentOrders { get; set; }
 
+        public decimal TotalProfit { get; set; }
+        public decimal TotalExpenses { get; set; }
+        public decimal SalesGoal { get; set; }
+        public decimal WeeklyRevenue { get; set; }
+
         public List<RecentOrderViewModel> RecentOrders { get; set; } = new List<RecentOrderViewModel>();
         public List<EmployeePerformanceViewModel> EmployeePerformances { get; set; } = new List<EmployeePerformanceViewModel>();
 
@@ -26,10 +31,14 @@ namespace E_ShoppingManagement.ViewModels
         public List<ProductTypeSalesViewModel> ProductTypeSales { get; set; } = new List<ProductTypeSalesViewModel>();
         public List<MonthlySalesViewModel> MonthlyHistory { get; set; } = new List<MonthlySalesViewModel>();
         public List<ProductSalesSummaryViewModel> TopProducts { get; set; } = new List<ProductSalesSummaryViewModel>();
+        public List<MonthlySalesViewModel> PreviousYearSales { get; set; } = new List<MonthlySalesViewModel>();
+        public int CurrentYear { get; set; }
+        public int PreviousYear { get; set; }
     }
 
     public class ProductSalesSummaryViewModel
     {
+        public int ProductId { get; set; }
         public string ProductName { get; set; } = string.Empty;
         public int TotalQuantity { get; set; }
         public decimal TotalRevenue { get; set; }
@@ -54,6 +63,7 @@ namespace E_ShoppingManagement.ViewModels
     {
         public string MonthName { get; set; } = string.Empty;
         public int Year { get; set; }
+        public int Month { get; set; }
         public decimal Amount { get; set; }
         public int Pieces { get; set; }
     }

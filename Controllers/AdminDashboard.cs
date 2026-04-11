@@ -82,22 +82,34 @@ namespace E_ShoppingManagement.Controllers
                 });
             }
 
-            // Unified "Sold" definition: Delivered OR Paid (standard for e-commerce sold records)
-            var deliveredOrders = orders
+            // Unified "Sold" definition: Delivered OR Paid OR Shipped
+            var soldOrders = orders
                 .Where(o => o.OrderStatus == "Delivered" || o.PaymentStatus == "Paid" || o.OrderStatus == "Shipped")
                 .ToList();
-            
+
+            stats.TotalRevenue = soldOrders.Sum(o => o.TotalAmount);
+            stats.WeeklyRevenue = soldOrders.Where(o => o.CreatedAt.Date >= DateTime.UtcNow.Date.AddDays(-6)).Sum(o => o.TotalAmount);
+            // Profit approximation: Revenue minus VAT collected (VAT is an expense)
+            var totalVatCollected = await _context.OrderDetails
+                .Where(od => od.Order.OrderStatus == "Delivered" || od.Order.PaymentStatus == "Paid" || od.Order.OrderStatus == "Shipped")
+                .SumAsync(od => od.VatAmount * od.Quantity);
+            stats.TotalProfit = stats.TotalRevenue - totalVatCollected;
+            stats.TotalExpenses = totalVatCollected;
+            // SalesGoal is calculated below after PreviousYear is set
+
             // 1. Daily Sales (Last 30 Days)
             var last30Days = DateTime.UtcNow.Date.AddDays(-29);
             for (int i = 0; i < 30; i++)
             {
                 var date = last30Days.AddDays(i);
-                var dayOrders = deliveredOrders.Where(o => o.CreatedAt.Date == date).ToList();
+                var dayOrders = soldOrders.Where(o => o.CreatedAt.Date == date).ToList();
+                var dayIds = dayOrders.Select(o => o.Id).ToList();
+                var dayPieces = await _context.OrderDetails.Where(od => dayIds.Contains(od.OrderId)).SumAsync(od => (int?)od.Quantity) ?? 0;
                 stats.DailySales.Add(new DailySalesViewModel
                 {
                     Date = date,
                     Amount = dayOrders.Sum(o => o.TotalAmount),
-                    Pieces = dayOrders.Sum(o => _context.OrderDetails.Where(od => od.OrderId == o.Id).Sum(od => od.Quantity))
+                    Pieces = dayPieces
                 });
             }
 
@@ -106,20 +118,21 @@ namespace E_ShoppingManagement.Controllers
             for (int i = 0; i < 7; i++)
             {
                 var date = last7Days.AddDays(i);
-                var dayOrders = deliveredOrders.Where(o => o.CreatedAt.Date == date).ToList();
+                var dayOrders = soldOrders.Where(o => o.CreatedAt.Date == date).ToList();
+                var dayIds = dayOrders.Select(o => o.Id).ToList();
+                var dayPieces = await _context.OrderDetails.Where(od => dayIds.Contains(od.OrderId)).SumAsync(od => (int?)od.Quantity) ?? 0;
                 stats.WeeklySales.Add(new DailySalesViewModel
                 {
                     Date = date,
                     Amount = dayOrders.Sum(o => o.TotalAmount),
-                    Pieces = dayOrders.Sum(o => _context.OrderDetails.Where(od => od.OrderId == o.Id).Sum(od => od.Quantity))
+                    Pieces = dayPieces
                 });
             }
 
-            // 2. Product Type Distribution (Based on ALL Sold records)
+            // 2. Product Type Distribution (real data)
             var productTypeData = await _context.OrderDetails
                 .Include(od => od.Order)
-                .Include(od => od.Product)
-                    .ThenInclude(p => p.ProductType)
+                .Include(od => od.Product).ThenInclude(p => p.ProductType)
                 .Where(od => od.Order.OrderStatus == "Delivered" || od.Order.PaymentStatus == "Paid" || od.Order.OrderStatus == "Shipped")
                 .GroupBy(od => od.Product.ProductType.Name)
                 .Select(g => new ProductTypeSalesViewModel
@@ -131,49 +144,106 @@ namespace E_ShoppingManagement.Controllers
                 .ToListAsync();
             stats.ProductTypeSales = productTypeData;
 
-            // 2.1 Top Selling Products (From ALL Sold records)
-            stats.TopProducts = await _context.OrderDetails
+            // 2.1 Top Selling Products (real data, with ProductId for navigation)
+            var topRaw = await _context.OrderDetails
                 .Include(od => od.Order)
-                .Include(od => od.Product)
+                .Include(od => od.Product).ThenInclude(p => p.Category)
                 .Where(od => od.Order.OrderStatus == "Delivered" || od.Order.PaymentStatus == "Paid" || od.Order.OrderStatus == "Shipped")
-                .GroupBy(od => od.Product.Id)
+                .GroupBy(od => new { od.Product.Id, od.Product.Name, CategoryName = od.Product.Category != null ? od.Product.Category.Name : "General" })
                 .Select(g => new ProductSalesSummaryViewModel
                 {
-                    ProductName = g.First().Product.Name,
+                    ProductId = g.Key.Id,
+                    ProductName = g.Key.Name ?? "Unknown",
                     TotalQuantity = g.Sum(od => od.Quantity),
                     TotalRevenue = g.Sum(od => od.PriceWithVat * od.Quantity),
-                    Category = _context.Categories.FirstOrDefault(c => c.Id == g.First().Product.CategoryId).Name
+                    Category = g.Key.CategoryName
                 })
                 .OrderByDescending(p => p.TotalQuantity)
                 .Take(10)
                 .ToListAsync();
+            stats.TopProducts = topRaw;
 
-            // 3. Monthly History (Any historical record)
-            var monthlyGrouped = deliveredOrders
+            // 3. Monthly History (ALL historical records, newest first)
+            var monthlyGrouped = soldOrders
                 .GroupBy(o => new { o.CreatedAt.Year, o.CreatedAt.Month })
                 .Select(g => new
                 {
                     Year = g.Key.Year,
                     Month = g.Key.Month,
                     Amount = g.Sum(o => o.TotalAmount),
-                    Pieces = g.Sum(o => _context.OrderDetails.Where(od => od.OrderId == o.Id).Sum(od => od.Quantity))
+                    OrderIds = g.Select(o => o.Id).ToList()
                 })
                 .OrderByDescending(g => g.Year).ThenByDescending(g => g.Month)
                 .ToList();
 
             foreach (var item in monthlyGrouped)
             {
+                var pieces = await _context.OrderDetails.Where(od => item.OrderIds.Contains(od.OrderId)).SumAsync(od => (int?)od.Quantity) ?? 0;
                 stats.MonthlyHistory.Add(new MonthlySalesViewModel
                 {
                     Year = item.Year,
+                    Month = item.Month,
                     MonthName = new DateTime(item.Year, item.Month, 1).ToString("MMMM"),
                     Amount = item.Amount,
-                    Pieces = item.Pieces
+                    Pieces = pieces
+                });
+            }
+
+            stats.CurrentYear = DateTime.UtcNow.Year;
+            stats.PreviousYear = DateTime.UtcNow.Year - 1;
+
+            // Fix SalesGoal: use lastYearRevenue if exists, else use currentYearRevenue as goal baseline
+            var lastYearRevenue = soldOrders.Where(o => o.CreatedAt.Year == stats.PreviousYear).Sum(o => o.TotalAmount);
+            stats.SalesGoal = lastYearRevenue > 0 ? lastYearRevenue * 1.2m : stats.TotalRevenue * 1.2m;
+            if (stats.SalesGoal == 0) stats.SalesGoal = 100000;
+
+            // Previous Year monthly sales (all 12 months)
+            for (int m = 1; m <= 12; m++)
+            {
+                var monthOrders = soldOrders.Where(o => o.CreatedAt.Year == stats.PreviousYear && o.CreatedAt.Month == m).ToList();
+                var mIds = monthOrders.Select(o => o.Id).ToList();
+                var mPieces = mIds.Any() ? await _context.OrderDetails.Where(od => mIds.Contains(od.OrderId)).SumAsync(od => (int?)od.Quantity) ?? 0 : 0;
+                stats.PreviousYearSales.Add(new MonthlySalesViewModel
+                {
+                    Year = stats.PreviousYear,
+                    Month = m,
+                    MonthName = new DateTime(stats.PreviousYear, m, 1).ToString("MMM"),
+                    Amount = monthOrders.Sum(o => o.TotalAmount),
+                    Pieces = mPieces
                 });
             }
 
             return View(stats);
+
         }
+        /// <summary>Shows all order details for a specific product (Top Products drill-down)</summary>
+        public async Task<IActionResult> ProductSalesDetail(int productId)
+        {
+            var product = await _context.Products
+                .Include(p => p.Category)
+                .Include(p => p.ProductType)
+                .FirstOrDefaultAsync(p => p.Id == productId);
+
+            if (product == null) return NotFound();
+
+            var orderDetails = await _context.OrderDetails
+                .Include(od => od.Product)
+                .Include(od => od.Order).ThenInclude(o => o.Customer)
+                .Where(od => od.ProductId == productId)
+                .OrderByDescending(od => od.Order.CreatedAt)
+                .ToListAsync();
+
+            ViewBag.ProductName  = product.Name;
+            ViewBag.ProductCategory = product.Category?.Name ?? "General";
+            ViewBag.ProductType  = product.ProductType?.Name ?? "";
+            ViewBag.TotalQty     = orderDetails.Sum(od => od.Quantity);
+            ViewBag.TotalRevenue = orderDetails.Sum(od => od.PriceWithVat * od.Quantity);
+            ViewBag.TotalVat     = orderDetails.Sum(od => od.VatAmount * od.Quantity);
+            ViewBag.ProductId    = productId;
+
+            return View(orderDetails);
+        }
+
 
         public async Task<IActionResult> OrdersByStatus(string status)
         {

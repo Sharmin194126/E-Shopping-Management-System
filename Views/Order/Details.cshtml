@@ -184,6 +184,7 @@
                 <th>Size</th>
                 <th>Unit Price</th>
                 <th>Qty</th>
+                <th>VAT (%)</th>
                 <th>Total</th>
             </tr>
         </thead>
@@ -193,16 +194,17 @@
                 <tr>
                     <td>@item.Product?.Name</td>
                     <td>@(item.Size ?? "-")</td>
-                    <td>৳@item.Price</td>
+                    <td>৳@item.Price.ToString("#,##0")</td>
                     <td>@item.Quantity</td>
-                    <td>৳@(item.Price * item.Quantity)</td>
+                    <td>@(item.VatPercentage)%</td>
+                    <td>৳@((item.PriceWithVat * item.Quantity).ToString("#,##0"))</td>
                 </tr>
             }
         </tbody>
         <tfoot>
             <tr style="border-top: 2px solid #000;">
-                <td colspan="4" style="text-align: right; font-weight: bold; font-size: 1.1em;">Grand Total:</td>
-                <td style="font-weight: bold; font-size: 1.1em;">৳@Model.TotalAmount</td>
+                <td colspan="5" style="text-align: right; font-weight: bold; font-size: 1.1em;">Grand Total (Inc. VAT):</td>
+                <td style="font-weight: bold; font-size: 1.1em;">৳@Model.TotalAmount.ToString("#,##0")</td>
             </tr>
         </tfoot>
     </table>

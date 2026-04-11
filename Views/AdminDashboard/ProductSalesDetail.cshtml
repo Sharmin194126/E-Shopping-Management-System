@@ -1,0 +1,210 @@
+@model List<E_ShoppingManagement.Models.OrderDetails>
+@{
+    ViewData["Title"] = "Product Sales Detail";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    string productName  = ViewBag.ProductName  ?? "Unknown";
+    string productCat   = ViewBag.ProductCategory ?? "";
+    string productType  = ViewBag.ProductType  ?? "";
+    int    totalQty     = (int)(ViewBag.TotalQty ?? 0);
+    decimal totalRev    = (decimal)(ViewBag.TotalRevenue ?? 0m);
+    decimal totalVat    = (decimal)(ViewBag.TotalVat ?? 0m);
+    int    productId    = (int)(ViewBag.ProductId ?? 0);
+}
+
+<!-- Back Button -->
+<div class="mb-4">
+    <a asp-controller="AdminDashboard" asp-action="Index"
+       class="theme-back-btn">
+        <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+    </a>
+</div>
+
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h4 class="fw-bold mb-1" style="color:#532374;">
+            <i class="bi bi-box-seam-fill me-2"></i>@productName — Sales Detail
+        </h4>
+        <div class="text-muted small">
+            <span class="badge bg-light text-dark border me-2">@productCat</span>
+            @if (!string.IsNullOrEmpty(productType))
+            {
+                <span class="badge bg-light text-dark border">@productType</span>
+            }
+        </div>
+    </div>
+    <a asp-controller="Product" asp-action="Details" asp-route-id="@productId"
+       class="btn btn-sm btn-outline-secondary">
+        <i class="bi bi-eye me-1"></i>View Product
+    </a>
+</div>
+
+<!-- Summary Cards -->
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="rounded-3 p-3 text-white" style="background:linear-gradient(135deg,#6f2da8,#532374);">
+            <div class="small opacity-75 text-uppercase" style="font-size:11px; letter-spacing:.5px;">Total Orders</div>
+            <div class="fw-bold" style="font-size:1.5rem;">@Model.Count</div>
+            <div class="small opacity-70">Order lines for this product</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="rounded-3 p-3 text-white" style="background:linear-gradient(135deg,#138d75,#1abc9c);">
+            <div class="small opacity-75 text-uppercase" style="font-size:11px; letter-spacing:.5px;">Total Pieces Sold</div>
+            <div class="fw-bold" style="font-size:1.5rem;">@totalQty.ToString("#,##0")</div>
+            <div class="small opacity-70">Units across all orders</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="rounded-3 p-3 text-white" style="background:linear-gradient(135deg,#1565c0,#1976d2);">
+            <div class="small opacity-75 text-uppercase" style="font-size:11px; letter-spacing:.5px;">Gross Revenue</div>
+            <div class="fw-bold" style="font-size:1.5rem;">৳@totalRev.ToString("#,##0")</div>
+            <div class="small opacity-70">Incl. VAT</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="rounded-3 p-3 text-white" style="background:linear-gradient(135deg,#8b4513,#a0522d);">
+            <div class="small opacity-75 text-uppercase" style="font-size:11px; letter-spacing:.5px;">Total VAT Collected</div>
+            <div class="fw-bold" style="font-size:1.5rem;">৳@totalVat.ToString("#,##0")</div>
+            <div class="small opacity-70">Tax on this product</div>
+        </div>
+    </div>
+</div>
+
+<!-- Orders Table -->
+<div class="page-card shadow-sm border-0 overflow-hidden" style="border-radius:14px; border:1px solid #e6e2db;">
+    <div class="p-3 border-bottom d-flex justify-content-between align-items-center" style="background:#fafafa;">
+        <h6 class="fw-bold mb-0 text-dark">
+            <i class="bi bi-list-ul me-2 text-primary"></i>All Orders Containing "@productName"
+        </h6>
+        <span class="badge rounded-pill" style="background:#532374;">@Model.Count Records</span>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="text-center py-5">
+            <i class="bi bi-inbox display-4 text-muted"></i>
+            <div class="text-muted mt-2">No orders found for this product.</div>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0" style="font-size:13px;">
+                <thead style="background:#532374; color:#fff; position:sticky; top:0; z-index:1;">
+                    <tr>
+                        <th class="ps-3" style="width:50px;">SL</th>
+                        <th>Image</th>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Order Date</th>
+                        <th class="text-center">Size</th>
+                        <th class="text-center">Qty</th>
+                        <th class="text-end">Unit Price</th>
+                        <th class="text-center">VAT %</th>
+                        <th class="text-end">VAT Amt</th>
+                        <th class="text-end">Line Total</th>
+                        <th class="text-center">Order Status</th>
+                        <th class="text-center">Payment</th>
+                        <th class="text-center pe-3">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ int sl = 1; }
+                    @foreach (var od in Model)
+                    {
+                        var order = od.Order;
+                        var lineTotal = od.PriceWithVat * od.Quantity;
+                        var vatAmt    = od.VatAmount * od.Quantity;
+                        <tr>
+                            <td class="ps-3 text-muted">@(sl++)</td>
+                            <td>
+                                @if (od.Product != null && !string.IsNullOrEmpty(od.Product.ImageUrl))
+                                {
+                                    <img src="@(od.Product.ImageUrl.StartsWith("/") ? od.Product.ImageUrl : "/images/products/" + od.Product.ImageUrl)" alt="Product Image" style="width: 40px; height: 40px; object-fit: cover; border-radius: 5px; border: 1px solid #ddd;" />
+                                }
+                                else
+                                {
+                                    <div style="width: 40px; height: 40px; background: #eee; border-radius: 5px; display: flex; align-items: center; justify-content: center;">
+                                        <i class="bi bi-image text-muted"></i>
+                                    </div>
+                                }
+                            </td>
+                            <td><span class="fw-bold" style="color:#532374;">#@od.OrderId</span></td>
+                            <td>
+                                <div class="fw-bold text-dark">@(order?.Customer?.Name ?? "N/A")</div>
+                                <small class="text-muted">@(order?.Customer?.Email ?? "")</small>
+                            </td>
+                            <td>
+                                <div>@(order?.CreatedAt.ToString("dd MMM yyyy") ?? "-")</div>
+                                <small class="text-muted">@(order?.CreatedAt.ToString("hh:mm tt") ?? "")</small>
+                            </td>
+                            <td class="text-center">
+                                @if (!string.IsNullOrEmpty(od.Size))
+                                {
+                                    <span class="badge bg-light text-dark border">@od.Size</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">—</span>
+                                }
+                            </td>
+                            <td class="text-center fw-bold">@od.Quantity.ToString("#,##0")</td>
+                            <td class="text-end">৳@od.Price.ToString("#,##0")</td>
+                            <td class="text-center">
+                                @if (od.VatPercentage > 0)
+                                {
+                                    <span class="badge" style="background:#f59e0b; color:#fff;">@od.VatPercentage%</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">—</span>
+                                }
+                            </td>
+                            <td class="text-end text-warning">৳@vatAmt.ToString("#,##0")</td>
+                            <td class="text-end fw-bold text-success">৳@lineTotal.ToString("#,##0")</td>
+                            <td class="text-center">
+                                @{
+                                    var statusClass = order?.OrderStatus switch
+                                    {
+                                        "Delivered"  => "bg-success",
+                                        "Shipped"    => "bg-primary",
+                                        "Processing" => "bg-info",
+                                        "Pending"    => "bg-warning text-dark",
+                                        "Cancelled"  => "bg-danger",
+                                        _            => "bg-secondary"
+                                    };
+                                }
+                                <span class="badge @statusClass">@(order?.OrderStatus ?? "—")</span>
+                            </td>
+                            <td class="text-center">
+                                @{
+                                    var payClass = order?.PaymentStatus == "Paid" ? "bg-success" : "bg-warning text-dark";
+                                }
+                                <span class="badge @payClass">@(order?.PaymentStatus ?? "—")</span>
+                            </td>
+                            <td class="text-center pe-3">
+                                <a asp-controller="Order" asp-action="Details" asp-route-id="@od.OrderId"
+                                   class="btn btn-sm btn-outline-secondary px-2 py-1" style="font-size:11px;">
+                                    <i class="bi bi-eye me-1"></i>View
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot style="background:#f8f6f0;">
+                    <tr>
+                        <td colspan="6" class="ps-3 fw-bold text-dark">TOTALS</td>
+                        <td class="text-center fw-bold text-primary">@totalQty.ToString("#,##0")</td>
+                        <td class="text-end text-muted">—</td>
+                        <td class="text-center text-muted">—</td>
+                        <td class="text-end fw-bold text-warning">৳@totalVat.ToString("#,##0")</td>
+                        <td class="text-end fw-bold text-success" style="font-size:1.05rem;">৳@totalRev.ToString("#,##0")</td>
+                        <td colspan="3"></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    }
+</div>

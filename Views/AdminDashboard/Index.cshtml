@@ -125,168 +125,246 @@
             <a asp-controller="AdminDashboard" asp-action="PaymentMethods" class="btn btn-outline-dark w-100 py-2">Payment Methods</a>
         </div>
     </div>
-</div><!-- SALES ANALYTICS SECTION (DESCO STYLE) -->
-<div class="row g-4 mb-5">
-    <div class="col-lg-8">
-        <div class="dashboard-table-card h-100 shadow-sm border-0 overflow-hidden" style="background: white; border-radius: 15px;">
-            <div class="p-4 border-bottom bg-light d-flex justify-content-between align-items-center">
-                <h5 class="fw-bold mb-0 text-dark">
-                    <i class="bi bi-activity text-primary me-2"></i>Sales Performance Analytics
-                </h5>
-                <div class="btn-group desco-range-picker" role="group">
-                    <button type="button" class="btn btn-outline-primary btn-sm px-3 active" onclick="updateChartRange('weekly')">Weekly</button>
-                    <button type="button" class="btn btn-outline-primary btn-sm px-3" onclick="updateChartRange('monthly')">Monthly</button>
-                    <button type="button" class="btn btn-outline-primary btn-sm px-3" onclick="updateChartRange('yearly')">Yearly</button>
+
+</div>
+
+@{
+    var currentYearSales = Model.MonthlyHistory.Where(m => m.Year == DateTime.Now.Year).Sum(m => m.Amount);
+    var goalPercent = Model.SalesGoal > 0 ? (int)Math.Min(100, (currentYearSales / Model.SalesGoal) * 100) : 0;
+    var goalRemaining = Model.SalesGoal - currentYearSales;
+}
+
+<!-- ===== DESCO-STYLE TOP SUMMARY BAR ===== -->
+<div class="row g-3 mb-4">
+    <!-- Metrics Box -->
+    <div class="col-lg-7">
+        <div class="row g-3 h-100">
+            <div class="col-6">
+                <div class="analytics-metric-card" style="background: linear-gradient(135deg,#6f2da8,#532374);">
+                    <div class="amc-icon"><i class="bi bi-graph-up-arrow"></i></div>
+                    <div class="amc-label">Total Sales</div>
+                    <div class="amc-value">৳@Model.TotalRevenue.ToString("#,##0")</div>
+                    <div class="amc-sub">All time revenue</div>
                 </div>
             </div>
-            
-            <div class="p-4">
-                <div class="row mb-4">
-                    <div class="col-4">
-                        <div class="small text-muted">Total Amount</div>
-                        <h4 class="fw-bold mb-0" id="rangeTotalAmount">৳0</h4>
-                    </div>
-                    <div class="col-4 border-start">
-                        <div class="small text-muted">Total Pieces</div>
-                        <h4 class="fw-bold mb-0" id="rangeTotalPieces">0</h4>
-                    </div>
-                    <div class="col-4 border-start">
-                        <div class="small text-muted">Avg/Order</div>
-                        <h4 class="fw-bold mb-0 text-success" id="rangeAvgOrder">৳0</h4>
-                    </div>
+            <div class="col-6">
+                <div class="analytics-metric-card" style="background: linear-gradient(135deg,#1a7a6e,#138d75);">
+                    <div class="amc-icon"><i class="bi bi-currency-exchange"></i></div>
+                    <div class="amc-label">Total Profit (Ex. VAT)</div>
+                    <div class="amc-value">৳@Model.TotalProfit.ToString("#,##0")</div>
+                    <div class="amc-sub">After VAT deduction</div>
                 </div>
-                
-                <div style="height: 300px;">
-                    <canvas id="salesChart"></canvas>
+            </div>
+            <div class="col-6">
+                <div class="analytics-metric-card" style="background: linear-gradient(135deg,#8b4513,#a0522d);">
+                    <div class="amc-icon"><i class="bi bi-receipt-cutoff"></i></div>
+                    <div class="amc-label">VAT Collected</div>
+                    <div class="amc-value">৳@Model.TotalExpenses.ToString("#,##0")</div>
+                    <div class="amc-sub">Total tax revenue</div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="analytics-metric-card" style="background: linear-gradient(135deg,#1565c0,#1976d2);">
+                    <div class="amc-icon"><i class="bi bi-calendar-week"></i></div>
+                    <div class="amc-label">Weekly Sales</div>
+                    <div class="amc-value">৳@Model.WeeklyRevenue.ToString("#,##0")</div>
+                    <div class="amc-sub">Last 7 days</div>
                 </div>
             </div>
         </div>
     </div>
-    
-    <div class="col-lg-4">
-        <div class="dashboard-table-card h-100 shadow-sm border-0 overflow-hidden" style="background: white; border-radius: 15px;">
-            <div class="p-4 border-bottom bg-light">
-                <h5 class="fw-bold mb-0 text-dark">
-                    <i class="bi bi-box-seam-fill text-info me-2"></i>Top Moving Products
-                </h5>
+    <!-- Sales Goals Card -->
+    <div class="col-lg-5">
+        <div class="h-100 p-4 rounded-3 shadow-sm" style="background:#fff; border:1px solid #e6e2db;">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-trophy-fill text-warning me-2"></i>Sales Goal @DateTime.Now.Year</h6>
             </div>
-            <div class="p-3">
-                <div class="list-group list-group-flush">
-                    @foreach (var prod in Model.TopProducts.Take(6))
-                    {
-                        <div class="list-group-item px-0 py-3 border-bottom d-flex justify-content-between align-items-center">
-                            <div class="d-flex align-items-center">
-                                <div class="bg-light rounded p-2 me-3" style="width: 40px; text-align: center;">
-                                    <i class="bi bi-package text-muted"></i>
-                                </div>
-                                <div>
-                                    <div class="fw-bold text-dark" style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">@prod.ProductName</div>
-                                    <small class="text-muted">@prod.Category</small>
-                                </div>
-                            </div>
-                            <div class="text-end">
-                                <div class="fw-bold text-primary">@prod.TotalQuantity Pcs</div>
-                                <small class="text-success">৳@prod.TotalRevenue.ToString("N0")</small>
-                            </div>
-                        </div>
-                    }
+            <div class="row mb-3">
+                <div class="col-6">
+                    <div class="small text-muted">Target</div>
+                    <div class="fw-bold fs-5" style="color:#532374;">৳@Model.SalesGoal.ToString("#,##0")</div>
+                    <div class="small text-muted">Full Year Goal</div>
+                </div>
+                <div class="col-6 border-start">
+                    <div class="small text-muted">Remaining</div>
+                    <div class="fw-bold fs-5 text-danger">৳@(goalRemaining > 0 ? goalRemaining.ToString("#,##0") : "0")</div>
+                    <div class="small text-muted">To reach target</div>
+                </div>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <div style="position:relative; width:90px; height:90px; flex-shrink:0;">
+                    <canvas id="goalRingChart"></canvas>
+                    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:14px;font-weight:700;color:#532374;">@goalPercent%</div>
+                </div>
+                <div>
+                    <div class="fw-bold text-dark">৳@currentYearSales.ToString("#,##0") achieved</div>
+                    <div class="small text-muted">Note: Goal = 120% of prev year revenue</div>
+                    <div class="progress mt-2" style="height:6px;">
+                        <div class="progress-bar" style="width:@goalPercent%; background:#532374;"></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<div class="row g-4 mb-5">
-    <!-- Pie Chart for Product Types -->
+<!-- ===== CHART + TOP PRODUCTS ROW ===== -->
+<div class="row g-4 mb-4">
+    <!-- Line Chart - Image-Style Dark Card -->
+    <div class="col-lg-8">
+        <div class="rounded-3 h-100" style="background:#1a1f2e; border:1px solid #2a3045;">
+            <!-- Card Header -->
+            <div class="px-4 pt-4 pb-2">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div>
+                        <div class="small mb-1" style="color:#8892a4; text-transform:uppercase; letter-spacing:.5px; font-size:11px;">Product Sales</div>
+                        <div id="chartHeaderAmount" class="fw-bold" style="color:#fff; font-size:1.8rem; line-height:1;">৳0</div>
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn btn-sm dropdown-toggle" id="rangeDropdownBtn"
+                                data-bs-toggle="dropdown" data-bs-display="static" style="background:#2a3045; color:#c0c8d8; border:1px solid #3a4560; border-radius:8px; font-size:13px;">
+                            <span id="rangeDropdownLabel">Weekly</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" style="background:#2a3045; border:1px solid #3a4560; min-width:150px;">
+                            <li><a class="dropdown-item chart-range-item" href="#" data-range="weekly" style="color:#c0c8d8;">Weekly (Last 7 Days)</a></li>
+                            <li><a class="dropdown-item chart-range-item" href="#" data-range="monthly" style="color:#c0c8d8;">Monthly (Last 30 Days)</a></li>
+                            <li><a class="dropdown-item chart-range-item" href="#" data-range="yearly" style="color:#c0c8d8;">Yearly (@DateTime.Now.Year)</a></li>
+                            <li><hr class="dropdown-divider" style="border-color:#3a4560;"></li>
+                            <li><a class="dropdown-item chart-range-item" href="#" data-range="prevyear" style="color:#f59e0b;">Previous Year (@(DateTime.Now.Year - 1))</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Mini stats -->
+                <div class="row g-3 mb-3">
+                    <div class="col-4">
+                        <div class="small" style="color:#8892a4; font-size:11px;">Total Amount</div>
+                        <div class="fw-bold" id="rangeTotalAmount" style="color:#a78be8; font-size:1rem;">৳0</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="small" style="color:#8892a4; font-size:11px;">Total Pieces</div>
+                        <div class="fw-bold" id="rangeTotalPieces" style="color:#4ade80; font-size:1rem;">0</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="small" style="color:#8892a4; font-size:11px;">Avg / Period</div>
+                        <div class="fw-bold" id="rangeAvgOrder" style="color:#fbbf24; font-size:1rem;">৳0</div>
+                    </div>
+                </div>
+            </div>
+            <!-- Floating Tooltip (custom) -->
+            <div id="chartFloatTooltip" style="display:none; position:absolute; background:#532374; color:#fff; border-radius:8px; padding:6px 12px; font-size:12px; font-weight:600; pointer-events:none; z-index:999; white-space:nowrap; box-shadow:0 4px 15px rgba(83,35,116,0.5);"></div>
+            <!-- Chart Canvas -->
+            <div style="position:relative; height:260px; padding:0;">
+                <canvas id="salesChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Products -->
+    <div class="col-lg-4">
+        <div class="shadow-sm rounded-3 overflow-hidden h-100" style="background:#fff; border:1px solid #e6e2db;">
+            <div class="p-3 border-bottom" style="background:#fafafa;">
+                <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-stars text-warning me-2"></i>Top Moving Products</h6>
+            </div>
+            <div class="p-2">
+                @{ int topRank = 1; }
+                @foreach (var prod in Model.TopProducts.Take(6))
+                {
+                    <a asp-controller="AdminDashboard" asp-action="ProductSalesDetail" asp-route-productId="@prod.ProductId"
+                       class="d-flex align-items-center gap-2 p-2 rounded-2 text-decoration-none top-prod-link" style="cursor:pointer;">
+                        <div class="top-prod-rank">@topRank</div>
+                        <div class="flex-grow-1" style="min-width:0;">
+                            <div class="fw-bold text-dark small text-truncate">@prod.ProductName</div>
+                            <small class="text-muted">@prod.Category</small>
+                        </div>
+                        <div class="text-end">
+                            <div class="badge rounded-pill" style="background:#532374; font-size:11px;">@prod.TotalQuantity Pcs</div>
+                            <div class="small text-success fw-bold">৳@prod.TotalRevenue.ToString("#,##0")</div>
+                        </div>
+                    </a>
+                    topRank++;
+                }
+                <div class="p-2 pt-3 border-top">
+                    <a asp-controller="AdminReport" asp-action="Index" class="btn btn-sm btn-outline-secondary w-100">View Full Report</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== PIE CHART + HISTORY ROW ===== -->
+<div class="row g-4 mb-4">
+    <!-- Pie -->
     <div class="col-lg-5">
-        <div class="dashboard-table-card h-100 shadow-sm border-0" style="background: white; border-radius: 15px;">
-            <h5 class="fw-bold mb-4 text-dark p-4 pb-0">
-                <i class="bi bi-pie-chart-fill text-info me-2"></i>Sales by Product Type
-            </h5>
-            <div style="height: 280px; position: relative;">
+        <div class="shadow-sm rounded-3 overflow-hidden h-100" style="background:#fff; border:1px solid #e6e2db;">
+            <div class="p-3 border-bottom" style="background:#fafafa;">
+                <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-pie-chart-fill text-info me-2"></i>Sales by Product Type</h6>
+            </div>
+            <div class="p-3" style="height:320px; position:relative;">
                 <canvas id="typePieChart"></canvas>
             </div>
-            <div class="mt-4 border-top pt-3 p-4">
+            <div class="px-3 pb-3">
                 <div id="pieLegend" class="d-flex flex-wrap gap-2"></div>
             </div>
         </div>
     </div>
-    
-<!-- DETAILED SALES RECORDS (FILTERABLE) -->
-<div class="mb-5 px-3">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="fw-bold mb-0 text-dark"><i class="bi bi-calendar-range text-danger me-2"></i>Full Sales Archives & History</h5>
-        <div class="btn-group" role="group">
-            <button type="button" class="btn btn-sm btn-outline-primary active" id="btnMonthly" onclick="toggleHistoryView('monthly')">Monthly View</button>
-            <button type="button" class="btn btn-sm btn-outline-primary" id="btnYearly" onclick="toggleHistoryView('yearly')">Yearly Summary</button>
-        </div>
-    </div>
-    
-    <div class="page-card shadow-sm border-0 p-0 overflow-hidden bg-white" style="border-radius: 15px; border: 1px solid #e6e2db !important;">
-        <!-- Monthly History Table -->
-        <div id="historyTableMonthly" class="history-view">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead style="background: #f8f9fa;">
+
+    <!-- Sales Archives -->
+    <div class="col-lg-7">
+        <div class="shadow-sm rounded-3 overflow-hidden h-100" style="background:#fff; border:1px solid #e6e2db;">
+            <div class="p-3 border-bottom d-flex justify-content-between align-items-center" style="background:#fafafa;">
+                <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-archive-fill text-danger me-2"></i>Full Sales Archives</h6>
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-sm btn-outline-primary active" id="btnMonthly" onclick="toggleHistoryView('monthly')">Monthly View</button>
+                    <button type="button" class="btn btn-sm btn-outline-primary" id="btnYearly" onclick="toggleHistoryView('yearly')">Yearly Summary</button>
+                </div>
+            </div>
+
+            <!-- Monthly -->
+            <div id="historyTableMonthly" style="overflow-y:auto; max-height:350px;">
+                <table class="table table-hover align-middle mb-0" style="font-size:13px;">
+                    <thead style="background:#532374; color:#fff; position:sticky; top:0;">
                         <tr>
-                            <th class="ps-4">Reporting Period</th>
-                            <th class="text-center">Gross Revenue</th>
-                            <th class="text-center">Items Sold (Pieces)</th>
-                            <th class="text-center">Net Impact</th>
-                            <th class="text-center">Action</th>
+                            <th class="ps-3">Month / Year</th>
+                            <th class="text-end">Revenue (Inc. VAT)</th>
+                            <th class="text-center">Pieces</th>
+                            <th class="text-center">Report</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var month in Model.MonthlyHistory.OrderByDescending(m => m.Year).ThenByDescending(m => m.MonthName))
+                        @foreach (var month in Model.MonthlyHistory.OrderByDescending(m => m.Year).ThenByDescending(m => m.Month))
                         {
                             <tr>
-                                <td class="ps-4">
-                                    <div class="fw-bold text-dark">@month.MonthName @month.Year</div>
-                                    <small class="text-muted">Completed Sales Cycle</small>
-                                </td>
-                                <td class="text-center fw-bold text-success" style="font-size: 1.1rem;">৳@month.Amount.ToString("N0")</td>
-                                <td class="text-center">
-                                    <span class="badge bg-light text-dark border px-3">@month.Pieces Pieces</span>
-                                </td>
-                                <td class="text-center">
-                                    <span class="text-success"><i class="bi bi-graph-up me-1"></i>Verified</span>
-                                </td>
-                                <td class="text-center">
-                                    <a asp-controller="AdminReport" asp-action="Index" class="btn btn-sm btn-outline-secondary px-3">View Report</a>
-                                </td>
+                                <td class="ps-3 fw-bold">@month.MonthName @month.Year</td>
+                                <td class="text-end fw-bold text-success">৳@month.Amount.ToString("#,##0")</td>
+                                <td class="text-center"><span class="badge bg-light text-dark border">@month.Pieces.ToString("#,##0") Pcs</span></td>
+                                <td class="text-center"><a asp-controller="AdminReport" asp-action="Index" class="btn btn-sm btn-outline-secondary px-2 py-0">View</a></td>
                             </tr>
                         }
                     </tbody>
                 </table>
             </div>
-        </div>
 
-        <!-- Yearly History Table (Hidden by default) -->
-        <div id="historyTableYearly" class="history-view" style="display:none;">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead style="background: #532374; color: white;">
+            <!-- Yearly -->
+            <div id="historyTableYearly" style="display:none; overflow-y:auto; max-height:350px;">
+                <table class="table table-hover align-middle mb-0" style="font-size:13px;">
+                    <thead style="background:#532374; color:#fff; position:sticky; top:0;">
                         <tr>
-                            <th class="ps-4 text-white">Fiscal Year</th>
-                            <th class="text-center text-white">Annual Revenue</th>
-                            <th class="text-center text-white">Annual Output (Pieces)</th>
-                            <th class="text-center text-white">Avg Monthly Sales</th>
-                            <th class="text-center text-white">Performance</th>
+                            <th class="ps-3">Fiscal Year</th>
+                            <th class="text-end">Annual Revenue</th>
+                            <th class="text-center">Items Sold</th>
+                            <th class="text-center">Avg / Month</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var yearGroup in Model.MonthlyHistory.GroupBy(m => m.Year).OrderByDescending(g => g.Key))
+                        @foreach (var yg in Model.MonthlyHistory.GroupBy(m => m.Year).OrderByDescending(g => g.Key))
                         {
-                            var yearTotal = yearGroup.Sum(y => y.Amount);
-                            var yearPieces = yearGroup.Sum(y => y.Pieces);
+                            var yt = yg.Sum(y => y.Amount);
+                            var yp = yg.Sum(y => y.Pieces);
                             <tr>
-                                <td class="ps-4 fw-bold text-dark" style="font-size: 1.2rem;">@yearGroup.Key</td>
-                                <td class="text-center fw-bold text-primary">৳@yearTotal.ToString("N0")</td>
-                                <td class="text-center fw-bold">@yearPieces <small class="text-muted">Items</small></td>
-                                <td class="text-center text-muted">৳@((yearTotal/12).ToString("N0")) /mo</td>
-                                <td class="text-center">
-                                    <span class="badge bg-success rounded-pill px-3">Year Closed</span>
-                                </td>
+                                <td class="ps-3 fw-bold fs-6">@yg.Key</td>
+                                <td class="text-end fw-bold text-primary">৳@yt.ToString("#,##0")</td>
+                                <td class="text-center fw-bold">@yp.ToString("#,##0") <small class="text-muted">Pcs</small></td>
+                                <td class="text-center text-muted">৳@((yt/12).ToString("#,##0"))</td>
                             </tr>
                         }
                     </tbody>
@@ -297,164 +375,252 @@
 </div>
 
 <style>
-    .desco-range-picker .btn { border-radius: 20px !important; margin: 0 2px; }
-    .desco-range-picker .btn.active { background-color: #532374 !important; border-color: #532374 !important; color: white !important; }
+    /* Metric Cards */
+    .analytics-metric-card { border-radius:12px; padding:16px; color:#fff; position:relative; overflow:hidden; height:100%; }
+    .analytics-metric-card .amc-icon { font-size:2rem; opacity:.25; position:absolute; right:12px; bottom:8px; }
+    .analytics-metric-card .amc-label { font-size:11px; opacity:.85; text-transform:uppercase; letter-spacing:.5px; }
+    .analytics-metric-card .amc-value { font-size:1.35rem; font-weight:700; margin:4px 0; }
+    .analytics-metric-card .amc-sub { font-size:10px; opacity:.7; }
+    /* Range Picker (pill style, kept for compatibility) */
+    .desco-range-picker .btn { border-radius:20px !important; margin:0 2px; border-color:#532374; color:#532374; }
+    .desco-range-picker .btn.active, .desco-range-picker .btn:hover { background:#532374 !important; color:#fff !important; border-color:#532374 !important; }
+    /* Dropdown item hover */
+    .chart-range-item:hover { background:#3a4560 !important; color:#fff !important; }
+    /* Top Product Links */
+    .top-prod-link { color: inherit; border-bottom: 1px solid #f1eee9; }
+    .top-prod-link:hover { background: #f8f6f0 !important; }
+    .top-prod-rank { width:26px; height:26px; border-radius:50%; background:#532374; color:#fff; font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
 </style>
 
 @section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script>
         let salesChart;
-        
+        const fmtBDT = n => '৳' + Number(n).toLocaleString('en-IN');
+
+        // ── Chart Data ──────────────────────────────────────────────
         const chartData = {
             weekly: {
-                labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.WeeklySales.Select(s => s.Date.ToString("ddd")))),
+                labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.WeeklySales.Select(s => s.Date.ToString("ddd, dd MMM")))),
                 amount: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.WeeklySales.Select(s => s.Amount))),
                 pieces: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.WeeklySales.Select(s => s.Pieces))),
-                totalAmount: '৳@Model.WeeklySales.Sum(s => s.Amount).ToString("N0")',
-                totalPieces: '@Model.WeeklySales.Sum(s => s.Pieces)',
-                avgOrder: '৳@((Model.WeeklySales.Sum(s => s.Amount) / Math.Max(1, Model.WeeklySales.Count(s => s.Amount > 0))).ToString("N0"))'
+                totalAmount: @Model.WeeklySales.Sum(s => s.Amount),
+                totalPieces: @Model.WeeklySales.Sum(s => s.Pieces),
+                divisor: @Math.Max(1, Model.WeeklySales.Count(s => s.Amount > 0))
             },
             monthly: {
                 labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.DailySales.Select(s => s.Date.ToString("dd MMM")))),
                 amount: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.DailySales.Select(s => s.Amount))),
                 pieces: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.DailySales.Select(s => s.Pieces))),
-                totalAmount: '৳@Model.DailySales.Sum(s => s.Amount).ToString("N0")',
-                totalPieces: '@Model.DailySales.Sum(s => s.Pieces)',
-                avgOrder: '৳@((Model.DailySales.Sum(s => s.Amount) / Math.Max(1, Model.DailySales.Count(s => s.Amount > 0))).ToString("N0"))'
+                totalAmount: @Model.DailySales.Sum(s => s.Amount),
+                totalPieces: @Model.DailySales.Sum(s => s.Pieces),
+                divisor: @Math.Max(1, Model.DailySales.Count(s => s.Amount > 0))
             },
             yearly: {
-                labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.MonthlyHistory.Select(s => s.MonthName))),
-                amount: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.MonthlyHistory.Select(s => s.Amount))),
-                pieces: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.MonthlyHistory.Select(s => s.Pieces))),
-                totalAmount: '৳@Model.MonthlyHistory.Sum(s => s.Amount).ToString("N0")',
-                totalPieces: '@Model.MonthlyHistory.Sum(s => s.Pieces)',
-                avgOrder: '৳@((Model.MonthlyHistory.Sum(s => s.Amount) / Math.Max(1, Model.MonthlyHistory.Count())).ToString("N0"))'
+                labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.MonthlyHistory.OrderBy(s=>s.Year).ThenBy(s=>s.Month).Select(s => s.MonthName + " " + s.Year))),
+                amount: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.MonthlyHistory.OrderBy(s=>s.Year).ThenBy(s=>s.Month).Select(s => s.Amount))),
+                pieces: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.MonthlyHistory.OrderBy(s=>s.Year).ThenBy(s=>s.Month).Select(s => s.Pieces))),
+                totalAmount: @Model.MonthlyHistory.Sum(s => s.Amount),
+                totalPieces: @Model.MonthlyHistory.Sum(s => s.Pieces),
+                divisor: @Math.Max(1, Model.MonthlyHistory.Count())
+            },
+            prevyear: {
+                labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.PreviousYearSales.Select(s => s.MonthName + " " + s.Year))),
+                amount: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.PreviousYearSales.Select(s => s.Amount))),
+                pieces: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.PreviousYearSales.Select(s => s.Pieces))),
+                totalAmount: @Model.PreviousYearSales.Sum(s => s.Amount),
+                totalPieces: @Model.PreviousYearSales.Sum(s => s.Pieces),
+                divisor: @Math.Max(1, Model.PreviousYearSales.Count(s => s.Amount > 0))
             }
         };
 
-        const typeLabels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ProductTypeSales.Select(s => s.ProductTypeName)));
-        const typeAmount = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ProductTypeSales.Select(s => s.Amount)));
+        const pieLabels  = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ProductTypeSales.Select(s => s.ProductTypeName)));
+        const pieAmounts = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ProductTypeSales.Select(s => s.Amount)));
+        const piePieces  = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ProductTypeSales.Select(s => s.Pieces)));
+        const pieTotal   = pieAmounts.reduce((a,b) => a+b, 0);
 
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // ── 1. Line Chart (Image-Style: dark bg, smooth gradient area) ─────
             const ctx = document.getElementById('salesChart').getContext('2d');
-            
+
+            // Canvas gradient fill (top=purple, bottom=transparent)
+            function makeGradient(context) {
+                const chart = context.chart;
+                const { ctx: c, chartArea } = chart;
+                if (!chartArea) return 'transparent';
+                const gradient = c.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+                gradient.addColorStop(0, 'rgba(167,139,232,0.55)');
+                gradient.addColorStop(0.5, 'rgba(83,35,116,0.18)');
+                gradient.addColorStop(1, 'rgba(83,35,116,0.0)');
+                return gradient;
+            }
+
             salesChart = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: chartData.weekly.labels,
                     datasets: [{
-                        label: 'Sales Revenue',
+                        label: 'Revenue',
                         data: chartData.weekly.amount,
-                        borderColor: '#532374',
-                        backgroundColor: 'rgba(83, 35, 116, 0.05)',
+                        borderColor: '#a78be8',
+                        backgroundColor: makeGradient,
                         fill: true,
-                        tension: 0, // Sharp lines like "digital graph"
-                        borderWidth: 4,
-                        pointBackgroundColor: '#fff',
-                        pointBorderColor: '#532374',
-                        pointRadius: 5,
-                        pointHoverRadius: 8
-                    }, {
-                        label: 'Pieces',
-                        data: chartData.weekly.pieces,
-                        borderColor: '#17a2b8',
-                        borderDash: [5, 5],
-                        fill: false,
-                        yAxisID: 'yPieces'
+                        tension: 0.45,
+                        borderWidth: 3,
+                        pointBackgroundColor: '#a78be8',
+                        pointBorderColor: '#1a1f2e',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 7,
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: '#a78be8',
+                        pointHoverBorderWidth: 3
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
                     plugins: {
                         legend: { display: false },
-                        tooltip: { backgroundColor: '#333', titleFont: { size: 14 } }
+                        tooltip: {
+                            enabled: false,
+                            external: function(context) {
+                                const tooltip = document.getElementById('chartFloatTooltip');
+                                if (context.tooltip.opacity === 0) { tooltip.style.display = 'none'; return; }
+                                const dp = context.tooltip.dataPoints[0];
+                                tooltip.innerText = fmtBDT(dp.raw);
+                                const canvas = context.chart.canvas;
+                                const rect = canvas.getBoundingClientRect();
+                                tooltip.style.display = 'block';
+                                tooltip.style.left = (rect.left + window.scrollX + context.tooltip.caretX - tooltip.offsetWidth/2) + 'px';
+                                tooltip.style.top  = (rect.top  + window.scrollY + context.tooltip.caretY - 38) + 'px';
+                            }
+                        }
                     },
                     scales: {
-                        y: { beginAtZero: true, grid: { borderDash: [2, 2], color: '#eee' } },
-                        yPieces: { position: 'right', beginAtZero: true, grid: { display: false } }
+                        x: {
+                            grid: { display: false },
+                            border: { display: false },
+                            ticks: { color: '#8892a4', font: { size: 11 }, maxRotation: 0 }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(255,255,255,0.05)', drawBorder: false },
+                            border: { display: false, dash: [4,4] },
+                            ticks: { color: '#8892a4', font: { size: 11 }, callback: v => v === 0 ? '৳0' : (v >= 1000 ? '৳' + (v/1000).toFixed(0) + 'k' : '৳' + v) }
+                        }
                     }
                 }
             });
 
-            // 2. Pie Chart (Product Type Distribution)
+            // Update the big header amount
+            document.getElementById('chartHeaderAmount').innerText = fmtBDT(chartData.weekly.totalAmount);
+            updateDisplayStats('weekly');
+
+            // ── 2. Pie / Doughnut Chart ──────────────────────────────
+            const colors = ['#532374','#17a2b8','#f59e0b','#28a745','#dc3545','#fd7e14','#6610f2','#e83e8c'];
             const ctxPie = document.getElementById('typePieChart').getContext('2d');
-            const colors = ['#532374', '#17a2b8', '#ffc107', '#28a745', '#dc3545', '#fd7e14', '#6610f2', '#e83e8c'];
-            
             new Chart(ctxPie, {
                 type: 'doughnut',
                 data: {
-                    labels: typeLabels,
-                    datasets: [{
-                        data: typeAmount,
-                        backgroundColor: colors,
-                        borderWidth: 0,
-                        hoverOffset: 15
-                    }]
+                    labels: pieLabels,
+                    datasets: [{ data: pieAmounts, backgroundColor: colors, borderWidth: 0, hoverOffset: 18 }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    cutout: '65%',
+                    cutout: '60%',
                     plugins: {
-                        legend: { display: false }
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#1a1a2e',
+                            callbacks: {
+                                title: ctx => ctx[0].label,
+                                label: ctx => {
+                                    const pct = pieTotal > 0 ? ((ctx.raw / pieTotal) * 100).toFixed(1) : 0;
+                                    const qty = piePieces[ctx.dataIndex];
+                                    return [
+                                        ' Revenue: ' + fmtBDT(ctx.raw),
+                                        ' Qty Sold: ' + qty + ' Pcs',
+                                        ' Share: ' + pct + '%'
+                                    ];
+                                }
+                            }
+                        }
                     }
                 }
             });
 
-            // Generate Custom Legend
-            const legendContainer = document.getElementById('pieLegend');
-            typeLabels.forEach((label, i) => {
-                const item = document.createElement('div');
-                item.className = 'd-flex align-items-center';
-                item.innerHTML = `<span style="width:10px; height:10px; background:${colors[i % colors.length]}; border-radius:50%; display:inline-block; margin-right:5px;"></span> <span style="font-size:11px;">${label}</span>`;
-                legendContainer.appendChild(item);
+            // Custom Pie Legend with %
+            const legend = document.getElementById('pieLegend');
+            pieLabels.forEach((lbl, i) => {
+                const pct = pieTotal > 0 ? ((pieAmounts[i] / pieTotal) * 100).toFixed(1) : 0;
+                const el = document.createElement('div');
+                el.className = 'd-flex align-items-center gap-1';
+                el.innerHTML = `<span style="width:10px;height:10px;border-radius:50%;background:${colors[i%colors.length]};display:inline-block;flex-shrink:0;"></span><span style="font-size:11px;">${lbl} <strong>${pct}%</strong></span>`;
+                legend.appendChild(el);
             });
-            
-            updateDisplayStats('weekly');
+
+            // ── 3. Sales Goal Ring ───────────────────────────────────
+            const goalCtx = document.getElementById('goalRingChart').getContext('2d');
+            const goalPct = @goalPercent;
+            new Chart(goalCtx, {
+                type: 'doughnut',
+                data: {
+                    datasets: [{
+                        data: [goalPct, 100 - goalPct],
+                        backgroundColor: ['#532374', '#f0ece6'],
+                        borderWidth: 0
+                    }]
+                },
+                options: { cutout: '72%', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { enabled: false } } }
+            });
         });
 
-        function updateChartRange(range) {
-            // Update buttons
-            document.querySelectorAll('.desco-range-picker .btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            // Update Chart
+        // ── Chart Range Switch (dropdown + direct) ───────────────────
+        function updateChartRange(range, btn) {
+            if (btn) {
+                document.querySelectorAll('.desco-range-picker .btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            }
             salesChart.data.labels = chartData[range].labels;
             salesChart.data.datasets[0].data = chartData[range].amount;
-            salesChart.data.datasets[1].data = chartData[range].pieces;
             salesChart.update();
-            
+            document.getElementById('chartHeaderAmount').innerText = fmtBDT(chartData[range].totalAmount);
             updateDisplayStats(range);
         }
 
+        // Dropdown range picker
+        document.querySelectorAll('.chart-range-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                const range = this.dataset.range;
+                document.getElementById('rangeDropdownLabel').innerText = this.innerText;
+                updateChartRange(range, null);
+            });
+        });
+
         function updateDisplayStats(range) {
-            document.getElementById('rangeTotalAmount').innerText = chartData[range].totalAmount;
-            document.getElementById('rangeTotalPieces').innerText = chartData[range].totalPieces;
-            document.getElementById('rangeAvgOrder').innerText = chartData[range].avgOrder;
+            const d = chartData[range];
+            document.getElementById('rangeTotalAmount').innerText = fmtBDT(d.totalAmount);
+            document.getElementById('rangeTotalPieces').innerText = d.totalPieces.toLocaleString('en-IN');
+            document.getElementById('rangeAvgOrder').innerText = fmtBDT(d.totalAmount / d.divisor);
         }
 
         function toggleHistoryView(view) {
-            if(view === 'monthly') {
-                document.getElementById('historyTableMonthly').style.display = 'block';
-                document.getElementById('historyTableYearly').style.display = 'none';
-                document.getElementById('btnMonthly').classList.add('active');
-                document.getElementById('btnYearly').classList.remove('active');
-            } else {
-                document.getElementById('historyTableMonthly').style.display = 'none';
-                document.getElementById('historyTableYearly').style.display = 'block';
-                document.getElementById('btnMonthly').classList.remove('active');
-                document.getElementById('btnYearly').classList.add('active');
-            }
-        }
-
-        function showHistory(type) {
-             // Redundant now that range picker is here, but keeping for compatibility
-             updateChartRange(type === 'monthly' ? 'monthly' : 'yearly');
+            const isMonthly = view === 'monthly';
+            document.getElementById('historyTableMonthly').style.display = isMonthly ? 'block' : 'none';
+            document.getElementById('historyTableYearly').style.display = isMonthly ? 'none' : 'block';
+            document.getElementById('btnMonthly').classList.toggle('active', isMonthly);
+            document.getElementById('btnYearly').classList.toggle('active', !isMonthly);
         }
     </script>
 }
+
+
+
 
 <div class="row g-4">
     <!-- RECENT ORDERS (Standardized Card) -->
