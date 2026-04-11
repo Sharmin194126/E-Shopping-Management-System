@@ -225,12 +225,21 @@
                                 data-bs-toggle="dropdown" data-bs-display="static" style="background:#2a3045; color:#c0c8d8; border:1px solid #3a4560; border-radius:8px; font-size:13px;">
                             <span id="rangeDropdownLabel">Weekly</span>
                         </button>
-                        <ul class="dropdown-menu dropdown-menu-end" style="background:#2a3045; border:1px solid #3a4560; min-width:150px;">
-                            <li><a class="dropdown-item chart-range-item" href="#" data-range="weekly" style="color:#c0c8d8;">Weekly (Last 7 Days)</a></li>
-                            <li><a class="dropdown-item chart-range-item" href="#" data-range="monthly" style="color:#c0c8d8;">Monthly (Last 30 Days)</a></li>
-                            <li><a class="dropdown-item chart-range-item" href="#" data-range="yearly" style="color:#c0c8d8;">Yearly (@DateTime.Now.Year)</a></li>
+                        <style>
+                            .dark-dropdown-menu .dropdown-item {
+                                color: #c0c8d8 !important;
+                            }
+                            .dark-dropdown-menu .dropdown-item:hover {
+                                background-color: #3a4560 !important;
+                                color: #fff !important;
+                            }
+                        </style>
+                        <ul class="dropdown-menu dropdown-menu-end dark-dropdown-menu" style="background:#2a3045 !important; border:1px solid #3a4560 !important; min-width:150px;">
+                            <li><a class="dropdown-item chart-range-item" href="#" data-range="weekly">Weekly (Last 7 Days)</a></li>
+                            <li><a class="dropdown-item chart-range-item" href="#" data-range="monthly">Monthly (Last 30 Days)</a></li>
+                            <li><a class="dropdown-item chart-range-item" href="#" data-range="yearly">Yearly (@DateTime.Now.Year)</a></li>
                             <li><hr class="dropdown-divider" style="border-color:#3a4560;"></li>
-                            <li><a class="dropdown-item chart-range-item" href="#" data-range="prevyear" style="color:#f59e0b;">Previous Year (@(DateTime.Now.Year - 1))</a></li>
+                            <li><a class="dropdown-item chart-range-item" href="#" data-range="prevyear">Previous Year (@(DateTime.Now.Year - 1))</a></li>
                         </ul>
                     </div>
                 </div>
