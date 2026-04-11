@@ -125,89 +125,167 @@
             <a asp-controller="AdminDashboard" asp-action="PaymentMethods" class="btn btn-outline-dark w-100 py-2">Payment Methods</a>
         </div>
     </div>
-</div><!-- SALES ANALYTICS SECTION -->
+</div><!-- SALES ANALYTICS SECTION (DESCO STYLE) -->
 <div class="row g-4 mb-5">
     <div class="col-lg-8">
-        <div class="dashboard-table-card h-100 shadow-sm border-0" style="background: white; border-radius: 15px;">
-            <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="dashboard-table-card h-100 shadow-sm border-0 overflow-hidden" style="background: white; border-radius: 15px;">
+            <div class="p-4 border-bottom bg-light d-flex justify-content-between align-items-center">
                 <h5 class="fw-bold mb-0 text-dark">
-                    <i class="bi bi-graph-up-arrow text-primary me-2"></i>Daily Sales Analytics (Last 30 Days)
+                    <i class="bi bi-activity text-primary me-2"></i>Sales Performance Analytics
                 </h5>
-                <div class="dropdown">
-                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                        View Options
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item active" href="#" onclick="toggleChart('daily')">Daily (30 Days)</a></li>
-                        <li><a class="dropdown-item" href="#" onclick="toggleChart('monthly')">Monthly History</a></li>
-                    </ul>
+                <div class="btn-group desco-range-picker" role="group">
+                    <button type="button" class="btn btn-outline-primary btn-sm px-3 active" onclick="updateChartRange('weekly')">Weekly</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm px-3" onclick="updateChartRange('monthly')">Monthly</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm px-3" onclick="updateChartRange('yearly')">Yearly</button>
                 </div>
             </div>
-            <div style="height: 350px;">
-                <canvas id="salesChart"></canvas>
+            
+            <div class="p-4">
+                <div class="row mb-4">
+                    <div class="col-4">
+                        <div class="small text-muted">Total Amount</div>
+                        <h4 class="fw-bold mb-0" id="rangeTotalAmount">৳0</h4>
+                    </div>
+                    <div class="col-4 border-start">
+                        <div class="small text-muted">Total Pieces</div>
+                        <h4 class="fw-bold mb-0" id="rangeTotalPieces">0</h4>
+                    </div>
+                    <div class="col-4 border-start">
+                        <div class="small text-muted">Avg/Order</div>
+                        <h4 class="fw-bold mb-0 text-success" id="rangeAvgOrder">৳0</h4>
+                    </div>
+                </div>
+                
+                <div style="height: 300px;">
+                    <canvas id="salesChart"></canvas>
+                </div>
             </div>
         </div>
     </div>
+    
     <div class="col-lg-4">
-        <div class="dashboard-table-card h-100 shadow-sm border-0" style="background: white; border-radius: 15px;">
-            <h5 class="fw-bold mb-4 text-dark">
-                <i class="bi bi-pie-chart-fill text-info me-2"></i>Sales by Product Type
-            </h5>
-            <div style="height: 280px; position: relative;">
-                <canvas id="typePieChart"></canvas>
+        <div class="dashboard-table-card h-100 shadow-sm border-0 overflow-hidden" style="background: white; border-radius: 15px;">
+            <div class="p-4 border-bottom bg-light">
+                <h5 class="fw-bold mb-0 text-dark">
+                    <i class="bi bi-box-seam-fill text-info me-2"></i>Top Moving Products
+                </h5>
             </div>
-            <div class="mt-4 border-top pt-3">
-                <div class="small text-muted mb-2 text-uppercase fw-bold" style="font-size: 10px;">Summary Distribution</div>
-                <div id="pieLegend" class="d-flex flex-wrap gap-2"></div>
+            <div class="p-3">
+                <div class="list-group list-group-flush">
+                    @foreach (var prod in Model.TopProducts.Take(6))
+                    {
+                        <div class="list-group-item px-0 py-3 border-bottom d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-light rounded p-2 me-3" style="width: 40px; text-align: center;">
+                                    <i class="bi bi-package text-muted"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-bold text-dark" style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">@prod.ProductName</div>
+                                    <small class="text-muted">@prod.Category</small>
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                <div class="fw-bold text-primary">@prod.TotalQuantity Pcs</div>
+                                <small class="text-success">৳@prod.TotalRevenue.ToString("N0")</small>
+                            </div>
+                        </div>
+                    }
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- DETAILED SALES RECORDS (FILTERABLE) -->
-<div class="mb-5">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="fw-bold mb-0"><i class="bi bi-calendar-range text-danger me-2"></i>Sales Records & History</h5>
-        <div class="btn-group" role="group">
-            <button type="button" class="btn btn-sm btn-outline-primary active" onclick="showHistory('monthly')">Monthly History</button>
-            <button type="button" class="btn btn-sm btn-outline-primary" onclick="showHistory('yearly')">Yearly Comparison</button>
+<div class="row g-4 mb-5">
+    <!-- Pie Chart for Product Types -->
+    <div class="col-lg-5">
+        <div class="dashboard-table-card h-100 shadow-sm border-0" style="background: white; border-radius: 15px;">
+            <h5 class="fw-bold mb-4 text-dark p-4 pb-0">
+                <i class="bi bi-pie-chart-fill text-info me-2"></i>Sales by Product Type
+            </h5>
+            <div style="height: 280px; position: relative;">
+                <canvas id="typePieChart"></canvas>
+            </div>
+            <div class="mt-4 border-top pt-3 p-4">
+                <div id="pieLegend" class="d-flex flex-wrap gap-2"></div>
+            </div>
         </div>
     </div>
     
-    <div class="page-card shadow-sm border-0 p-0 overflow-hidden" style="background: white; border-radius: 15px;">
-        <div id="monthlyHistoryTable" class="history-view">
+<!-- DETAILED SALES RECORDS (FILTERABLE) -->
+<div class="mb-5 px-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0 text-dark"><i class="bi bi-calendar-range text-danger me-2"></i>Full Sales Archives & History</h5>
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-sm btn-outline-primary active" id="btnMonthly" onclick="toggleHistoryView('monthly')">Monthly View</button>
+            <button type="button" class="btn btn-sm btn-outline-primary" id="btnYearly" onclick="toggleHistoryView('yearly')">Yearly Summary</button>
+        </div>
+    </div>
+    
+    <div class="page-card shadow-sm border-0 p-0 overflow-hidden bg-white" style="border-radius: 15px; border: 1px solid #e6e2db !important;">
+        <!-- Monthly History Table -->
+        <div id="historyTableMonthly" class="history-view">
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
-                    <thead style="background: #532374; color: white;">
+                    <thead style="background: #f8f9fa;">
                         <tr>
-                            <th class="ps-4">Month/Year</th>
-                            <th class="text-center">Total Amount (Inc. VAT)</th>
-                            <th class="text-center">Pieces Sold</th>
-                            <th class="text-center">Growth</th>
+                            <th class="ps-4">Reporting Period</th>
+                            <th class="text-center">Gross Revenue</th>
+                            <th class="text-center">Items Sold (Pieces)</th>
+                            <th class="text-center">Net Impact</th>
                             <th class="text-center">Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @{ decimal prevAmount = 0; }
                         @foreach (var month in Model.MonthlyHistory.OrderByDescending(m => m.Year).ThenByDescending(m => m.MonthName))
                         {
                             <tr>
-                                <td class="ps-4 fw-bold">@month.MonthName @month.Year</td>
-                                <td class="text-center fw-bold text-success">৳@month.Amount.ToString("N0")</td>
-                                <td class="text-center">@month.Pieces <small class="text-muted">Units</small></td>
+                                <td class="ps-4">
+                                    <div class="fw-bold text-dark">@month.MonthName @month.Year</div>
+                                    <small class="text-muted">Completed Sales Cycle</small>
+                                </td>
+                                <td class="text-center fw-bold text-success" style="font-size: 1.1rem;">৳@month.Amount.ToString("N0")</td>
                                 <td class="text-center">
-                                    @if(prevAmount > 0) {
-                                        decimal growth = ((month.Amount - prevAmount) / prevAmount) * 100;
-                                        <span class="@(growth >= 0 ? "text-success" : "text-danger") small">
-                                            <i class="bi bi-caret-@(growth >= 0 ? "up" : "down")-fill"></i> @Math.Abs(growth).ToString("F1")%
-                                        </span>
-                                    } else {
-                                        <span class="text-muted small">--</span>
-                                    }
-                                    @{ prevAmount = month.Amount; }
+                                    <span class="badge bg-light text-dark border px-3">@month.Pieces Pieces</span>
                                 </td>
                                 <td class="text-center">
-                                    <a asp-controller="AdminReport" asp-action="Index" asp-route-fromDate="@(new DateTime(month.Year, DateTime.ParseExact(month.MonthName, "MMM", null).Month, 1).ToString("yyyy-MM-dd"))" class="btn btn-sm btn-link text-decoration-none p-0">Detailed Report</a>
+                                    <span class="text-success"><i class="bi bi-graph-up me-1"></i>Verified</span>
+                                </td>
+                                <td class="text-center">
+                                    <a asp-controller="AdminReport" asp-action="Index" class="btn btn-sm btn-outline-secondary px-3">View Report</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Yearly History Table (Hidden by default) -->
+        <div id="historyTableYearly" class="history-view" style="display:none;">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead style="background: #532374; color: white;">
+                        <tr>
+                            <th class="ps-4 text-white">Fiscal Year</th>
+                            <th class="text-center text-white">Annual Revenue</th>
+                            <th class="text-center text-white">Annual Output (Pieces)</th>
+                            <th class="text-center text-white">Avg Monthly Sales</th>
+                            <th class="text-center text-white">Performance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var yearGroup in Model.MonthlyHistory.GroupBy(m => m.Year).OrderByDescending(g => g.Key))
+                        {
+                            var yearTotal = yearGroup.Sum(y => y.Amount);
+                            var yearPieces = yearGroup.Sum(y => y.Pieces);
+                            <tr>
+                                <td class="ps-4 fw-bold text-dark" style="font-size: 1.2rem;">@yearGroup.Key</td>
+                                <td class="text-center fw-bold text-primary">৳@yearTotal.ToString("N0")</td>
+                                <td class="text-center fw-bold">@yearPieces <small class="text-muted">Items</small></td>
+                                <td class="text-center text-muted">৳@((yearTotal/12).ToString("N0")) /mo</td>
+                                <td class="text-center">
+                                    <span class="badge bg-success rounded-pill px-3">Year Closed</span>
                                 </td>
                             </tr>
                         }
@@ -218,42 +296,71 @@
     </div>
 </div>
 
+<style>
+    .desco-range-picker .btn { border-radius: 20px !important; margin: 0 2px; }
+    .desco-range-picker .btn.active { background-color: #532374 !important; border-color: #532374 !important; color: white !important; }
+</style>
+
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        let salesChart;
+        
+        const chartData = {
+            weekly: {
+                labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.WeeklySales.Select(s => s.Date.ToString("ddd")))),
+                amount: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.WeeklySales.Select(s => s.Amount))),
+                pieces: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.WeeklySales.Select(s => s.Pieces))),
+                totalAmount: '৳@Model.WeeklySales.Sum(s => s.Amount).ToString("N0")',
+                totalPieces: '@Model.WeeklySales.Sum(s => s.Pieces)',
+                avgOrder: '৳@((Model.WeeklySales.Sum(s => s.Amount) / Math.Max(1, Model.WeeklySales.Count(s => s.Amount > 0))).ToString("N0"))'
+            },
+            monthly: {
+                labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.DailySales.Select(s => s.Date.ToString("dd MMM")))),
+                amount: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.DailySales.Select(s => s.Amount))),
+                pieces: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.DailySales.Select(s => s.Pieces))),
+                totalAmount: '৳@Model.DailySales.Sum(s => s.Amount).ToString("N0")',
+                totalPieces: '@Model.DailySales.Sum(s => s.Pieces)',
+                avgOrder: '৳@((Model.DailySales.Sum(s => s.Amount) / Math.Max(1, Model.DailySales.Count(s => s.Amount > 0))).ToString("N0"))'
+            },
+            yearly: {
+                labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.MonthlyHistory.Select(s => s.MonthName))),
+                amount: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.MonthlyHistory.Select(s => s.Amount))),
+                pieces: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.MonthlyHistory.Select(s => s.Pieces))),
+                totalAmount: '৳@Model.MonthlyHistory.Sum(s => s.Amount).ToString("N0")',
+                totalPieces: '@Model.MonthlyHistory.Sum(s => s.Pieces)',
+                avgOrder: '৳@((Model.MonthlyHistory.Sum(s => s.Amount) / Math.Max(1, Model.MonthlyHistory.Count())).ToString("N0"))'
+            }
+        };
+
+        const typeLabels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ProductTypeSales.Select(s => s.ProductTypeName)));
+        const typeAmount = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ProductTypeSales.Select(s => s.Amount)));
+
         document.addEventListener('DOMContentLoaded', function () {
-            // Data from Model using System.Text.Json
-            const dailyLabels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.DailySales.Select(s => s.Date.ToString("dd MMM"))));
-            const dailyAmount = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.DailySales.Select(s => s.Amount)));
-            const dailyPieces = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.DailySales.Select(s => s.Pieces)));
-
-            const typeLabels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ProductTypeSales.Select(s => s.ProductTypeName)));
-            const typeAmount = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ProductTypeSales.Select(s => s.Amount)));
-
-            // 1. Line Chart (Daily Sales)
-            const ctxSales = document.getElementById('salesChart').getContext('2d');
-            const salesChart = new Chart(ctxSales, {
+            const ctx = document.getElementById('salesChart').getContext('2d');
+            
+            salesChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: dailyLabels,
+                    labels: chartData.weekly.labels,
                     datasets: [{
-                        label: 'Revenue (৳)',
-                        data: dailyAmount,
+                        label: 'Sales Revenue',
+                        data: chartData.weekly.amount,
                         borderColor: '#532374',
-                        backgroundColor: 'rgba(83, 35, 116, 0.1)',
+                        backgroundColor: 'rgba(83, 35, 116, 0.05)',
                         fill: true,
-                        tension: 0.4,
-                        borderWidth: 3,
-                        pointRadius: 4,
+                        tension: 0, // Sharp lines like "digital graph"
+                        borderWidth: 4,
                         pointBackgroundColor: '#fff',
-                        pointBorderColor: '#532374'
+                        pointBorderColor: '#532374',
+                        pointRadius: 5,
+                        pointHoverRadius: 8
                     }, {
-                        label: 'Pieces Sold',
-                        data: dailyPieces,
-                        borderColor: '#ffc107',
+                        label: 'Pieces',
+                        data: chartData.weekly.pieces,
+                        borderColor: '#17a2b8',
                         borderDash: [5, 5],
                         fill: false,
-                        tension: 0.4,
                         yAxisID: 'yPieces'
                     }]
                 },
@@ -261,21 +368,12 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { position: 'top', labels: { usePointStyle: true, boxWidth: 6 } },
-                        tooltip: { mode: 'index', intersect: false }
+                        legend: { display: false },
+                        tooltip: { backgroundColor: '#333', titleFont: { size: 14 } }
                     },
                     scales: {
-                        y: { 
-                            beginAtZero: true, 
-                            title: { display: true, text: 'Revenue (৳)' },
-                            grid: { borderDash: [2, 2] }
-                        },
-                        yPieces: { 
-                            beginAtZero: true, 
-                            position: 'right', 
-                            title: { display: true, text: 'Units Sold' },
-                            grid: { display: false }
-                        }
+                        y: { beginAtZero: true, grid: { borderDash: [2, 2], color: '#eee' } },
+                        yPieces: { position: 'right', beginAtZero: true, grid: { display: false } }
                     }
                 }
             });
@@ -313,11 +411,47 @@
                 item.innerHTML = `<span style="width:10px; height:10px; background:${colors[i % colors.length]}; border-radius:50%; display:inline-block; margin-right:5px;"></span> <span style="font-size:11px;">${label}</span>`;
                 legendContainer.appendChild(item);
             });
+            
+            updateDisplayStats('weekly');
         });
 
+        function updateChartRange(range) {
+            // Update buttons
+            document.querySelectorAll('.desco-range-picker .btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update Chart
+            salesChart.data.labels = chartData[range].labels;
+            salesChart.data.datasets[0].data = chartData[range].amount;
+            salesChart.data.datasets[1].data = chartData[range].pieces;
+            salesChart.update();
+            
+            updateDisplayStats(range);
+        }
+
+        function updateDisplayStats(range) {
+            document.getElementById('rangeTotalAmount').innerText = chartData[range].totalAmount;
+            document.getElementById('rangeTotalPieces').innerText = chartData[range].totalPieces;
+            document.getElementById('rangeAvgOrder').innerText = chartData[range].avgOrder;
+        }
+
+        function toggleHistoryView(view) {
+            if(view === 'monthly') {
+                document.getElementById('historyTableMonthly').style.display = 'block';
+                document.getElementById('historyTableYearly').style.display = 'none';
+                document.getElementById('btnMonthly').classList.add('active');
+                document.getElementById('btnYearly').classList.remove('active');
+            } else {
+                document.getElementById('historyTableMonthly').style.display = 'none';
+                document.getElementById('historyTableYearly').style.display = 'block';
+                document.getElementById('btnMonthly').classList.remove('active');
+                document.getElementById('btnYearly').classList.add('active');
+            }
+        }
+
         function showHistory(type) {
-            // In a real app, this might show/hide different tables
-            alert('Switching view to ' + type + '. Yearly aggregate data calculation implementation follows same pattern.');
+             // Redundant now that range picker is here, but keeping for compatibility
+             updateChartRange(type === 'monthly' ? 'monthly' : 'yearly');
         }
     </script>
 }

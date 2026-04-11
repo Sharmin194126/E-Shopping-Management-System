@@ -22,8 +22,18 @@ namespace E_ShoppingManagement.ViewModels
 
         // Chart Data
         public List<DailySalesViewModel> DailySales { get; set; } = new List<DailySalesViewModel>();
+        public List<DailySalesViewModel> WeeklySales { get; set; } = new List<DailySalesViewModel>();
         public List<ProductTypeSalesViewModel> ProductTypeSales { get; set; } = new List<ProductTypeSalesViewModel>();
         public List<MonthlySalesViewModel> MonthlyHistory { get; set; } = new List<MonthlySalesViewModel>();
+        public List<ProductSalesSummaryViewModel> TopProducts { get; set; } = new List<ProductSalesSummaryViewModel>();
+    }
+
+    public class ProductSalesSummaryViewModel
+    {
+        public string ProductName { get; set; } = string.Empty;
+        public int TotalQuantity { get; set; }
+        public decimal TotalRevenue { get; set; }
+        public string? Category { get; set; }
     }
 
     public class DailySalesViewModel

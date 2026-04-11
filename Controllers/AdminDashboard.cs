@@ -82,10 +82,13 @@ namespace E_ShoppingManagement.Controllers
                 });
             }
 
+            // Unified "Sold" definition: Delivered OR Paid (standard for e-commerce sold records)
+            var deliveredOrders = orders
+                .Where(o => o.OrderStatus == "Delivered" || o.PaymentStatus == "Paid" || o.OrderStatus == "Shipped")
+                .ToList();
+            
             // 1. Daily Sales (Last 30 Days)
             var last30Days = DateTime.UtcNow.Date.AddDays(-29);
-            var deliveredOrders = orders.Where(o => o.OrderStatus == "Delivered").ToList();
-            
             for (int i = 0; i < 30; i++)
             {
                 var date = last30Days.AddDays(i);
@@ -98,12 +101,26 @@ namespace E_ShoppingManagement.Controllers
                 });
             }
 
-            // 2. Product Type Distribution
+            // 1.1 Weekly Sales (Last 7 Days)
+            var last7Days = DateTime.UtcNow.Date.AddDays(-6);
+            for (int i = 0; i < 7; i++)
+            {
+                var date = last7Days.AddDays(i);
+                var dayOrders = deliveredOrders.Where(o => o.CreatedAt.Date == date).ToList();
+                stats.WeeklySales.Add(new DailySalesViewModel
+                {
+                    Date = date,
+                    Amount = dayOrders.Sum(o => o.TotalAmount),
+                    Pieces = dayOrders.Sum(o => _context.OrderDetails.Where(od => od.OrderId == o.Id).Sum(od => od.Quantity))
+                });
+            }
+
+            // 2. Product Type Distribution (Based on ALL Sold records)
             var productTypeData = await _context.OrderDetails
                 .Include(od => od.Order)
                 .Include(od => od.Product)
                     .ThenInclude(p => p.ProductType)
-                .Where(od => od.Order.OrderStatus == "Delivered")
+                .Where(od => od.Order.OrderStatus == "Delivered" || od.Order.PaymentStatus == "Paid" || od.Order.OrderStatus == "Shipped")
                 .GroupBy(od => od.Product.ProductType.Name)
                 .Select(g => new ProductTypeSalesViewModel
                 {
@@ -114,12 +131,25 @@ namespace E_ShoppingManagement.Controllers
                 .ToListAsync();
             stats.ProductTypeSales = productTypeData;
 
-            // 3. Monthly History (Last 24 Months)
-            var monthRange = DateTime.UtcNow.Date.AddMonths(-23);
-            monthRange = new DateTime(monthRange.Year, monthRange.Month, 1);
+            // 2.1 Top Selling Products (From ALL Sold records)
+            stats.TopProducts = await _context.OrderDetails
+                .Include(od => od.Order)
+                .Include(od => od.Product)
+                .Where(od => od.Order.OrderStatus == "Delivered" || od.Order.PaymentStatus == "Paid" || od.Order.OrderStatus == "Shipped")
+                .GroupBy(od => od.Product.Id)
+                .Select(g => new ProductSalesSummaryViewModel
+                {
+                    ProductName = g.First().Product.Name,
+                    TotalQuantity = g.Sum(od => od.Quantity),
+                    TotalRevenue = g.Sum(od => od.PriceWithVat * od.Quantity),
+                    Category = _context.Categories.FirstOrDefault(c => c.Id == g.First().Product.CategoryId).Name
+                })
+                .OrderByDescending(p => p.TotalQuantity)
+                .Take(10)
+                .ToListAsync();
 
+            // 3. Monthly History (Any historical record)
             var monthlyGrouped = deliveredOrders
-                .Where(o => o.CreatedAt >= monthRange)
                 .GroupBy(o => new { o.CreatedAt.Year, o.CreatedAt.Month })
                 .Select(g => new
                 {
@@ -128,7 +158,7 @@ namespace E_ShoppingManagement.Controllers
                     Amount = g.Sum(o => o.TotalAmount),
                     Pieces = g.Sum(o => _context.OrderDetails.Where(od => od.OrderId == o.Id).Sum(od => od.Quantity))
                 })
-                .OrderBy(g => g.Year).ThenBy(g => g.Month)
+                .OrderByDescending(g => g.Year).ThenByDescending(g => g.Month)
                 .ToList();
 
             foreach (var item in monthlyGrouped)
@@ -136,7 +166,7 @@ namespace E_ShoppingManagement.Controllers
                 stats.MonthlyHistory.Add(new MonthlySalesViewModel
                 {
                     Year = item.Year,
-                    MonthName = new DateTime(item.Year, item.Month, 1).ToString("MMM"),
+                    MonthName = new DateTime(item.Year, item.Month, 1).ToString("MMMM"),
                     Amount = item.Amount,
                     Pieces = item.Pieces
                 });
