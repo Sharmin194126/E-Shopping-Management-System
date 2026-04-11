@@ -431,7 +431,14 @@ body {
     background: #532374 !important;
     color: #ffffff !important;
 }
-.table thead th { border-color: rgba(255,255,255,0.15) !important; color: #ffffff !important; }
+.table thead th { 
+    border-color: rgba(255,255,255,0.15) !important; 
+    color: #ffffff !important; 
+}
+.page-card h5.bg-theme, .card-header.bg-theme {
+    background: #532374 !important;
+    color: #ffffff !important;
+}
 
 .table-light th, .table-light td { background: #f8f6f0 !important; color: #33312e !important; }
 
@@ -698,3 +705,21 @@ body {
     }
 }
 
+/* ===== PRINT OPTIMIZATIONS ===== */
+@media print {
+    .admin-sidebar, .dm-sidebar, .admin-header, .shoegee-header, .d-print-none, .search-box, .theme-back-btn, .btn-warning, .btn-outline-primary {
+        display: none !important;
+    }
+    .admin-main, .dm-main {
+        margin-left: 0 !important;
+        padding: 0 !important;
+        background: #ffffff !important;
+    }
+    .page-card, .card {
+        box-shadow: none !important;
+        border: 1px solid #eee !important;
+    }
+    body {
+        background: #ffffff !important;
+    }
+}

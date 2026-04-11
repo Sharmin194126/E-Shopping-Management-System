@@ -6,7 +6,7 @@
 
 <div class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Order Details #@Model.Id</h2>
+        <h2>Order Details SL @Model.Id</h2>
         <div class="d-flex gap-2">
             @if (Model.PaymentStatus == "Paid")
             {
@@ -26,11 +26,11 @@
                     <table class="table align-middle">
                         <thead style="background:#532374; color:#fff;">
                             <tr>
-                                <th style="width: 70px;">SL No</th>
+                                <th style="width: 70px;">SL</th>
                                 <th>Product</th>
-                                <th>Price</th>
+                                <th>Unit Price</th>
                                 <th>Quantity</th>
-                                <th>Total</th>
+                                <th>Subtotal (Inc. VAT)</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -46,16 +46,16 @@
                                             <div>@(item.Product?.Name ?? "Product")</div>
                                         </div>
                                     </td>
-                                    <td>৳@item.Price</td>
+                                    <td>৳@item.PriceWithVat.ToString("N0")</td>
                                     <td>@item.Quantity</td>
-                                    <td>৳@(item.Price * item.Quantity)</td>
+                                    <td>৳@((item.PriceWithVat * item.Quantity).ToString("N0"))</td>
                                 </tr>
                             }
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="4" class="text-end fw-bold">Grand Total:</td>
-                                <td class="fw-bold">৳@Model.TotalAmount</td>
+                                <td colspan="4" class="text-end fw-bold">Grand Total (Inc. VAT):</td>
+                                <td class="fw-bold fs-5 text-danger">৳@Model.TotalAmount.ToString("N0")</td>
                             </tr>
                         </tfoot>
                     </table>

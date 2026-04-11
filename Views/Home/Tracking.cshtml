@@ -298,7 +298,7 @@
                 <div class="card border-0 shadow-sm p-4">
                     <form asp-action="Tracking" method="post">
                         <div class="mb-3">
-                            <label class="form-label fw-bold" style="color: #532374;">Order ID</label>
+                            <label class="form-label fw-bold" style="color: #532374;">Order SL</label>
                             <input type="number" name="orderId" class="form-control py-3" placeholder="e.g. 123456" required />
                         </div>
                         <div class="mb-4">
@@ -351,7 +351,7 @@
                         </div>
                     </div>
 
-                    <p class="fs-5"><strong>Total Amount:</strong> ৳@Model.TotalAmount</p>
+                    <p class="fs-5 text-dark fw-bold"><strong>Total Amount (Inc. VAT):</strong> <span class="text-danger">৳@Model.TotalAmount.ToString("N0")</span></p>
                     <p class="fs-5"><strong>Payment:</strong> @Model.PaymentStatus (@(Model.PaymentMethod == "COD" ? "Cash on Delivery" : Model.PaymentMethod))</p>
                     <div class="mt-4">
                         <a href="/Home/Tracking" class="btn btn-theme-outline px-4 py-2 fw-bold">Track Another Package</a>

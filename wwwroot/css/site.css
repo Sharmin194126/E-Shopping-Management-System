@@ -161,6 +161,16 @@ button {
     padding-bottom: 25px; /* space for the floating pill nav */
     margin-bottom: 40px;
 }
+.shoegee-header .shoegee-brand, 
+.shoegee-header .topbar-link, 
+.shoegee-header .digital-clock-widget *,
+.shoegee-header .cart-wrapper *,
+.shoegee-header .welcome * {
+    color: #ffffff !important;
+}
+.shoegee-header form input, .shoegee-header form button {
+    color: #33312e !important;
+}
 
 .shoegee-topbar {
     width: 100%;

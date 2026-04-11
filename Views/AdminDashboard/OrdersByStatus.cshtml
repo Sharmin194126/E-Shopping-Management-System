@@ -16,11 +16,11 @@
         <table class="table table-hover align-middle">
             <thead class="table-dark">
                 <tr>
-                    <th>Order #</th>
+                    <th>Order SL</th>
                     <th>Date</th>
                     <th>Customer</th>
                     <th>Items</th>
-                    <th>Amount</th>
+                    <th>Amount (Inc. VAT)</th>
                     <th>Payment</th>
                     <th>Employee</th>
                     <th>Delivery Man</th>
@@ -31,7 +31,7 @@
                 @foreach (var order in Model)
                 {
                     <tr>
-                        <td>#@order.Id</td>
+                        <td>@order.Id</td>
                         <td>@order.CreatedAt.ToString("dd MMM yyyy, hh:mm tt")</td>
                         <td>
                             @order.Customer?.Name<br />
@@ -43,7 +43,7 @@
                                 <small>@item.Product?.Name x @item.Quantity</small><br />
                             }
                         </td>
-                        <td>৳ @order.TotalAmount</td>
+                        <td>৳@order.TotalAmount.ToString("N0")</td>
                         <td>
                             <span class="badge @(order.PaymentStatus == "Paid" ? "bg-success" : "bg-warning")">@order.PaymentStatus</span><br />
                             <small>@order.PaymentMethod</small>

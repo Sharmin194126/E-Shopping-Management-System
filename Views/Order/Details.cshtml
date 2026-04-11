@@ -6,13 +6,20 @@
 
 <style>
     @@media print {
-        body { background-color: #f2efe9 !important; font-size: 12pt; }
-        .d-print-none { display: none !important; }
-        .d-print-block { display: block !important; }
-        .print-container { max-width: 800px; margin: 0 auto; color: #000; }
+        body { background-color: #ffffff !important; font-size: 11pt; }
+        .d-print-none, .admin-sidebar, .dm-sidebar, .admin-header, .shoegee-header, .sidebar, .search-box, nav, footer { 
+            display: none !important; 
+        }
+        .admin-main, .dm-main, .container { 
+            margin-left: 0 !important; 
+            padding: 0 !important;
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+        .print-container { display: block !important; width: 100%; color: #000; }
         .print-header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; }
         .print-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        .print-table th, .print-table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        .print-table th, .print-table td { border: 1px solid #000; padding: 10px; text-align: left; }
         .print-table th { background-color: #f2efe9 !important; -webkit-print-color-adjust: exact; }
     }
 </style>
@@ -20,7 +27,7 @@
 <!-- Normal View (Hidden when printing) -->
 <div class="container mt-4 d-print-none">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Order #@Model.Id Details</h2>
+        <h2>Order SL @Model.Id Details</h2>
         <div class="d-flex gap-2">
             @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
             {
@@ -36,47 +43,63 @@
     <div class="row">
         <div class="col-md-8">
             <div class="card mb-4 shadow-sm">
-                <div class="card-header">
-                    <h5 class="mb-0">Order Items</h5>
+                <div class="card-header bg-theme" style="background:#532374 !important;">
+                    <h5 class="mb-0 text-white">Order Items</h5>
                 </div>
                 <div class="card-body">
+                    <div class="table-responsive">
                     <table class="table align-middle">
-                        <thead>
+                        <thead class="bg-light">
                             <tr>
+                                <th>SL</th>
                                 <th>Product</th>
-                                <th>Size</th>
-                                <th>Price</th>
+                                <th>Details</th>
+                                <th>Price Structure</th>
                                 <th>Qty</th>
                                 <th>Total</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @{ int sl = 1; }
                             @foreach (var item in Model.OrderDetails!)
                             {
                                 <tr>
+                                    <td>@(sl++)</td>
                                     <td>
                                         <div class="d-flex align-items-center gap-2">
                                             @if (!string.IsNullOrEmpty(item.Product?.ImageUrl))
                                             {
                                                 <img src="@(item.Product.ImageUrl.StartsWith("/") ? item.Product.ImageUrl : "/images/products/" + item.Product.ImageUrl)" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;" />
                                             }
-                                            <span>@item.Product?.Name</span>
+                                            <div class="fw-bold">@item.Product?.Name</div>
                                         </div>
                                     </td>
-                                    <td>@(item.Size ?? "N/A")</td>
-                                    <td>৳@item.Price</td>
+                                    <td>
+                                        <div class="small">Size: <span class="badge bg-secondary">@(item.Size ?? "N/A")</span></div>
+                                        @if(item.OfferPercentage > 0) {
+                                            <div class="badge bg-danger mt-1">@item.OfferPercentage% Offer</div>
+                                        }
+                                    </td>
+                                    <td>
+                                        <div class="small">Price: ৳@item.Price.ToString("N0")</div>
+                                        @if(item.VatPercentage > 0) {
+                                            <div class="text-success small">VAT (@item.VatPercentage%): +৳@item.VatAmount.ToString("N0")</div>
+                                        }
+                                        <div class="fw-bold text-dark" style="font-size: 0.9rem;">Inc. VAT: ৳@item.PriceWithVat.ToString("N0")</div>
+                                    </td>
                                     <td>@item.Quantity</td>
-                                    <td class="fw-bold">৳@(item.Price * item.Quantity)</td>
+                                    <td class="fw-bold">৳@((item.PriceWithVat * item.Quantity).ToString("N0"))</td>
                                 </tr>
                             }
                         </tbody>
-                        <tfoot>
+                        <tfoot class="table-light">
                             <tr>
-                                <td colspan="4" class="text-end fw-bold">Grand Total:</td>
-                                <td class="fw-bold text-danger" style="font-size: 1.2rem;">৳@Model.TotalAmount</td>
+                                <td colspan="5" class="text-end fw-bold">Grand Total (Inc. All VAT):</td>
+                                <td class="fw-bold text-danger" style="font-size: 1.2rem;">৳@Model.TotalAmount.ToString("N0")</td>
                             </tr>
                         </tfoot>
                     </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -110,8 +133,8 @@
             </div>
 
             <div class="card mb-4 shadow-sm">
-                <div class="card-header">
-                    <h5 class="mb-0">Shipping Info</h5>
+                <div class="card-header bg-theme" style="background:#532374 !important;">
+                    <h5 class="mb-0 text-white">Shipping Info</h5>
                 </div>
                 <div class="card-body">
                     <p class="mb-1"><strong>Customer:</strong> @Model.Customer?.Name</p>
@@ -128,7 +151,7 @@
 <div class="d-none d-print-block print-container">
     <div class="print-header">
         <h1>E-Shop Receipt</h1>
-        <p class="mb-0">Order #@Model.Id | Date: @Model.CreatedAt.ToLocalTime().ToString("dd MMM yyyy, hh:mm tt")</p>
+        <p class="mb-0">Order SL @Model.Id | Date: @Model.CreatedAt.ToLocalTime().ToString("dd MMM yyyy, hh:mm tt")</p>
         <p class="mb-0">Status: <strong>@Model.OrderStatus</strong></p>
     </div>
 

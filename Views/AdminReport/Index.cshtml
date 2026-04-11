@@ -3,195 +3,314 @@
 @{
     ViewData["Title"] = "Reports";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    
+    // Calculated stats
+    decimal avgOrderValue = Model.Summary.TotalOrders > 0 ? Model.Summary.TotalRevenue / Model.Summary.TotalOrders : 0;
+    var topDay = Model.DateWiseSales.OrderByDescending(x => x.Revenue).FirstOrDefault();
+    var topEmployee = Model.EmployeeSales.OrderByDescending(x => x.Revenue).FirstOrDefault();
+    decimal maxRevenue = Model.EmployeeSales.Any() ? Model.EmployeeSales.Max(x => x.Revenue) : 1;
 }
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h2 class="mb-0">📈 Sales &amp; Operations Reports</h2>
-    <a asp-controller="AdminDashboard" asp-action="Index" class="theme-back-btn mb-0">Back to Dashboard</a>
+<div class="d-flex justify-content-between align-items-center mb-4 d-print-none">
+    <h2 class="mb-0 fw-bold border-start border-4 border-primary ps-3">
+        <i class="bi bi-file-earmark-bar-graph me-2 text-primary"></i>Admin reporting Center
+    </h2>
+    <div class="d-flex gap-2">
+        <button onclick="window.print()" class="btn btn-outline-dark shadow-sm bg-white fw-bold">
+            <i class="bi bi-printer me-1"></i> Print Full Report
+        </button>
+        <a asp-controller="AdminDashboard" asp-action="Index" class="theme-back-btn mb-0 shadow-sm">
+            <i class="bi bi-speedometer2 me-1"></i> Dashboard
+        </a>
+    </div>
 </div>
 
-<!-- Filter -->
-<div class="page-card p-3 mb-3">
-    <form asp-action="Index" method="get" class="row g-2">
-        <div class="col-md-3">
-            <label class="form-label">From</label>
-            <input type="date" name="fromDate" class="form-control"
-                   value="@Model.FromDate?.ToString("yyyy-MM-dd")" />
+<div class="d-none d-print-block text-center mb-5">
+    <h1 class="fw-bold mb-0">E-SHOP PERFORMANCE REPORT</h1>
+    <p class="text-muted">Report Generated: @DateTime.Now.ToString("dd MMM yyyy, hh:mm tt")</p>
+    <div style="border-bottom: 2px solid #532374; width: 100px; margin: 10px auto;"></div>
+</div>
+
+<!-- Filter Section -->
+<div class="page-card mb-4 shadow-sm border-0 d-print-none" style="background: #f2efe9;">
+    <div class="d-flex align-items-center mb-3">
+        <h5 class="mb-0 fw-bold text-muted"><i class="bi bi-funnel me-2"></i>Report Parameters</h5>
+    </div>
+    <form asp-action="Index" method="get" class="row g-3 align-items-end">
+        <div class="col-md-4">
+            <label class="form-label small fw-bold text-uppercase text-dark">Start Date</label>
+            <div class="input-group">
+                <span class="input-group-text bg-white border-end-0"><i class="bi bi-calendar-event"></i></span>
+                <input type="date" name="fromDate" class="form-control ps-1 border-start-0" 
+                       value="@Model.FromDate?.ToString("yyyy-MM-dd")" />
+            </div>
         </div>
-        <div class="col-md-3">
-            <label class="form-label">To</label>
-            <input type="date" name="toDate" class="form-control"
-                   value="@Model.ToDate?.ToString("yyyy-MM-dd")" />
+        <div class="col-md-4">
+            <label class="form-label small fw-bold text-uppercase text-dark">End Date</label>
+            <div class="input-group">
+                <span class="input-group-text bg-white border-end-0"><i class="bi bi-calendar-check"></i></span>
+                <input type="date" name="toDate" class="form-control ps-1 border-start-0" 
+                       value="@Model.ToDate?.ToString("yyyy-MM-dd")" />
+            </div>
         </div>
-        <div class="col-md-3 d-flex align-items-end gap-2">
-            <button type="submit" class="btn btn-primary w-100">Filter</button>
-            <a asp-action="Index" class="btn btn-outline-secondary w-100">Clear</a>
+        <div class="col-md-4 d-flex gap-2">
+            <button type="submit" class="btn btn-primary w-100 py-2 fw-bold" style="background: #532374;">
+                <i class="bi bi-filter me-1"></i> Apply Filter
+            </button>
+            <a asp-action="Index" class="btn btn-outline-secondary w-100 py-2 fw-bold bg-white">
+                <i class="bi bi-arrow-counterclockwise me-1"></i> Clear
+            </a>
         </div>
     </form>
 </div>
 
-<!-- Summary cards -->
-<div class="row g-3 mb-3">
-    <div class="col-md-4">
-        <div class="dash-card bg-success text-white position-relative p-3">
-            <h5>Total Products Sold</h5>
-            <p class="fs-4 mb-0">@Model.Summary.TotalProductsSold</p>
+<!-- Summary Premium Stat Cards -->
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="stat-card-premium card-variant-green shadow-sm">
+            <div class="stat-card-content">
+                <div class="stat-card-label" style="color: white !important;">Products Sold</div>
+                <div class="stat-card-value" style="color: white !important;">@Model.Summary.TotalProductsSold</div>
+            </div>
+            <div class="stat-card-icon">
+                <i class="bi bi-cart-check-fill"></i>
+            </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="dash-card p-3" style="background:#532374; color:#fff;">
-            <h5>Total Revenue</h5>
-            <p class="fs-4 mb-0">@Model.Summary.TotalRevenue</p>
+    <div class="col-md-3">
+        <div class="stat-card-premium card-variant-purple shadow-sm">
+            <div class="stat-card-content">
+                <div class="stat-card-label" style="color: white !important;">Total Revenue (Inc. VAT)</div>
+                <div class="stat-card-value" style="color: white !important;">৳@Model.Summary.TotalRevenue.ToString("N0")</div>
+            </div>
+            <div class="stat-card-icon">
+                <i class="bi bi-cash-stack"></i>
+            </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="dash-card bg-info text-dark position-relative p-3">
-            <h5>Total Orders</h5>
-            <p class="fs-4 mb-0">@Model.Summary.TotalOrders</p>
+    <div class="col-md-3">
+        <div class="stat-card-premium card-variant-blue shadow-sm">
+            <div class="stat-card-content">
+                <div class="stat-card-label" style="color: white !important;">Confirmed Orders</div>
+                <div class="stat-card-value" style="color: white !important;">@Model.Summary.TotalOrders</div>
+            </div>
+            <div class="stat-card-icon">
+                <i class="bi bi-check2-circle"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card-premium card-variant-orange shadow-sm">
+            <div class="stat-card-content">
+                <div class="stat-card-label" style="color: white !important;">Avg Order Value</div>
+                <div class="stat-card-value" style="color: white !important;">৳@avgOrderValue.ToString("N0")</div>
+            </div>
+            <div class="stat-card-icon">
+                <i class="bi bi-calculator"></i>
+            </div>
         </div>
     </div>
 </div>
 
-<!-- Date-wise sales -->
-<div class="page-card p-3 mb-3">
-    <h5 class="mb-2">📆 Date-wise Sales</h5>
-    <table class="table table-sm table-bordered align-middle">
-        <thead style="background:#532374; color:#fff;">
-            <tr>
-                <th style="width: 70px;">SL No</th>
-                <th>Date</th>
-                <th>Orders</th>
-                <th>Products Sold</th>
-                <th>Revenue</th>
-            </tr>
-        </thead>
-        <tbody>
-            @{ var sl1 = 1; }
-            @if (!Model.DateWiseSales.Any())
-            {
-                <tr><td colspan="5" class="text-muted text-center">No data.</td></tr>
-            }
-            else
-            {
-                @foreach (var row in Model.DateWiseSales)
-                {
-                    <tr>
-                        <td>@(sl1++)</td>
-                        <td>@row.Date.ToString("dd-MM-yyyy")</td>
-                        <td>@row.OrdersCount</td>
-                        <td>@row.ProductsSold</td>
-                        <td>@row.Revenue</td>
-                    </tr>
-                }
-            }
-        </tbody>
-    </table>
+<div class="row g-4">
+    <!-- Date-wise sales -->
+    <div class="col-lg-6">
+        <div class="dashboard-table-card h-100 shadow-sm border-0 bg-white" style="border-radius: 16px;">
+            <h5 class="mb-4 fw-bold border-bottom pb-3"><i class="bi bi-calendar3 me-2 text-primary"></i>Daily Sales Overview</h5>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead style="background: #532374; color: white;">
+                        <tr>
+                            <th class="text-center" style="color: white !important;">SL</th>
+                            <th style="color: white !important;">Date</th>
+                            <th class="text-center" style="color: white !important;">Orders</th>
+                            <th class="text-center" style="color: white !important;">Revenue</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{ var sl1 = 1; }
+                        @if (!Model.DateWiseSales.Any())
+                        {
+                            <tr><td colspan="4" class="text-muted text-center py-4">No data available for this range.</td></tr>
+                        }
+                        else
+                        {
+                            @foreach (var row in Model.DateWiseSales.OrderByDescending(x => x.Date))
+                            {
+                                <tr>
+                                    <td class="text-center fw-bold text-muted">@(sl1++)</td>
+                                    <td><span class="badge bg-light text-dark fw-normal border px-2 py-1">@row.Date.ToString("dd MMM yyyy")</span></td>
+                                    <td class="text-center"><span class="fw-bold">@row.OrdersCount</span></td>
+                                    <td class="text-center"><span class="text-success fw-bold">৳@row.Revenue.ToString("N0")</span></td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Employee-wise sales -->
+    <div class="col-lg-6">
+        <div class="dashboard-table-card h-100 shadow-sm border-0 bg-white" style="border-radius: 16px;">
+            <h5 class="mb-4 fw-bold border-bottom pb-3"><i class="bi bi-person-workspace me-2 text-primary"></i>Sales Distribution (Employee)</h5>
+            <div class="table-responsive mt-3">
+                <table class="table table-sm table-hover align-middle">
+                    <thead style="background: #532374; color: white;">
+                        <tr>
+                            <th class="text-center" style="color: white !important;">SL</th>
+                            <th style="color: white !important;">Name</th>
+                            <th class="text-center" style="color: white !important;">Orders</th>
+                            <th class="text-center" style="color: white !important;">Total Revenue</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{ var sl2 = 1; }
+                        @foreach (var row in Model.EmployeeSales.OrderByDescending(x => x.Revenue))
+                        {
+                            <tr>
+                                <td class="text-center text-muted">@(sl2++)</td>
+                                <td>@row.EmployeeName</td>
+                                <td class="text-center"><span class="badge bg-light text-dark border">@row.OrdersHandled</span></td>
+                                <td class="text-center fw-bold" style="color:#532374;">৳@row.Revenue.ToString("N0")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pending stock Section -->
+    <div class="col-lg-12">
+        <div class="page-card shadow-sm border-0 mb-4 overflow-hidden bg-white" style="border-radius: 12px; border: 1px solid #e6e2db !important;">
+            <div class="p-3 bg-light border-bottom d-flex justify-content-between align-items-center">
+                <h5 class="mb-0 fw-bold text-dark"><i class="bi bi-exclamation-triangle-fill me-2 text-warning"></i>Critical Stock Alerts</h5>
+                <span class="badge bg-warning text-dark rounded-pill" style="font-size: 13px;">@Model.PendingStock.Count() Items Need Attention</span>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead style="background: #532374; color: white;">
+                        <tr>
+                            <th class="text-center" style="width: 80px; color: white !important;">SL</th>
+                            <th style="color: white !important;">Product Tracking</th>
+                            <th class="text-center" style="color: white !important;">Current Stock</th>
+                            <th class="text-center" style="color: white !important;">Committed (Pending)</th>
+                            <th class="text-center" style="color: white !important;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{ var sl3 = 1; }
+                        @if (!Model.PendingStock.Any())
+                        {
+                            <tr><td colspan="5" class="text-muted text-center py-5"><i class="bi bi-check-circle-fill text-success fs-1 d-block mb-3"></i>All products are sufficiently stocked.</td></tr>
+                        }
+                        else
+                        {
+                            @foreach (var row in Model.PendingStock)
+                            {
+                                <tr>
+                                    <td class="text-center fw-bold text-muted">@(sl3++)</td>
+                                    <td>
+                                        <div class="fw-bold">@row.ProductName</div>
+                                        <small class="text-muted">Unique ID: @row.ProductId</small>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="badge @(row.StockQty < 10 ? "bg-danger" : "bg-warning text-dark") fs-6 px-3">
+                                            @row.StockQty Units
+                                        </span>
+                                    </td>
+                                    <td class="text-center text-primary-emphasis fw-bold">@row.PendingOrderQty Units</td>
+                                    <td class="text-center">
+                                        <a href="/Product/Edit/@row.ProductId" class="theme-back-btn" style="padding: 5px 15px !important; font-size: 13px !important; margin-bottom: 0 !important;">
+                                            Update Stock
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pending delivery Section -->
+    <div class="col-lg-12">
+        <div class="page-card shadow-sm border-0 overflow-hidden bg-white" style="border-radius: 12px; border: 1px solid #e6e2db !important;">
+            <div class="p-3 bg-light border-bottom d-flex justify-content-between align-items-center">
+                <h5 class="mb-0 fw-bold text-dark"><i class="bi bi-truck me-2 text-primary"></i>Ongoing Shipment Tracking</h5>
+                <span class="badge bg-primary text-white rounded-pill" style="font-size: 13px;">@Model.PendingDelivery.Count() Active Shipments</span>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead style="background: #532374; color: white !important;">
+                        <tr>
+                            <th class="text-center" style="color: white !important;">Order ID</th>
+                            <th style="color: white !important;">Customer Detail</th>
+                            <th style="color: white !important;">Order Timestamp</th>
+                            <th class="text-center" style="color: white !important;">Status</th>
+                            <th class="text-center" style="color: white !important;">Grand Total (Inc. VAT)</th>
+                            <th class="text-center" style="color: white !important;">Operation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!Model.PendingDelivery.Any())
+                        {
+                            <tr><td colspan="6" class="text-center text-muted py-5">No active shipments in processing.</td></tr>
+                        }
+                        else
+                        {
+                            @foreach (var row in Model.PendingDelivery.OrderByDescending(x => x.CreatedAt))
+                            {
+                                <tr>
+                                    <td class="text-center fw-bold">#ORD-@row.OrderId</td>
+                                    <td>
+                                        <div class="fw-medium">@row.CustomerName</div>
+                                    </td>
+                                    <td>
+                                        <small class="text-muted"><i class="bi bi-clock me-1"></i>@row.CreatedAt.ToLocalTime().ToString("dd MMM yyyy, hh:mm tt")</small>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="badge @(row.OrderStatus == "Shipped" ? "bg-info" : "bg-primary") px-3 rounded-pill">
+                                            @row.OrderStatus
+                                        </span>
+                                    </td>
+                                    <td class="text-center fw-bold text-dark">৳@row.TotalAmount.ToString("N0")</td>
+                                    <td class="text-center">
+                                        <a href="/Order/Details/@row.OrderId" class="theme-back-btn" style="padding: 5px 15px !important; font-size: 13px !important; margin-bottom: 0 !important;">
+                                            View Detail
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
-<!-- Employee-wise sales -->
-<div class="page-card p-3 mb-3">
-    <h5 class="mb-2">👨‍💼 Employee-wise Sales</h5>
-    <table class="table table-sm table-bordered align-middle">
-        <thead style="background:#532374; color:#fff;">
-            <tr>
-                <th style="width: 70px;">SL No</th>
-                <th>Employee</th>
-                <th>Orders Handled</th>
-                <th>Products Sold</th>
-                <th>Revenue</th>
-            </tr>
-        </thead>
-        <tbody>
-            @{ var sl2 = 1; }
-            @if (!Model.EmployeeSales.Any())
-            {
-                <tr><td colspan="5" class="text-muted text-center">No data.</td></tr>
-            }
-            else
-            {
-                @foreach (var row in Model.EmployeeSales)
-                {
-                    <tr>
-                        <td>@(sl2++)</td>
-                        <td>@row.EmployeeName (@row.EmployeeId)</td>
-                        <td>@row.OrdersHandled</td>
-                        <td>@row.ProductsSold</td>
-                        <td>@row.Revenue</td>
-                    </tr>
-                }
-            }
-        </tbody>
-    </table>
-</div>
-
-<!-- Pending stock -->
-<div class="page-card p-3 mb-3">
-    <h5 class="mb-2">📦 Pending Stock (Low stock / pending orders)</h5>
-    <table class="table table-sm table-bordered align-middle">
-        <thead style="background:#532374; color:#fff;">
-            <tr>
-                <th style="width: 70px;">SL No</th>
-                <th>Product</th>
-                <th>Stock Qty</th>
-                <th>Pending Order Qty</th>
-            </tr>
-        </thead>
-        <tbody>
-            @{ var sl3 = 1; }
-            @if (!Model.PendingStock.Any())
-            {
-                <tr><td colspan="4" class="text-muted text-center">No pending stock alerts.</td></tr>
-            }
-            else
-            {
-                @foreach (var row in Model.PendingStock)
-                {
-                    <tr>
-                        <td>@(sl3++)</td>
-                        <td>@row.ProductName (@row.ProductId)</td>
-                        <td>@row.StockQty</td>
-                        <td>@row.PendingOrderQty</td>
-                    </tr>
-                }
-            }
-        </tbody>
-    </table>
-</div>
-
-<!-- Pending delivery -->
-<div class="page-card p-3 mb-3">
-    <h5 class="mb-2">🚚 Pending Delivery</h5>
-    <table class="table table-sm table-bordered align-middle">
-        <thead style="background:#532374; color:#fff;">
-            <tr>
-                <th style="width: 70px;">SL No</th>
-                <th>Order Id</th>
-                <th>Customer</th>
-                <th>Created At</th>
-                <th>Status</th>
-                <th>Total</th>
-            </tr>
-        </thead>
-        <tbody>
-            @{ var sl4 = 1; }
-            @if (!Model.PendingDelivery.Any())
-            {
-                <tr><td colspan="6" class="text-center text-muted">No pending deliveries.</td></tr>
-            }
-            else
-            {
-                @foreach (var row in Model.PendingDelivery)
-                {
-                    <tr>
-                        <td>@(sl4++)</td>
-                        <td>@row.OrderId</td>
-                        <td>@row.CustomerName</td>
-                        <td>@row.CreatedAt.ToLocalTime().ToString("dd-MM-yyyy, hh:mm tt")</td>
-                        <td>@row.OrderStatus</td>
-                        <td>@row.TotalAmount</td>
-                    </tr>
-                }
-            }
-        </tbody>
-    </table>
-</div>
+<style>
+    .text-purple { color: #532374; }
+    .page-card { transition: all 0.3s ease; }
+    .page-card h5 { font-size: 1.1rem; }
+    
+    @@media print {
+        .admin-sidebar, .dm-sidebar, .admin-header, .shoegee-header, .side-nav, .theme-back-btn, .btn, .input-group, label, .d-print-none {
+            display: none !important;
+        }
+        .admin-main, .dm-main, .container-fluid, .container { 
+            margin-left: 0 !important; 
+            padding: 0 !important; 
+            width: 100% !important;
+        }
+        .page-card, .dashboard-table-card { box-shadow: none !important; border: 1px solid #ddd !important; background: white !important; }
+        .stat-card-premium { color: black !important; border: 1px solid #ddd; background: white !important; box-shadow: none !important; }
+        .stat-card-label, .stat-card-value { color: black !important; }
+        .stat-card-icon { display: none; }
+        .table thead th { background: #532374 !important; color: white !important; -webkit-print-color-adjust: exact; }
+    }
+</style>

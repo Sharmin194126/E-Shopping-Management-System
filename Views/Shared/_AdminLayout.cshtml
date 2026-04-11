@@ -24,6 +24,15 @@
         .container, .container-fluid {
             background-color: transparent !important;
         }
+
+        /* Sidebar link text color white */
+        .admin-sidebar a {
+            color: #ffffff !important;
+        }
+        .admin-sidebar a:hover {
+            background: rgba(255, 255, 255, 0.15) !important;
+            color: #ffffff !important;
+        }
     </style>
 </head>
 
@@ -35,30 +44,63 @@
         <aside class="admin-sidebar">
             <h4 class="text-center py-3">ADMIN</h4>
             <div class="px-3 mb-3">
-                <a asp-controller="Home" asp-action="Index" class="theme-back-btn w-100 justify-content-center" style="margin-bottom:0;">
+                <a asp-controller="Home" asp-action="Index" class="theme-back-btn w-100 justify-content-center" style="margin-bottom:0; color: #532374 !important;">
                     <i class="bi bi-arrow-left"></i> Back to Website
                 </a>
             </div>
-            <a asp-controller="AdminDashboard" asp-action="Index">Dashboard</a>
+            
+            <a asp-controller="AdminDashboard" asp-action="Index">
+                <i class="bi bi-speedometer2 me-2"></i>Dashboard
+            </a>
 
             <p class="menu-title">CATEGORY</p>
-            <a asp-controller="Category" asp-action="Index">Categories</a>
-            <a asp-controller="Product" asp-action="Index">Products</a>
-            <a asp-controller="ProductType" asp-action="Index">Product Types</a>
-            <a asp-controller="AdminDashboard" asp-action="ManageDisplaySections" class="text-warning">🏠 Homepage Sections</a>
+            <a asp-controller="Category" asp-action="Index">
+                <i class="bi bi-tags me-2"></i>Categories
+            </a>
+            <a asp-controller="Product" asp-action="Index">
+                <i class="bi bi-box-seam me-2"></i>Products
+            </a>
+            <a asp-controller="ProductType" asp-action="Index">
+                <i class="bi bi-collection me-2"></i>Product Types
+            </a>
+            <a asp-controller="AdminDashboard" asp-action="ManageDisplaySections" class="text-warning">
+                <i class="bi bi-house-gear me-2"></i>Homepage Sections
+            </a>
 
             <p class="menu-title">SYSTEM</p>
-            <a asp-controller="Customer" asp-action="Index">Manage Customer</a>
-            <a asp-controller="Employee" asp-action="Index">Manage Employees</a>
-            <a asp-controller="AdminCart" asp-action="Index">Manage Carts</a>
-            <a asp-controller="DeliveryMan" asp-action="Index">Delivery Personnel</a>
-            <a asp-controller="AdminReport" asp-action="Index">Reports</a>
-            <a asp-controller="AdminDashboard" asp-action="ManageReviews">⭐ Manage Reviews</a>
-            <a asp-controller="AdminDashboard" asp-action="Messages">✉ Messages</a>
-            <a asp-controller="AdminDashboard" asp-action="EmployeeList">👥 Employee Products & Sales</a>
-            <a asp-controller="AdminDashboard" asp-action="Profile" class="fw-bold text-warning">My Profile</a>
-            <a asp-controller="PaymentGateway" asp-action="AdminPaymentHistory" class="text-info">💰 Payment History</a>
-            <a asp-controller="Banner" asp-action="Index" class="text-success">🖼️ Manage Banners</a>
+            <a asp-controller="Customer" asp-action="Index">
+                <i class="bi bi-people me-2"></i>Manage Customer
+            </a>
+            <a asp-controller="Employee" asp-action="Index">
+                <i class="bi bi-person-badge me-2"></i>Manage Employees
+            </a>
+            <a asp-controller="AdminCart" asp-action="Index">
+                <i class="bi bi-cart me-2"></i>Manage Carts
+            </a>
+            <a asp-controller="DeliveryMan" asp-action="Index">
+                <i class="bi bi-truck me-2"></i>Delivery Personnel
+            </a>
+            <a asp-controller="AdminReport" asp-action="Index">
+                <i class="bi bi-file-earmark-bar-graph me-2"></i>Reports
+            </a>
+            <a asp-controller="AdminDashboard" asp-action="ManageReviews">
+                <i class="bi bi-star me-2"></i>Manage Reviews
+            </a>
+            <a asp-controller="AdminDashboard" asp-action="Messages">
+                <i class="bi bi-envelope me-2"></i>Messages
+            </a>
+            <a asp-controller="AdminDashboard" asp-action="EmployeeList">
+                <i class="bi bi-person-lines-fill me-1"></i>Employee Products-Sales
+            </a>
+            <a asp-controller="AdminDashboard" asp-action="Profile" class="fw-bold text-warning">
+                <i class="bi bi-person-circle me-2"></i>My Profile
+            </a>
+            <a asp-controller="PaymentGateway" asp-action="AdminPaymentHistory" class="text-info">
+                <i class="bi bi-credit-card me-2"></i>Payment History
+            </a>
+            <a asp-controller="Banner" asp-action="Index" class="text-success">
+                <i class="bi bi-images me-2"></i>Manage Banners
+            </a>
         </aside>
 
         <!-- MAIN -->
@@ -85,4 +127,3 @@
 
 </body>
 </html>
-

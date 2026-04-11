@@ -11,11 +11,11 @@
         <table class="table table-hover align-middle">
             <thead class="table-dark">
                 <tr>
-                    <th>Order ID</th>
+                    <th>Order SL</th>
                     <th>Customer</th>
                     <th>Date</th>
                     <th>Products</th>
-                    <th>Total Amount</th>
+                    <th>Total (Inc. VAT)</th>
                 </tr>
             </thead>
             <tbody>
@@ -46,7 +46,7 @@
                                 }
                             </div>
                         </td>
-                        <td style="font-weight: bold; color: #2c3e50;">৳@order.TotalAmount</td>
+                        <td style="font-weight: bold; color: #2c3e50;">৳@order.TotalAmount.ToString("N0")</td>
                     </tr>
                 }
             </tbody>
@@ -54,6 +54,6 @@
     </div>
 
     <div class="mt-4">
-        <a asp-action="Index" class="btn btn-secondary">Back to Dashboard</a>
+        <a asp-action="Index" class="theme-back-btn">Back to Dashboard</a>
     </div>
 </div>

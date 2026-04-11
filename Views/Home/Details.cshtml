@@ -249,21 +249,51 @@
                 <span class="text-warning fs-5">@Html.Raw(RenderStars(Model.Product.AverageRating))</span>
                 <span class="text-muted">(@Model.Product.AverageRating.ToString("0.0")) | @Model.TotalReviews.ToString("#,##0") Reviews</span>
             </div>
-            <div class="price-area mb-3">
+            <div class="price-area mb-3 p-3 rounded" style="background: rgba(83,35,116,0.05); border-left: 4px solid #532374;">
                 @if (Model.Product.OfferPercentage > 0)
                 {
-                    <span class="badge bg-danger mb-2">@Model.Product.OfferPercentage% offer price</span>
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <span class="badge bg-danger">@Model.Product.OfferPercentage% OFF</span>
+                        <span class="text-danger fw-bold small text-uppercase" style="letter-spacing: 1px;">Limited Time Offer!</span>
+                    </div>
                 }
-                <div class="d-flex align-items-center gap-2">
+                
+                <div class="d-flex flex-column gap-1">
                     @if (Model.Product.RegularPrice > Model.Product.Price)
                     {
-                        <h4 class="text-muted text-decoration-line-through mb-0">৳ @Model.Product.RegularPrice.ToString("#,##0")</h4>
+                        <div>
+                            <span class="text-muted small">Regular Price: </span>
+                            <span class="text-muted text-decoration-line-through">৳ @Model.Product.RegularPrice.ToString("#,##0")</span>
+                        </div>
                     }
-                    <h3 class="text-danger fw-bold mb-0">৳ @Model.Product.Price.ToString("#,##0")</h3>
+                    <div class="d-flex align-items-baseline gap-2">
+                        <h3 class="text-danger fw-bold mb-0" style="font-size: 2rem;">৳ @Model.Product.Price.ToString("#,##0")</h3>
+                        @if (Model.Product.OfferPercentage > 0)
+                        {
+                            <span class="text-muted small">(Offer Price)</span>
+                        }
+                    </div>
                 </div>
+
                 @if (Model.Product.VatPercentage > 0)
                 {
-                    <div class="text-muted small">+ @Model.Product.VatPercentage% VAT</div>
+                    decimal vAmt = (Model.Product.Price * Model.Product.VatPercentage) / 100;
+                    decimal totalWVat = Model.Product.Price + vAmt;
+                    
+                    <div class="mt-2 border-top pt-2">
+                        <div class="text-muted small d-flex justify-content-between" style="max-width: 250px;">
+                            <span>Price:</span>
+                            <span class="fw-bold">৳ @Model.Product.Price.ToString("#,##0")</span>
+                        </div>
+                        <div class="text-muted small d-flex justify-content-between" style="max-width: 250px;">
+                            <span>VAT (@Model.Product.VatPercentage%):</span>
+                            <span class="fw-bold text-success">+ ৳ @vAmt.ToString("#,##0")</span>
+                        </div>
+                        <div class="text-dark fw-bold d-flex justify-content-between" style="max-width: 250px; font-size: 1.1rem;">
+                            <span>Grand Total:</span>
+                            <span class="text-danger">৳ @totalWVat.ToString("#,##0")</span>
+                        </div>
+                    </div>
                 }
             </div>
             
@@ -509,7 +539,7 @@
                     else
                     {
                         <p class="mb-2">Please login to share your feedback.</p>
-                        <a asp-controller="Account" asp-action="Login" class="btn btn-sm btn-outline-primary">Login Now</a>
+                        <a asp-controller="Account" asp-action="Login" class="btn btn-sm btn-primary shadow-sm px-4 fw-bold" style="background: #532374 !important; border:none;">Login Now</a>
                     }
                 </div>
             </div>

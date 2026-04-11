@@ -29,7 +29,7 @@
                 <table class="table table-hover align-middle" style="background: #f2efe9; border-radius: 8px; overflow: hidden;">
                     <thead style="background:#532374; color:#fff;">
                         <tr>
-                            <th style="width: 70px;">SL No</th>
+                            <th style="width: 70px;">SL</th>
                             <th>Image</th>
                             <th>Product</th>
                             <th style="width:120px;">Price</th>
@@ -55,11 +55,14 @@
                                 <td>
                                     <div style="font-weight: 600; color: #333;">@item.ProductName</div>
                                 </td>
-                                <td style="color: #d9534f; font-weight: bold;">
-                                    ৳@item.UnitPrice.ToString("#,##0")
+                                <td style="color: #333;">
+                                    <div class="fw-bold">৳@item.UnitPrice.ToString("#,##0")</div>
                                     @if(item.VatAmount > 0) {
-                                        <div class="small text-muted" style="font-size: 10px;">+ ৳@item.VatAmount.ToString("#,##0") VAT</div>
+                                        <div class="text-success small" style="font-size: 11px; font-weight: 500;">+ ৳@item.VatAmount.ToString("#,##0") VAT (@(((item.VatAmount/item.UnitPrice)*100).ToString("0"))%)</div>
                                     }
+                                    <div class="text-danger fw-bold" style="font-size: 0.9rem; border-top: 1px solid #ddd; margin-top: 2px; padding-top: 2px;">
+                                        Inc. VAT: ৳@item.PriceWithVat.ToString("#,##0")
+                                    </div>
                                 </td>
                                 <td>
                                     <form asp-action="UpdateSize" method="post">
@@ -116,7 +119,7 @@
                 </form>
             </div>
             <div class="d-flex align-items-center gap-4">
-                <span class="fs-4" style="color: #333;"><strong>Total: </strong> <span style="color: #d9534f; font-weight: 800;">৳@Model.Total.ToString("#,##0")</span></span>
+                <span class="fs-4" style="color: #333;"><strong>Total (Inc. VAT): </strong> <span style="color: #d9534f; font-weight: 800;">৳@Model.Total.ToString("#,##0")</span></span>
                 <a href="/Order/Checkout" class="btn btn-success px-4 py-2" style="font-weight: bold;">Checkout Now</a>
             </div>
         </div>
