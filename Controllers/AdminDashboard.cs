@@ -34,7 +34,11 @@ namespace E_ShoppingManagement.Controllers
         {
             var stats = new AdminStatsViewModel();
 
-            var orders = await _context.Orders.Include(o => o.Customer).ToListAsync();
+            var orders = await _context.Orders
+                .Include(o => o.Customer)
+                .Include(o => o.OrderDetails!)
+                    .ThenInclude(od => od.Product)
+                .ToListAsync();
             stats.TotalOrders = orders.Count;
             stats.TotalDelivered = orders.Count(o => o.OrderStatus == "Delivered");
             stats.TotalPending = orders.Count(o => o.OrderStatus == "Pending");
@@ -55,7 +59,8 @@ namespace E_ShoppingManagement.Controllers
                 Amount = o.TotalAmount,
                 PaymentStatus = o.PaymentStatus,
                 PaymentMethod = o.PaymentMethod,
-                ShippingAddress = $"{o.ShippingAddress}, {o.City}"
+                ShippingAddress = $"{o.ShippingAddress}, {o.City}",
+                ImageUrl = o.OrderDetails?.FirstOrDefault()?.Product?.ImageUrl ?? ""
             }).ToList();
 
             // Employee Performance
@@ -192,10 +197,18 @@ namespace E_ShoppingManagement.Controllers
             stats.CurrentYear = DateTime.UtcNow.Year;
             stats.PreviousYear = DateTime.UtcNow.Year - 1;
 
-            // Fix SalesGoal: use lastYearRevenue if exists, else use currentYearRevenue as goal baseline
-            var lastYearRevenue = soldOrders.Where(o => o.CreatedAt.Year == stats.PreviousYear).Sum(o => o.TotalAmount);
-            stats.SalesGoal = lastYearRevenue > 0 ? lastYearRevenue * 1.2m : stats.TotalRevenue * 1.2m;
-            if (stats.SalesGoal == 0) stats.SalesGoal = 100000;
+            // Fix SalesGoal: load from custom settings file if available
+            string goalFilePath = System.IO.Path.Combine(_env.WebRootPath, "settings", "sales_goal.txt");
+            if (System.IO.File.Exists(goalFilePath) && decimal.TryParse(System.IO.File.ReadAllText(goalFilePath), out decimal savedGoal))
+            {
+                stats.SalesGoal = savedGoal;
+            }
+            else
+            {
+                var lastYearRevenue = soldOrders.Where(o => o.CreatedAt.Year == stats.PreviousYear).Sum(o => o.TotalAmount);
+                stats.SalesGoal = lastYearRevenue > 0 ? lastYearRevenue * 1.2m : stats.TotalRevenue * 1.2m;
+                if (stats.SalesGoal == 0) stats.SalesGoal = 100000;
+            }
 
             // Previous Year monthly sales (all 12 months)
             for (int m = 1; m <= 12; m++)
@@ -216,6 +229,21 @@ namespace E_ShoppingManagement.Controllers
             return View(stats);
 
         }
+
+        [HttpPost]
+        public IActionResult UpdateSalesGoal(decimal goalAmount)
+        {
+            string folderPath = System.IO.Path.Combine(_env.WebRootPath, "settings");
+            if (!System.IO.Directory.Exists(folderPath)) System.IO.Directory.CreateDirectory(folderPath);
+            
+            string filePath = System.IO.Path.Combine(folderPath, "sales_goal.txt");
+            System.IO.File.WriteAllText(filePath, goalAmount.ToString());
+            
+            TempData["Message"] = "Sales goal updated successfully!";
+            TempData["IsSuccess"] = true;
+            return RedirectToAction(nameof(Index));
+        }
+
         /// <summary>Shows all order details for a specific product (Top Products drill-down)</summary>
         public async Task<IActionResult> ProductSalesDetail(int productId)
         {

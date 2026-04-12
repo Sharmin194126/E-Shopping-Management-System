@@ -1,4 +1,4 @@
-﻿using E_ShoppingManagement.Data;
+using E_ShoppingManagement.Data;
 using E_ShoppingManagement.Models;
 using E_ShoppingManagement.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -39,6 +39,8 @@ namespace E_ShoppingManagement.Controllers
             // Orders assigned to this employee
             var orders = await _context.Orders
                 .Include(o => o.Customer)
+                .Include(o => o.OrderDetails!)
+                    .ThenInclude(od => od.Product)
                 .Where(o => o.AssignedEmployeeId == employee.Id)
                 .ToListAsync();
 
@@ -60,7 +62,8 @@ namespace E_ShoppingManagement.Controllers
                 Amount = o.TotalAmount,
                 PaymentStatus = o.PaymentStatus,
                 PaymentMethod = o.PaymentMethod,
-                ShippingAddress = o.ShippingAddress ?? "N/A"
+                ShippingAddress = o.ShippingAddress ?? "N/A",
+                ImageUrl = o.OrderDetails?.FirstOrDefault()?.Product?.ImageUrl ?? ""
             }).ToList();
 
             return View(stats);

@@ -78,6 +78,7 @@ namespace E_ShoppingManagement.ViewModels
         public string PaymentStatus { get; set; } = string.Empty;
         public string PaymentMethod { get; set; } = string.Empty;
         public string ShippingAddress { get; set; } = string.Empty;
+        public string ImageUrl { get; set; } = string.Empty;
     }
 
     public class EmployeePerformanceViewModel

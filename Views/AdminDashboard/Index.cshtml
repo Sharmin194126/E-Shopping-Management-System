@@ -178,6 +178,14 @@
         <div class="h-100 p-4 rounded-3 shadow-sm" style="background:#fff; border:1px solid #e6e2db;">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-trophy-fill text-warning me-2"></i>Sales Goal @DateTime.Now.Year</h6>
+                <div>
+                    <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="modal" data-bs-target="#historyGoalModal" title="View Goal History">
+                        <i class="bi bi-clock-history"></i> History
+                    </button>
+                    <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editGoalModal" title="Edit Current Goal">
+                        <i class="bi bi-pencil-square"></i> Edit
+                    </button>
+                </div>
             </div>
             <div class="row mb-3">
                 <div class="col-6">
@@ -210,35 +218,35 @@
 
 <!-- ===== CHART + TOP PRODUCTS ROW ===== -->
 <div class="row g-4 mb-4">
-    <!-- Line Chart - Image-Style Dark Card -->
+    <!-- Line Chart - Standard Premium Card -->
     <div class="col-lg-8">
-        <div class="rounded-3 h-100" style="background:#1a1f2e; border:1px solid #2a3045;">
+        <div class="shadow-sm rounded-3 h-100" style="background:#fff; border:1px solid #e6e2db;">
             <!-- Card Header -->
             <div class="px-4 pt-4 pb-2">
                 <div class="d-flex justify-content-between align-items-start mb-3">
                     <div>
-                        <div class="small mb-1" style="color:#8892a4; text-transform:uppercase; letter-spacing:.5px; font-size:11px;">Product Sales</div>
-                        <div id="chartHeaderAmount" class="fw-bold" style="color:#fff; font-size:1.8rem; line-height:1;">৳0</div>
+                        <div class="small mb-1" style="color:#6c757d; text-transform:uppercase; letter-spacing:.5px; font-size:11px;">Product Sales</div>
+                        <div id="chartHeaderAmount" class="fw-bold" style="color:#33312e; font-size:1.8rem; line-height:1;">৳0</div>
                     </div>
                     <div class="dropdown">
                         <button class="btn btn-sm dropdown-toggle" id="rangeDropdownBtn"
-                                data-bs-toggle="dropdown" data-bs-display="static" style="background:#2a3045; color:#c0c8d8; border:1px solid #3a4560; border-radius:8px; font-size:13px;">
+                                data-bs-toggle="dropdown" data-bs-display="static" style="background:#f8f6f0; color:#532374; border:1px solid #e6e2db; border-radius:8px; font-size:13px;">
                             <span id="rangeDropdownLabel">Weekly</span>
                         </button>
                         <style>
-                            .dark-dropdown-menu .dropdown-item {
-                                color: #c0c8d8 !important;
+                            .light-dropdown-menu .dropdown-item {
+                                color: #33312e !important;
                             }
-                            .dark-dropdown-menu .dropdown-item:hover {
-                                background-color: #3a4560 !important;
-                                color: #fff !important;
+                            .light-dropdown-menu .dropdown-item:hover {
+                                background-color: #f8f6f0 !important;
+                                color: #532374 !important;
                             }
                         </style>
-                        <ul class="dropdown-menu dropdown-menu-end dark-dropdown-menu" style="background:#2a3045 !important; border:1px solid #3a4560 !important; min-width:150px;">
+                        <ul class="dropdown-menu dropdown-menu-end light-dropdown-menu" style="background:#fff !important; border:1px solid #e6e2db !important; min-width:150px;">
                             <li><a class="dropdown-item chart-range-item" href="#" data-range="weekly">Weekly (Last 7 Days)</a></li>
                             <li><a class="dropdown-item chart-range-item" href="#" data-range="monthly">Monthly (Last 30 Days)</a></li>
                             <li><a class="dropdown-item chart-range-item" href="#" data-range="yearly">Yearly (@DateTime.Now.Year)</a></li>
-                            <li><hr class="dropdown-divider" style="border-color:#3a4560;"></li>
+                            <li><hr class="dropdown-divider" style="border-color:#e6e2db;"></li>
                             <li><a class="dropdown-item chart-range-item" href="#" data-range="prevyear">Previous Year (@(DateTime.Now.Year - 1))</a></li>
                         </ul>
                     </div>
@@ -246,16 +254,16 @@
                 <!-- Mini stats -->
                 <div class="row g-3 mb-3">
                     <div class="col-4">
-                        <div class="small" style="color:#8892a4; font-size:11px;">Total Amount</div>
-                        <div class="fw-bold" id="rangeTotalAmount" style="color:#a78be8; font-size:1rem;">৳0</div>
+                        <div class="small" style="color:#6c757d; font-size:11px;">Total Amount</div>
+                        <div class="fw-bold" id="rangeTotalAmount" style="color:#532374; font-size:1rem;">৳0</div>
                     </div>
                     <div class="col-4">
-                        <div class="small" style="color:#8892a4; font-size:11px;">Total Pieces</div>
-                        <div class="fw-bold" id="rangeTotalPieces" style="color:#4ade80; font-size:1rem;">0</div>
+                        <div class="small" style="color:#6c757d; font-size:11px;">Total Pieces</div>
+                        <div class="fw-bold" id="rangeTotalPieces" style="color:#28a745; font-size:1rem;">0</div>
                     </div>
                     <div class="col-4">
-                        <div class="small" style="color:#8892a4; font-size:11px;">Avg / Period</div>
-                        <div class="fw-bold" id="rangeAvgOrder" style="color:#fbbf24; font-size:1rem;">৳0</div>
+                        <div class="small" style="color:#6c757d; font-size:11px;">Avg / Period</div>
+                        <div class="fw-bold" id="rangeAvgOrder" style="color:#fd7e14; font-size:1rem;">৳0</div>
                     </div>
                 </div>
             </div>
@@ -401,6 +409,104 @@
     .top-prod-rank { width:26px; height:26px; border-radius:50%; background:#532374; color:#fff; font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
 </style>
 
+<!-- History Goal Modal -->
+<div class="modal fade" id="historyGoalModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content" style="background:#f2efe9; border:none;">
+            <div class="modal-header" style="border-bottom:1px solid #e6e2db;">
+                <h5 class="modal-title fw-bold" style="color:#532374;"><i class="bi bi-clock-history me-2"></i>Yearly Goal Rates & Comparison</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0 text-center" style="font-size:14px; background:#fff;">
+                        <thead style="background:#532374; color:#fff;">
+                            <tr>
+                                <th>Year</th>
+                                <th>Actual Sales</th>
+                                <th>Target Goal</th>
+                                <th>Achievement Rate</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                var years = Model.MonthlyHistory.GroupBy(m => m.Year).OrderByDescending(g => g.Key).ToList();
+                                for (int i = 0; i < years.Count; i++)
+                                {
+                                    var currentYr = years[i];
+                                    var currentYrSales = currentYr.Sum(m => m.Amount);
+
+                                    decimal historicalGoal = 0;
+                                    if (currentYr.Key == DateTime.Now.Year)
+                                    {
+                                        historicalGoal = Model.SalesGoal;
+                                    }
+                                    else
+                                    {
+                                        if (i + 1 < years.Count)
+                                        {
+                                            var olderYrSales = years[i+1].Sum(m => m.Amount);
+                                            historicalGoal = olderYrSales * 1.2m;
+                                        }
+                                        else
+                                        {
+                                            historicalGoal = currentYrSales > 0 ? currentYrSales * 1.05m : 100000;
+                                        }
+                                    }
+
+                                    var achievementPct = historicalGoal > 0 ? (currentYrSales / historicalGoal) * 100 : 0;
+                                    
+                                    <tr>
+                                        <td class="fw-bold">@currentYr.Key</td>
+                                        <td class="text-success fw-bold">৳@currentYrSales.ToString("#,##0")</td>
+                                        <td class="text-muted">৳@historicalGoal.ToString("#,##0")</td>
+                                        <td>
+                                            <div class="d-flex align-items-center justify-content-center gap-2">
+                                                <div class="progress flex-grow-1" style="height:6px; width:70px; background:#e6e2db;">
+                                                    <div class="progress-bar @(achievementPct >= 100 ? "bg-success" : "bg-warning")" style="width:@(Math.Min(100, achievementPct))%;"></div>
+                                                </div>
+                                                <span class="fw-bold" style="color: @(achievementPct >= 100 ? "#28a745" : "#532374");">@achievementPct.ToString("0.0")%</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer" style="border-top:1px solid #e6e2db;">
+                <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Goal Modal -->
+<div class="modal fade" id="editGoalModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold" style="color:#532374;">Update Sales Goal</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form asp-controller="AdminDashboard" asp-action="UpdateSalesGoal" method="post">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="goalAmount" class="form-label">New Target Amount (৳)</label>
+                        <input type="number" class="form-control" id="goalAmount" name="goalAmount" value="@Model.SalesGoal" required min="1" step="0.01">
+                        <div class="form-text">Change your yearly target goal to adjust the progress charts tracking.</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn text-white fw-bold" style="background-color:#532374;">Save New Target</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script>
@@ -450,17 +556,16 @@
 
         document.addEventListener('DOMContentLoaded', () => {
 
-            // ── 1. Line Chart (Image-Style: dark bg, smooth gradient area) ─────
+            // ── 1. Line Chart (Standard Theme) ─────
             const ctx = document.getElementById('salesChart').getContext('2d');
 
-            // Canvas gradient fill (top=purple, bottom=transparent)
             function makeGradient(context) {
                 const chart = context.chart;
                 const { ctx: c, chartArea } = chart;
                 if (!chartArea) return 'transparent';
                 const gradient = c.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
-                gradient.addColorStop(0, 'rgba(167,139,232,0.55)');
-                gradient.addColorStop(0.5, 'rgba(83,35,116,0.18)');
+                gradient.addColorStop(0, 'rgba(83,35,116,0.25)');
+                gradient.addColorStop(0.5, 'rgba(83,35,116,0.1)');
                 gradient.addColorStop(1, 'rgba(83,35,116,0.0)');
                 return gradient;
             }
@@ -472,18 +577,18 @@
                     datasets: [{
                         label: 'Revenue',
                         data: chartData.weekly.amount,
-                        borderColor: '#a78be8',
+                        borderColor: '#532374',
                         backgroundColor: makeGradient,
                         fill: true,
                         tension: 0.45,
                         borderWidth: 3,
-                        pointBackgroundColor: '#a78be8',
-                        pointBorderColor: '#1a1f2e',
+                        pointBackgroundColor: '#532374',
+                        pointBorderColor: '#fff',
                         pointBorderWidth: 2,
                         pointRadius: 4,
                         pointHoverRadius: 7,
                         pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: '#a78be8',
+                        pointHoverBorderColor: '#532374',
                         pointHoverBorderWidth: 3
                     }]
                 },
@@ -512,13 +617,13 @@
                         x: {
                             grid: { display: false },
                             border: { display: false },
-                            ticks: { color: '#8892a4', font: { size: 11 }, maxRotation: 0 }
+                            ticks: { color: '#6c757d', font: { size: 11 }, maxRotation: 0 }
                         },
                         y: {
                             beginAtZero: true,
-                            grid: { color: 'rgba(255,255,255,0.05)', drawBorder: false },
+                            grid: { color: 'rgba(0,0,0,0.05)', drawBorder: false },
                             border: { display: false, dash: [4,4] },
-                            ticks: { color: '#8892a4', font: { size: 11 }, callback: v => v === 0 ? '৳0' : (v >= 1000 ? '৳' + (v/1000).toFixed(0) + 'k' : '৳' + v) }
+                            ticks: { color: '#6c757d', font: { size: 11 }, callback: v => v === 0 ? '৳0' : (v >= 1000 ? '৳' + (v/1000).toFixed(0) + 'k' : '৳' + v) }
                         }
                     }
                 }

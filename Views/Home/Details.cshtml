@@ -508,7 +508,7 @@
                                 <input type="hidden" name="productId" value="@Model.Product.Id" />
                                 <div class="row">
                                     <div class="col-md-3 mb-3">
-                                        <label class="form-label fw-bold">Select Stars</label>
+                                        <label class="form-label fw-bold" style="color: #532374;">Select Stars</label>
                                         <select name="rating" class="form-select border-primary" required>
                                             <option value="5">★★★★★ (5 Stars)</option>
                                             <option value="4">★★★★☆ (4 Stars)</option>
@@ -518,12 +518,12 @@
                                         </select>
                                     </div>
                                     <div class="col-md-8 mb-3">
-                                        <label class="form-label fw-bold">Comments</label>
+                                        <label class="form-label fw-bold" style="color: #532374;">Comments</label>
                                         <textarea name="comment" class="form-control border-primary" rows="2" placeholder="Write your experience..." required></textarea>
                                     </div>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label fw-bold">Add Photos (Optional)</label>
+                                    <label class="form-label fw-bold" style="color: #532374;">Add Photos (Optional)</label>
                                     <input type="file" name="images" class="form-control" accept="image/*" multiple onchange="previewImages(this)" />
                                     <small class="text-muted">You can upload up to 5 images</small>
                                     <div id="imagePreview" class="mt-2 d-flex gap-2 flex-wrap"></div>

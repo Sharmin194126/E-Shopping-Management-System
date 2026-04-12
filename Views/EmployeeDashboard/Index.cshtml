@@ -115,20 +115,23 @@
 
 
 <!-- ASSIGNED ORDERS -->
-<div class="dashboard-table-card">
-    <h4><i class="bi bi-list-task"></i> Recent Orders Assigned to Me</h4>
-    <div class="table-responsive">
-        <table class="table table-hover align-middle">
-            <thead>
+<div class="dashboard-table-card border-0 shadow-sm" style="border-radius: 12px; overflow: hidden; background: #fff;">
+    <div class="p-4 border-bottom-0" style="background: linear-gradient(135deg, #532374, #3d1a55); color: #fff;">
+        <h5 class="mb-0 fw-bold"><i class="bi bi-list-task me-2" style="opacity: 0.8;"></i>Recent Orders Assigned to Me</h5>
+    </div>
+    <div class="table-responsive p-0">
+        <table class="table table-hover align-middle mb-0">
+            <thead style="background:#f2efe9; color:#532374;">
                 <tr>
-                    <th style="width: 70px;">SL No</th>
+                    <th class="ps-4" style="width: 70px;">SL</th>
+                    <th>Product</th>
                     <th>Order Ref</th>
                     <th>Customer</th>
                     <th>Date</th>
                     <th>Amount</th>
                     <th>Status</th>
                     <th>Location</th>
-                    <th>Action</th>
+                    <th class="text-center pe-4">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -136,31 +139,37 @@
                 @foreach (var order in Model.AssignedOrders)
                 {
                     <tr>
-                        <td>@(sl++)</td>
+                        <td class="ps-4 fw-bold text-muted">@(sl++)</td>
+                        <td>
+                            <img src="@(string.IsNullOrEmpty(order.ImageUrl) ? "/images/no-image.png" : order.ImageUrl)" 
+                                 class="rounded shadow-sm" 
+                                 style="width: 45px; height: 45px; object-fit: cover; border: 2px solid #e6e2db;" 
+                                 onerror="this.src='/images/no-image.png'" alt="Product">
+                        </td>
                         <td><span class="fw-bold text-primary">#@order.OrderId</span></td>
-                        <td>@order.CustomerName</td>
-                        <td><small>@order.OrderDate.ToString("MMM dd, yyyy")</small></td>
-                        <td class="fw-bold">৳@order.Amount</td>
+                        <td class="fw-bold" style="color: #475569;">@order.CustomerName</td>
+                        <td><small class="text-muted">@order.OrderDate.ToString("MMM dd, yyyy")</small></td>
+                        <td class="fw-bold text-success">৳@order.Amount.ToString("#,##0")</td>
                         <td>
                             @switch (order.Status)
                             {
-                                case "Delivered": <span class="badge bg-success">Delivered</span> break;
-                                case "Pending": <span class="badge bg-warning text-dark">Pending</span> break;
-                                case "Processing": <span class="badge bg-info">Processing</span> break;
-                                case "Shipped": <span class="badge bg-primary">Shipped</span> break;
-                                default: <span class="badge bg-secondary">@order.Status</span> break;
+                                case "Delivered": <span class="badge rounded-pill bg-success px-3">Delivered</span> break;
+                                case "Pending": <span class="badge rounded-pill text-dark px-3" style="background:#ffc107;">Pending</span> break;
+                                case "Processing": <span class="badge rounded-pill bg-info px-3">Processing</span> break;
+                                case "Shipped": <span class="badge rounded-pill bg-primary px-3">Shipped</span> break;
+                                default: <span class="badge rounded-pill bg-secondary px-3">@order.Status</span> break;
                             }
                         </td>
-                        <td><small class="text-muted">@order.ShippingAddress</small></td>
-                        <td>
-                            <a asp-controller="EmployeeOrder" asp-action="Details" asp-route-id="@order.OrderId" class="btn btn-sm btn-outline-primary px-3">View</a>
+                        <td><small class="text-muted text-truncate d-inline-block" style="max-width: 150px;">@order.ShippingAddress</small></td>
+                        <td class="text-center pe-4">
+                            <a asp-controller="EmployeeOrder" asp-action="Details" asp-route-id="@order.OrderId" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold">View</a>
                         </td>
                     </tr>
                 }
                 @if (!Model.AssignedOrders.Any())
                 {
                     <tr>
-                        <td colspan="8" class="text-center py-5 text-muted">No orders assigned to you yet.</td>
+                        <td colspan="9" class="text-center py-5 text-muted">No orders assigned to you yet.</td>
                     </tr>
                 }
             </tbody>

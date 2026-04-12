@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -145,6 +145,7 @@ namespace E_ShoppingManagement.Controllers
                 Items = order.OrderDetails?.Select(od => new OrderDetailRow
                 {
                     ProductName = od.Product != null ? od.Product.Name : "Unknown",
+                    ProductImageUrl = od.Product != null ? od.Product.ImageUrl : null,
                     Quantity = od.Quantity,
                     Price = od.Price
                 }).ToList() ?? new List<OrderDetailRow>()
