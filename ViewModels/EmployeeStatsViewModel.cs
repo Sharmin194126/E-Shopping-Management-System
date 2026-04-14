@@ -16,6 +16,20 @@ namespace E_ShoppingManagement.ViewModels
         public int TotalDeliveryMen { get; set; }
         public int ActiveDeliveries { get; set; }
 
+        public decimal SalesGoal { get; set; }
+        public decimal TotalRevenue { get; set; }
+        public decimal WeeklyRevenue { get; set; }
+        public int CurrentYear { get; set; }
+        public int PreviousYear { get; set; }
+
         public List<RecentOrderViewModel> AssignedOrders { get; set; } = new List<RecentOrderViewModel>();
+
+        // Chart Data
+        public List<DailySalesViewModel> DailySales { get; set; } = new List<DailySalesViewModel>();
+        public List<DailySalesViewModel> WeeklySales { get; set; } = new List<DailySalesViewModel>();
+        public List<ProductTypeSalesViewModel> ProductTypeSales { get; set; } = new List<ProductTypeSalesViewModel>();
+        public List<MonthlySalesViewModel> MonthlyHistory { get; set; } = new List<MonthlySalesViewModel>();
+        public List<MonthlySalesViewModel> PreviousYearSales { get; set; } = new List<MonthlySalesViewModel>();
+        public List<ProductSalesSummaryViewModel> TopProducts { get; set; } = new List<ProductSalesSummaryViewModel>();
     }
 }

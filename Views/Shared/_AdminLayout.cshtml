@@ -111,12 +111,29 @@
         <!-- MAIN -->
         <main class="admin-main">
 
-            <!-- HEADER -->
-            <header class="admin-header">
-                <form asp-controller="Product" asp-action="Index" method="get" class="search-box">
-                    <input type="text" name="query" placeholder="Search products..." />
-                    <button type="submit">🔍</button>
+            <header class="admin-header d-flex justify-content-between align-items-center px-4 py-3" style="background:#fff; border-bottom:1px solid #e6e2db;">
+                <form asp-controller="Product" asp-action="Index" method="get" class="search-box mb-0">
+                    <input type="text" name="query" placeholder="Search products..." class="form-control" style="border-radius:20px; width:250px; padding-left:15px;" />
+                    <button type="submit" class="btn btn-sm position-absolute end-0 top-50 translate-middle-y me-2 border-0 bg-transparent">🔍</button>
                 </form>
+                <div class="d-flex align-items-center gap-3">
+                    <!-- Notification Button -->
+                    <div class="dropdown">
+                        <a href="#" class="position-relative text-decoration-none" id="adminNotificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-bell-fill" style="font-size: 1.3rem; color: #532374;"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:0.65rem;">
+                                3
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0" aria-labelledby="adminNotificationDropdown" style="width: 300px; border-radius: 12px;">
+                            <li><h6 class="dropdown-header fw-bold" style="background:#532374; color:#fff; border-radius: 12px 12px 0 0; margin-top:-8px; padding:10px 15px;">Notifications</h6></li>
+                            <li><a class="dropdown-item py-2 border-bottom" href="#"><small class="text-muted d-block">Just now</small>New order received!</a></li>
+                            <li><a class="dropdown-item py-2 border-bottom" href="#"><small class="text-muted d-block">1 hr ago</small>System update completed.</a></li>
+                            <li><hr class="dropdown-divider m-0"></li>
+                            <li><a class="dropdown-item text-center fw-bold py-2" style="color:#532374; font-size:13px;" href="#">View All Notifications</a></li>
+                        </ul>
+                    </div>
+                </div>
             </header>
 
             <!-- PAGE CONTENT -->

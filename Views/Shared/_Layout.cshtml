@@ -50,23 +50,6 @@
                 <div class="topbar-center text-center flex-grow-1">
                     <a href="/Home/Index" class="text-decoration-none">
                         <h2 class="shoegee-brand mb-0">E-Shop</h2>
-                    </a>
-                </div>
-                
-                <div class="topbar-right d-flex justify-content-end align-items-center gap-4" style="width: 250px;">
-                    <a href="#" onclick="document.getElementById('searchForm').classList.toggle('d-none'); return false;" class="topbar-link"><i class="bi bi-search" style="font-size: 1.1rem;"></i></a>
-                    
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <div class="cart-wrapper">
-                            @await Component.InvokeAsync("CartSummary")
-                        </div>
-                        <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline m-0 p-0">
-                            <button type="submit" class="btn btn-link topbar-link p-0 text-decoration-none border-0" style="font-size: 14px;">Logout</button>
-                        </form>
-                    }
-                    else
-                    {
                         <a class="topbar-link" asp-controller="Account" asp-action="Login">Login</a>
                         <span class="text-white mx-2">|</span>
                         <a class="topbar-link fw-bold text-white text-decoration-none" asp-controller="Account" asp-action="Register">Sign Up</a>
