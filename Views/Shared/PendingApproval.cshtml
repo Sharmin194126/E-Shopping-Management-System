@@ -1,0 +1,76 @@
+@{
+    ViewData["Title"] = "Approval Pending";
+    Layout = null; // We can use null for a clean message page or reuse a layout
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pending Approval - E-Shop</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
+    <style>
+        body {
+            background-color: #f8f6f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+        }
+        .message-card {
+            background: #fff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+        .icon-box {
+            width: 80px;
+            height: 80px;
+            background: #fff3cd;
+            color: #856404;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        .btn-theme {
+            background: #532374;
+            color: #fff;
+            border-radius: 10px;
+            padding: 12px 30px;
+            border: none;
+            transition: all 0.3s;
+        }
+        .btn-theme:hover {
+            background: #3d1a55;
+            color: #fff;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="message-card">
+        <div class="icon-box">
+            <i class="bi bi-shield-lock-fill"></i>
+        </div>
+        <h2 class="fw-bold mb-3" style="color: #532374;">Access Restricted</h2>
+        <p class="text-muted mb-4" style="font-size: 1.1rem;">
+            Admin didn't approved ur account yet. Your profile is currently under review. Please wait for administrative approval to access your dashboard.
+        </p>
+        <div class="d-grid gap-2">
+            <a href="/" class="btn btn-theme fw-bold">Back to Home</a>
+            <form action="/Account/Logout" method="post" style="display:inline;">
+                <button type="submit" class="btn btn-link text-muted text-decoration-none mt-2">Logout</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

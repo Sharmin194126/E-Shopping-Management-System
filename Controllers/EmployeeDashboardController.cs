@@ -26,6 +26,24 @@ namespace E_ShoppingManagement.Controllers
             _env = env;
         }
 
+        public async Task<IActionResult> Notifications()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return RedirectToAction("Login", "Account");
+
+            var employee = await _context.Employees.FirstOrDefaultAsync(e => e.UserId == user.Id);
+            if (employee == null) return NotFound();
+
+            var orders = await _context.Orders
+                .Where(o => o.AssignedEmployeeId == employee.Id)
+                .Include(o => o.Customer)
+                .OrderByDescending(o => o.CreatedAt)
+                .Take(30)
+                .ToListAsync();
+
+            return View(orders);
+        }
+
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -33,6 +51,11 @@ namespace E_ShoppingManagement.Controllers
 
             var employee = await _context.Employees.FirstOrDefaultAsync(e => e.UserId == user.Id);
             if (employee == null) return NotFound();
+
+            if (employee.Status != "Active")
+            {
+                return View("PendingApproval");
+            }
 
             var stats = new EmployeeStatsViewModel();
 

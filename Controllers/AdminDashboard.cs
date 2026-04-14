@@ -23,6 +23,23 @@ namespace E_ShoppingManagement.Controllers
             _userManager = userManager;
         }
 
+        public async Task<IActionResult> Notifications()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return RedirectToAction("Login", "Account");
+
+            // Mock notifications for now based on actual data
+            var recentOrders = await _context.Orders.Include(o => o.Customer).OrderByDescending(o => o.CreatedAt).Take(20).ToListAsync();
+            var recentCustomers = await _context.Customers.OrderByDescending(o => o.CreatedAt).Take(10).ToListAsync();
+            var recentEmployees = await _context.Employees.OrderByDescending(o => o.CreatedAt).Take(10).ToListAsync();
+
+            ViewBag.RecentOrders = recentOrders;
+            ViewBag.RecentCustomers = recentCustomers;
+            ViewBag.RecentEmployees = recentEmployees;
+
+            return View();
+        }
+
         public async Task<IActionResult> Profile()
         {
             var user = await _userManager.GetUserAsync(User);

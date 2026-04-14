@@ -50,6 +50,39 @@
                 <div class="topbar-center text-center flex-grow-1">
                     <a href="/Home/Index" class="text-decoration-none">
                         <h2 class="shoegee-brand mb-0">E-Shop</h2>
+                    </a>
+                </div>
+
+                <div class="topbar-right d-flex justify-content-end align-items-center gap-4" style="width: 280px;">
+                    <a href="#" onclick="document.getElementById('searchForm').classList.toggle('d-none'); return false;" class="topbar-link"><i class="bi bi-search" style="font-size: 1.1rem;"></i></a>
+                    
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <!-- Notification Button -->
+                        <div class="dropdown me-1">
+                            <a href="#" class="topbar-link position-relative text-decoration-none" id="customerNotificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-bell-fill" style="font-size: 1.2rem; color: #532374;"></i>
+                                <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+                                    <span class="visually-hidden">New alerts</span>
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0" aria-labelledby="customerNotificationDropdown" style="width: 280px; border-radius: 12px; background: #fff !important;">
+                                <li><h6 class="dropdown-header fw-bold" style="background:#532374; color:#fff; border-radius: 12px 12px 0 0; margin-top:-8px; padding:10px 15px;">Notifications</h6></li>
+                                <li><a class="dropdown-item py-2" href="#"><small class="text-muted d-block">Just now</small>Welcome back!</a></li>
+                                <li><a class="dropdown-item py-2" href="#"><small class="text-muted d-block">1 hr ago</small>Your order is pending.</a></li>
+                                <li><hr class="dropdown-divider mb-0"></li>
+                                <li><a class="dropdown-item text-center fw-bold py-2" style="color:#532374; font-size:13px;" asp-controller="Home" asp-action="Notifications">View All</a></li>
+                            </ul>
+                        </div>
+                        <div class="cart-wrapper">
+                            @await Component.InvokeAsync("CartSummary")
+                        </div>
+                        <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline m-0 p-0">
+                            <button type="submit" class="btn btn-link topbar-link p-0 text-decoration-none border-0" style="font-size: 14px;">Logout</button>
+                        </form>
+                    }
+                    else
+                    {
                         <a class="topbar-link" asp-controller="Account" asp-action="Login">Login</a>
                         <span class="text-white mx-2">|</span>
                         <a class="topbar-link fw-bold text-white text-decoration-none" asp-controller="Account" asp-action="Register">Sign Up</a>
@@ -120,4 +153,3 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
-

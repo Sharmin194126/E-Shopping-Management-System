@@ -1,0 +1,54 @@
+@model List<E_ShoppingManagement.Models.Order>
+@{
+    ViewData["Title"] = "My Activity Notifications";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold" style="color:#532374;"><i class="bi bi-bell-fill me-2"></i> My Notifications</h2>
+        <a asp-action="Index" class="btn btn-outline-secondary px-4 rounded-pill">Back to Shopping</a>
+    </div>
+
+    <div class="card border-0 shadow-sm" style="border-radius: 20px; background: #fff;">
+        <div class="card-body p-0">
+            <div class="list-group list-group-flush">
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var order in Model)
+                    {
+                        <div class="list-group-item py-4 px-4">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="d-flex gap-3">
+                                    <div class="icon-box rounded-circle bg-light d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                        @switch(order.OrderStatus) {
+                                            case "Pending": <i class="bi bi-hourglass-split text-warning" style="font-size: 1.5rem;"></i> break;
+                                            case "Processing": <i class="bi bi-gear-wide-connected text-info" style="font-size: 1.5rem;"></i> break;
+                                            case "Shipped": <i class="bi bi-truck text-primary" style="font-size: 1.5rem;"></i> break;
+                                            case "Delivered": <i class="bi bi-check-circle-fill text-success" style="font-size: 1.5rem;"></i> break;
+                                            default: <i class="bi bi-cart text-secondary" style="font-size: 1.5rem;"></i> break;
+                                        }
+                                    </div>
+                                    <div>
+                                        <h5 class="mb-1 fw-bold">Order #@order.Id Status Updated</h5>
+                                        <p class="mb-2 text-muted">Your order is now <span class="badge @(order.OrderStatus == "Delivered" ? "bg-success" : (order.OrderStatus == "Pending" ? "bg-warning text-dark" : "bg-info"))">@order.OrderStatus</span></p>
+                                        <div class="small text-muted">Updated on @((order.ModifiedAt ?? order.CreatedAt).ToString("MMM dd, yyyy | hh:mm tt"))</div>
+                                    </div>
+                                </div>
+                                <a asp-controller="Order" asp-action="Details" asp-route-id="@order.Id" class="btn btn-outline-primary btn-sm rounded-pill px-4">Order Details</a>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="p-5 text-center">
+                         <div class="mb-3"><i class="bi bi-bell-slash text-muted" style="font-size: 4rem;"></i></div>
+                         <h4 class="text-muted">No new notifications</h4>
+                         <p class="text-muted">We'll notify you here when your order status changes.</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

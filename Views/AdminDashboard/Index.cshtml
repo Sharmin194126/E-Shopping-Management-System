@@ -555,6 +555,7 @@
         const pieTotal   = pieAmounts.reduce((a,b) => a+b, 0);
 
         document.addEventListener('DOMContentLoaded', () => {
+            const colors = ['#532374','#17a2b8','#f59e0b','#28a745','#dc3545','#fd7e14','#6610f2','#e83e8c'];
 
             // ── 1. Line Chart (Standard Theme) ─────
             const ctx = document.getElementById('salesChart').getContext('2d');
@@ -582,13 +583,17 @@
                         fill: true,
                         tension: 0.45,
                         borderWidth: 3,
-                        pointBackgroundColor: '#532374',
+                        pointBackgroundColor: function(context) {
+                            return colors[context.dataIndex % colors.length];
+                        },
                         pointBorderColor: '#fff',
                         pointBorderWidth: 2,
-                        pointRadius: 4,
-                        pointHoverRadius: 7,
-                        pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: '#532374',
+                        pointRadius: 6,
+                        pointHoverRadius: 9,
+                        pointHoverBackgroundColor: function(context) {
+                            return colors[context.dataIndex % colors.length];
+                        },
+                        pointHoverBorderColor: '#fff',
                         pointHoverBorderWidth: 3
                     }]
                 },
@@ -634,7 +639,6 @@
             updateDisplayStats('weekly');
 
             // ── 2. Pie / Doughnut Chart ──────────────────────────────
-            const colors = ['#532374','#17a2b8','#f59e0b','#28a745','#dc3545','#fd7e14','#6610f2','#e83e8c'];
             const ctxPie = document.getElementById('typePieChart').getContext('2d');
             new Chart(ctxPie, {
                 type: 'doughnut',

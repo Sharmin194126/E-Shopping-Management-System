@@ -59,6 +59,11 @@ namespace E_ShoppingManagement.Controllers
                 return NotFound("Delivery man profile not found.");
             }
 
+            if (deliveryMan.Status != "Active")
+            {
+                return View("PendingApproval");
+            }
+
             var assignedOrders = await _context.Orders
                 .Where(o => o.DeliveryManId == deliveryMan.Id)
                 .Include(o => o.Customer)

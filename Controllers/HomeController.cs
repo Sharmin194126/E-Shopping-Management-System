@@ -24,6 +24,25 @@ namespace E_ShoppingManagement.Controllers
             _userManager = userManager;
         }
 
+        [Authorize(Roles = "Customer")]
+        public async Task<IActionResult> Notifications()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return RedirectToAction("Login", "Account");
+
+            var customer = await _context.Customers.FirstOrDefaultAsync(c => c.UserId == user.Id);
+            if (customer == null) return NotFound();
+
+            // Fetch order status updates for this customer
+            var orders = await _context.Orders
+                .Where(o => o.CustomerId == customer.Id)
+                .OrderByDescending(o => o.ModifiedAt ?? o.CreatedAt)
+                .Take(20)
+                .ToListAsync();
+
+            return View(orders);
+        }
+
         public async Task<IActionResult> Details(int id)
         {
             var product = await _context.Products

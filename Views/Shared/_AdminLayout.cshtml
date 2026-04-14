@@ -106,33 +106,43 @@
             <a asp-controller="Banner" asp-action="Index" class="text-success @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Banner" ? "active" : "")">
                 <i class="bi bi-images me-2"></i>Manage Banners
             </a>
+            <p class="menu-title">TRACKING</p>
+            <a asp-controller="Home" asp-action="Tracking" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Tracking" ? "active" : "")">
+                <i class="bi bi-geo-alt me-2"></i>Track Customer Order
+            </a>
         </aside>
 
         <!-- MAIN -->
         <main class="admin-main">
 
             <header class="admin-header d-flex justify-content-between align-items-center px-4 py-3" style="background:#fff; border-bottom:1px solid #e6e2db;">
-                <form asp-controller="Product" asp-action="Index" method="get" class="search-box mb-0">
-                    <input type="text" name="query" placeholder="Search products..." class="form-control" style="border-radius:20px; width:250px; padding-left:15px;" />
-                    <button type="submit" class="btn btn-sm position-absolute end-0 top-50 translate-middle-y me-2 border-0 bg-transparent">🔍</button>
-                </form>
-                <div class="d-flex align-items-center gap-3">
+                <div class="header-search flex-grow-1 me-4">
+                    <form asp-controller="Product" asp-action="Index" method="get" class="position-relative">
+                        <input type="text" name="query" placeholder="Search products, orders, customers..." class="form-control" style="border-radius:10px; padding-left:45px; background: #f8f6f0; border: 1px solid #e6e2db; height: 45px;" />
+                        <i class="bi bi-search position-absolute" style="left: 15px; top: 50%; transform: translateY(-50%); color: #532374; font-size: 1.1rem;"></i>
+                    </form>
+                </div>
+                <div class="d-flex align-items-center gap-4">
                     <!-- Notification Button -->
                     <div class="dropdown">
                         <a href="#" class="position-relative text-decoration-none" id="adminNotificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-bell-fill" style="font-size: 1.3rem; color: #532374;"></i>
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:0.65rem;">
+                            <i class="bi bi-bell-fill" style="font-size: 1.4rem; color: #532374;"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:0.65rem; border: 2px solid #fff;">
                                 3
                             </span>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0" aria-labelledby="adminNotificationDropdown" style="width: 300px; border-radius: 12px;">
-                            <li><h6 class="dropdown-header fw-bold" style="background:#532374; color:#fff; border-radius: 12px 12px 0 0; margin-top:-8px; padding:10px 15px;">Notifications</h6></li>
-                            <li><a class="dropdown-item py-2 border-bottom" href="#"><small class="text-muted d-block">Just now</small>New order received!</a></li>
-                            <li><a class="dropdown-item py-2 border-bottom" href="#"><small class="text-muted d-block">1 hr ago</small>System update completed.</a></li>
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="adminNotificationDropdown" style="width: 320px; border-radius: 12px; background: #fff !important;">
+                            <li><h6 class="dropdown-header fw-bold" style="background:#532374; color:#fff; border-radius: 12px 12px 0 0; margin-top:-8px; padding:12px 15px;">Admin Notifications</h6></li>
+                            <li><a class="dropdown-item py-3 border-bottom" href="#"><div class="d-flex gap-2"><i class="bi bi-cart-plus text-primary"></i><div><small class="text-muted d-block">Just now</small>New order #1234 received!</div></div></a></li>
+                            <li><a class="dropdown-item py-3 border-bottom" href="#"><div class="d-flex gap-2"><i class="bi bi-person-plus text-success"></i><div><small class="text-muted d-block">1 hr ago</small>New employee registered.</div></div></a></li>
                             <li><hr class="dropdown-divider m-0"></li>
-                            <li><a class="dropdown-item text-center fw-bold py-2" style="color:#532374; font-size:13px;" href="#">View All Notifications</a></li>
+                            <li><a class="dropdown-item text-center fw-bold py-2" style="color:#532374; font-size:13px;" asp-controller="AdminDashboard" asp-action="Notifications">View All Notifications</a></li>
                         </ul>
                     </div>
+                    <!-- Profile Link -->
+                    <a asp-action="Profile" class="d-flex align-items-center gap-2 text-decoration-none">
+                        <i class="bi bi-person-circle" style="font-size: 1.8rem; color: #532374;"></i>
+                    </a>
                 </div>
             </header>
 
