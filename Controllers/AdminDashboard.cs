@@ -28,6 +28,9 @@ namespace E_ShoppingManagement.Controllers
             var user = await _userManager.GetUserAsync(User);
             if (user == null) return RedirectToAction("Login", "Account");
 
+            user.LastNotificationCheck = DateTime.UtcNow;
+            await _userManager.UpdateAsync(user);
+
             // Real data for notifications
             var recentOrders = await _context.Orders.Include(o => o.Customer).OrderByDescending(o => o.CreatedAt).Take(20).ToListAsync();
             var recentCustomers = await _context.Customers.OrderByDescending(o => o.CreatedAt).Take(10).ToListAsync();
@@ -739,6 +742,41 @@ namespace E_ShoppingManagement.Controllers
         {
              return await EditDisplaySection(section);
         }
+        [HttpGet]
+        public async Task<IActionResult> GetYearlyGoalStats(int year)
+        {
+            var soldOrders = await _context.Orders
+                .Where(o => o.CreatedAt.Year == year && (o.OrderStatus == "Delivered" || o.PaymentStatus == "Paid" || o.OrderStatus == "Shipped"))
+                .ToListAsync();
+            
+            decimal totalRevenue = soldOrders.Sum(o => o.TotalAmount);
+            decimal goalAmount = 0;
+            
+            string goalFolderPath = Path.Combine(_env.WebRootPath, "settings", "goals");
+            string goalFilePath = Path.Combine(goalFolderPath, $"admin_goal_{year}.txt");
+            
+            if (System.IO.File.Exists(goalFilePath) && decimal.TryParse(System.IO.File.ReadAllText(goalFilePath), out decimal savedGoal))
+            {
+                goalAmount = savedGoal;
+            }
+            else
+            {
+                // Fallback logic
+                var prevYearRevenue = await _context.Orders
+                    .Where(o => o.CreatedAt.Year == (year - 1) && (o.OrderStatus == "Delivered" || o.PaymentStatus == "Paid" || o.OrderStatus == "Shipped"))
+                    .SumAsync(o => (decimal?)o.TotalAmount) ?? 0;
+                goalAmount = prevYearRevenue > 0 ? prevYearRevenue * 1.2m : 500000;
+            }
+
+            return Json(new { 
+                year = year,
+                revenue = totalRevenue,
+                goal = goalAmount,
+                percent = goalAmount > 0 ? (int)Math.Min(100, (totalRevenue / goalAmount) * 100) : 0,
+                remaining = goalAmount - totalRevenue
+            });
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetYearlySales(int year)
         {

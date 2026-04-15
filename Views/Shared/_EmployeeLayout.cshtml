@@ -1,3 +1,5 @@
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<E_ShoppingManagement.Models.Users> UserManager
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -111,14 +113,21 @@
                     <!-- Notification Button -->
                     @{
                         var db = Context.RequestServices.GetRequiredService<E_ShoppingManagement.Data.AppDbContext>();
-                        var userMgr = Context.RequestServices.GetRequiredService<Microsoft.AspNetCore.Identity.UserManager<E_ShoppingManagement.Models.Users>>();
-                        var userId = userMgr.GetUserId(User);
+                        var loggedInUser = await UserManager.GetUserAsync(User);
+                        var lastCheck = loggedInUser?.LastNotificationCheck ?? DateTime.MinValue;
+
+                        var userId = UserManager.GetUserId(User);
                         var emp = db.Employees.FirstOrDefault(e => e.UserId == userId);
                         var empId = emp?.Id ?? 0;
                         
                         var pendingOrders = db.Orders.Where(o => o.AssignedEmployeeId == empId && o.OrderStatus == "Pending").ToList();
                         var activeMsgs = db.ContactMessages.Where(m => m.Status != "Replied").ToList();
-                        var totalNotifs = pendingOrders.Count + activeMsgs.Count;
+
+                        var newOrdersCount = pendingOrders.Count(o => o.CreatedAt > lastCheck);
+                        var newMsgsCount = activeMsgs.Count(m => m.CreatedAt > lastCheck);
+                        
+                        var totalNewNotifs = newOrdersCount + newMsgsCount;
+                        var totalItems = pendingOrders.Count + activeMsgs.Count;
                     }
                     <div class="dropdown">
                         <a href="#" class="position-relative text-decoration-none" id="employeeNotificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
@@ -126,9 +135,9 @@
                             @{
                                 var currentAction = ViewContext.RouteData.Values["Action"]?.ToString();
                              }
-                            @if (totalNotifs > 0 && currentAction != "Notifications") {
+                            @if (totalNewNotifs > 0 && currentAction != "Notifications") {
                                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:0.65rem; border: 2px solid #fff;">
-                                    @totalNotifs
+                                    @totalNewNotifs
                                 </span>
                             }
                         </a>
@@ -162,7 +171,7 @@
                                 </li>
                             }
 
-                            @if (totalNotifs == 0) {
+                            @if (totalItems == 0) {
                                 <li><div class="dropdown-item py-3 text-center text-muted">No new notifications</div></li>
                             }
 

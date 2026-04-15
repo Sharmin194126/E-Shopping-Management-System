@@ -164,6 +164,13 @@ namespace E_ShoppingManagement.Controllers
             var dm = await GetCurrentDmAsync();
             if (dm == null) return RedirectToAction("Login", "Account");
 
+            var user = await _userManager.GetUserAsync(User);
+            if (user != null)
+            {
+                user.LastNotificationCheck = DateTime.UtcNow;
+                await _userManager.UpdateAsync(user);
+            }
+
             var orders = await _context.Orders
                 .Where(o => o.DeliveryManId == dm.Id)
                 .Include(o => o.Customer)

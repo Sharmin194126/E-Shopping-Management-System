@@ -1,3 +1,39 @@
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<E_ShoppingManagement.Models.Users> UserManager
+@{
+    int newCount = 0;
+    string notificationLink = "/Home/Notifications";
+    string userRole = "";
+    
+    if (User.Identity.IsAuthenticated)
+    {
+        var db = Context.RequestServices.GetRequiredService<E_ShoppingManagement.Data.AppDbContext>();
+        var loggedInUser = await UserManager.GetUserAsync(User);
+        var lastCheck = loggedInUser?.LastNotificationCheck ?? DateTime.MinValue;
+        userRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value ?? "";
+        var userId = UserManager.GetUserId(User);
+
+        if (userRole == "Admin") {
+            newCount = db.Orders.Count(o => o.OrderStatus == "Pending" && o.CreatedAt > lastCheck) +
+                       db.Employees.Count(e => e.Status == "Pending" && e.CreatedAt > lastCheck) +
+                       db.ContactMessages.Count(m => m.Status != "Replied" && m.CreatedAt > lastCheck);
+            notificationLink = "/AdminDashboard/Notifications";
+        } else if (userRole == "Employee") {
+            var emp = db.Employees.FirstOrDefault(e => e.UserId == userId);
+            var empId = emp?.Id ?? 0;
+            newCount = db.Orders.Count(o => o.AssignedEmployeeId == empId && o.OrderStatus == "Pending" && o.CreatedAt > lastCheck) +
+                       db.ContactMessages.Count(m => m.Status != "Replied" && m.CreatedAt > lastCheck);
+            notificationLink = "/EmployeeDashboard/Notifications";
+        } else if (userRole == "Customer") {
+            var cust = db.Customers.FirstOrDefault(c => c.UserId == userId);
+            var custId = cust?.Id ?? 0;
+            newCount = db.Orders.Count(o => o.CustomerId == custId && (o.CreatedAt > lastCheck || o.ModifiedAt > lastCheck) && o.OrderStatus != "Pending");
+            notificationLink = "/CustomerDashboard/Index";
+        } else if (userRole == "DeliveryMan") {
+            notificationLink = "/DeliveryManDashboard/Notifications";
+        }
+    }
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -62,24 +98,23 @@
                         <div class="dropdown me-1">
                             <a href="#" class="topbar-link position-relative text-decoration-none" id="customerNotificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-bell-fill" style="font-size: 1.2rem; color: #532374;"></i>
-                                <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
-                                    <span class="visually-hidden">New alerts</span>
-                                </span>
+                                @if (newCount > 0) {
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:0.6rem;">
+                                        @newCount
+                                    </span>
+                                }
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0" aria-labelledby="customerNotificationDropdown" style="width: 280px; border-radius: 12px; background: #fff !important;">
                                 <li><h6 class="dropdown-header fw-bold" style="background:#532374; color:#fff; border-radius: 12px 12px 0 0; margin-top:-8px; padding:10px 15px;">Notifications</h6></li>
-                                <li><a class="dropdown-item py-2" href="#"><small class="text-muted d-block">Just now</small>Welcome back!</a></li>
-                                <li><a class="dropdown-item py-2" href="#"><small class="text-muted d-block">1 hr ago</small>Your order is pending.</a></li>
+                                
+                                @if (newCount == 0) {
+                                    <li><div class="dropdown-item py-3 text-center text-muted">No new updates</div></li>
+                                } else {
+                                    <li><div class="dropdown-item py-2 text-center small fw-bold">You have @newCount new updates</div></li>
+                                }
+
                                 <li><hr class="dropdown-divider mb-0"></li>
-                                <li>
-                                    <a class="dropdown-item text-center fw-bold py-2" style="color:#532374; font-size:13px;" 
-                                       href="@(User.IsInRole("Admin") ? "/AdminDashboard/Notifications" : 
-                                              User.IsInRole("Employee") ? "/EmployeeDashboard/Notifications" : 
-                                              User.IsInRole("DeliveryMan") ? "/DeliveryManDashboard/Notifications" : 
-                                              "/CustomerDashboard/Notifications")">
-                                        View All Notifications
-                                    </a>
-                                </li>
+                                <li><a class="dropdown-item text-center fw-bold py-2" style="color:#532374; font-size:13px;" href="@notificationLink">View All Activities</a></li>
                             </ul>
                         </div>
                         <div class="cart-wrapper">

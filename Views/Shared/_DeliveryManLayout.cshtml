@@ -301,42 +301,55 @@
     </style>
 </head>
 <body>
-
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<E_ShoppingManagement.Models.Users> UserManager
+@inject E_ShoppingManagement.Data.AppDbContext _context
+@{
+    var loggedInUser = await UserManager.GetUserAsync(User);
+    var lastCheck = loggedInUser?.LastNotificationCheck ?? DateTime.MinValue;
+    
+    int totalNewNotifs = 0;
+    if (loggedInUser != null)
+    {
+        // For DM, we mostly track assigned orders or messages. Let's assume assigned orders.
+        var dm = _context.DeliveryMen.FirstOrDefault(d => d.UserId == loggedInUser.Id);
+        if (dm != null)
+        {
+            totalNewNotifs = _context.Orders.Count(o => o.DeliveryManId == dm.Id && o.CreatedAt > lastCheck);
+        }
+    }
+    
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+}
 <div class="dm-wrapper">
-
     <!-- ===== SIDEBAR ===== -->
     <aside class="dm-sidebar">
-
         <!-- Brand -->
         <div class="dm-sidebar-brand">
             <div class="dm-avatar"><i class="bi bi-truck"></i></div>
             <div class="dm-name">@(ViewBag.DmName ?? User.Identity?.Name ?? "Delivery Man")</div>
             <div class="dm-role">Delivery Partner</div>
         </div>
-
         <!-- Nav Links -->
         <nav class="dm-nav">
             <div class="dm-nav-section">Main Menu</div>
-
             <a asp-controller="DeliveryManDashboard" asp-action="Index"
                class="@(ViewData["ActivePage"]?.ToString() == "Dashboard" ? "active" : "")">
                 <i class="bi bi-grid-1x2-fill"></i> Dashboard
             </a>
-
             <a asp-controller="DeliveryManDashboard" asp-action="Earnings"
                class="@(ViewData["ActivePage"]?.ToString() == "Earnings" ? "active" : "")">
                 <i class="bi bi-cash-coin"></i> Earnings
             </a>
-
             <a asp-controller="DeliveryManDashboard" asp-action="Notifications"
                class="@(ViewData["ActivePage"]?.ToString() == "Notifications" ? "active" : "")">
                 <i class="bi bi-bell-fill"></i> Notifications
-                @if ((int)(ViewBag.UnreadNotifications ?? 0) > 0)
+                @if (totalNewNotifs > 0 && currentAction != "Notifications")
                 {
-                    <span class="badge-notif">@ViewBag.UnreadNotifications</span>
+                    <span class="badge-notif">@totalNewNotifs</span>
                 }
             </a>
-
             <div class="dm-nav-section">Account</div>
 
             <a asp-controller="DeliveryManDashboard" asp-action="Profile"
@@ -385,7 +398,7 @@
                 </div>
                 <a asp-controller="DeliveryManDashboard" asp-action="Notifications" class="notif-btn mt-1" title="Notifications">
                     <i class="bi bi-bell"></i>
-                    @if ((int)(ViewBag.UnreadNotifications ?? 0) > 0)
+                    @if (totalNewNotifs > 0 && currentAction != "Notifications")
                     {
                         <span class="dot"></span>
                     }

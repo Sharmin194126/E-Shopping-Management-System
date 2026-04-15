@@ -32,6 +32,9 @@ namespace E_ShoppingManagement.Controllers
             var user = await _userManager.GetUserAsync(User);
             if (user == null) return RedirectToAction("Login", "Account");
 
+            user.LastNotificationCheck = DateTime.UtcNow;
+            await _userManager.UpdateAsync(user);
+
             var employee = await _context.Employees.FirstOrDefaultAsync(e => e.UserId == user.Id);
             if (employee == null) return NotFound();
 
@@ -199,6 +202,46 @@ namespace E_ShoppingManagement.Controllers
             stats.ProductTypeSales = pieData;
 
             return View(stats);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetYearlyGoalStats(int year)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return Unauthorized();
+            var employee = await _context.Employees.FirstOrDefaultAsync(e => e.UserId == user.Id);
+            if (employee == null) return NotFound();
+
+            var soldOrders = await _context.Orders
+                .Where(o => o.AssignedEmployeeId == employee.Id && o.CreatedAt.Year == year && (o.OrderStatus == "Delivered" || o.PaymentStatus == "Paid" || o.OrderStatus == "Shipped"))
+                .ToListAsync();
+            
+            decimal totalRevenue = soldOrders.Sum(o => o.TotalAmount);
+            decimal goalAmount = 0;
+            
+            string goalFolderPath = Path.Combine(_env.WebRootPath, "settings", "goals");
+            string goalFilePath = Path.Combine(goalFolderPath, $"employee_goal_{employee.Id}_{year}.txt");
+            
+            if (System.IO.File.Exists(goalFilePath) && decimal.TryParse(System.IO.File.ReadAllText(goalFilePath), out decimal savedGoal))
+            {
+                goalAmount = savedGoal;
+            }
+            else
+            {
+                // Fallback logic for employee
+                var prevYearRevenue = await _context.Orders
+                    .Where(o => o.AssignedEmployeeId == employee.Id && o.CreatedAt.Year == (year - 1) && (o.OrderStatus == "Delivered" || o.PaymentStatus == "Paid" || o.OrderStatus == "Shipped"))
+                    .SumAsync(o => (decimal?)o.TotalAmount) ?? 0;
+                goalAmount = prevYearRevenue > 0 ? prevYearRevenue * 1.2m : 50000;
+            }
+
+            return Json(new { 
+                year = year,
+                revenue = totalRevenue,
+                goal = goalAmount,
+                percent = goalAmount > 0 ? (int)Math.Min(100, (totalRevenue / goalAmount) * 100) : 0,
+                remaining = goalAmount - totalRevenue
+            });
         }
 
         [HttpGet]

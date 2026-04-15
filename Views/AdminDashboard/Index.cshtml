@@ -178,7 +178,18 @@
     <div class="col-lg-5">
         <div class="h-100 p-4 rounded-3 shadow-sm" style="background:#fff; border:1px solid #e6e2db;">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-trophy-fill text-warning me-2"></i>Sales Goal @DateTime.Now.Year</h6>
+                <div class="d-flex align-items-center gap-2">
+                    <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-trophy-fill text-warning me-2"></i>Sales Goal</h6>
+                    <div class="d-flex align-items-center border rounded-pill px-2" style="background:#f8f6f0; height:28px;">
+                        <button class="btn btn-sm p-0 border-0" onclick="updateGoalYear(-1)" style="font-size:10px;">
+                            <i class="bi bi-chevron-left"></i>
+                        </button>
+                        <span id="goalDisplayYear" class="px-2 fw-bold" style="font-size:12px; color:#532374;">@DateTime.Now.Year</span>
+                        <button class="btn btn-sm p-0 border-0" onclick="updateGoalYear(1)" style="font-size:10px;">
+                            <i class="bi bi-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
                 <div>
                     <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="modal" data-bs-target="#historyGoalModal" title="View Goal History">
                         <i class="bi bi-clock-history"></i> History
@@ -191,25 +202,25 @@
             <div class="row mb-3">
                 <div class="col-6">
                     <div class="small text-muted">Target</div>
-                    <div class="fw-bold fs-5" style="color:#532374;">৳@Model.SalesGoal.ToString("#,##0")</div>
+                    <div class="fw-bold fs-5" id="valTarget" style="color:#532374;">৳@Model.SalesGoal.ToString("#,##0")</div>
                     <div class="small text-muted">Full Year Goal</div>
                 </div>
                 <div class="col-6 border-start">
                     <div class="small text-muted">Remaining</div>
-                    <div class="fw-bold fs-5 text-danger">৳@(goalRemaining > 0 ? goalRemaining.ToString("#,##0") : "0")</div>
+                    <div class="fw-bold fs-5 text-danger" id="valRemaining">৳@(goalRemaining > 0 ? goalRemaining.ToString("#,##0") : "0")</div>
                     <div class="small text-muted">To reach target</div>
                 </div>
             </div>
             <div class="d-flex align-items-center gap-3">
                 <div style="position:relative; width:90px; height:90px; flex-shrink:0;">
                     <canvas id="goalRingChart"></canvas>
-                    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:14px;font-weight:700;color:#532374;">@goalPercent%</div>
+                    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:14px;font-weight:700;color:#532374;" id="valPercent">@goalPercent%</div>
                 </div>
                 <div>
-                    <div class="fw-bold text-dark">৳@currentYearSales.ToString("#,##0") achieved</div>
-                    <div class="small text-muted">Note: Goal = 120% of prev year revenue</div>
+                    <div class="fw-bold text-dark" id="valAchieved">৳@currentYearSales.ToString("#,##0") achieved</div>
+                    <div class="small text-muted" id="goalNote">Note: Goal for <span id="noteYear">@DateTime.Now.Year</span></div>
                     <div class="progress mt-2" style="height:6px;">
-                        <div class="progress-bar" style="width:@goalPercent%; background:#532374;"></div>
+                        <div class="progress-bar" id="valProgressBar" style="width:@goalPercent%; background:#532374;"></div>
                     </div>
                 </div>
             </div>
@@ -526,8 +537,9 @@
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script>
+        const fmtBDT = val => '৳' + Number(val || 0).toLocaleString('en-IN');
         let salesChart;
-        const fmtBDT = n => '৳' + Number(n).toLocaleString('en-IN');
+        let goalRing;
 
         // ── Chart Data ──────────────────────────────────────────────
         const chartData = {
@@ -571,6 +583,8 @@
         const pieTotal   = pieAmounts.reduce((a,b) => a+b, 0);
 
         document.addEventListener('DOMContentLoaded', () => {
+            initGoalRing();
+
             const colors = ['#532374','#17a2b8','#f59e0b','#28a745','#dc3545','#fd7e14','#6610f2','#e83e8c'];
 
             // ── 1. Line Chart (Standard Theme) ─────
@@ -582,7 +596,6 @@
                 if (!chartArea) return 'transparent';
                 const gradient = c.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
                 gradient.addColorStop(0, 'rgba(83,35,116,0.25)');
-                gradient.addColorStop(0.5, 'rgba(83,35,116,0.1)');
                 gradient.addColorStop(1, 'rgba(83,35,116,0.0)');
                 return gradient;
             }
@@ -595,91 +608,78 @@
                         label: 'Revenue',
                         data: chartData.weekly.amount,
                         borderColor: '#532374',
-                        backgroundColor: makeGradient,
-                        fill: true,
-                        tension: 0.45,
+                        backgroundColor: (c) => makeGradient(c),
                         borderWidth: 3,
-                        pointBackgroundColor: function(context) {
-                            return colors[context.dataIndex % colors.length];
-                        },
-                        pointBorderColor: '#fff',
+                        pointRadius: 4,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#532374',
                         pointBorderWidth: 2,
-                        pointRadius: 6,
-                        pointHoverRadius: 9,
-                        pointHoverBackgroundColor: function(context) {
-                            return colors[context.dataIndex % colors.length];
-                        },
-                        pointHoverBorderColor: '#fff',
-                        pointHoverBorderWidth: 3
+                        fill: true,
+                        tension: 0.4
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    interaction: { mode: 'index', intersect: false },
                     plugins: {
                         legend: { display: false },
                         tooltip: {
-                            enabled: false,
-                            external: function(context) {
-                                const tooltip = document.getElementById('chartFloatTooltip');
-                                if (context.tooltip.opacity === 0) { tooltip.style.display = 'none'; return; }
-                                const dp = context.tooltip.dataPoints[0];
-                                tooltip.innerText = fmtBDT(dp.raw);
-                                const canvas = context.chart.canvas;
-                                const rect = canvas.getBoundingClientRect();
-                                tooltip.style.display = 'block';
-                                tooltip.style.left = (rect.left + window.scrollX + context.tooltip.caretX - tooltip.offsetWidth/2) + 'px';
-                                tooltip.style.top  = (rect.top  + window.scrollY + context.tooltip.caretY - 38) + 'px';
+                            mode: 'index',
+                            intersect: false,
+                            backgroundColor: '#1a1a2e',
+                            titleFont: { family: 'Inter', weight: 'bold' },
+                            bodyFont: { family: 'Inter' },
+                            callbacks: {
+                                label: ctx => {
+                                    const range = document.querySelector('.desco-range-picker .active')?.dataset.range || 'weekly';
+                                    const pieces = chartData[range].pieces[ctx.dataIndex];
+                                    return [
+                                        ' Revenue: ' + fmtBDT(ctx.raw),
+                                        ' Sold: ' + (pieces||0) + ' Pcs'
+                                    ];
+                                }
                             }
                         }
                     },
                     scales: {
-                        x: {
-                            grid: { display: false },
-                            border: { display: false },
-                            ticks: { color: '#6c757d', font: { size: 11 }, maxRotation: 0 }
-                        },
+                        x: { grid: { display: false }, ticks: { font: { size: 11 } } },
                         y: {
                             beginAtZero: true,
-                            grid: { color: 'rgba(0,0,0,0.05)', drawBorder: false },
-                            border: { display: false, dash: [4,4] },
-                            ticks: { color: '#6c757d', font: { size: 11 }, callback: v => v === 0 ? '৳0' : (v >= 1000 ? '৳' + (v/1000).toFixed(0) + 'k' : '৳' + v) }
+                            grid: { color: 'rgba(0,0,0,0.03)' },
+                            ticks: {
+                                font: { size: 11 },
+                                callback: val => '৳' + (val >= 1000 ? (val / 1000) + 'k' : val)
+                            }
                         }
                     }
                 }
             });
 
-            // Update the big header amount
-            document.getElementById('chartHeaderAmount').innerText = fmtBDT(chartData.weekly.totalAmount);
-            updateDisplayStats('weekly');
-
-            // ── 2. Pie / Doughnut Chart ──────────────────────────────
-            const ctxPie = document.getElementById('typePieChart').getContext('2d');
-            new Chart(ctxPie, {
-                type: 'doughnut',
+            // ── 2. Product Type Distribution (Pie) ─────
+            const pieCtx = document.getElementById('typePieChart').getContext('2d');
+            new Chart(pieCtx, {
+                type: 'pie',
                 data: {
                     labels: pieLabels,
-                    datasets: [{ data: pieAmounts, backgroundColor: colors, borderWidth: 0, hoverOffset: 18 }]
+                    datasets: [{
+                        data: pieAmounts,
+                        backgroundColor: colors,
+                        hoverOffset: 15,
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    cutout: '60%',
                     plugins: {
                         legend: { display: false },
                         tooltip: {
                             backgroundColor: '#1a1a2e',
                             callbacks: {
-                                title: ctx => ctx[0].label,
                                 label: ctx => {
                                     const pct = pieTotal > 0 ? ((ctx.raw / pieTotal) * 100).toFixed(1) : 0;
-                                    const qty = piePieces[ctx.dataIndex];
-                                    return [
-                                        ' Revenue: ' + fmtBDT(ctx.raw),
-                                        ' Qty Sold: ' + qty + ' Pcs',
-                                        ' Share: ' + pct + '%'
-                                    ];
+                                    return ` ${ctx.label}: ${fmtBDT(ctx.raw)} (${pct}%)`;
                                 }
                             }
                         }
@@ -687,7 +687,6 @@
                 }
             });
 
-            // Custom Pie Legend with %
             const legend = document.getElementById('pieLegend');
             pieLabels.forEach((lbl, i) => {
                 const pct = pieTotal > 0 ? ((pieAmounts[i] / pieTotal) * 100).toFixed(1) : 0;
@@ -696,11 +695,13 @@
                 el.innerHTML = `<span style="width:10px;height:10px;border-radius:50%;background:${colors[i%colors.length]};display:inline-block;flex-shrink:0;"></span><span style="font-size:11px;">${lbl} <strong>${pct}%</strong></span>`;
                 legend.appendChild(el);
             });
+        });
 
-            // ── 3. Sales Goal Ring ───────────────────────────────────
+        // ── Sales Goal Scroller ─────────────────────────────────────
+        function initGoalRing() {
             const goalCtx = document.getElementById('goalRingChart').getContext('2d');
             const goalPct = @goalPercent;
-            new Chart(goalCtx, {
+            goalRing = new Chart(goalCtx, {
                 type: 'doughnut',
                 data: {
                     datasets: [{
@@ -709,9 +710,31 @@
                         borderWidth: 0
                     }]
                 },
-                options: { cutout: '72%', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { enabled: false } } }
+                options: { cutout: '72%', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { enabled: false } }, animation: { duration: 1000 } }
             });
-        });
+        }
+        
+        async function updateGoalYear(delta) {
+            const yearEl = document.getElementById('goalDisplayYear');
+            let year = parseInt(yearEl.innerText) + delta;
+            if (year < 2020) return;
+            yearEl.innerText = year;
+            
+            try {
+                const response = await fetch(`/AdminDashboard/GetYearlyGoalStats?year=${year}`);
+                const data = await response.json();
+                
+                document.getElementById('valTarget').innerText = fmtBDT(data.goal);
+                document.getElementById('valAchieved').innerText = fmtBDT(data.revenue) + ' achieved';
+                document.getElementById('valRemaining').innerText = fmtBDT(Math.max(0, data.remaining));
+                document.getElementById('valPercent').innerText = data.percent + '%';
+                document.getElementById('valProgressBar').style.width = data.percent + '%';
+                document.getElementById('noteYear').innerText = year;
+                
+                goalRing.data.datasets[0].data = [data.percent, 100 - data.percent];
+                goalRing.update();
+            } catch (e) { console.error('Error fetching goal stats:', e); }
+        }
 
         // ── Chart Range Switch (dropdown + direct) ───────────────────
         function updateChartRange(range, btn) {
@@ -726,7 +749,6 @@
             updateDisplayStats(range);
         }
 
-        // Dropdown range picker
         document.querySelectorAll('.chart-range-item').forEach(item => {
             item.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -734,7 +756,6 @@
                 document.getElementById('rangeDropdownLabel').innerText = this.innerText.trim();
                 
                 if (range === 'prevyear') {
-                    // Force refresh data for current display year
                     fetchYearData(parseInt(document.getElementById('displayYear').innerText));
                 } else {
                     updateChartRange(range, null);
@@ -747,20 +768,14 @@
             let currentYear = parseInt(yearSpan.innerText);
             currentYear += delta;
             yearSpan.innerText = currentYear;
-            
             await fetchYearData(currentYear);
-            
-            // Set dropdown label to new year
             document.getElementById('rangeDropdownLabel').innerText = 'Year ' + currentYear;
         }
 
         async function fetchYearData(year) {
             try {
                 const response = await fetch(`/AdminDashboard/GetYearlySales?year=${year}`);
-                if (!response.ok) throw new Error('Network response was not ok');
                 const data = await response.json();
-                
-                // Update chartData.prevyear
                 chartData.prevyear = {
                     labels: data.map(s => s.monthName + ' ' + s.year),
                     amount: data.map(s => s.amount),
@@ -769,11 +784,8 @@
                     totalPieces: data.reduce((a, b) => a + b.pieces, 0),
                     divisor: Math.max(1, data.filter(s => s.amount > 0).length)
                 };
-                
                 updateChartRange('prevyear');
-            } catch (error) {
-                console.error('Error fetching yearly sales:', error);
-            }
+            } catch (error) { console.error('Error fetching yearly sales:', error); }
         }
 
         function updateDisplayStats(range) {

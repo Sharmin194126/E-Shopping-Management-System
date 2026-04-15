@@ -148,7 +148,18 @@
     <div class="col-lg-5">
         <div class="h-100 p-4 rounded-3 shadow-sm" style="background:#fff; border:1px solid #e6e2db;">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-trophy-fill text-warning me-2"></i>My Sales Goal @DateTime.Now.Year</h6>
+                <div class="d-flex align-items-center gap-2">
+                    <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-trophy-fill text-warning me-2"></i>My Sales Goal</h6>
+                    <div class="d-flex align-items-center border rounded-pill px-2" style="background:#f8f6f0; height:28px;">
+                        <button class="btn btn-sm p-0 border-0" onclick="updateEmployeeGoalYear(-1)" style="font-size:10px;">
+                            <i class="bi bi-chevron-left"></i>
+                        </button>
+                        <span id="goalDisplayYear" class="px-2 fw-bold" style="font-size:12px; color:#532374;">@DateTime.Now.Year</span>
+                        <button class="btn btn-sm p-0 border-0" onclick="updateEmployeeGoalYear(1)" style="font-size:10px;">
+                            <i class="bi bi-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
                 <div class="d-flex align-items-center gap-2">
                     <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#historyGoalModal" title="View Goal History">
                         <i class="bi bi-clock-history"></i> History
@@ -161,22 +172,25 @@
             <div class="row mb-3">
                 <div class="col-6">
                     <div class="small text-muted">Target</div>
-                    <div class="fw-bold fs-5" style="color:#532374;">৳@Model.SalesGoal.ToString("#,##0")</div>
+                    <div class="fw-bold fs-5" id="valTarget" style="color:#532374;">৳@Model.SalesGoal.ToString("#,##0")</div>
+                    <div class="small text-muted">Full Year Goal</div>
                 </div>
                 <div class="col-6 border-start">
                     <div class="small text-muted">Remaining</div>
-                    <div class="fw-bold fs-5 text-danger">৳@(goalRemaining > 0 ? goalRemaining.ToString("#,##0") : "0")</div>
+                    <div class="fw-bold fs-5 text-danger" id="valRemaining">৳@(goalRemaining > 0 ? goalRemaining.ToString("#,##0") : "0")</div>
+                    <div class="small text-muted">To reach target</div>
                 </div>
             </div>
             <div class="d-flex align-items-center gap-3">
-                <div style="position:relative; width:80px; height:80px; flex-shrink:0;">
+                <div style="position:relative; width:90px; height:90px; flex-shrink:0;">
                     <canvas id="goalRingChart"></canvas>
-                    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:12px;font-weight:700;color:#532374;">@goalPercent%</div>
+                    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:14px;font-weight:700;color:#532374;" id="valPercent">@goalPercent%</div>
                 </div>
-                <div class="flex-grow-1">
-                    <div class="fw-bold text-dark small">৳@currentYearSales.ToString("#,##0") achieved</div>
+                <div>
+                    <div class="fw-bold text-dark" id="valAchieved">৳@currentYearSales.ToString("#,##0") achieved</div>
+                    <div class="small text-muted" id="goalNote">Note: Goal for <span id="noteYear">@DateTime.Now.Year</span></div>
                     <div class="progress mt-2" style="height:6px;">
-                        <div class="progress-bar" style="width:@goalPercent%; background:#532374;"></div>
+                        <div class="progress-bar" id="valProgressBar" style="width:@goalPercent%; background:#532374;"></div>
                     </div>
                 </div>
             </div>
@@ -351,7 +365,7 @@
         <div class="modal-content border-0">
             <div class="modal-header" style="background:#532374; color:#fff;">
                 <h5 class="modal-title">Set Annual Sales Goal</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss.="modal"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <form asp-action="UpdateSalesGoal" method="post">
                 <div class="modal-body p-4">
@@ -396,7 +410,47 @@
         const pieLabels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ProductTypeSales.Select(s => s.ProductTypeName)));
         const pieAmounts = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ProductTypeSales.Select(s => s.Amount)));
 
+        let goalRing;
+        function initGoalRing() {
+            const goalCtx = document.getElementById('goalRingChart').getContext('2d');
+            const goalPct = @goalPercent;
+            goalRing = new Chart(goalCtx, {
+                type: 'doughnut',
+                data: {
+                    datasets: [{
+                        data: [goalPct, 100 - goalPct],
+                        backgroundColor: ['#532374', '#f0ece6'],
+                        borderWidth: 0
+                    }]
+                },
+                options: { cutout: '72%', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { enabled: false } }, animation: { duration: 1000 } }
+            });
+        }
+        
+        async function updateEmployeeGoalYear(delta) {
+            const yearEl = document.getElementById('goalDisplayYear');
+            let year = parseInt(yearEl.innerText) + delta;
+            if (year < 2020) return;
+            yearEl.innerText = year;
+            
+            try {
+                const response = await fetch(`/EmployeeDashboard/GetYearlyGoalStats?year=${year}`);
+                const data = await response.json();
+                
+                document.getElementById('valTarget').innerText = fmtBDT(data.goal);
+                document.getElementById('valAchieved').innerText = fmtBDT(data.revenue) + ' achieved';
+                document.getElementById('valRemaining').innerText = fmtBDT(Math.max(0, data.remaining));
+                document.getElementById('valPercent').innerText = data.percent + '%';
+                document.getElementById('valProgressBar').style.width = data.percent + '%';
+                document.getElementById('noteYear').innerText = year;
+                
+                goalRing.data.datasets[0].data = [data.percent, 100 - data.percent];
+                goalRing.update();
+            } catch (e) { console.error('Error fetching goal stats:', e); }
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
+            initGoalRing();
              // Line Chart
             const ctx = document.getElementById('salesChart').getContext('2d');
             salesChart = new Chart(ctx, {
@@ -438,20 +492,6 @@
                 const el = document.createElement('div');
                 el.innerHTML = `<span style="width:10px;height:10px;background:${colors[i%colors.length]};display:inline-block;border-radius:50%;"></span> <small>${lbl}</small>`;
                 legend.appendChild(el);
-            });
-
-            // Goal Ring
-            const goalCtx = document.getElementById('goalRingChart').getContext('2d');
-            new Chart(goalCtx, {
-                type: 'doughnut',
-                data: {
-                    datasets: [{
-                        data: [@goalPercent, @(100 - goalPercent)],
-                        backgroundColor: ['#532374', '#f0ece6'],
-                        borderWidth: 0
-                    }]
-                },
-                options: { cutout: '75%', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { enabled: false } } }
             });
         });
 
