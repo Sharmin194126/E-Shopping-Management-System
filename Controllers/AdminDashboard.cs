@@ -28,14 +28,16 @@ namespace E_ShoppingManagement.Controllers
             var user = await _userManager.GetUserAsync(User);
             if (user == null) return RedirectToAction("Login", "Account");
 
-            // Mock notifications for now based on actual data
+            // Real data for notifications
             var recentOrders = await _context.Orders.Include(o => o.Customer).OrderByDescending(o => o.CreatedAt).Take(20).ToListAsync();
             var recentCustomers = await _context.Customers.OrderByDescending(o => o.CreatedAt).Take(10).ToListAsync();
             var recentEmployees = await _context.Employees.OrderByDescending(o => o.CreatedAt).Take(10).ToListAsync();
+            var recentMessages = await _context.ContactMessages.OrderByDescending(o => o.CreatedAt).Take(20).ToListAsync();
 
             ViewBag.RecentOrders = recentOrders;
             ViewBag.RecentCustomers = recentCustomers;
             ViewBag.RecentEmployees = recentEmployees;
+            ViewBag.RecentMessages = recentMessages;
 
             return View();
         }

@@ -11,30 +11,44 @@
 
 <div class="row g-4 mb-4">
     <div class="col-md-3">
-        <div class="page-card text-center p-3" style="background: rgba(83,35,116,0.08);">
-            <h3 class="text-primary">@ViewBag.TotalProducts</h3>
-            <p class="mb-0 text-muted">Managed Products</p>
+        <div class="page-card text-center p-4 border-0 shadow-sm transition-hover" style="background: linear-gradient(135deg, #532374, #7a3a9d); color: white; border-radius: 15px;">
+            <i class="bi bi-box-seam mb-2" style="font-size: 2rem; opacity: 0.8;"></i>
+            <h3 class="fw-bold mb-1">@ViewBag.TotalProducts</h3>
+            <p class="mb-0 small" style="opacity: 0.9;">Managed Products</p>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="page-card text-center p-3" style="background: rgba(40,167,69,0.08);">
-            <h3 class="text-success">৳@ViewBag.TotalProductValue</h3>
-            <p class="mb-0 text-muted">Stock Value</p>
+        <div class="page-card text-center p-4 border-0 shadow-sm transition-hover" style="background: linear-gradient(135deg, #28a745, #4cd137); color: white; border-radius: 15px;">
+            <i class="bi bi-currency-dollar mb-2" style="font-size: 2rem; opacity: 0.8;"></i>
+            <h3 class="fw-bold mb-1">৳@ViewBag.TotalProductValue.ToString("#,##0")</h3>
+            <p class="mb-0 small" style="opacity: 0.9;">Stock Value</p>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="page-card text-center p-3" style="background: rgba(255,193,7,0.12);">
-            <h3 class="text-warning">@ViewBag.TotalSalesCount</h3>
-            <p class="mb-0 text-muted">Orders Delivered</p>
+        <div class="page-card text-center p-4 border-0 shadow-sm transition-hover" style="background: linear-gradient(135deg, #f59e0b, #fbbf24); color: white; border-radius: 15px;">
+            <i class="bi bi-cart-check mb-2" style="font-size: 2rem; opacity: 0.8;"></i>
+            <h3 class="fw-bold mb-1">@ViewBag.TotalSalesCount</h3>
+            <p class="mb-0 small" style="opacity: 0.9;">Orders Delivered</p>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="page-card text-center p-3" style="background: rgba(220,53,69,0.08);">
-            <h3 class="text-danger">@ViewBag.ReturnsCount</h3>
-            <p class="mb-0 text-muted">Returns/Issues</p>
+        <div class="page-card text-center p-4 border-0 shadow-sm transition-hover" style="background: linear-gradient(135deg, #ef4444, #f87171); color: white; border-radius: 15px;">
+            <i class="bi bi-exclamation-triangle mb-2" style="font-size: 2rem; opacity: 0.8;"></i>
+            <h3 class="fw-bold mb-1">@ViewBag.ReturnsCount</h3>
+            <p class="mb-0 small" style="opacity: 0.9;">Returns/Issues</p>
         </div>
     </div>
 </div>
+
+<style>
+    .transition-hover {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .transition-hover:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    }
+</style>
 
 <div class="page-card p-4">
     <h4>Recent Successful Sales</h4>

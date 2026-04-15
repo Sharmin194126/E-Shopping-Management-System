@@ -152,8 +152,9 @@
 
 
         <div class="form-group">
-            <label asp-for="MaxOrderQty">Max Order limit per Customer (Optional)</label>
-            <input type="number" name="MaxOrderQty" value="@Model.MaxOrderQty" class="form-control" placeholder="Leave empty for no limit" />
+            <label asp-for="MaxOrderQty">Max Order limit per Customer</label>
+            <input asp-for="MaxOrderQty" class="form-control" placeholder="Leave empty for no limit" />
+            <span asp-validation-for="MaxOrderQty" class="text-danger"></span>
         </div>
 
         <div class="form-group">

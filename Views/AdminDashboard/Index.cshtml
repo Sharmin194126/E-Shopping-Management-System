@@ -248,6 +248,7 @@
                             <li><a class="dropdown-item chart-range-item" href="#" data-range="yearly">Yearly (@DateTime.Now.Year)</a></li>
                             <li><hr class="dropdown-divider" style="border-color:#e6e2db;"></li>
                             <li><a class="dropdown-item chart-range-item" href="#" data-range="prevyear">Previous Year (@(DateTime.Now.Year - 1))</a></li>
+                            <li><a class="dropdown-item chart-range-item" href="#" data-range="fullhistory">Full History (All Years)</a></li>
                         </ul>
                     </div>
                 </div>
@@ -546,6 +547,14 @@
                 totalAmount: @Model.PreviousYearSales.Sum(s => s.Amount),
                 totalPieces: @Model.PreviousYearSales.Sum(s => s.Pieces),
                 divisor: @Math.Max(1, Model.PreviousYearSales.Count(s => s.Amount > 0))
+            },
+            fullhistory: {
+                labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.MonthlyHistory.OrderBy(s=>s.Year).ThenBy(s=>s.Month).Select(s => s.MonthName + " " + s.Year))),
+                amount: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.MonthlyHistory.OrderBy(s=>s.Year).ThenBy(s=>s.Month).Select(s => s.Amount))),
+                pieces: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.MonthlyHistory.OrderBy(s=>s.Year).ThenBy(s=>s.Month).Select(s => s.Pieces))),
+                totalAmount: @Model.MonthlyHistory.Sum(s => s.Amount),
+                totalPieces: @Model.MonthlyHistory.Sum(s => s.Pieces),
+                divisor: @Math.Max(1, Model.MonthlyHistory.Count())
             }
         };
 

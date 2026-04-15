@@ -124,17 +124,56 @@
                 </div>
                 <div class="d-flex align-items-center gap-4">
                     <!-- Notification Button -->
+                    @{
+                        var db = Context.RequestServices.GetRequiredService<E_ShoppingManagement.Data.AppDbContext>();
+                        var today = DateTime.UtcNow.Date;
+                        var newOrdersCount = db.Orders.Count(o => o.CreatedAt >= today);
+                        var pendingEmpsCount = db.Employees.Count(e => e.Status == "Pending");
+                        var totalNotifs = newOrdersCount + pendingEmpsCount;
+                        
+                        var headerOrders = db.Orders.OrderByDescending(o => o.CreatedAt).Take(2).ToList();
+                        var headerEmps = db.Employees.Where(e => e.Status == "Pending").OrderByDescending(e => e.CreatedAt).Take(1).ToList();
+                    }
                     <div class="dropdown">
                         <a href="#" class="position-relative text-decoration-none" id="adminNotificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-bell-fill" style="font-size: 1.4rem; color: #532374;"></i>
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:0.65rem; border: 2px solid #fff;">
-                                3
-                            </span>
+                            @if (totalNotifs > 0)
+                            {
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:0.65rem; border: 2px solid #fff;">
+                                    @totalNotifs
+                                </span>
+                            }
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="adminNotificationDropdown" style="width: 320px; border-radius: 12px; background: #fff !important;">
                             <li><h6 class="dropdown-header fw-bold" style="background:#532374; color:#fff; border-radius: 12px 12px 0 0; margin-top:-8px; padding:12px 15px;">Admin Notifications</h6></li>
-                            <li><a class="dropdown-item py-3 border-bottom" href="#"><div class="d-flex gap-2"><i class="bi bi-cart-plus text-primary"></i><div><small class="text-muted d-block">Just now</small>New order #1234 received!</div></div></a></li>
-                            <li><a class="dropdown-item py-3 border-bottom" href="#"><div class="d-flex gap-2"><i class="bi bi-person-plus text-success"></i><div><small class="text-muted d-block">1 hr ago</small>New employee registered.</div></div></a></li>
+                            
+                            @foreach(var ho in headerOrders) {
+                                <li>
+                                    <a class="dropdown-item py-3 border-bottom" asp-controller="Order" asp-action="Details" asp-route-id="@ho.Id">
+                                        <div class="d-flex gap-2">
+                                            <i class="bi bi-cart-plus text-primary"></i>
+                                            <div>
+                                                <small class="text-muted d-block">@ho.CreatedAt.ToString("MMM dd, hh:mm tt")</small>
+                                                New order #@ho.Id received!
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                            }
+                            @foreach(var he in headerEmps) {
+                                <li>
+                                    <a class="dropdown-item py-3 border-bottom" asp-controller="Employee" asp-action="Details" asp-route-id="@he.Id">
+                                        <div class="d-flex gap-2">
+                                            <i class="bi bi-person-plus text-success"></i>
+                                            <div>
+                                                <small class="text-muted d-block">@he.CreatedAt.ToString("MMM dd")</small>
+                                                New employee registration: @he.Name
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                            }
+
                             <li><hr class="dropdown-divider m-0"></li>
                             <li><a class="dropdown-item text-center fw-bold py-2" style="color:#532374; font-size:13px;" asp-controller="AdminDashboard" asp-action="Notifications">View All Notifications</a></li>
                         </ul>

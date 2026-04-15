@@ -4,19 +4,20 @@
     var orders = ViewBag.RecentOrders as List<E_ShoppingManagement.Models.Order>;
     var customers = ViewBag.RecentCustomers as List<E_ShoppingManagement.Models.Customer>;
     var employees = ViewBag.RecentEmployees as List<E_ShoppingManagement.Models.Employee>;
+    var messages = ViewBag.RecentMessages as List<E_ShoppingManagement.Models.ContactMessage>;
 }
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h3 class="fw-bold mb-0" style="color: #532374;"><i class="bi bi-bell-fill me-2"></i> All Notifications & Activities</h3>
-    <a href="javascript:history.back()" class="btn btn-outline-secondary btn-sm px-4 rounded-pill">Back</a>
+    <a href="javascript:history.back()" class="theme-back-btn mb-0" style="text-decoration: none;">Back</a>
 </div>
 
 <div class="row g-4">
     <!-- Orders Activity -->
     <div class="col-md-6">
         <div class="card border-0 shadow-sm" style="border-radius: 15px;">
-            <div class="card-header bg-white py-3 border-0">
-                <h5 class="mb-0 fw-bold"><i class="bi bi-cart-check text-primary me-2"></i>Recent Orders</h5>
+            <div class="card-header py-3 border-0" style="background:#532374; border-radius: 15px 15px 0 0;">
+                <h5 class="mb-0 fw-bold text-white"><i class="bi bi-cart-check me-2"></i>Recent Orders</h5>
             </div>
             <div class="card-body p-0">
                 <div class="list-group list-group-flush">
@@ -28,14 +29,14 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
                                         <span class="fw-bold">New Order #@order.Id</span>
-                                        <div class="small text-muted">Customer: @(order.Customer?.Name ?? "Admin")</div>
+                                        <div class="small text-muted">Customer: @(order.Customer?.Name ?? "Admin") (@(order.Customer?.Email ?? "N/A"))</div>
                                         <div class="small mt-1">
                                             Status: <span class="badge @(order.OrderStatus == "Delivered" ? "bg-success" : (order.OrderStatus == "Pending" ? "bg-warning text-dark" : "bg-info"))">@order.OrderStatus</span>
                                         </div>
                                     </div>
                                     <div class="text-end">
                                         <div class="small text-muted">@order.CreatedAt.ToString("MMM dd, hh:mm tt")</div>
-                                        <a asp-action="OrderDetails" asp-route-id="@order.Id" class="btn btn-sm btn-link text-decoration-none p-0">View</a>
+                                        <a asp-controller="Order" asp-action="Details" asp-route-id="@order.Id" class="btn btn-sm btn-link text-decoration-none p-0" style="color: #532374;">View</a>
                                     </div>
                                 </div>
                             </div>
@@ -50,11 +51,47 @@
         </div>
     </div>
 
-    <!-- Registration Activities -->
+    <!-- Messages Activity -->
     <div class="col-md-6">
+        <div class="card border-0 shadow-sm" style="border-radius: 15px;">
+            <div class="card-header py-3 border-0" style="background:#17a2b8; border-radius: 15px 15px 0 0;">
+                <h5 class="mb-0 fw-bold text-white"><i class="bi bi-envelope me-2"></i>Customer Messages</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="list-group list-group-flush">
+                    @if (messages != null && messages.Any())
+                    {
+                        foreach (var msg in messages)
+                        {
+                            <div class="list-group-item py-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <span class="fw-bold">From: @msg.Name</span>
+                                        <div class="small text-muted">@msg.Email</div>
+                                        <div class="small text-truncate" style="max-width: 250px;">@msg.Message</div>
+                                    </div>
+                                    <div class="text-end">
+                                        <div class="small text-muted">@msg.CreatedAt.ToString("MMM dd, hh:mm tt")</div>
+                                        <a asp-action="ReplyMessage" asp-route-id="@msg.Id" class="btn btn-sm btn-link text-decoration-none p-0 text-info">Reply</a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="p-4 text-center text-muted">No recent messages found.</div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Registration Activities -->
+    <div class="col-md-12">
         <div class="card border-0 shadow-sm mb-4" style="border-radius: 15px;">
-            <div class="card-header bg-white py-3 border-0">
-                <h5 class="mb-0 fw-bold"><i class="bi bi-person-plus text-success me-2"></i>New Registrations</h5>
+            <div class="card-header py-3 border-0" style="background:#28a745; border-radius: 15px 15px 0 0;">
+                <h5 class="mb-0 fw-bold text-white"><i class="bi bi-person-plus me-2"></i>New Registrations</h5>
             </div>
             <div class="card-body p-0">
                 <div class="list-group list-group-flush">
@@ -73,7 +110,7 @@
                                     </div>
                                     <div class="text-end">
                                         <div class="small text-muted">@emp.CreatedAt.ToString("MMM dd, yyyy")</div>
-                                        <a asp-controller="Employee" asp-action="Details" asp-route-id="@emp.Id" class="btn btn-sm btn-link text-decoration-none p-0 text-success">Approve</a>
+                                        <a asp-controller="Employee" asp-action="Details" asp-route-id="@emp.Id" class="btn btn-sm btn-link text-decoration-none p-0 text-success">Approve/Details</a>
                                     </div>
                                 </div>
                             </div>
@@ -86,7 +123,7 @@
                             <div class="list-group-item py-3">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
-                                        <span class="fw-bold">Customer: @cust.Name</span>
+                                        <span class="fw-bold">Customer: @cust.Name (@cust.Email)</span>
                                         <div class="small text-muted">Joined: @cust.CreatedAt.ToString("MMM dd, yyyy")</div>
                                     </div>
                                     <div class="text-end">
@@ -96,7 +133,7 @@
                             </div>
                         }
                     }
-                    else if ((employees == null || !employees.Any()) && (customers == null || !customers.Any()))
+                    @if ((employees == null || !employees.Any()) && (customers == null || !customers.Any()))
                     {
                         <div class="p-4 text-center text-muted">No recent registrations found.</div>
                     }

@@ -39,7 +39,7 @@ namespace E_ShoppingManagement.ViewModels
         public int StockQty { get; set; }
 
         [Display(Name = "Max Order Limit")]
-        [Range(1, 9999)]
+        [Range(0, 9999)]
         public int? MaxOrderQty { get; set; }
 
         public string? Description { get; set; }
