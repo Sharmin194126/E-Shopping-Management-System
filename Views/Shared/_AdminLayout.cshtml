@@ -126,13 +126,10 @@
                     <!-- Notification Button -->
                     @{
                         var db = Context.RequestServices.GetRequiredService<E_ShoppingManagement.Data.AppDbContext>();
-                        var today = DateTime.UtcNow.Date;
-                        var newOrdersCount = db.Orders.Count(o => o.CreatedAt >= today);
-                        var pendingEmpsCount = db.Employees.Count(e => e.Status == "Pending");
-                        var totalNotifs = newOrdersCount + pendingEmpsCount;
-                        
-                        var headerOrders = db.Orders.OrderByDescending(o => o.CreatedAt).Take(2).ToList();
-                        var headerEmps = db.Employees.Where(e => e.Status == "Pending").OrderByDescending(e => e.CreatedAt).Take(1).ToList();
+                        var pendingOrders = db.Orders.Where(o => o.OrderStatus == "Pending").ToList();
+                        var pendingEmps = db.Employees.Where(e => e.Status == "Pending").ToList();
+                        var activeMsgs = db.ContactMessages.Where(m => m.Status != "Replied").ToList();
+                        var totalNotifs = pendingOrders.Count + pendingEmps.Count + activeMsgs.Count;
                     }
                     <div class="dropdown">
                         <a href="#" class="position-relative text-decoration-none" id="adminNotificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
@@ -147,35 +144,52 @@
                         <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="adminNotificationDropdown" style="width: 320px; border-radius: 12px; background: #fff !important;">
                             <li><h6 class="dropdown-header fw-bold" style="background:#532374; color:#fff; border-radius: 12px 12px 0 0; margin-top:-8px; padding:12px 15px;">Admin Notifications</h6></li>
                             
-                            @foreach(var ho in headerOrders) {
+                            @if (pendingOrders.Any()) {
                                 <li>
-                                    <a class="dropdown-item py-3 border-bottom" asp-controller="Order" asp-action="Details" asp-route-id="@ho.Id">
+                                    <a class="dropdown-item py-2 border-bottom" asp-controller="AdminDashboard" asp-action="OrdersByStatus" asp-route-status="Pending">
                                         <div class="d-flex gap-2">
                                             <i class="bi bi-cart-plus text-primary"></i>
                                             <div>
-                                                <small class="text-muted d-block">@ho.CreatedAt.ToString("MMM dd, hh:mm tt")</small>
-                                                New order #@ho.Id received!
+                                                <span class="fw-bold">@pendingOrders.Count Pending Orders</span>
+                                                <small class="text-muted d-block">Needs processing</small>
                                             </div>
                                         </div>
                                     </a>
                                 </li>
                             }
-                            @foreach(var he in headerEmps) {
+                            @if (pendingEmps.Any()) {
                                 <li>
-                                    <a class="dropdown-item py-3 border-bottom" asp-controller="Employee" asp-action="Details" asp-route-id="@he.Id">
+                                    <a class="dropdown-item py-2 border-bottom" asp-controller="Employee" asp-action="Index">
                                         <div class="d-flex gap-2">
                                             <i class="bi bi-person-plus text-success"></i>
                                             <div>
-                                                <small class="text-muted d-block">@he.CreatedAt.ToString("MMM dd")</small>
-                                                New employee registration: @he.Name
+                                                <span class="fw-bold">@pendingEmps.Count Pending Approvals</span>
+                                                <small class="text-muted d-block">New employee registrations</small>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                            }
+                            @if (activeMsgs.Any()) {
+                                <li>
+                                    <a class="dropdown-item py-2 border-bottom" asp-controller="AdminDashboard" asp-action="Messages">
+                                        <div class="d-flex gap-2">
+                                            <i class="bi bi-envelope text-info"></i>
+                                            <div>
+                                                <span class="fw-bold">@activeMsgs.Count New Messages</span>
+                                                <small class="text-muted d-block">From contact form</small>
                                             </div>
                                         </div>
                                     </a>
                                 </li>
                             }
 
+                            @if (totalNotifs == 0) {
+                                <li><div class="dropdown-item py-3 text-center text-muted">No new notifications</div></li>
+                            }
+
                             <li><hr class="dropdown-divider m-0"></li>
-                            <li><a class="dropdown-item text-center fw-bold py-2" style="color:#532374; font-size:13px;" asp-controller="AdminDashboard" asp-action="Notifications">View All Notifications</a></li>
+                            <li><a class="dropdown-item text-center fw-bold py-2" style="color:#532374; font-size:13px;" asp-controller="AdminDashboard" asp-action="Notifications">View All Activity</a></li>
                         </ul>
                     </div>
                     <!-- Profile Link -->

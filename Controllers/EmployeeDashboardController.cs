@@ -9,6 +9,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace E_ShoppingManagement.Controllers
 {
@@ -40,6 +41,9 @@ namespace E_ShoppingManagement.Controllers
                 .OrderByDescending(o => o.CreatedAt)
                 .Take(30)
                 .ToListAsync();
+            
+            var messages = await _context.ContactMessages.OrderByDescending(m => m.CreatedAt).Take(20).ToListAsync();
+            ViewBag.RecentMessages = messages;
 
             return View(orders);
         }
@@ -188,6 +192,63 @@ namespace E_ShoppingManagement.Controllers
             stats.ProductTypeSales = pieData;
 
             return View(stats);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetYearlySales(int year)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var employee = await _context.Employees.FirstOrDefaultAsync(e => e.UserId == user.Id);
+            if (employee == null) return Unauthorized();
+
+            var monthlySales = new List<MonthlySalesViewModel>();
+            var soldOrders = await _context.Orders
+                .Where(o => o.AssignedEmployeeId == employee.Id && o.CreatedAt.Year == year && (o.OrderStatus == "Delivered" || o.PaymentStatus == "Paid" || o.OrderStatus == "Shipped"))
+                .ToListAsync();
+
+            for (int m = 1; m <= 12; m++)
+            {
+                var monthOrders = soldOrders.Where(o => o.CreatedAt.Month == m).ToList();
+                var mIds = monthOrders.Select(o => o.Id).ToList();
+                var mPieces = mIds.Any() ? await _context.OrderDetails.Where(od => mIds.Contains(od.OrderId)).SumAsync(od => (int?)od.Quantity) ?? 0 : 0;
+                
+                monthlySales.Add(new MonthlySalesViewModel
+                {
+                    Year = year,
+                    Month = m,
+                    MonthName = new DateTime(year, m, 1).ToString("MMM"),
+                    Amount = monthOrders.Sum(o => o.TotalAmount),
+                    Pieces = mPieces
+                });
+            }
+            return Json(monthlySales);
+        }
+
+        public async Task<IActionResult> Messages()
+        {
+            var messages = await _context.ContactMessages.OrderByDescending(m => m.CreatedAt).ToListAsync();
+            return View(messages);
+        }
+
+        public async Task<IActionResult> MessageDetails(int id)
+        {
+            var message = await _context.ContactMessages.FindAsync(id);
+            if (message == null) return NotFound();
+            return View(message);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ReplyMessage(int id, string reply)
+        {
+            var message = await _context.ContactMessages.FindAsync(id);
+            if (message == null) return NotFound();
+
+            message.Reply = reply;
+            message.Status = "Replied";
+            await _context.SaveChangesAsync();
+
+            TempData["Message"] = "Reply sent successfully!";
+            return RedirectToAction(nameof(Messages));
         }
 
         [HttpPost]

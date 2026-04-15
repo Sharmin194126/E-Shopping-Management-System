@@ -37,12 +37,24 @@
                         <td>@(sl++)</td>
                         <td>@o.OrderId</td>
                         <td>@o.CustomerName</td>
-                        <td>@o.TotalAmount</td>
-                        <td>@o.OrderStatus</td>
+                        <td>৳@o.TotalAmount</td>
+                        <td>
+                            <form asp-action="UpdateStatus" method="post" class="d-inline">
+                                <input type="hidden" name="id" value="@o.OrderId" />
+                                <select name="newStatus" onchange="this.form.submit()" class="form-select form-select-sm fw-bold text-primary" style="min-width: 110px;">
+                                    <option value="Pending" selected="@(o.OrderStatus == "Pending")">Pending</option>
+                                    <option value="Processing" selected="@(o.OrderStatus == "Processing")">Processing</option>
+                                    <option value="Shipped" selected="@(o.OrderStatus == "Shipped")">Shipped</option>
+                                    <option value="Delivered" selected="@(o.OrderStatus == "Delivered")">Delivered</option>
+                                </select>
+                            </form>
+                        </td>
                         <td>@o.CreatedAt.ToLocalTime().ToString("dd-MM-yyyy, hh:mm tt")</td>
                         <td>
-                            <a asp-action="Details" asp-route-id="@o.OrderId"
-                               class="btn btn-sm btn-secondary">Details</a>
+                            <div class="d-flex gap-1">
+                                <a asp-action="Details" asp-route-id="@o.OrderId" class="btn btn-sm btn-outline-info">View</a>
+                                <button type="button" class="btn btn-sm btn-outline-primary" onclick="this.parentElement.parentElement.previousElementSibling.previousElementSibling.querySelector('select').focus()">Edit</button>
+                            </div>
                         </td>
                     </tr>
                 }

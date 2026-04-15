@@ -3,6 +3,20 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<style>
+    .image-preview-container {
+        margin-top: 10px;
+    }
+    #imagePreview {
+        display: none;
+        max-width: 150px;
+        max-height: 150px;
+        object-fit: cover;
+        border-radius: 10px;
+        border: 2px solid #532374;
+    }
+</style>
+
 <div class="container mt-5 mb-5">
 <div class="d-flex justify-content-end align-items-center mb-3">
     <a asp-action="Index" class="theme-back-btn mb-0">Back</a>

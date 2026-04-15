@@ -71,7 +71,15 @@
                                 <li><a class="dropdown-item py-2" href="#"><small class="text-muted d-block">Just now</small>Welcome back!</a></li>
                                 <li><a class="dropdown-item py-2" href="#"><small class="text-muted d-block">1 hr ago</small>Your order is pending.</a></li>
                                 <li><hr class="dropdown-divider mb-0"></li>
-                                <li><a class="dropdown-item text-center fw-bold py-2" style="color:#532374; font-size:13px;" asp-controller="Home" asp-action="Notifications">View All</a></li>
+                                <li>
+                                    <a class="dropdown-item text-center fw-bold py-2" style="color:#532374; font-size:13px;" 
+                                       href="@(User.IsInRole("Admin") ? "/AdminDashboard/Notifications" : 
+                                              User.IsInRole("Employee") ? "/EmployeeDashboard/Notifications" : 
+                                              User.IsInRole("DeliveryMan") ? "/DeliveryManDashboard/Notifications" : 
+                                              "/CustomerDashboard/Notifications")">
+                                        View All Notifications
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                         <div class="cart-wrapper">

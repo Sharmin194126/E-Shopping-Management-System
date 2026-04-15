@@ -9,39 +9,53 @@
     <a asp-action="Index" class="theme-back-btn">Back to List</a>
 </div>
 
-<div class="row g-4 mb-4">
+<div class="row g-4 mb-5">
     <div class="col-md-4">
-        <div class="page-card text-center p-3" style="background: #e8f5e9; border-left: 5px solid #2e7d32;">
-            <h3 class="text-success">@ViewBag.Delivered</h3>
-            <p class="mb-0 fw-bold">Successfully Received</p>
+        <div class="analytics-metric-card" style="background: linear-gradient(135deg, #2e7d32, #1b5e20);">
+            <div class="amc-icon"><i class="bi bi-check-circle-fill"></i></div>
+            <div class="amc-label">Successfully Delivered</div>
+            <div class="amc-value">@ViewBag.Delivered</div>
+            <div class="amc-sub">Total completed deliveries</div>
         </div>
     </div>
     <div class="col-md-4">
-        <div class="page-card text-center p-3" style="background: #fff3e0; border-left: 5px solid #ef6c00;">
-            <h3 class="text-warning">@ViewBag.Pending</h3>
-            <p class="mb-0 fw-bold">In Transit / Pending</p>
+        <div class="analytics-metric-card" style="background: linear-gradient(135deg, #f57c00, #e65100);">
+            <div class="amc-icon"><i class="bi bi-truck"></i></div>
+            <div class="amc-label">In Transit / Pending</div>
+            <div class="amc-value">@ViewBag.Pending</div>
+            <div class="amc-sub">Currently active assignments</div>
         </div>
     </div>
     <div class="col-md-4">
-        <div class="page-card text-center p-3" style="background: #ffebee; border-left: 5px solid #c62828;">
-            <h3 class="text-danger">@ViewBag.Returned</h3>
-            <p class="mb-0 fw-bold">Returned Parcels</p>
+        <div class="analytics-metric-card" style="background: linear-gradient(135deg, #d32f2f, #b71c1c);">
+            <div class="amc-icon"><i class="bi bi-x-circle-fill"></i></div>
+            <div class="amc-label">Returned Parcels</div>
+            <div class="amc-value">@ViewBag.Returned</div>
+            <div class="amc-sub">Orders failed or returned</div>
         </div>
     </div>
 </div>
+
+<style>
+    .analytics-metric-card { border-radius:12px; padding:20px; color:#fff; position:relative; overflow:hidden; height:100%; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+    .analytics-metric-card .amc-icon { font-size:2.2rem; opacity:.25; position:absolute; right:15px; bottom:10px; }
+    .analytics-metric-card .amc-label { font-size:12px; opacity:.85; text-transform:uppercase; font-weight: 600; letter-spacing:.5px; }
+    .analytics-metric-card .amc-value { font-size:2rem; font-weight:700; margin:5px 0; }
+    .analytics-metric-card .amc-sub { font-size:11px; opacity:.7; }
+</style>
 
 <div class="page-card p-4">
     <h4>Assigned Order History</h4>
     <div class="table-responsive mt-3">
         <table class="table table-hover align-middle">
-            <thead class="table-light">
+            <thead style="background: #532374; color: #fff;">
                 <tr>
-                    <th>Order #</th>
-                    <th>Customer</th>
-                    <th>Status</th>
-                    <th>Amount</th>
-                    <th>Payment</th>
-                    <th>Date</th>
+                    <th class="ps-3 py-3">Order #</th>
+                    <th class="py-3">Customer</th>
+                    <th class="py-3">Status</th>
+                    <th class="py-3">Amount</th>
+                    <th class="py-3">Payment</th>
+                    <th class="py-3 pe-3">Date</th>
                 </tr>
             </thead>
             <tbody>

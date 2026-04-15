@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace E_ShoppingManagement.Models
 {
@@ -16,5 +16,6 @@ namespace E_ShoppingManagement.Models
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         public string Status { get; set; } = "Active";
+        public string? Reply { get; set; }
     }
 }

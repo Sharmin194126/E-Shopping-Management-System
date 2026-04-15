@@ -58,20 +58,23 @@
                         <td>@o.CustomerName</td>
                         <td><span class="fw-bold">৳@o.TotalAmount</span></td>
                         <td>
-                            @switch (o.OrderStatus)
-                            {
-                                case "Pending": <span class="badge bg-warning text-dark">Pending</span> break;
-                                case "Processing": <span class="badge bg-info">Processing</span> break;
-                                case "Shipped": <span class="badge bg-primary">Shipped</span> break;
-                                case "Delivered": <span class="badge bg-success">Delivered</span> break;
-                                case "Cancelled": <span class="badge bg-danger">Cancelled</span> break;
-                                default: <span class="badge bg-secondary">@o.OrderStatus</span> break;
-                            }
+                            <form asp-action="UpdateStatus" method="post" class="d-inline">
+                                <input type="hidden" name="id" value="@o.OrderId" />
+                                <select name="newStatus" onchange="this.form.submit()" class="form-select form-select-sm fw-bold @(o.OrderStatus == "Delivered" ? "text-success" : (o.OrderStatus == "Cancelled" ? "text-danger" : "text-primary"))" style="min-width: 110px;">
+                                    <option value="Pending" selected="@(o.OrderStatus == "Pending")">Pending</option>
+                                    <option value="Processing" selected="@(o.OrderStatus == "Processing")">Processing</option>
+                                    <option value="Shipped" selected="@(o.OrderStatus == "Shipped")">Shipped</option>
+                                    <option value="Delivered" selected="@(o.OrderStatus == "Delivered")">Delivered</option>
+                                    <option value="Cancelled" selected="@(o.OrderStatus == "Cancelled")">Cancelled</option>
+                                </select>
+                            </form>
                         </td>
                         <td>@o.CreatedAt.ToLocalTime().ToString("dd-MM-yyyy, hh:mm tt")</td>
                         <td>
-                            <a href="/EmployeeOrder/Details/@o.OrderId"
-                               class="btn btn-sm btn-outline-info">View Details</a>
+                            <div class="d-flex gap-1">
+                                <a href="/EmployeeOrder/Details/@o.OrderId" class="btn btn-sm btn-outline-info">View</a>
+                                <button type="button" class="btn btn-sm btn-outline-primary" onclick="this.parentElement.parentElement.previousElementSibling.previousElementSibling.querySelector('select').focus()">Edit</button>
+                            </div>
                         </td>
                     </tr>
                     i++;

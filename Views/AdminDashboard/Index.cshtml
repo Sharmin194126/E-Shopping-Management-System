@@ -247,8 +247,19 @@
                             <li><a class="dropdown-item chart-range-item" href="#" data-range="monthly">Monthly (Last 30 Days)</a></li>
                             <li><a class="dropdown-item chart-range-item" href="#" data-range="yearly">Yearly (@DateTime.Now.Year)</a></li>
                             <li><hr class="dropdown-divider" style="border-color:#e6e2db;"></li>
-                            <li><a class="dropdown-item chart-range-item" href="#" data-range="prevyear">Previous Year (@(DateTime.Now.Year - 1))</a></li>
-                            <li><a class="dropdown-item chart-range-item" href="#" data-range="fullhistory">Full History (All Years)</a></li>
+                            <li class="dropdown-item px-3 py-2">
+                                <div class="d-flex align-items-center justify-content-between border rounded-pill px-2" style="background:#f8f6f0;">
+                                    <button class="btn btn-sm p-0 border-0" onclick="updateYear(-1); event.stopPropagation();" title="Previous Year">
+                                        <i class="bi bi-chevron-left" style="color:#532374; font-weight:bold;"></i>
+                                    </button>
+                                    <div class="chart-range-item text-center flex-grow-1 fw-bold" data-range="prevyear" style="cursor:pointer; color:#532374; font-size:12px;">
+                                        Year <span id="displayYear">@(DateTime.Now.Year - 1)</span>
+                                    </div>
+                                    <button class="btn btn-sm p-0 border-0" onclick="updateYear(1); event.stopPropagation();" title="Next Year">
+                                        <i class="bi bi-chevron-right" style="color:#532374; font-weight:bold;"></i>
+                                    </button>
+                                </div>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -547,14 +558,6 @@
                 totalAmount: @Model.PreviousYearSales.Sum(s => s.Amount),
                 totalPieces: @Model.PreviousYearSales.Sum(s => s.Pieces),
                 divisor: @Math.Max(1, Model.PreviousYearSales.Count(s => s.Amount > 0))
-            },
-            fullhistory: {
-                labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.MonthlyHistory.OrderBy(s=>s.Year).ThenBy(s=>s.Month).Select(s => s.MonthName + " " + s.Year))),
-                amount: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.MonthlyHistory.OrderBy(s=>s.Year).ThenBy(s=>s.Month).Select(s => s.Amount))),
-                pieces: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.MonthlyHistory.OrderBy(s=>s.Year).ThenBy(s=>s.Month).Select(s => s.Pieces))),
-                totalAmount: @Model.MonthlyHistory.Sum(s => s.Amount),
-                totalPieces: @Model.MonthlyHistory.Sum(s => s.Pieces),
-                divisor: @Math.Max(1, Model.MonthlyHistory.Count())
             }
         };
 
@@ -724,16 +727,56 @@
             item.addEventListener('click', function(e) {
                 e.preventDefault();
                 const range = this.dataset.range;
-                document.getElementById('rangeDropdownLabel').innerText = this.innerText;
-                updateChartRange(range, null);
+                document.getElementById('rangeDropdownLabel').innerText = this.innerText.trim();
+                
+                if (range === 'prevyear') {
+                    // Force refresh data for current display year
+                    fetchYearData(parseInt(document.getElementById('displayYear').innerText));
+                } else {
+                    updateChartRange(range, null);
+                }
             });
         });
+
+        async function updateYear(delta) {
+            const yearSpan = document.getElementById('displayYear');
+            let currentYear = parseInt(yearSpan.innerText);
+            currentYear += delta;
+            yearSpan.innerText = currentYear;
+            
+            await fetchYearData(currentYear);
+            
+            // Set dropdown label to new year
+            document.getElementById('rangeDropdownLabel').innerText = 'Year ' + currentYear;
+        }
+
+        async function fetchYearData(year) {
+            try {
+                const response = await fetch(`/AdminDashboard/GetYearlySales?year=${year}`);
+                if (!response.ok) throw new Error('Network response was not ok');
+                const data = await response.json();
+                
+                // Update chartData.prevyear
+                chartData.prevyear = {
+                    labels: data.map(s => s.monthName + ' ' + s.year),
+                    amount: data.map(s => s.amount),
+                    pieces: data.map(s => s.pieces),
+                    totalAmount: data.reduce((a, b) => a + b.amount, 0),
+                    totalPieces: data.reduce((a, b) => a + b.pieces, 0),
+                    divisor: Math.max(1, data.filter(s => s.amount > 0).length)
+                };
+                
+                updateChartRange('prevyear');
+            } catch (error) {
+                console.error('Error fetching yearly sales:', error);
+            }
+        }
 
         function updateDisplayStats(range) {
             const d = chartData[range];
             document.getElementById('rangeTotalAmount').innerText = fmtBDT(d.totalAmount);
-            document.getElementById('rangeTotalPieces').innerText = d.totalPieces.toLocaleString('en-IN');
-            document.getElementById('rangeAvgOrder').innerText = fmtBDT(d.totalAmount / d.divisor);
+            document.getElementById('rangeTotalPieces').innerText = (d.totalPieces || 0).toLocaleString('en-IN');
+            document.getElementById('rangeAvgOrder').innerText = fmtBDT(d.totalAmount / (d.divisor || 1));
         }
 
         function toggleHistoryView(view) {

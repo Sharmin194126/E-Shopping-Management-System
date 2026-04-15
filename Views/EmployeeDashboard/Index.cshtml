@@ -148,9 +148,14 @@
         <div class="h-100 p-4 rounded-3 shadow-sm" style="background:#fff; border:1px solid #e6e2db;">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-trophy-fill text-warning me-2"></i>My Sales Goal @DateTime.Now.Year</h6>
-                <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editGoalModal">
-                    <i class="bi bi-pencil-square"></i> Set Goal
-                </button>
+                <div class="d-flex align-items-center gap-2">
+                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#historyGoalModal" title="View Goal History">
+                        <i class="bi bi-clock-history"></i> History
+                    </button>
+                    <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editGoalModal">
+                        <i class="bi bi-pencil-square"></i> Set Goal
+                    </button>
+                </div>
             </div>
             <div class="row mb-3">
                 <div class="col-6">
@@ -195,6 +200,20 @@
                         <li><a class="dropdown-item chart-range-item" href="#" data-range="weekly">Weekly</a></li>
                         <li><a class="dropdown-item chart-range-item" href="#" data-range="monthly">Monthly (30 Days)</a></li>
                         <li><a class="dropdown-item chart-range-item" href="#" data-range="yearly">Yearly (@DateTime.Now.Year)</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li class="dropdown-item px-3 py-1">
+                            <div class="d-flex align-items-center justify-content-between border rounded-pill px-2" style="background:#f8f6f0;">
+                                <button class="btn btn-sm p-0 border-0" onclick="updateYear(-1); event.stopPropagation();">
+                                    <i class="bi bi-chevron-left" style="color:#532374;"></i>
+                                </button>
+                                <div class="chart-range-item text-center flex-grow-1 fw-bold" data-range="prevyear" style="cursor:pointer; color:#532374; font-size:12px;">
+                                    Year <span id="displayYear">@(DateTime.Now.Year - 1)</span>
+                                </div>
+                                <button class="btn btn-sm p-0 border-0" onclick="updateYear(1); event.stopPropagation();">
+                                    <i class="bi bi-chevron-right" style="color:#532374;"></i>
+                                </button>
+                            </div>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -267,6 +286,52 @@
     </div>
 </div>
 
+<!-- History Goal Modal -->
+<div class="modal fade" id="historyGoalModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="background:#f2efe9; border:none;">
+            <div class="modal-header" style="border-bottom:1px solid #e6e2db;">
+                <h5 class="modal-title fw-bold" style="color:#532374;"><i class="bi bi-clock-history me-2"></i>Yearly Goal Rates</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0 text-center" style="font-size:14px; background:#fff;">
+                        <thead style="background:#532374; color:#fff;">
+                            <tr>
+                                <th>Year</th>
+                                <th>Sales</th>
+                                <th>Target</th>
+                                <th>Rate</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                var years = Model.MonthlyHistory.GroupBy(m => m.Year).OrderByDescending(g => g.Key).ToList();
+                                foreach (var yrGroup in years)
+                                {
+                                    var yrSales = yrGroup.Sum(m => m.Amount);
+                                    decimal yrGoal = 0;
+                                    if (yrGroup.Key == DateTime.Now.Year) yrGoal = Model.SalesGoal;
+                                    else yrGoal = yrSales * 1.1m; // Simplified historical goal for employee
+
+                                    var achv = yrGoal > 0 ? (yrSales / yrGoal) * 100 : 0;
+                                    <tr>
+                                        <td>@yrGroup.Key</td>
+                                        <td class="text-success fw-bold">৳@yrSales.ToString("#,##0")</td>
+                                        <td class="text-muted">৳@yrGoal.ToString("#,##0")</td>
+                                        <td class="fw-bold" style="color:#532374;">@achv.ToString("0")%</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Edit Goal Modal -->
 <div class="modal fade" id="editGoalModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
@@ -306,8 +371,12 @@
                 amount: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.DailySales.Select(s => s.Amount)))
             },
             yearly: {
-                labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.MonthlyHistory.OrderBy(s=>s.Year).ThenBy(s=>s.Month).Select(s => s.MonthName))),
+                labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.MonthlyHistory.OrderBy(s=>s.Year).ThenBy(s=>s.Month).Select(s => s.MonthName + " " + s.Year))),
                 amount: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.MonthlyHistory.OrderBy(s=>s.Year).ThenBy(s=>s.Month).Select(s => s.Amount)))
+            },
+            prevyear: {
+                labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.PreviousYearSales.Select(s => s.MonthName + " " + s.Year))),
+                amount: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.PreviousYearSales.Select(s => s.Amount)))
             }
         };
 
@@ -377,11 +446,39 @@
             item.addEventListener('click', function(e) {
                 e.preventDefault();
                 const range = this.dataset.range;
-                document.getElementById('rangeDropdownLabel').innerText = this.innerText;
-                salesChart.data.labels = chartData[range].labels;
-                salesChart.data.datasets[0].data = chartData[range].amount;
-                salesChart.update();
+                document.getElementById('rangeDropdownLabel').innerText = this.innerText.trim();
+                
+                if (range === 'prevyear') {
+                    fetchYearData(parseInt(document.getElementById('displayYear').innerText));
+                } else {
+                    salesChart.data.labels = chartData[range].labels;
+                    salesChart.data.datasets[0].data = chartData[range].amount;
+                    salesChart.update();
+                }
             });
         });
+
+        async function updateYear(delta) {
+            const yearSpan = document.getElementById('displayYear');
+            let currentYear = parseInt(yearSpan.innerText);
+            currentYear += delta;
+            yearSpan.innerText = currentYear;
+            await fetchYearData(currentYear);
+            document.getElementById('rangeDropdownLabel').innerText = 'Year ' + currentYear;
+        }
+
+        async function fetchYearData(year) {
+            try {
+                const response = await fetch(`/EmployeeDashboard/GetYearlySales?year=${year}`);
+                const data = await response.json();
+                chartData.prevyear = {
+                    labels: data.map(s => s.monthName + ' ' + s.year),
+                    amount: data.map(s => s.amount)
+                };
+                salesChart.data.labels = chartData.prevyear.labels;
+                salesChart.data.datasets[0].data = chartData.prevyear.amount;
+                salesChart.update();
+            } catch (e) { console.error(e); }
+        }
     </script>
 }

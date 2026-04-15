@@ -189,9 +189,11 @@ namespace E_ShoppingManagement.Controllers
 
             await _context.SaveChangesAsync();
 
-            TempData["Message"] = "Order status updated.";
+            TempData["Message"] = $"Order #{id} status updated to {newStatus}.";
             TempData["IsSuccess"] = true;
 
+            string referer = Request.Headers["Referer"].ToString();
+            if (!string.IsNullOrEmpty(referer)) return Redirect(referer);
             return RedirectToAction(nameof(Details), new { id });
         }
     }

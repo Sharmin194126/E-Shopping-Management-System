@@ -734,5 +734,30 @@ namespace E_ShoppingManagement.Controllers
         {
              return await EditDisplaySection(section);
         }
+        [HttpGet]
+        public async Task<IActionResult> GetYearlySales(int year)
+        {
+            var monthlySales = new List<MonthlySalesViewModel>();
+            var soldOrders = await _context.Orders
+                .Where(o => o.CreatedAt.Year == year && (o.OrderStatus == "Delivered" || o.PaymentStatus == "Paid" || o.OrderStatus == "Shipped"))
+                .ToListAsync();
+
+            for (int m = 1; m <= 12; m++)
+            {
+                var monthOrders = soldOrders.Where(o => o.CreatedAt.Month == m).ToList();
+                var mIds = monthOrders.Select(o => o.Id).ToList();
+                var mPieces = mIds.Any() ? await _context.OrderDetails.Where(od => mIds.Contains(od.OrderId)).SumAsync(od => (int?)od.Quantity) ?? 0 : 0;
+                
+                monthlySales.Add(new MonthlySalesViewModel
+                {
+                    Year = year,
+                    Month = m,
+                    MonthName = new DateTime(year, m, 1).ToString("MMM"),
+                    Amount = monthOrders.Sum(o => o.TotalAmount),
+                    Pieces = mPieces
+                });
+            }
+            return Json(monthlySales);
+        }
     }
 }

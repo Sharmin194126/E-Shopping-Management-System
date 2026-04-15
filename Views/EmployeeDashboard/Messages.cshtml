@@ -1,0 +1,102 @@
+@model IEnumerable<E_ShoppingManagement.Models.ContactMessage>
+@{
+    ViewData["Title"] = "Customer Messages";
+    Layout = "~/Views/Shared/_EmployeeLayout.cshtml";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="fw-bold mb-0" style="color: #532374;"><i class="bi bi-envelope-fill me-2"></i> Customer Messages</h3>
+    <a asp-action="Index" class="theme-back-btn mb-0">Back</a>
+</div>
+
+<div class="page-card p-0 overflow-hidden shadow-sm border-0">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead style="background: #532374; color: #fff;">
+                <tr>
+                    <th class="ps-4 py-3">Customer Info</th>
+                    <th class="py-3">Subject</th>
+                    <th class="py-3">Message Preview</th>
+                    <th class="py-3">Date</th>
+                    <th class="py-3">Status</th>
+                    <th class="py-3 text-end pe-4">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="ps-4">
+                            <div class="fw-bold">@item.Name</div>
+                            <small class="text-muted">@item.Email</small>
+                        </td>
+                        <td>@item.Subject</td>
+                        <td>
+                            <div class="text-truncate" style="max-width: 250px;">@item.Message</div>
+                        </td>
+                        <td>@item.CreatedAt.ToString("MMM dd, yyyy")</td>
+                        <td>
+                            @if (item.Status == "Replied")
+                            {
+                                <span class="badge bg-success rounded-pill px-3">Replied</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning text-dark rounded-pill px-3">Active</span>
+                            }
+                        </td>
+                        <td class="text-end pe-4">
+                            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#replyModal@(item.Id)">
+                                <i class="bi bi-reply-fill me-1"></i> @(item.Status == "Replied" ? "View Reply" : "Reply")
+                            </button>
+
+                            <!-- Reply Modal -->
+                            <div class="modal fade" id="replyModal@(item.Id)" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content text-start">
+                                        <div class="modal-header border-0 pb-0">
+                                            <h5 class="modal-title fw-bold" style="color:#532374;">Message Details</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="mb-3">
+                                                <label class="small text-muted d-block">From</label>
+                                                <strong>@item.Name (@item.Email)</strong>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="small text-muted d-block">Subject</label>
+                                                <strong>@item.Subject</strong>
+                                            </div>
+                                            <div class="mb-3 p-3 bg-light rounded-3">
+                                                <label class="small text-muted d-block mb-1">Message</label>
+                                                <p class="mb-0">@item.Message</p>
+                                            </div>
+                                            
+                                            <form asp-action="ReplyMessage" method="post">
+                                                <input type="hidden" name="id" value="@item.Id" />
+                                                <div class="mb-3">
+                                                    <label class="form-label fw-bold">Your Reply</label>
+                                                    <textarea name="reply" class="form-control" rows="4" required placeholder="Write your response here...">@item.Reply</textarea>
+                                                </div>
+                                                <div class="text-end">
+                                                    <button type="button" class="btn btn-light border me-2" data-bs-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn text-white fw-bold px-4" style="background:#532374;">Send Response</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="6" class="text-center py-5 text-muted">No messages found.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
