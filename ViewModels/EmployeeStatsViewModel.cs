@@ -4,6 +4,7 @@ namespace E_ShoppingManagement.ViewModels
 {
     public class EmployeeStatsViewModel
     {
+        public int EmployeeId { get; set; }
         public int TotalProductsManaged { get; set; }
         public int TotalInventoryQty { get; set; }
         public decimal TotalStockValue { get; set; }

@@ -62,6 +62,7 @@ namespace E_ShoppingManagement.Controllers
             }
 
             var stats = new EmployeeStatsViewModel();
+            stats.EmployeeId = employee.Id;
 
             var products = await _context.Products.Where(p => p.CreatedBy == employee.Email || p.CreatedBy == employee.Name).ToListAsync();
             stats.TotalProductsManaged = products.Count;
@@ -138,7 +139,13 @@ namespace E_ShoppingManagement.Controllers
             stats.CurrentYear = DateTime.UtcNow.Year;
             stats.PreviousYear = stats.CurrentYear - 1;
 
-            string goalFilePath = Path.Combine(_env.WebRootPath, "settings", $"employee_goal_{employee.Id}.txt");
+            stats.CurrentYear = DateTime.UtcNow.Year;
+            stats.PreviousYear = stats.CurrentYear - 1;
+
+            string goalFolderPath = Path.Combine(_env.WebRootPath, "settings", "goals");
+            if (!Directory.Exists(goalFolderPath)) Directory.CreateDirectory(goalFolderPath);
+
+            string goalFilePath = Path.Combine(goalFolderPath, $"employee_goal_{employee.Id}_{stats.CurrentYear}.txt");
             if (System.IO.File.Exists(goalFilePath) && decimal.TryParse(System.IO.File.ReadAllText(goalFilePath), out decimal savedGoal))
             {
                 stats.SalesGoal = savedGoal;
@@ -146,7 +153,7 @@ namespace E_ShoppingManagement.Controllers
             else
             {
                 var lastYearRevenue = soldOrders.Where(o => o.CreatedAt.Year == stats.PreviousYear).Sum(o => o.TotalAmount);
-                stats.SalesGoal = lastYearRevenue > 0 ? lastYearRevenue * 1.2m : (stats.TotalRevenue > 0 ? stats.TotalRevenue * 1.2m : 50000);
+                stats.SalesGoal = lastYearRevenue > 0 ? lastYearRevenue * 1.2m : (stats.TotalRevenue > 0 ? stats.TotalRevenue * 0.1m : 50000);
             }
 
             for (int m = 1; m <= 12; m++)
@@ -259,13 +266,14 @@ namespace E_ShoppingManagement.Controllers
             var employee = await _context.Employees.FirstOrDefaultAsync(e => e.UserId == user.Id);
             if (employee == null) return NotFound();
 
-            string folderPath = Path.Combine(_env.WebRootPath, "settings");
+            int currentYear = DateTime.UtcNow.Year;
+            string folderPath = Path.Combine(_env.WebRootPath, "settings", "goals");
             if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
             
-            string filePath = Path.Combine(folderPath, $"employee_goal_{employee.Id}.txt");
+            string filePath = Path.Combine(folderPath, $"employee_goal_{employee.Id}_{currentYear}.txt");
             System.IO.File.WriteAllText(filePath, goalAmount.ToString());
             
-            TempData["Message"] = "Sales goal updated successfully!";
+            TempData["Message"] = $"Sales goal for {currentYear} updated successfully!";
             TempData["IsSuccess"] = true;
             return RedirectToAction(nameof(Index));
         }

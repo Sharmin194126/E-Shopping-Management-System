@@ -217,7 +217,11 @@ namespace E_ShoppingManagement.Controllers
             stats.PreviousYear = DateTime.UtcNow.Year - 1;
 
             // Fix SalesGoal: load from custom settings file if available
-            string goalFilePath = System.IO.Path.Combine(_env.WebRootPath, "settings", "sales_goal.txt");
+            int currentYear = DateTime.UtcNow.Year;
+            string goalFolderPath = System.IO.Path.Combine(_env.WebRootPath, "settings", "goals");
+            if (!System.IO.Directory.Exists(goalFolderPath)) System.IO.Directory.CreateDirectory(goalFolderPath);
+            
+            string goalFilePath = System.IO.Path.Combine(goalFolderPath, $"admin_goal_{currentYear}.txt");
             if (System.IO.File.Exists(goalFilePath) && decimal.TryParse(System.IO.File.ReadAllText(goalFilePath), out decimal savedGoal))
             {
                 stats.SalesGoal = savedGoal;
@@ -225,8 +229,8 @@ namespace E_ShoppingManagement.Controllers
             else
             {
                 var lastYearRevenue = soldOrders.Where(o => o.CreatedAt.Year == stats.PreviousYear).Sum(o => o.TotalAmount);
-                stats.SalesGoal = lastYearRevenue > 0 ? lastYearRevenue * 1.2m : stats.TotalRevenue * 1.2m;
-                if (stats.SalesGoal == 0) stats.SalesGoal = 100000;
+                stats.SalesGoal = lastYearRevenue > 0 ? lastYearRevenue * 1.2m : stats.TotalRevenue * 0.1m;
+                if (stats.SalesGoal == 0) stats.SalesGoal = 500000;
             }
 
             // Previous Year monthly sales (all 12 months)
@@ -252,13 +256,14 @@ namespace E_ShoppingManagement.Controllers
         [HttpPost]
         public IActionResult UpdateSalesGoal(decimal goalAmount)
         {
-            string folderPath = System.IO.Path.Combine(_env.WebRootPath, "settings");
+            int currentYear = DateTime.UtcNow.Year;
+            string folderPath = System.IO.Path.Combine(_env.WebRootPath, "settings", "goals");
             if (!System.IO.Directory.Exists(folderPath)) System.IO.Directory.CreateDirectory(folderPath);
             
-            string filePath = System.IO.Path.Combine(folderPath, "sales_goal.txt");
+            string filePath = System.IO.Path.Combine(folderPath, $"admin_goal_{currentYear}.txt");
             System.IO.File.WriteAllText(filePath, goalAmount.ToString());
             
-            TempData["Message"] = "Sales goal updated successfully!";
+            TempData["Message"] = $"Sales goal for {currentYear} updated successfully!";
             TempData["IsSuccess"] = true;
             return RedirectToAction(nameof(Index));
         }

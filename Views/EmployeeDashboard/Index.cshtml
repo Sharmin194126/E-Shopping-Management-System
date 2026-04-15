@@ -1,4 +1,5 @@
 @model E_ShoppingManagement.ViewModels.EmployeeStatsViewModel
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment _env
 @{
     ViewData["Title"] = "Employee Dashboard";
     Layout = "~/Views/Shared/_EmployeeLayout.cshtml";
@@ -307,26 +308,38 @@
                         </thead>
                         <tbody>
                             @{
-                                var years = Model.MonthlyHistory.GroupBy(m => m.Year).OrderByDescending(g => g.Key).ToList();
-                                foreach (var yrGroup in years)
+                                var yrData = Model.MonthlyHistory.GroupBy(m => m.Year).OrderByDescending(g => g.Key).ToList();
+                                foreach (var yrGroup in yrData)
                                 {
                                     var yrSales = yrGroup.Sum(m => m.Amount);
                                     decimal yrGoal = 0;
-                                    if (yrGroup.Key == DateTime.Now.Year) yrGoal = Model.SalesGoal;
-                                    else yrGoal = yrSales * 1.1m; // Simplified historical goal for employee
-
+                                    string gPath = System.IO.Path.Combine(_env.WebRootPath, "settings", "goals", $"employee_goal_{Model.EmployeeId}_{yrGroup.Key}.txt");
+                                    
+                                    if (System.IO.File.Exists(gPath) && decimal.TryParse(System.IO.File.ReadAllText(gPath), out decimal saved)) {
+                                        yrGoal = saved;
+                                    }
+                                    else if (yrGroup.Key == DateTime.Now.Year) {
+                                        yrGoal = Model.SalesGoal;
+                                    }
+                                    else {
+                                        yrGoal = yrSales * 1.1m; 
+                                    }
+ 
                                     var achv = yrGoal > 0 ? (yrSales / yrGoal) * 100 : 0;
                                     <tr>
                                         <td>@yrGroup.Key</td>
                                         <td class="text-success fw-bold">৳@yrSales.ToString("#,##0")</td>
                                         <td class="text-muted">৳@yrGoal.ToString("#,##0")</td>
-                                        <td class="fw-bold" style="color:#532374;">@achv.ToString("0")%</td>
+                                        <td class="fw-bold" style="color:#532374;">@achv.ToString("0.0")%</td>
                                     </tr>
                                 }
                             }
                         </tbody>
                     </table>
                 </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

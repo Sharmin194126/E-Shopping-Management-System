@@ -1,4 +1,5 @@
 @model E_ShoppingManagement.ViewModels.AdminStatsViewModel
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment _env
 @{
     ViewData["Title"] = "Admin Dashboard";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -449,12 +450,15 @@
                                     var currentYrSales = currentYr.Sum(m => m.Amount);
 
                                     decimal historicalGoal = 0;
-                                    if (currentYr.Key == DateTime.Now.Year)
+                                    string gPath = System.IO.Path.Combine(_env.WebRootPath, "settings", "goals", $"admin_goal_{currentYr.Key}.txt");
+                                    
+                                    if (System.IO.File.Exists(gPath) && decimal.TryParse(System.IO.File.ReadAllText(gPath), out decimal saved))
                                     {
-                                        historicalGoal = Model.SalesGoal;
+                                        historicalGoal = saved;
                                     }
                                     else
                                     {
+                                        // Fallback calculation for years without a set goal
                                         if (i + 1 < years.Count)
                                         {
                                             var olderYrSales = years[i+1].Sum(m => m.Amount);
@@ -462,7 +466,7 @@
                                         }
                                         else
                                         {
-                                            historicalGoal = currentYrSales > 0 ? currentYrSales * 1.05m : 100000;
+                                            historicalGoal = currentYrSales > 0 ? currentYrSales * 1.1m : 500000;
                                         }
                                     }
 
@@ -477,7 +481,7 @@
                                                 <div class="progress flex-grow-1" style="height:6px; width:70px; background:#e6e2db;">
                                                     <div class="progress-bar @(achievementPct >= 100 ? "bg-success" : "bg-warning")" style="width:@(Math.Min(100, achievementPct))%;"></div>
                                                 </div>
-                                                <span class="fw-bold" style="color: @(achievementPct >= 100 ? "#28a745" : "#532374");">@achievementPct.ToString("0.0")%</span>
+                                                <span class="fw-bold" style="color: @(achievementPct >= 100 ? "#28a745" : "#3a4560");">@achievementPct.ToString("0.0")%</span>
                                             </div>
                                         </td>
                                     </tr>
