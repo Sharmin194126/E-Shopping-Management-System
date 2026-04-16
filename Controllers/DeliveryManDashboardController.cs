@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace E_ShoppingManagement.Controllers
 {
-    [Authorize(Roles = "DeliveryMan,Admin")]
+    [Authorize(Roles = "DeliveryMan,Admin,Employee")]
     public class DeliveryManDashboardController : Controller
     {
         private readonly AppDbContext _context;
@@ -201,7 +201,7 @@ namespace E_ShoppingManagement.Controllers
 
             DeliveryMan? dm = null;
 
-            if (id.HasValue && User.IsInRole("Admin"))
+            if (id.HasValue && (User.IsInRole("Admin") || User.IsInRole("Employee")))
                 dm = await _context.DeliveryMen.FirstOrDefaultAsync(d => d.Id == id);
             else if (User.IsInRole("DeliveryMan"))
                 dm = await _context.DeliveryMen.FirstOrDefaultAsync(d => d.UserId == user.Id);

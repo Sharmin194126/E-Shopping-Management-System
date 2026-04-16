@@ -91,7 +91,7 @@
 
             <p class="menu-title">SYSTEM</p>
             <a asp-controller="EmployeeDashboard" asp-action="Messages" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Messages" ? "active" : "")">
-                <i class="bi bi-envelope me-2"></i>Messages
+                <i class="bi bi-envelope me-2"></i>Emails
             </a>
             <p class="menu-title">TRACKING</p>
             <a asp-controller="Home" asp-action="Tracking" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Tracking" ? "active" : "")">
@@ -130,7 +130,7 @@
                         var totalItems = pendingOrders.Count + activeMsgs.Count;
                     }
                     <div class="dropdown">
-                        <a href="#" class="position-relative text-decoration-none" id="employeeNotificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a asp-controller="EmployeeDashboard" asp-action="Notifications" class="position-relative text-decoration-none" title="View Notifications">
                             <i class="bi bi-bell-fill" style="font-size: 1.3rem; color: #532374;"></i>
                             @{
                                 var currentAction = ViewContext.RouteData.Values["Action"]?.ToString();

@@ -32,7 +32,7 @@
                                 </div>
                             </div>
                             <div class="text-end">
-                                <div class="small fw-bold text-muted mb-2">@order.CreatedAt.ToString("MMM dd, hh:mm tt")</div>
+                                <div class="small fw-bold text-muted mb-2">@order.CreatedAt.ToString("MMM dd, yyyy | hh:mm tt")</div>
                                 <a asp-controller="EmployeeOrder" asp-action="Details" asp-route-id="@order.Id" class="btn btn-sm btn-primary px-3 rounded-pill">Manage Order</a>
                             </div>
                         </div>
@@ -50,7 +50,7 @@
     </div>
 </div>
 
-<h4 class="fw-bold mt-5 mb-3" style="color: #532374;"><i class="bi bi-envelope-fill me-2"></i> Recent Customer Inquiries</h4>
+<h4 class="fw-bold mt-5 mb-3" style="color: #532374;"><i class="bi bi-envelope-fill me-2"></i> Customer Emails</h4>
 <div class="card border-0 shadow-sm" style="border-radius: 15px;">
     <div class="card-body p-0">
         <div class="list-group list-group-flush">
@@ -74,8 +74,8 @@
                                 </div>
                             </div>
                             <div class="text-end">
-                                <div class="small fw-bold text-muted mb-2">@msg.CreatedAt.ToString("MMM dd, hh:mm tt")</div>
-                                <a asp-action="Messages" class="btn btn-sm btn-outline-info px-3 rounded-pill">View Messages</a>
+                                <div class="small fw-bold text-muted mb-2">@msg.CreatedAt.ToString("MMM dd, yyyy | hh:mm tt")</div>
+                                <a asp-action="Messages" class="btn btn-sm btn-outline-info px-3 rounded-pill">View Emails</a>
                             </div>
                         </div>
                     </div>

@@ -35,7 +35,7 @@
                                         </div>
                                     </div>
                                     <div class="text-end">
-                                        <div class="small text-muted">@order.CreatedAt.ToString("MMM dd, hh:mm tt")</div>
+                                        <div class="small text-muted">@order.CreatedAt.ToString("MMM dd, yyyy | hh:mm tt")</div>
                                         <a asp-controller="Order" asp-action="Details" asp-route-id="@order.Id" class="btn btn-sm btn-link text-decoration-none p-0" style="color: #532374;">View</a>
                                     </div>
                                 </div>
@@ -55,7 +55,7 @@
     <div class="col-md-6">
         <div class="card border-0 shadow-sm" style="border-radius: 15px;">
             <div class="card-header py-3 border-0" style="background:#17a2b8; border-radius: 15px 15px 0 0;">
-                <h5 class="mb-0 fw-bold text-white"><i class="bi bi-envelope me-2"></i>Customer Messages</h5>
+                <h5 class="mb-0 fw-bold text-white"><i class="bi bi-envelope me-2"></i>Customer Emails</h5>
             </div>
             <div class="card-body p-0">
                 <div class="list-group list-group-flush">
@@ -71,7 +71,7 @@
                                         <div class="small text-truncate" style="max-width: 250px;">@msg.Message</div>
                                     </div>
                                     <div class="text-end">
-                                        <div class="small text-muted">@msg.CreatedAt.ToString("MMM dd, hh:mm tt")</div>
+                                        <div class="small text-muted">@msg.CreatedAt.ToString("MMM dd, yyyy | hh:mm tt")</div>
                                         <a asp-action="ReplyMessage" asp-route-id="@msg.Id" class="btn btn-sm btn-link text-decoration-none p-0 text-info">Reply</a>
                                     </div>
                                 </div>
@@ -109,7 +109,7 @@
                                         }
                                     </div>
                                     <div class="text-end">
-                                        <div class="small text-muted">@emp.CreatedAt.ToString("MMM dd, yyyy")</div>
+                                        <div class="small text-muted">@emp.CreatedAt.ToString("MMM dd, yyyy | hh:mm tt")</div>
                                         <a asp-controller="Employee" asp-action="Details" asp-route-id="@emp.Id" class="btn btn-sm btn-link text-decoration-none p-0 text-success">Approve/Details</a>
                                     </div>
                                 </div>
@@ -124,7 +124,7 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
                                         <span class="fw-bold">Customer: @cust.Name (@cust.Email)</span>
-                                        <div class="small text-muted">Joined: @cust.CreatedAt.ToString("MMM dd, yyyy")</div>
+                                        <div class="small text-muted">Joined: @cust.CreatedAt.ToString("MMM dd, yyyy | hh:mm tt")</div>
                                     </div>
                                     <div class="text-end">
                                         <i class="bi bi-person text-info" style="font-size: 1.2rem;"></i>

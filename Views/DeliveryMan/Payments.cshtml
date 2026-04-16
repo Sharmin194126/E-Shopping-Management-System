@@ -86,7 +86,7 @@
                     @foreach (var item in Model)
                     {
                         <tr>
-                            <td>@item.CreatedAt.ToString("MMM dd, yyyy")</td>
+                            <td>@item.CreatedAt.ToString("MMM dd, yyyy | hh:mm tt")</td>
                             <td><a asp-controller="Order" asp-action="Details" asp-route-id="@item.OrderId" class="text-decoration-none fw-bold">#@item.OrderId</a></td>
                             <td>৳@item.OrderTotal</td>
                             <td class="fw-bold text-success">৳@item.CommissionAmount</td>
@@ -97,7 +97,7 @@
                                     <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split"></i> Pending</span>
                                 }
                             </td>
-                            <td>@(item.PaidAt?.ToString("MMM dd, yyyy") ?? "-")</td>
+                            <td>@(item.PaidAt?.ToString("MMM dd, yyyy | hh:mm tt") ?? "-")</td>
                         </tr>
                     }
                     @if (!Model.Any())

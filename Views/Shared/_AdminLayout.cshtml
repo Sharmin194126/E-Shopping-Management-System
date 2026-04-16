@@ -94,7 +94,7 @@
                 <i class="bi bi-star me-2"></i>Manage Reviews
             </a>
             <a asp-controller="AdminDashboard" asp-action="Messages" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Messages" ? "active" : "")">
-                <i class="bi bi-envelope me-2"></i>Messages
+                <i class="bi bi-envelope me-2"></i>Emails
             </a>
             <a asp-controller="AdminDashboard" asp-action="EmployeeList" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "EmployeeList" ? "active" : "")">
                 <i class="bi bi-person-lines-fill me-1"></i>Employee Products-Sales
@@ -143,7 +143,7 @@
                         var totalItems = pendingOrders.Count + pendingEmps.Count + activeMsgs.Count;
                     }
                     <div class="dropdown">
-                        <a href="#" class="position-relative text-decoration-none" id="adminNotificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a asp-controller="AdminDashboard" asp-action="Notifications" class="position-relative text-decoration-none" title="View Notifications">
                             <i class="bi bi-bell-fill" style="font-size: 1.4rem; color: #532374;"></i>
                             @{
                                 var currentAction = ViewContext.RouteData.Values["Action"]?.ToString();

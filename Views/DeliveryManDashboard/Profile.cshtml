@@ -105,6 +105,8 @@
 
     <!-- Edit Forms Column -->
     <div class="col-lg-7">
+        @if (User.IsInRole("DeliveryMan"))
+        {
 
         <!-- Update Profile Form -->
         <div class="page-card mb-4">
@@ -201,6 +203,15 @@
             </form>
         </div>
 
+        }
+        else
+        {
+            <div class="page-card text-center p-5">
+                <i class="bi bi-shield-lock text-muted" style="font-size: 3rem;"></i>
+                <h5 class="mt-3 text-muted">View Only Mode</h5>
+                <p class="small text-muted">You are viewing this profile as an Administrator or Employee. Only the Delivery Partner can modify their own details.</p>
+            </div>
+        }
     </div>
 </div>
 

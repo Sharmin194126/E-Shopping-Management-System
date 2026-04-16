@@ -246,7 +246,7 @@
                                             </a>
                                         }
 
-                                        @if (order.OrderStatus != "Delivered" && order.OrderStatus != "Returned")
+                                        @if (User.IsInRole("DeliveryMan") && order.OrderStatus != "Delivered" && order.OrderStatus != "Returned")
                                         {
                                             <button class="btn btn-sm btn-warning text-dark fw-bold" type="button"
                                                     data-bs-toggle="collapse" data-bs-target="#update-@order.Id"

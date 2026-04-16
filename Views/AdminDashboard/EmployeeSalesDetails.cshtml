@@ -24,7 +24,7 @@
                     <tr>
                         <td>@order.Id</td>
                         <td>@order.Customer?.Name</td>
-                        <td>@order.CreatedAt.ToString("MMM dd, yyyy")</td>
+                        <td>@order.CreatedAt.ToString("MMM dd, yyyy | hh:mm tt")</td>
                         <td>
                             <div class="d-flex flex-column gap-2">
                                 @foreach (var item in order.OrderDetails)
