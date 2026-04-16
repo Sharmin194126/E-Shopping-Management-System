@@ -140,7 +140,7 @@
                                         <tr>
                                             <td class="ps-4">@(sl++)</td>
                                             <td class="fw-bold">#@order.Id</td>
-                                            <td><small class="text-muted">@order.CreatedAt.ToString("MMM dd, yyyy")</small></td>
+                                            <td><small class="text-muted">@order.CreatedAt.ToString("MMM dd, yyyy | hh:mm tt")</small></td>
                                             <td class="fw-bold text-success">৳@order.TotalAmount</td>
                                             <td>
                                                 <span class="badge rounded-pill @(order.OrderStatus == "Delivered" ? "bg-success" : (order.OrderStatus == "Cancelled" ? "bg-danger" : "bg-warning text-dark"))">

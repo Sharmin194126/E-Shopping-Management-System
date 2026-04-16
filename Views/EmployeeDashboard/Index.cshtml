@@ -6,31 +6,14 @@
 }
 
 <style>
-    .stat-card-premium {
-        padding: 20px;
-        border-radius: 12px;
-        color: white;
-        text-decoration: none;
-        display: block;
-        transition: transform 0.3s;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
-    .stat-card-premium:hover { transform: translateY(-5px); color: white; }
-    .card-variant-blue { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
-    .card-variant-orange { background: linear-gradient(135deg, #f97316, #c2410c); }
-    .card-variant-cyan { background: linear-gradient(135deg, #06b6d4, #0e7490); }
-    .card-variant-green { background: linear-gradient(135deg, #10b981, #047857); }
-    .card-variant-purple { background: linear-gradient(135deg, #8b5cf6, #532374); }
-    .card-variant-red { background: linear-gradient(135deg, #ef4444, #b91c1c); }
-    .stat-card-content { position: relative; z-index: 1; }
-    .stat-card-label { font-size: 0.9rem; opacity: 0.9; font-weight: 500; }
-    .stat-card-value { font-size: 1.8rem; font-weight: 700; margin: 5px 0; }
-    .stat-card-icon { position: absolute; right: 15px; bottom: 15px; font-size: 2.5rem; opacity: 0.2; }
-
-    .amc-sub { font-size: 11px; opacity: 0.7; }
-
     /* Analytics Metric Card Hover Animation */
     .analytics-metric-card {
+        border-radius:12px; 
+        padding:16px; 
+        color:#fff; 
+        position:relative; 
+        overflow:hidden; 
+        height:100%;
         transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
         cursor: pointer;
     }
@@ -38,6 +21,10 @@
         transform: translateY(-8px) scale(1.02);
         box-shadow: 0 10px 20px rgba(0,0,0,0.15);
     }
+    .analytics-metric-card .amc-icon { font-size:2rem; opacity:.25; position:absolute; right:12px; bottom:8px; }
+    .analytics-metric-card .amc-label { font-size:11px; opacity:.85; text-transform:uppercase; letter-spacing:.5px; }
+    .analytics-metric-card .amc-value { font-size:1.35rem; font-weight:700; margin:4px 0; }
+    .analytics-metric-card .amc-sub { font-size:10px; opacity:.7; }
 </style>
 
 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -111,34 +98,34 @@
     <div class="col-lg-7">
         <div class="row g-3 h-100">
              <div class="col-6">
-                <div class="analytics-metric-card" style="background: linear-gradient(135deg,#6f2da8,#532374); border-radius: 12px; padding: 20px; color: #fff;">
-                    <div class="amc-icon" style="position: absolute; right: 20px; top: 20px; font-size: 1.5rem; opacity: 0.3;"><i class="bi bi-graph-up-arrow"></i></div>
-                    <div class="amc-label" style="font-size: 12px; text-transform: uppercase; font-weight: 600; opacity: 0.8;">My Sales Revenue</div>
-                    <div class="amc-value" style="font-size: 22px; font-weight: 700; margin: 5px 0;">৳@Model.TotalRevenue.ToString("#,##0")</div>
+                <div class="analytics-metric-card" style="background: linear-gradient(135deg,#6f2da8,#532374);">
+                    <div class="amc-icon"><i class="bi bi-graph-up-arrow"></i></div>
+                    <div class="amc-label">My Sales Revenue</div>
+                    <div class="amc-value">৳@Model.TotalRevenue.ToString("#,##0")</div>
                     <div class="amc-sub">Total since joining</div>
                 </div>
             </div>
-             <div class="col-6">
-                <div class="analytics-metric-card" style="background: linear-gradient(135deg,#1565c0,#1976d2); border-radius: 12px; padding: 20px; color: #fff;">
-                    <div class="amc-icon" style="position: absolute; right: 20px; top: 20px; font-size: 1.5rem; opacity: 0.3;"><i class="bi bi-calendar-event"></i></div>
-                    <div class="amc-label" style="font-size: 12px; text-transform: uppercase; font-weight: 600; opacity: 0.8;">Weekly Sales</div>
-                    <div class="amc-value" style="font-size: 22px; font-weight: 700; margin: 5px 0;">৳@Model.WeeklyRevenue.ToString("#,##0")</div>
+            <div class="col-6">
+                <div class="analytics-metric-card" style="background: linear-gradient(135deg,#1a7a6e,#138d75);">
+                    <div class="amc-icon"><i class="bi bi-currency-exchange"></i></div>
+                    <div class="amc-label">Weekly Sales</div>
+                    <div class="amc-value">৳@Model.WeeklyRevenue.ToString("#,##0")</div>
                     <div class="amc-sub">Last 7 days performance</div>
                 </div>
             </div>
-             <div class="col-6">
-                <div class="analytics-metric-card" style="background: linear-gradient(135deg,#2e7d32,#2ed573); border-radius: 12px; padding: 20px; color: #fff;">
-                    <div class="amc-icon" style="position: absolute; right: 20px; top: 20px; font-size: 1.5rem; opacity: 0.3;"><i class="bi bi-check-circle"></i></div>
-                    <div class="amc-label" style="font-size: 12px; text-transform: uppercase; font-weight: 600; opacity: 0.8;">Delivered Orders</div>
-                    <div class="amc-value" style="font-size: 22px; font-weight: 700; margin: 5px 0;">@Model.DeliveredOrders</div>
+            <div class="col-6">
+                <div class="analytics-metric-card" style="background: linear-gradient(135deg,#8b4513,#a0522d);">
+                    <div class="amc-icon"><i class="bi bi-check-circle"></i></div>
+                    <div class="amc-label">Delivered Orders</div>
+                    <div class="amc-value">@Model.DeliveredOrders</div>
                     <div class="amc-sub">Successfully fulfilled</div>
                 </div>
             </div>
-             <div class="col-6">
-                <div class="analytics-metric-card" style="background: linear-gradient(135deg,#d35400,#e67e22); border-radius: 12px; padding: 20px; color: #fff;">
-                    <div class="amc-icon" style="position: absolute; right: 20px; top: 20px; font-size: 1.5rem; opacity: 0.3;"><i class="bi bi-truck"></i></div>
-                    <div class="amc-label" style="font-size: 12px; text-transform: uppercase; font-weight: 600; opacity: 0.8;">Assigned Delivery</div>
-                    <div class="amc-value" style="font-size: 22px; font-weight: 700; margin: 5px 0;">@Model.ActiveDeliveries</div>
+            <div class="col-6">
+                <div class="analytics-metric-card" style="background: linear-gradient(135deg,#1565c0,#1976d2);">
+                    <div class="amc-icon"><i class="bi bi-truck"></i></div>
+                    <div class="amc-label">Assigned Delivery</div>
+                    <div class="amc-value">@Model.ActiveDeliveries</div>
                     <div class="amc-sub">Active personnel: @Model.TotalDeliveryMen</div>
                 </div>
             </div>
@@ -274,7 +261,7 @@
                              <img src="@(string.IsNullOrEmpty(order.ImageUrl) ? "/images/no-image.png" : order.ImageUrl)" 
                                  class="rounded shadow-sm" style="width: 45px; height: 45px; object-fit: cover;" onerror="this.src='/images/no-image.png'"/>
                         </td>
-                        <td><span class="fw-bold text-primary">#@order.OrderId</span></td>
+                        <td><span class="fw-bold text-primary">@order.OrderId</span></td>
                         <td>@order.CustomerName</td>
                         <td><small>@order.OrderDate.ToString("MMM dd, yyyy | hh:mm tt")</small></td>
                         <td class="fw-bold text-success">৳@order.Amount.ToString("#,##0")</td>

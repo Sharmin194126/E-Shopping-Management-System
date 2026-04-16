@@ -82,6 +82,7 @@ namespace E_ShoppingManagement.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateStatus(int orderId, string status, string? reason, string? paymentStatus)
         {
+            if (!User.IsInRole("DeliveryMan")) return Forbid();
             var order = await _context.Orders.Include(o => o.DeliveryMan).FirstOrDefaultAsync(o => o.Id == orderId);
             if (order == null) return NotFound();
 
@@ -222,6 +223,7 @@ namespace E_ShoppingManagement.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateProfile(int id, string name, string contactNumber, string? email, string? vehicleInfo)
         {
+            if (!User.IsInRole("DeliveryMan")) return Forbid();
             var dm = await _context.DeliveryMen.FindAsync(id);
             if (dm == null) return NotFound();
 
@@ -253,6 +255,7 @@ namespace E_ShoppingManagement.Controllers
         [HttpPost]
         public async Task<IActionResult> ChangePassword(string currentPassword, string newPassword, string confirmPassword)
         {
+            if (!User.IsInRole("DeliveryMan")) return Forbid();
             if (newPassword != confirmPassword)
             {
                 TempData["PwdError"] = "New password and confirmation do not match.";
@@ -273,6 +276,55 @@ namespace E_ShoppingManagement.Controllers
             }
 
             return RedirectToAction(nameof(Profile));
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetEarningsData(string range = "Weekly")
+        {
+            var dm = await GetCurrentDmAsync();
+            if (dm == null) return Unauthorized();
+
+            var labels = new List<string>();
+            var values = new List<decimal>();
+            var now = DateTime.UtcNow.ToLocalTime();
+
+            if (range == "Weekly")
+            {
+                for (int i = 6; i >= 0; i--)
+                {
+                    var date = now.Date.AddDays(-i);
+                    labels.Add(date.ToString("ddd dd"));
+                    var amount = await _context.DeliveryManPayments
+                        .Where(p => p.DeliveryManId == dm.Id && p.CreatedAt.ToLocalTime().Date == date)
+                        .SumAsync(p => p.CommissionAmount);
+                    values.Add(amount);
+                }
+            }
+            else if (range == "Monthly")
+            {
+                for (int i = 29; i >= 0; i--)
+                {
+                    var date = now.Date.AddDays(-i);
+                    labels.Add(date.ToString("MMM dd"));
+                    var amount = await _context.DeliveryManPayments
+                        .Where(p => p.DeliveryManId == dm.Id && p.CreatedAt.ToLocalTime().Date == date)
+                        .SumAsync(p => p.CommissionAmount);
+                    values.Add(amount);
+                }
+            }
+            else if (range == "Yearly")
+            {
+                for (int i = 11; i >= 0; i--)
+                {
+                    var date = new DateTime(now.Year, now.Month, 1).AddMonths(-i);
+                    labels.Add(date.ToString("MMM yyyy"));
+                    var amount = await _context.DeliveryManPayments
+                        .Where(p => p.DeliveryManId == dm.Id && p.CreatedAt.Year == date.Year && p.CreatedAt.Month == date.Month)
+                        .SumAsync(p => p.CommissionAmount);
+                    values.Add(amount);
+                }
+            }
+
+            return Json(new { labels, values });
         }
     }
 }

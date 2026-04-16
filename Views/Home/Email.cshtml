@@ -18,6 +18,7 @@
                     }
                     
                     <form asp-action="SendMessage" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="messageType" value="Email" />
                         <div class="row">
                             <div class="col-md-6 mb-4">
                                 <label class="form-label fw-bold">Your Name</label>

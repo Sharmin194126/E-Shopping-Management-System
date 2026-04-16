@@ -94,6 +94,9 @@
                 <i class="bi bi-star me-2"></i>Manage Reviews
             </a>
             <a asp-controller="AdminDashboard" asp-action="Messages" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Messages" ? "active" : "")">
+                <i class="bi bi-chat-dots me-2"></i>Messages
+            </a>
+            <a asp-controller="AdminDashboard" asp-action="Emails" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Emails" ? "active" : "")">
                 <i class="bi bi-envelope me-2"></i>Emails
             </a>
             <a asp-controller="AdminDashboard" asp-action="EmployeeList" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "EmployeeList" ? "active" : "")">

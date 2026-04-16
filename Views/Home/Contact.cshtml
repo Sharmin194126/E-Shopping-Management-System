@@ -80,6 +80,7 @@
                         <div class="alert alert-success border-0 shadow-sm rounded-3">@TempData["Message"]</div>
                     }
                     <form asp-action="SendMessage" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="messageType" value="General" />
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-semibold">Name</label>

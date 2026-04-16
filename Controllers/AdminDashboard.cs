@@ -631,8 +631,20 @@ namespace E_ShoppingManagement.Controllers
 
         public async Task<IActionResult> Messages()
         {
-            var messages = await _context.ContactMessages.OrderByDescending(m => m.CreatedAt).ToListAsync();
+            var messages = await _context.ContactMessages
+                .Where(m => m.MessageType == "General" || m.MessageType == "LiveChat")
+                .OrderByDescending(m => m.CreatedAt)
+                .ToListAsync();
             return View(messages);
+        }
+ 
+        public async Task<IActionResult> Emails()
+        {
+            var emails = await _context.ContactMessages
+                .Where(m => m.MessageType == "Email")
+                .OrderByDescending(m => m.CreatedAt)
+                .ToListAsync();
+            return View("Messages", emails); // Reuse Messages view but with filtered data
         }
 
         public async Task<IActionResult> ReplyMessage(int id)

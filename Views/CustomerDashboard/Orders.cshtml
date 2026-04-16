@@ -57,7 +57,7 @@
                                         <tr>
                                             <td>@(sl++)</td>
                                             <td>@order.Id</td>
-                                            <td>@order.CreatedAt.ToString("MMM dd, yyyy")</td>
+                                            <td>@order.CreatedAt.ToString("MMM dd, yyyy | hh:mm tt")</td>
                                             <td>৳@order.TotalAmount.ToString("N0")</td>
                                             <td>
                                                 <span class="badge @(order.OrderStatus == "Delivered" ? "bg-success" : (order.OrderStatus == "Cancelled" ? "bg-danger" : "bg-warning text-dark"))">

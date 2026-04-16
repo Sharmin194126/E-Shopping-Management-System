@@ -88,7 +88,14 @@
     <!-- Earnings Chart -->
     <div class="col-lg-5">
         <div class="page-card">
-            <h5 class="fw-bold mb-3"><i class="bi bi-bar-chart-fill me-2 text-primary"></i>Last 7 Days Trend</h5>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="fw-bold mb-0"><i class="bi bi-bar-chart-fill me-2 text-primary"></i>Earnings Performance</h5>
+                <select id="earningsRange" class="form-select form-select-sm" style="width:110px; border-radius:20px; border:1px solid #532374; font-weight:600; cursor:pointer;">
+                    <option value="Weekly">Weekly</option>
+                    <option value="Monthly">Monthly</option>
+                    <option value="Yearly">Yearly</option>
+                </select>
+            </div>
             <canvas id="earningsChart" height="220"></canvas>
         </div>
     </div>
@@ -116,7 +123,7 @@
                             {
                                 <tr>
                                     <td>@p.CreatedAt.ToLocalTime().ToString("dd MMM yyyy")</td>
-                                    <td><strong>#@p.OrderId</strong></td>
+                                    <td><strong>@p.OrderId</strong></td>
                                     <td>৳@p.OrderTotal</td>
                                     <td class="text-success fw-bold">৳@p.CommissionAmount.ToString("0.##")</td>
                                     <td><span class="badge bg-secondary">Cash on Delivery</span></td>
@@ -145,12 +152,12 @@
 
 @section Scripts {
 <script>
-    // Build last-7-days chart data from server
-    const chartLabels = @Html.Raw(ViewBag.ChartLabels ?? "[]");
-    const chartData   = @Html.Raw(ViewBag.ChartData   ?? "[]");
+    // Initial Data
+    let chartLabels = @Html.Raw(ViewBag.ChartLabels ?? "[]");
+    let chartData   = @Html.Raw(ViewBag.ChartData   ?? "[]");
 
     const ctx = document.getElementById('earningsChart').getContext('2d');
-    new Chart(ctx, {
+    const earningsChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: chartLabels,
@@ -168,17 +175,40 @@
             responsive: true,
             plugins: {
                 legend: { display: false },
-                tooltip: { callbacks: { label: ctx => '৳' + ctx.parsed.y } }
+                tooltip: { 
+                    callbacks: { 
+                        label: function(context) {
+                            return '৳' + context.parsed.y.toLocaleString();
+                        }
+                    }
+                }
             },
             scales: {
                 y: {
                     beginAtZero: true,
-                    ticks: { callback: v => '৳' + v },
+                    ticks: { 
+                        callback: function(value) {
+                             return '৳' + value.toLocaleString();
+                        }
+                    },
                     grid: { color: '#f1f5f9' }
                 },
                 x: { grid: { display: false } }
             }
         }
+    });
+
+    // Range Switcher
+    document.getElementById('earningsRange').addEventListener('change', function() {
+        const range = this.value;
+        fetch(`/DeliveryManDashboard/GetEarningsData?range=${range}`)
+            .then(res => res.json())
+            .then(data => {
+                earningsChart.data.labels = data.labels;
+                earningsChart.data.datasets[0].data = data.values;
+                earningsChart.update();
+            })
+            .catch(err => console.error('Error fetching chart data:', err));
     });
 </script>
 }

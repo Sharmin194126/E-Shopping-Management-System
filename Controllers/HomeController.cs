@@ -382,7 +382,7 @@ namespace E_ShoppingManagement.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SendMessage(string name, string email, string subject, string message, IFormFile? attachment)
+        public async Task<IActionResult> SendMessage(string name, string email, string subject, string message, IFormFile? attachment, string messageType = "General")
         {
             string? attachmentUrl = null;
             if (attachment != null && attachment.Length > 0)
@@ -404,6 +404,7 @@ namespace E_ShoppingManagement.Controllers
                 Email = email,
                 Subject = subject,
                 Message = message,
+                MessageType = messageType,
                 AttachmentUrl = attachmentUrl,
                 CreatedAt = DateTime.UtcNow,
                 Status = "Active"
@@ -412,8 +413,27 @@ namespace E_ShoppingManagement.Controllers
             _context.ContactMessages.Add(contactMsg);
             await _context.SaveChangesAsync();
 
-            TempData["Message"] = "Your email has been sent successfully! We will contact you soon.";
-            return RedirectToAction("Contact");
+            TempData["Message"] = messageType == "Email" ? "Your email has been sent successfully!" : "Your message has been sent successfully! We will contact you soon.";
+            return RedirectToAction(messageType == "Email" ? "Email" : "Contact");
+        }
+        [HttpPost]
+        public async Task<IActionResult> SendLiveChatMessage(string message)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var contactMsg = new ContactMessage
+            {
+                Name = user?.FullName ?? "Customer",
+                Email = user?.Email ?? "N/A",
+                Subject = "Live Chat Inquiry",
+                Message = message,
+                MessageType = "LiveChat",
+                CreatedAt = DateTime.UtcNow,
+                Status = "Active"
+            };
+ 
+            _context.ContactMessages.Add(contactMsg);
+            await _context.SaveChangesAsync();
+            return Json(new { success = true });
         }
     }
 }

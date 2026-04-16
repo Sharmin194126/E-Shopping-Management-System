@@ -26,6 +26,7 @@
         cursor: pointer;
         position: relative;
     }
+
     .btn-call-customer:hover {
         background: linear-gradient(135deg, #15803d, #166534);
         transform: translateY(-1px);
@@ -164,13 +165,10 @@
         <div class="page-card">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h5 class="mb-0 fw-bold"><i class="bi bi-list-check me-2 text-primary"></i>My Assigned Orders</h5>
-                <a asp-action="Profile" class="btn btn-sm btn-outline-primary">
-                    <i class="bi bi-person-badge"></i> My Profile
-                </a>
             </div>
             <div class="table-responsive">
                 <table class="table table-hover align-middle">
-                    <thead style="background:#532374; color:#fff;">
+                    <thead style="background: linear-gradient(135deg, #4b1d68 0%, #301144 100%); color:#fff;">
                         <tr>
                             <th style="width: 70px;">SL No</th>
                             <th>Order #</th>
@@ -189,7 +187,7 @@
                         {
                             <tr>
                                 <td>@(sl++)</td>
-                                <td><strong>#@order.Id</strong></td>
+                                <td><strong>@order.Id</strong></td>
                                 <td><span class="fw-bold">@order.Customer?.Name</span></td>
                                 <td><small>@order.ShippingAddress, @order.City</small></td>
                                 <td>
@@ -321,7 +319,7 @@
                         </div>
                         <div>
                             <div class="activity-text">
-                                Order <strong>#@order.Id</strong> — @order.Customer?.Name
+                                Order <strong>@order.Id</strong> — @order.Customer?.Name
                             </div>
                             <div style="font-size:12px; margin-top:2px;">
                                 <span class="badge @(order.OrderStatus == "Delivered" ? "bg-success" : order.OrderStatus == "Returned" ? "bg-danger" : "bg-warning text-dark")" style="font-size:10px;">

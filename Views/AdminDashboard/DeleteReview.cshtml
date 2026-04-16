@@ -24,7 +24,7 @@
             </span>
         </p>
         <p><strong>Comment:</strong> @Model.Comment</p>
-        <p><strong>Date:</strong> @Model.CreatedAt.ToString("MMM dd, yyyy")</p>
+        <p><strong>Date:</strong> @Model.CreatedAt.ToString("MMM dd, yyyy | hh:mm tt")</p>
     </div>
 
     <form asp-action="DeleteReview" method="post">

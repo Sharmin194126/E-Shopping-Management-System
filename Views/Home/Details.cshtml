@@ -557,7 +557,7 @@
                                     <span class="ms-2 fw-bold" style="color: #FF6B35;">@review.CustomerName</span>
                                     <span class="badge bg-light text-success ms-2 small" style="font-size: 0.7rem;">Verified Purchase</span>
                                 </div>
-                                <small class="text-muted">@review.CreatedAt.ToString("MMM dd, yyyy")</small>
+                                <small class="text-muted">@review.CreatedAt.ToString("MMM dd, yyyy | hh:mm tt")</small>
                             </div>
                             
                             <p class="mt-2 mb-2 text-dark">@review.Comment</p>
@@ -694,6 +694,9 @@
         
         input.value = '';
         chatMessages.scrollTop = chatMessages.scrollHeight;
+ 
+        // Actual post to server
+        $.post('/Home/SendLiveChatMessage', { message: message });
 
         // Auto-reply after 1 second
         setTimeout(() => {

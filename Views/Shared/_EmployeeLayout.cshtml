@@ -91,6 +91,9 @@
 
             <p class="menu-title">SYSTEM</p>
             <a asp-controller="EmployeeDashboard" asp-action="Messages" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Messages" ? "active" : "")">
+                <i class="bi bi-chat-dots me-2"></i>Messages
+            </a>
+            <a asp-controller="EmployeeDashboard" asp-action="Emails" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Emails" ? "active" : "")">
                 <i class="bi bi-envelope me-2"></i>Emails
             </a>
             <p class="menu-title">TRACKING</p>

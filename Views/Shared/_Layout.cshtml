@@ -28,7 +28,7 @@
             var cust = db.Customers.FirstOrDefault(c => c.UserId == userId);
             var custId = cust?.Id ?? 0;
             newCount = db.Orders.Count(o => o.CustomerId == custId && (o.CreatedAt > lastCheck || o.ModifiedAt > lastCheck) && o.OrderStatus != "Pending");
-            notificationLink = "/CustomerDashboard/Index";
+            notificationLink = "/Home/Notifications";
         } else if (userRole == "DeliveryMan") {
             notificationLink = "/DeliveryManDashboard/Notifications";
         }

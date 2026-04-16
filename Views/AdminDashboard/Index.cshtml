@@ -385,7 +385,7 @@
                         @foreach (var month in Model.MonthlyHistory.OrderByDescending(m => m.Year).ThenByDescending(m => m.Month))
                         {
                             <tr>
-                                <td class="ps-3 fw-bold">@month.MonthName @month.Year | @DateTime.Now.ToString("hh:mm tt")</td>
+                                <td class="ps-3 fw-bold">@month.MonthName @month.Year | @DateTime.Now.ToString("MMM dd, yyyy | hh:mm tt")</td>
                                 <td class="text-end fw-bold text-success">৳@month.Amount.ToString("#,##0")</td>
                                 <td class="text-center"><span class="badge bg-light text-dark border">@month.Pieces.ToString("#,##0") Pcs</span></td>
                                 <td class="text-center"><a asp-controller="AdminReport" asp-action="Index" class="btn btn-sm btn-outline-secondary px-2 py-0">View</a></td>
@@ -845,9 +845,9 @@
                         {
                             <tr>
                                 <td>@(sl_o++)</td>
-                                <td><span class="fw-bold text-primary">#@order.OrderId</span></td>
+                                <td><span class="fw-bold text-primary">@order.OrderId</span></td>
                                 <td>@order.CustomerName</td>
-                                <td><small>@order.OrderDate.ToString("MMM dd, yyyy")</small></td>
+                                <td><small>@order.OrderDate.ToString("MMM dd, yyyy | hh:mm tt")</small></td>
                                 <td class="fw-bold">৳@order.Amount.ToString("#,##0")</td>
                                 <td>
                                     @switch (order.Status)

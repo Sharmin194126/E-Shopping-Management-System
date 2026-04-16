@@ -34,7 +34,7 @@
                         <td>
                             <div class="text-truncate" style="max-width: 250px;">@item.Message</div>
                         </td>
-                        <td>@item.CreatedAt.ToString("MMM dd, yyyy")</td>
+                        <td>@item.CreatedAt.ToString("MMM dd, yyyy | hh:mm tt")</td>
                         <td>
                             @if (item.Status == "Replied")
                             {

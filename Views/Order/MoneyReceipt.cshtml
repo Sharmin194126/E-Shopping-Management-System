@@ -23,7 +23,7 @@
                 </div>
                 <div class="col-md-6 text-end">
                     <h5 class="fw-bold">Receipt SL @Model.Id</h5>
-                    <p>Date: @Model.CreatedAt.ToString("MMM dd, yyyy")<br>
+                    <p>Date: @Model.CreatedAt.ToString("MMM dd, yyyy | hh:mm tt")<br>
                     Status: <span class="badge bg-success">@Model.PaymentStatus</span><br>
                     Trx ID: @Model.PaymentMethod</p>
                 </div>

@@ -15,6 +15,7 @@ namespace E_ShoppingManagement.Models
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
+        public string MessageType { get; set; } = "General"; // General, Email, LiveChat
         public string Status { get; set; } = "Active";
         public string? Reply { get; set; }
     }
