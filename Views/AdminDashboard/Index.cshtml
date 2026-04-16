@@ -38,6 +38,16 @@
     .nav-shortcuts .dash-card:hover {
         transform: translateY(-5px);
     }
+
+    /* Analytics Metric Card Hover Animation */
+    .analytics-metric-card {
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+        cursor: pointer;
+    }
+    .analytics-metric-card:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    }
 </style>
 
 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -102,10 +112,10 @@
     <h5 class="fw-bold mb-3"><i class="bi bi-lightning-fill text-warning me-2"></i>Quick Management</h5>
     <div class="row g-2 nav-shortcuts">
         <div class="col-6 col-md-3">
-            <a asp-controller="Category" asp-action="Index" class="btn btn-outline-primary w-100 py-2">Categories</a>
+            <a asp-controller="Product" asp-action="Index" class="btn btn-outline-success w-100 py-2">Products</a>
         </div>
         <div class="col-6 col-md-3">
-            <a asp-controller="Product" asp-action="Index" class="btn btn-outline-success w-100 py-2">Products</a>
+            <a asp-controller="AdminDashboard" asp-action="SetEmployeeGoals" class="btn btn-outline-primary w-100 py-2">Employee Goal Set</a>
         </div>
         <div class="col-6 col-md-3">
             <a asp-controller="Customer" asp-action="Index" class="btn btn-outline-info w-100 py-2">Customers</a>
@@ -655,27 +665,30 @@
                 }
             });
 
-            // ── 2. Product Type Distribution (Pie) ─────
+            // ── 2. Product Type Distribution (Doughnut) ─────
             const pieCtx = document.getElementById('typePieChart').getContext('2d');
             new Chart(pieCtx, {
-                type: 'pie',
+                type: 'doughnut',
                 data: {
                     labels: pieLabels,
                     datasets: [{
                         data: pieAmounts,
                         backgroundColor: colors,
-                        hoverOffset: 15,
+                        hoverOffset: 20,
                         borderColor: '#fff',
-                        borderWidth: 2
+                        borderWidth: 3
                     }]
                 },
                 options: {
+                    cutout: '65%',
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
                         legend: { display: false },
                         tooltip: {
                             backgroundColor: '#1a1a2e',
+                            padding: 12,
+                            cornerRadius: 8,
                             callbacks: {
                                 label: ctx => {
                                     const pct = pieTotal > 0 ? ((ctx.raw / pieTotal) * 100).toFixed(1) : 0;

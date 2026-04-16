@@ -777,6 +777,51 @@ namespace E_ShoppingManagement.Controllers
             });
         }
 
+        public async Task<IActionResult> SetEmployeeGoals()
+        {
+            var employees = await _context.Employees.Where(e => e.Status == "Active").ToListAsync();
+            var model = new List<EmployeeGoalViewModel>();
+            int currentYear = DateTime.UtcNow.Year;
+
+            foreach (var emp in employees)
+            {
+                decimal currentGoal = 0;
+                string goalFolderPath = Path.Combine(_env.WebRootPath, "settings", "goals");
+                string goalFilePath = Path.Combine(goalFolderPath, $"employee_goal_{emp.Id}_{currentYear}.txt");
+
+                if (System.IO.File.Exists(goalFilePath) && decimal.TryParse(System.IO.File.ReadAllText(goalFilePath), out decimal saved))
+                {
+                    currentGoal = saved;
+                }
+
+                model.Add(new EmployeeGoalViewModel
+                {
+                    EmployeeId = emp.Id,
+                    EmployeeName = emp.Name,
+                    Designation = emp.Designation,
+                    CurrentGoal = currentGoal,
+                    Year = currentYear
+                });
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult UpdateEmployeeGoal(int employeeId, decimal goalAmount)
+        {
+            int currentYear = DateTime.UtcNow.Year;
+            string folderPath = Path.Combine(_env.WebRootPath, "settings", "goals");
+            if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
+
+            string filePath = Path.Combine(folderPath, $"employee_goal_{employeeId}_{currentYear}.txt");
+            System.IO.File.WriteAllText(filePath, goalAmount.ToString());
+
+            TempData["Message"] = "Employee goal updated successfully!";
+            TempData["IsSuccess"] = true;
+            return RedirectToAction(nameof(SetEmployeeGoals));
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetYearlySales(int year)
         {

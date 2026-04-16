@@ -95,27 +95,15 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         <!-- Notification Button -->
-                        <div class="dropdown me-1">
-                            <a href="#" class="topbar-link position-relative text-decoration-none" id="customerNotificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-bell-fill" style="font-size: 1.2rem; color: #532374;"></i>
+                        <div class="me-1">
+                            <a href="@notificationLink" class="topbar-link position-relative text-decoration-none" title="View Notifications">
+                                <i class="bi bi-bell-fill" style="font-size: 1.2rem; color: #532374; transition: color 0.3s ease;"></i>
                                 @if (newCount > 0) {
                                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:0.6rem;">
                                         @newCount
                                     </span>
                                 }
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0" aria-labelledby="customerNotificationDropdown" style="width: 280px; border-radius: 12px; background: #fff !important;">
-                                <li><h6 class="dropdown-header fw-bold" style="background:#532374; color:#fff; border-radius: 12px 12px 0 0; margin-top:-8px; padding:10px 15px;">Notifications</h6></li>
-                                
-                                @if (newCount == 0) {
-                                    <li><div class="dropdown-item py-3 text-center text-muted">No new updates</div></li>
-                                } else {
-                                    <li><div class="dropdown-item py-2 text-center small fw-bold">You have @newCount new updates</div></li>
-                                }
-
-                                <li><hr class="dropdown-divider mb-0"></li>
-                                <li><a class="dropdown-item text-center fw-bold py-2" style="color:#532374; font-size:13px;" href="@notificationLink">View All Activities</a></li>
-                            </ul>
                         </div>
                         <div class="cart-wrapper">
                             @await Component.InvokeAsync("CartSummary")
