@@ -163,7 +163,7 @@
     <div class="container d-flex justify-content-between align-items-center">
         <div>
             <h4 class="mb-1" style="color: #FFD700 !important; font-weight: 800;"><i class="bi bi-chat-text-fill me-2"></i>Live Chat Support Available!</h4>
-            <p class="mb-0 small" style="color: rgba(255,255,255,0.95) !important; font-weight: 500;">Connect with our product experts instantly via our Live Chat button for real-time assistance.</p>
+            <p class="mb-0 small" style="color: #ffffff !important; font-weight: 600;">Connect with our product experts instantly via our Live Chat button for real-time assistance.</p>
         </div>
         <button onclick="toggleChat()" class="btn btn-warning fw-bold px-4 text-dark shadow-sm">Start Chat Now</button>
     </div>
@@ -574,7 +574,7 @@
 
                             <!-- Reactions -->
                             <div class="d-flex align-items-center gap-3 mb-2">
-                                <button class="btn btn-sm @(review.IsLikedByCurrentUser ? "btn-primary" : "btn-outline-primary")" onclick="reactToReview(@review.Id, 'Like')">
+                                <button class="btn btn-sm btn-success text-white fw-bold" onclick="reactToReview(@review.Id, 'Like')">
                                     <i class="bi bi-hand-thumbs-up"></i> <span id="like-count-@review.Id">@review.LikeCount</span>
                                 </button>
                                 <button class="btn btn-sm @(review.IsDislikedByCurrentUser ? "btn-danger" : "btn-outline-danger")" onclick="reactToReview(@review.Id, 'Dislike')">
@@ -605,11 +605,19 @@
                                 </div>
                             }
 
-                            <!-- Reply Box (Hidden by default) -->
+                            <!-- Reply Box -->
                             <div id="reply-box-@review.Id" class="ms-5 mt-2" style="display: none;">
-                                <div class="input-group">
-                                    <input type="text" id="reply-text-@review.Id" class="form-control form-control-sm" placeholder="Write a reply..." />
-                                    <button class="btn btn-sm btn-primary" onclick="submitReply(@review.Id)">Send</button>
+                                <div class="card p-2 border-primary shadow-sm">
+                                    <div class="d-flex gap-2 mb-2 p-1 bg-light rounded">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary border-0" onclick="insertTool(@review.Id, 'gallery')" title="Add from Gallery"><i class="bi bi-images"></i></button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary border-0" onclick="insertTool(@review.Id, 'attach')" title="Attach File"><i class="bi bi-paperclip"></i></button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary border-0" onclick="insertTool(@review.Id, 'emoji')" title="Insert Emoji"><i class="bi bi-emoji-smile"></i></button>
+                                    </div>
+                                    <textarea id="reply-text-@review.Id" class="form-control mb-2" rows="2" placeholder="Write your reply..."></textarea>
+                                    <div class="d-flex justify-content-end gap-2">
+                                        <button type="button" class="btn btn-sm btn-secondary" onclick="toggleReplyBox(@review.Id)">Cancel</button>
+                                        <button type="button" class="btn btn-sm btn-primary" onclick="submitReply(@review.Id)">Post Reply</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -617,7 +625,7 @@
                 }
                 else
                 {
-                    <p class="text-muted">No reviews yet. Be the first to review!</p>
+                    <p class="text-muted">No reviews yet. Be the first to review this product!</p>
                 }
             </div>
         </div>
@@ -663,14 +671,14 @@
         </div>
         <button onclick="toggleChat()" class="btn btn-sm text-white" style="font-size: 20px; padding: 0; border: none; background: transparent;">×</button>
     </div>
-    <div class="chat-body" id="chatMessages">
+    <div class="chat-body" id="chatMessages" style="color: #333 !important;">
         <div class="chat-message support">
-            <strong>Support Team</strong>
-            <p class="mb-0 small">Hello! How can we help you today?</p>
+            <strong style="color: #532374;">Support Team</strong>
+            <p class="mb-0 small" style="color: #444 !important;">Hello! How can we help you today?</p>
         </div>
     </div>
     <div class="chat-footer">
-        <input type="text" id="chatInput" class="form-control" placeholder="Type your message..." onkeypress="if(event.key==='Enter') sendMessage()">
+        <input type="text" id="chatInput" class="form-control" style="color: #000 !important; font-weight: 500;" placeholder="Type your message..." onkeypress="if(event.key==='Enter') sendMessage()">
         <button onclick="sendMessage()" class="btn btn-success"><i class="bi bi-send-fill"></i></button>
     </div>
 </div>
@@ -689,7 +697,7 @@
         const chatMessages = document.getElementById('chatMessages');
         const userMsg = document.createElement('div');
         userMsg.className = 'chat-message user';
-        userMsg.innerHTML = `<strong>You</strong><p class="mb-0 small">${message}</p>`;
+        userMsg.innerHTML = `<strong style="color: #198754;">You</strong><p class="mb-0 small" style="color: #222 !important;">${message}</p>`;
         chatMessages.appendChild(userMsg);
         
         input.value = '';
@@ -702,24 +710,21 @@
         setTimeout(() => {
             const supportMsg = document.createElement('div');
             supportMsg.className = 'chat-message support';
-            supportMsg.innerHTML = `<strong>Support Team</strong><p class="mb-0 small">Thank you for your message. An agent will respond shortly. For immediate assistance, please call us or visit our <a href="/Home/Contact">Contact Page</a>.</p>`;
+            supportMsg.innerHTML = `<strong style="color: #532374;">Support Team</strong><p class="mb-0 small" style="color: #444 !important;">Thank you for your message. An agent will respond shortly. For immediate assistance, please call us or visit our <a href="/Home/Contact" style="color: #532374; font-weight: 600;">Contact Page</a>.</p>`;
             chatMessages.appendChild(supportMsg);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }, 1000);
     }
 
-    // Unified quantity control logic handled by functions above line 300
-
-
     function reactToReview(reviewId, reactionType) {
-        @if (!User.Identity?.IsAuthenticated == true)
+        @if (!(User.Identity?.IsAuthenticated ?? false))
         {
             <text>window.location.href = '/Account/Login'; return;</text>
         }
         
         $.post('/Review/React', { reviewId: reviewId, reactionType: reactionType }, function(data) {
             if (data.success) {
-                location.reload(); // Simplest way to update UI
+                location.reload(); 
             }
         });
     }
@@ -730,7 +735,8 @@
     }
 
     function submitReply(reviewId) {
-        const text = document.getElementById(`reply-text-${reviewId}`).value;
+        const textArea = document.getElementById(`reply-text-${reviewId}`);
+        const text = textArea.value;
         if (!text.trim()) return;
 
         $.post('/Review/Reply', { reviewId: reviewId, replyText: text }, function(data) {
@@ -738,6 +744,19 @@
                 location.reload();
             }
         });
+    }
+
+    function insertTool(reviewId, type) {
+        const area = document.getElementById(`reply-text-${reviewId}`);
+        let content = "";
+        if(type === 'emoji') content = "😊";
+        if(type === 'attach') content = "[Attachment]";
+        if(type === 'gallery') content = "[Image]";
+        
+        const start = area.selectionStart;
+        const end = area.selectionEnd;
+        area.value = area.value.substring(0, start) + content + area.value.substring(end);
+        area.focus();
     }
 
     document.querySelectorAll('.size-select').forEach(radio => {

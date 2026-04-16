@@ -55,7 +55,7 @@
                     <th class="py-3">Status</th>
                     <th class="py-3">Amount</th>
                     <th class="py-3">Payment</th>
-                    <th class="py-3 pe-3">Date</th>
+                    <th class="py-3 pe-3">Date & Time</th>
                 </tr>
             </thead>
             <tbody>
@@ -78,15 +78,6 @@
                             else
                             {
                                 <span class="badge bg-secondary">Pending (@order.PaymentMethod)</span>
-                                @if (order.PaymentMethod?.Contains("COD") == true || order.PaymentMethod?.Contains("Cash") == true)
-                                {
-                                    <!-- Button to mark as received -->
-                                     <form asp-controller="Order" asp-action="UpdatePaymentStatus" method="post" class="d-inline ms-1">
-                                        <input type="hidden" name="id" value="@order.Id" />
-                                        <input type="hidden" name="status" value="Paid" />
-                                        <button type="submit" class="btn btn-xs btn-outline-primary p-0 px-1" style="font-size: 0.7rem;">Mark Paid</button>
-                                    </form>
-                                }
                             }
                         </td>
                         <td>@order.CreatedAt.ToString("MMM dd, yyyy | hh:mm tt")</td>

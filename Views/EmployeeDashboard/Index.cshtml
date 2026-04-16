@@ -239,13 +239,13 @@
     </div>
     <div class="table-responsive p-0">
         <table class="table table-hover align-middle mb-0">
-            <thead style="background:#f2efe9; color:#532374;">
+            <thead style="background: linear-gradient(135deg, #532374, #3d1a55); color: #fff;">
                 <tr>
                     <th class="ps-4" style="width: 70px;">SL</th>
                     <th>Product</th>
                     <th>Order Ref</th>
                     <th>Customer</th>
-                    <th>Date</th>
+                    <th>Date & Time</th>
                     <th>Amount</th>
                     <th>Status</th>
                     <th class="text-center pe-4">Action</th>
@@ -461,13 +461,31 @@
             // Pie Chart
             const ctxPie = document.getElementById('typePieChart').getContext('2d');
             const colors = ['#532374','#17a2b8','#f59e0b','#28a745','#dc3545'];
+            const totalSum = pieAmounts.reduce((a, b) => a + b, 0);
+
             new Chart(ctxPie, {
                 type: 'doughnut',
                 data: {
                     labels: pieLabels,
                     datasets: [{ data: pieAmounts, backgroundColor: colors }]
                 },
-                options: { cutout: '70%', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+                options: { 
+                    cutout: '70%', 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    plugins: { 
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const value = context.raw;
+                                    const percentage = totalSum > 0 ? ((value / totalSum) * 100).toFixed(1) + '%' : '0%';
+                                    return ` ${context.label}: ৳${value.toLocaleString()} (${percentage})`;
+                                }
+                            }
+                        }
+                    } 
+                }
             });
 
             // Pie Legend
