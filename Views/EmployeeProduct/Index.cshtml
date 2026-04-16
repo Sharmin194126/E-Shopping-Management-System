@@ -10,100 +10,111 @@
     <a asp-controller="EmployeeDashboard" asp-action="Index" class="theme-back-btn">Back to Dashboard</a>
 </div>
 
-<div class="page-card mb-3">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="mb-0">All Products</h5>
-        <a asp-action="Create" class="btn btn-primary">
-            <i class="bi bi-plus-circle"></i> Add New Product
-        </a>
-    </div>
-
-    @if (TempData["Message"] != null)
-    {
-        <div class="alert @(TempData["IsSuccess"] != null && (TempData["IsSuccess"] as bool? == true) ? "alert-success" : "alert-danger")">
-            @TempData["Message"]
+<div class="card border-0 shadow-sm" style="border-radius:15px; background: #fff;">
+    <div class="card-body p-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="fw-bold mb-0" style="color:#532374;"><i class="bi bi-box-seam-fill me-2"></i> My Products</h4>
+            <a asp-action="Create" class="btn btn-primary px-4 fw-bold shadow-sm" style="background:#532374; border:none; border-radius:10px;">
+                <i class="bi bi-plus-lg me-2"></i>Add New Product
+            </a>
         </div>
-    }
 
-    <table class="table table-hover table-bordered">
-        <thead style="background:#532374; color:#fff;">
-            <tr>
-                <th style="width:60px;">SL No</th>
-                <th style="width:80px;">Image</th>
-                <th>Name</th>
-                <th>Category</th>
-                <th>Type</th>
-                <th>Price</th>
-                <th>Offer %</th>
-                <th>Offer Price</th>
-                <th>Stock</th>
-                <th>Status</th>
-                <th style="width: 250px;">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @{
-                var index = 1;
-            }
-            @if (!Model.Any())
-            {
-                <tr>
-                    <td colspan="11" class="text-center text-muted">No products found.</td>
-                </tr>
-            }
-            else
-            {
-                foreach (var item in Model)
-                {
+        @if (TempData["Message"] != null)
+        {
+            <div class="alert @(TempData["IsSuccess"] != null && (TempData["IsSuccess"] as bool? == true) ? "alert-success" : "alert-danger") alert-dismissible fade show border-0 shadow-sm mb-4" role="alert">
+                <i class="bi @(TempData["IsSuccess"] != null && (TempData["IsSuccess"] as bool? == true) ? "bi-check-circle-fill" : "bi-exclamation-triangle-fill") me-2"></i>
+                @TempData["Message"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead style="background: #f8f6f0; color: #532374;">
                     <tr>
-                        <td>@index</td>
-                        <td>
-                            @if (!string.IsNullOrEmpty(item.ImageUrl))
-                            {
-                                <img src="@(item.ImageUrl.StartsWith("/") ? item.ImageUrl : "/images/products/" + item.ImageUrl)" class="product-image-small" />
-                            }
-                            else
-                            {
-                                 <img src="/images/no-image.png" class="product-image-small" />
-                            }
-                        </td>
-                        <td class="fw-bold">@item.Name</td>
-                        <td>@item.Category?.Name</td>
-                        <td><span class="badge bg-light text-dark border">@item.ProductType?.Name</span></td>
-                        <td>
-                            @if (item.OfferPercentage > 0)
-                            {
-                                <del class="text-muted">৳@item.RegularPrice.ToString("#,##0")</del>
-                            }
-                            else
-                            {
-                                <span>৳@item.RegularPrice.ToString("#,##0")</span>
-                            }
-                        </td>
-                        <td class="text-success fw-bold">@(item.OfferPercentage > 0 ? item.OfferPercentage + "%" : "")</td>
-                        <td class="fw-bold text-danger">
-                            @(item.OfferPercentage > 0 ? "৳" + item.Price.ToString("#,##0") : "")
-                        </td>
-                        <td>
-                            <span class="badge @(item.StockQty <= 10 ? "badge-stock-low" : "badge-stock-ok")">
-                                @item.StockQty.ToString("#,##0") Units
-                            </span>
-                        </td>
-                        <td>
-                            <span class="badge @(item.Status == "Active" ? "bg-success" : "bg-danger")">
-                                @item.Status
-                            </span>
-                        </td>
-                        <td>
-                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-success">Edit</a>
-                            <a asp-action="EditStock" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Stock</a>
-                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-secondary">Details</a>
-                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
-                        </td>
+                        <th class="ps-3" style="width:60px;">SL</th>
+                        <th style="width:80px;">Image</th>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Pricing</th>
+                        <th>Stock</th>
+                        <th>Status</th>
+                        <th class="text-center pe-3">Actions</th>
                     </tr>
-                    index++;
-                }
-            }
-        </tbody>
-    </table>
+                </thead>
+                <tbody>
+                    @{ var index = 1; }
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="8" class="text-center py-5 text-muted">
+                                <i class="bi bi-inbox-fill d-block mb-2" style="font-size: 2rem; opacity: 0.3;"></i>
+                                No products found. Start by adding your first product.
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="ps-3 fw-bold text-muted">@index</td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(item.ImageUrl))
+                                    {
+                                        <img src="@(item.ImageUrl.StartsWith("/") ? item.ImageUrl : "/images/products/" + item.ImageUrl)" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);" />
+                                    }
+                                    else
+                                    {
+                                         <img src="/images/no-image.png" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;" />
+                                    }
+                                </td>
+                                <td>
+                                    <div class="fw-bold text-dark">@item.Name</div>
+                                    <small class="text-muted"><span class="badge bg-light text-dark border">@item.ProductType?.Name</span></small>
+                                </td>
+                                <td>@item.Category?.Name</td>
+                                <td>
+                                    @if (item.OfferPercentage > 0)
+                                    {
+                                        <div class="text-muted small"><del>৳@item.RegularPrice.ToString("#,##0")</del> <span class="badge bg-danger ms-1" style="font-size: 10px;">-@item.OfferPercentage%</span></div>
+                                        <div class="fw-bold text-success" style="font-size: 1.1rem;">৳@item.Price.ToString("#,##0")</div>
+                                    }
+                                    else
+                                    {
+                                        <div class="fw-bold text-dark">৳@item.RegularPrice.ToString("#,##0")</div>
+                                    }
+                                </td>
+                                <td>
+                                    <span class="badge @(item.StockQty <= 10 ? "bg-warning text-dark" : "bg-info text-white") rounded-pill px-3">
+                                        @item.StockQty.ToString("#,##0") Units
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge @(item.Status == "Active" ? "bg-success" : "bg-danger") px-3">
+                                        @item.Status
+                                    </span>
+                                </td>
+                                <td class="text-center pe-2">
+                                    <div class="dropdown">
+                                        <button class="btn btn-sm btn-light border dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                            Manage
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
+                                            <li><a class="dropdown-item py-2" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pencil-square me-2 text-success"></i> Edit Details</a></li>
+                                            <li><a class="dropdown-item py-2" asp-action="EditStock" asp-route-id="@item.Id"><i class="bi bi-stack me-2 text-primary"></i> Update Stock</a></li>
+                                            <li><a class="dropdown-item py-2" asp-action="Details" asp-route-id="@item.Id"><i class="bi bi-eye-fill me-2 text-secondary"></i> View Full Details</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item py-2 text-danger" asp-action="Delete" asp-route-id="@item.Id"><i class="bi bi-trash3-fill me-2"></i> Remove Product</a></li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            index++;
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>

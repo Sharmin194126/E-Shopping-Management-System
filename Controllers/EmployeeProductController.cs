@@ -13,11 +13,13 @@ namespace E_ShoppingManagement.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IWebHostEnvironment _env;
+        private readonly Microsoft.AspNetCore.Identity.UserManager<E_ShoppingManagement.Models.Users> _userManager;
 
-        public EmployeeProductController(AppDbContext context, IWebHostEnvironment env)
+        public EmployeeProductController(AppDbContext context, IWebHostEnvironment env, Microsoft.AspNetCore.Identity.UserManager<E_ShoppingManagement.Models.Users> userManager)
         {
             _context = context;
             _env = env;
+            _userManager = userManager;
         }
 
         private IEnumerable<SelectListItem> GetCategoryList()
@@ -64,11 +66,17 @@ namespace E_ShoppingManagement.Controllers
         // GET: EmployeeProduct
         public async Task<IActionResult> Index()
         {
-            var userEmail = User.Identity?.Name;
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return RedirectToAction("Login", "Account");
+
+            var employee = await _context.Employees.FirstOrDefaultAsync(e => e.UserId == user.Id);
+            var employeeId = employee?.Id ?? 0;
+            var userEmail = user.Email;
+
             var products = await _context.Products
                 .Include(p => p.Category)
                 .Include(p => p.ProductType)
-                .Where(p => p.CreatedBy == userEmail) // Only show employee's own products
+                .Where(p => p.CreatedBy == userEmail || p.AssignedEmployeeId == employeeId) 
                 .ToListAsync();
             return View(products);
         }
