@@ -256,6 +256,14 @@ namespace E_ShoppingManagement.Controllers
                 }
             }
 
+            var user = await _userManager.GetUserAsync(User);
+            int employeeId = 0;
+            if (user != null && User.IsInRole("Employee"))
+            {
+                var employee = await _context.Employees.FirstOrDefaultAsync(e => e.UserId == user.Id);
+                employeeId = employee?.Id ?? 0;
+            }
+
             var vm = new CategoryProductsViewModel
             {
                 Products = await productsQuery.OrderByDescending(p => p.CreatedAt).ToListAsync(),
@@ -265,7 +273,8 @@ namespace E_ShoppingManagement.Controllers
                 SelectedType = typeId,
                 SelectedSize = size,
                 PriceRange = priceRange,
-                SearchQuery = query
+                SearchQuery = query,
+                LoggedInEmployeeId = employeeId
             };
 
             return View("CategoryProducts", vm);

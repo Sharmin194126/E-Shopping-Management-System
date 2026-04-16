@@ -28,6 +28,7 @@ namespace E_ShoppingManagement.Controllers
             var user = await _userManager.GetUserAsync(User);
             if (user == null) return RedirectToAction("Login", "Account");
 
+            ViewBag.LastNotificationCheck = user.LastNotificationCheck ?? DateTime.UtcNow.AddHours(-24);
             user.LastNotificationCheck = DateTime.UtcNow;
             await _userManager.UpdateAsync(user);
 

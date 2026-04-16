@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "My Notifications";
     Layout = "~/Views/Shared/_EmployeeLayout.cshtml";
-    var twentyFourHoursAgo = DateTime.UtcNow.AddHours(-24);
+    var lastCheck = ViewBag.LastNotificationCheck as DateTime? ?? DateTime.UtcNow.AddDays(-1);
 }
 
 <style>
@@ -54,7 +54,7 @@
                     {
                         foreach (var order in Model)
                         {
-                            var isNew = order.CreatedAt >= twentyFourHoursAgo;
+                            var isNew = order.CreatedAt >= lastCheck;
                             <div class="list-group-item py-4 px-4 overflow-hidden position-relative @(isNew ? "new-notification" : "")" style="border-left: 5px solid @(order.OrderStatus == "Pending" ? "#ffc107" : "#17a2b8");">
                                 <div class="d-flex justify-content-between">
                                     <div class="d-flex gap-3">
@@ -107,7 +107,7 @@
                     {
                         foreach (var msg in customerMsgs)
                         {
-                            var isNew = msg.CreatedAt >= twentyFourHoursAgo;
+                            var isNew = msg.CreatedAt >= lastCheck;
                             <div class="list-group-item py-4 px-4 overflow-hidden position-relative @(isNew ? "new-notification" : "")" style="border-left: 5px solid @(msg.MessageType == "LiveChat" ? "#532374" : "#ffc107");">
                                 <div class="d-flex justify-content-between">
                                     <div class="d-flex gap-3">
@@ -155,7 +155,7 @@
                     {
                         foreach (var msg in customerEmails)
                         {
-                            var isNew = msg.CreatedAt >= twentyFourHoursAgo;
+                            var isNew = msg.CreatedAt >= lastCheck;
                             <div class="list-group-item py-3 px-4 @(isNew ? "new-notification" : "")">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="d-flex align-items-center gap-3">

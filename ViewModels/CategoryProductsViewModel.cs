@@ -14,5 +14,6 @@ namespace E_ShoppingManagement.ViewModels
         public string? SelectedSize { get; set; }
         public string? PriceRange { get; set; }
         public string? SearchQuery { get; set; }
+        public int LoggedInEmployeeId { get; set; }
     }
 }

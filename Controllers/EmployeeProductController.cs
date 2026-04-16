@@ -324,9 +324,6 @@ namespace E_ShoppingManagement.Controllers
 
             if (product == null) return NotFound();
 
-            // Only allow deleting own products
-            if (product.CreatedBy != User.Identity?.Name) return Unauthorized();
-
             ViewBag.SizeStocks = await _context.ProductSizeStocks.Where(ss => ss.ProductId == id).ToListAsync();
             return View(product);
         }
@@ -338,9 +335,6 @@ namespace E_ShoppingManagement.Controllers
         {
             var product = await _context.Products.FindAsync(id);
             if (product == null) return NotFound();
-
-            // Security check
-            if (product.CreatedBy != User.Identity?.Name) return Unauthorized();
 
             // Clear size stocks first
             var sizeStocks = _context.ProductSizeStocks.Where(ss => ss.ProductId == id);
