@@ -8,36 +8,78 @@
 <h2 class="mb-3">Create Product</h2>
 
 <style>
-    .size-toggle-btn {
+    /* Square checkbox style */
+    .size-chk-label {
         display: inline-flex;
         align-items: center;
-        gap: 4px;
-        padding: 5px 14px;
-        border: 1.5px solid #ced4da;
-        border-radius: 20px;
-        background: #f2efe9;
-        font-size: 0.875rem;
-        font-weight: 500;
+        gap: 6px;
         cursor: pointer;
-        color: #555;
-        transition: all 0.18s ease;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: #333;
+        user-select: none;
     }
-    .size-toggle-btn .size-check-icon {
+    .size-chk-label input[type="checkbox"] {
         display: none;
-        color: #28a745;
+    }
+    .size-chk-box {
+        width: 20px;
+        height: 20px;
+        border: 2px solid #6c757d;
+        border-radius: 3px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: #f2efe9;
+        flex-shrink: 0;
+        transition: border-color 0.15s;
+    }
+    .size-chk-label input[type="checkbox"]:checked + .size-chk-box {
+        border-color: #333;
+    }
+    .size-chk-label input[type="checkbox"]:checked + .size-chk-box::after {
+        content: '\2713';
+        font-size: 13px;
         font-weight: 700;
+        color: #333;
     }
-    .size-toggle-btn.active {
-        background: #e6f4ea;
-        border-color: #28a745;
-        color: #1a7c35;
+    /* Size quantity input group */
+    .size-qty-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 8px;
     }
-    .size-toggle-btn.active .size-check-icon {
-        display: inline;
+    .size-qty-item {
+        display: flex;
+        align-items: stretch;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        overflow: hidden;
     }
-    .size-stock-input::-webkit-outer-spin-button,
-    .size-stock-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-    .size-stock-input { -moz-appearance: textfield; }
+    .size-qty-item .size-label {
+        display: flex;
+        align-items: center;
+        padding: 4px 10px;
+        background: #f2efe9;
+        border-right: 1px solid #ced4da;
+        font-weight: 700;
+        font-size: 0.9rem;
+        color: #333;
+        min-width: 38px;
+        justify-content: center;
+    }
+    .size-qty-item input[type=number] {
+        width: 70px;
+        border: none;
+        text-align: center;
+        padding: 4px 6px;
+        font-size: 0.9rem;
+        outline: none;
+    }
+    .size-qty-item input[type=number]:focus {
+        background: #f0f4ff;
+    }
     .page-card {
         background: #f2efe9;
         padding: 30px;
@@ -132,39 +174,38 @@
 
         <div class="form-group mb-3">
             <label>Available Sizes</label>
-            <div class="d-flex flex-wrap gap-2 mt-1">
+            <div class="d-flex flex-wrap gap-4 mt-2">
                 @{
                     var sizesList = new[] { "S", "M", "L", "XL", "XXL", "3XL" };
                 }
                 @foreach (var sz in sizesList)
                 {
-                    <button type="button" class="size-toggle-btn" data-size="@sz">
-                        <span class="size-check-icon">&#10003;</span> @sz
-                    </button>
-                    <input type="hidden" class="size-checkbox" id="sizeCheck_@sz" value="@sz" />
+                    <label class="size-chk-label">
+                        <input type="checkbox" class="size-checkbox" value="@sz" id="sizeChk_@sz" />
+                        <span class="size-chk-box"></span>
+                        @sz
+                    </label>
                 }
             </div>
         </div>
 
         <div class="form-group mb-3">
             <label>Size Wise Quantity</label>
-            <div class="d-flex flex-wrap gap-3 mt-1">
+            <div class="size-qty-row">
                 @{
                     int idx = 0;
                 }
                 @foreach (var size in sizesList)
                 {
-                    <div class="size-stock-row" data-size="@size" style="display:none;">
-                        <div class="d-flex flex-column align-items-center">
-                            <small class="text-muted mb-1 fw-semibold">@size</small>
-                            <div class="input-group" style="width:110px;">
-                                <button type="button" class="btn btn-outline-secondary btn-sm size-dec" data-target="sizeQty_@size">&#8722;</button>
-                                <input type="number" id="sizeQty_@size" name="SizeStocks[@idx].StockQty" value="0" class="form-control form-control-sm size-stock-input text-center" min="0" />
-                                <button type="button" class="btn btn-outline-secondary btn-sm size-inc" data-target="sizeQty_@size">&#43;</button>
-                            </div>
-                            <input type="hidden" name="SizeStocks[@idx].Size" value="@size" />
-                        </div>
+                    <div class="size-qty-item">
+                        <span class="size-label">@size</span>
+                        <input type="number" id="sizeQty_@size"
+                               name="SizeStocks[@idx].StockQty"
+                               value="0"
+                               class="size-stock-input"
+                               min="0" />
                     </div>
+                    <input type="hidden" name="SizeStocks[@idx].Size" value="@size" />
                     idx++;
                 }
             </div>
@@ -215,33 +256,6 @@
                 calculateOffer();
             });
 
-            // Size toggle button click
-            $(document).on('click', '.size-toggle-btn', function() {
-                $(this).toggleClass('active');
-                var size = $(this).data('size');
-                var row = $('.size-stock-row[data-size="' + size + '"]');
-                if ($(this).hasClass('active')) {
-                    row.show();
-                } else {
-                    row.hide();
-                    row.find('.size-stock-input').val(0);
-                }
-                calculateTotalStock();
-            });
-
-            // +/- buttons
-            $(document).on('click', '.size-inc', function() {
-                var inp = $('#' + $(this).data('target'));
-                inp.val((parseInt(inp.val()) || 0) + 1);
-                calculateTotalStock();
-            });
-            $(document).on('click', '.size-dec', function() {
-                var inp = $('#' + $(this).data('target'));
-                var v = (parseInt(inp.val()) || 0) - 1;
-                inp.val(v < 0 ? 0 : v);
-                calculateTotalStock();
-            });
-
             // Image preview
             $('#imageInput').on('change', function() {
                 var file = this.files[0];
@@ -260,10 +274,10 @@
             function calculateTotalStock() {
                 var total = 0;
                 var availSizes = [];
-                $('.size-toggle-btn.active').each(function() {
-                    availSizes.push($(this).data('size'));
+                $('.size-checkbox:checked').each(function() {
+                    availSizes.push($(this).val());
                 });
-                $('.size-stock-row:visible .size-stock-input').each(function() {
+                $('.size-stock-input').each(function() {
                     total += parseInt($(this).val()) || 0;
                 });
 
@@ -272,6 +286,7 @@
             }
 
             $(document).on('input', '.size-stock-input', calculateTotalStock);
+            $(document).on('change', '.size-checkbox', calculateTotalStock);
 
             calculateOffer();
             calculateTotalStock();

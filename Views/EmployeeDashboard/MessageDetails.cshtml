@@ -1,0 +1,98 @@
+@model E_ShoppingManagement.Models.ContactMessage
+@{
+    ViewData["Title"] = "Message Details";
+    Layout = "~/Views/Shared/_EmployeeLayout.cshtml";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold" style="color: #532374;"><i class="bi bi-chat-dots-fill me-2"></i> Message Details</h2>
+    <a asp-action="Notifications" class="theme-back-btn mb-0">Back to Notifications</a>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm" style="border-radius: 15px; background: #fdfbf7;">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center gap-3 mb-4">
+                    <div class="icon-circle bg-white text-purple shadow-sm" style="width: 60px; height: 60px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; color: #532374;">
+                        <i class="bi @(Model.MessageType == "LiveChat" ? "bi-chat-heart" : "bi-chat-left-text")" style="font-size: 2rem;"></i>
+                    </div>
+                    <div>
+                        <h4 class="mb-0 fw-bold">From @Model.Name</h4>
+                        <span class="badge @(Model.MessageType == "LiveChat" ? "bg-theme" : "bg-warning text-dark")">@Model.MessageType</span>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="text-muted small fw-bold text-uppercase">Email Address</label>
+                    <p class="mb-0">@Model.Email</p>
+                </div>
+
+                <div class="mb-3">
+                    <label class="text-muted small fw-bold text-uppercase">Subject</label>
+                    <p class="mb-0 fw-bold" style="color: #532374;">@Model.Subject</p>
+                </div>
+
+                <div class="mb-3">
+                    <label class="text-muted small fw-bold text-uppercase">Received At</label>
+                    <p class="mb-0">@Model.CreatedAt.ToString("MMM dd, yyyy | hh:mm tt")</p>
+                </div>
+
+                <hr />
+
+                <div class="mb-4">
+                    <label class="text-muted small fw-bold text-uppercase">Message Content</label>
+                    <div class="p-3 bg-white rounded border shadow-sm mt-2" style="white-space: pre-wrap;">@Model.Message</div>
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.AttachmentUrl))
+                {
+                    <div class="p-3 border rounded border-info bg-light">
+                        <label class="text-info small fw-bold text-uppercase mb-2 d-block"><i class="bi bi-paperclip me-1"></i> Attachment</label>
+                        <a href="@Model.AttachmentUrl" target="_blank" class="btn btn-sm btn-info text-white fw-bold px-4">View Attached File</a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm h-100" style="border-radius: 15px;">
+            <div class="card-body p-4">
+                <h5 class="fw-bold mb-4" style="color: #532374;"><i class="bi bi-reply-fill me-2"></i> Your Response</h5>
+                
+                @if (Model.Status == "Replied")
+                {
+                    <div class="alert alert-success border-0 shadow-sm mb-4">
+                        <i class="bi bi-check-circle-fill me-2"></i> This message has been answered.
+                    </div>
+                    <div class="p-4 bg-light rounded border border-success" style="border-style: dashed !important;">
+                        <label class="text-success small fw-bold text-uppercase mb-2 d-block">Previous Response</label>
+                        <div style="white-space: pre-wrap;">@Model.Reply</div>
+                    </div>
+                }
+                
+                <form asp-action="ReplyMessage" method="post" class="mt-3">
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">@(Model.Status == "Replied" ? "Send Another Response" : "Reply Content")</label>
+                        <textarea name="reply" class="form-control" rows="10" placeholder="Type your response here..." required style="border-radius: 12px;"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary px-5 py-3 fw-bold rounded-pill" style="background: #532374; border: none;">
+                        Send Reply <i class="bi bi-send-fill ms-2"></i>
+                    </button>
+                    
+                    <div class="alert alert-info mt-4 small border-0 shadow-sm" style="border-radius: 10px;">
+                        <i class="bi bi-info-circle-fill me-2"></i>
+                        Note: Replying here will update the message status to "Replied" and persist your answer.
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-theme { background-color: #532374 !important; color: white !important; }
+    .text-purple { color: #532374 !important; }
+</style>

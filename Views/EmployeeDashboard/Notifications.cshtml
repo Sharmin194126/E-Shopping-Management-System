@@ -2,133 +2,181 @@
 @{
     ViewData["Title"] = "My Notifications";
     Layout = "~/Views/Shared/_EmployeeLayout.cshtml";
+    var twentyFourHoursAgo = DateTime.UtcNow.AddHours(-24);
 }
 
+<style>
+    .notification-card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        border-radius: 15px;
+        height: 100%;
+    }
+    .notification-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    }
+    .new-notification {
+        background-color: #fff9f0 !important;
+        border-right: 4px solid #532374 !important;
+    }
+    .badge-new {
+        background: linear-gradient(135deg, #FF6B35, #FFB200);
+        color: white;
+        padding: 4px 10px;
+        border-radius: 50rem;
+        font-size: 10px;
+        text-transform: uppercase;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+    }
+    .text-theme { color: #532374 !important; }
+    .bg-theme { background-color: #532374 !important; }
+    .livechat-badge {
+        background-color: #fce4ec !important;
+        color: #d81b60 !important; /* Specific vibrant color for Live Chat text */
+        font-weight: 700 !important;
+    }
+</style>
+
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h3 class="fw-bold mb-0" style="color: #532374;"><i class="bi bi-bell-fill me-2"></i> Assigned Order Notifications</h3>
+    <h3 class="fw-bold mb-0 text-theme"><i class="bi bi-bell-fill me-2"></i> Dashboard Notifications</h3>
     <a href="javascript:history.back()" class="theme-back-btn mb-0">Back</a>
 </div>
 
-<div class="card border-0 shadow-sm" style="border-radius: 15px;">
-    <div class="card-body p-0">
-        <div class="list-group list-group-flush">
-            @if (Model != null && Model.Any())
-            {
-                foreach (var order in Model)
-                {
-                    <div class="list-group-item py-4 px-4 overflow-hidden position-relative" style="border-left: 5px solid @(order.OrderStatus == "Pending" ? "#ffc107" : "#17a2b8");">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="d-flex gap-3 align-items-center">
-                                <div class="icon-circle bg-light text-primary" style="width: 50px; height: 50px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%;">
-                                    <i class="bi bi-box-seam" style="font-size: 1.5rem;"></i>
-                                </div>
-                                <div>
-                                    <h6 class="mb-1 fw-bold">New Order Assigned: #@order.Id</h6>
-                                    <p class="mb-1 text-muted small">Customer: @order.Customer?.Name</p>
-                                    <p class="mb-0 small">
-                                        <span class="badge @(order.OrderStatus == "Delivered" ? "bg-success" : (order.OrderStatus == "Pending" ? "bg-warning text-dark" : "bg-info"))">@order.OrderStatus</span>
-                                        <span class="ms-2 text-muted"><i class="bi bi-geo-alt me-1"></i>@order.ShippingAddress</span>
-                                    </p>
+<div class="row">
+    <!-- Left Column: Assigned Orders -->
+    <div class="col-lg-6 mb-4">
+        <h4 class="fw-bold mb-3 text-theme"><i class="bi bi-box-seam-fill me-2"></i> Assigned Orders</h4>
+        <div class="card border-0 shadow-sm" style="border-radius: 15px;">
+            <div class="card-body p-0">
+                <div class="list-group list-group-flush">
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var order in Model)
+                        {
+                            var isNew = order.CreatedAt >= twentyFourHoursAgo;
+                            <div class="list-group-item py-4 px-4 overflow-hidden position-relative @(isNew ? "new-notification" : "")" style="border-left: 5px solid @(order.OrderStatus == "Pending" ? "#ffc107" : "#17a2b8");">
+                                <div class="d-flex justify-content-between">
+                                    <div class="d-flex gap-3">
+                                        <div class="icon-circle bg-light text-primary" style="width: 50px; height: 50px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%;">
+                                            <i class="bi bi-cart-check" style="font-size: 1.5rem;"></i>
+                                        </div>
+                                        <div>
+                                            <div class="d-flex align-items-center gap-2 mb-1">
+                                                <h6 class="mb-0 fw-bold">Order #@order.Id</h6>
+                                                @if(isNew) { <span class="badge-new">NEW</span> }
+                                            </div>
+                                            <p class="mb-1 text-muted small">Customer: @order.Customer?.Name</p>
+                                            <p class="mb-0 small">
+                                                <span class="badge @(order.OrderStatus == "Delivered" ? "bg-success" : (order.OrderStatus == "Pending" ? "bg-warning text-dark" : "bg-info"))">@order.OrderStatus</span>
+                                                <span class="ms-2 text-muted"><i class="bi bi-geo-alt me-1"></i>@order.ShippingAddress</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="text-end" style="min-width: 140px;">
+                                        <div class="small fw-bold text-muted mb-2">@order.CreatedAt.ToString("MMM dd, HH:mm")</div>
+                                        <a asp-controller="EmployeeOrder" asp-action="Details" asp-route-id="@order.Id" class="btn btn-sm btn-primary px-3 rounded-pill btn-block w-100">Manage</a>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="text-end">
-                                <div class="small fw-bold text-muted mb-2">@order.CreatedAt.ToString("MMM dd, yyyy | hh:mm tt")</div>
-                                <a asp-controller="EmployeeOrder" asp-action="Details" asp-route-id="@order.Id" class="btn btn-sm btn-primary px-3 rounded-pill">Manage Order</a>
-                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="p-5 text-center">
+                            <i class="bi bi-box-slash text-muted" style="font-size: 3rem;"></i>
+                            <p class="mt-3 text-muted">No orders assigned recently.</p>
                         </div>
-                    </div>
-                }
-            }
-            else
-            {
-                <div class="p-5 text-center">
-                    <i class="bi bi-bell-slash text-muted" style="font-size: 3rem;"></i>
-                    <p class="mt-3 text-muted">No notifications found.</p>
+                    }
                 </div>
-            }
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Column: Customer Messages -->
+    <div class="col-lg-6 mb-4">
+        <h4 class="fw-bold mb-3 text-theme"><i class="bi bi-chat-left-dots-fill me-2"></i> Customer Inquiries</h4>
+        <div class="card border-0 shadow-sm" style="border-radius: 15px;">
+            <div class="card-body p-0">
+                <div class="list-group list-group-flush">
+                    @{
+                        var allMessages = ViewBag.RecentMessages as List<E_ShoppingManagement.Models.ContactMessage> ?? new List<E_ShoppingManagement.Models.ContactMessage>();
+                        var customerMsgs = allMessages.Where(m => m.MessageType != "Email").ToList();
+                    }
+                    @if (customerMsgs.Any())
+                    {
+                        foreach (var msg in customerMsgs)
+                        {
+                            var isNew = msg.CreatedAt >= twentyFourHoursAgo;
+                            <div class="list-group-item py-4 px-4 overflow-hidden position-relative @(isNew ? "new-notification" : "")" style="border-left: 5px solid @(msg.MessageType == "LiveChat" ? "#532374" : "#ffc107");">
+                                <div class="d-flex justify-content-between">
+                                    <div class="d-flex gap-3">
+                                        <div class="icon-circle bg-light" style="width: 50px; height: 50px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; color: #532374;">
+                                            <i class="bi @(msg.MessageType == "LiveChat" ? "bi-chat-heart" : "bi-chat-left-text")" style="font-size: 1.5rem;"></i>
+                                        </div>
+                                        <div>
+                                            <div class="d-flex align-items-center gap-2 mb-1">
+                                                <h6 class="mb-0 fw-bold">@msg.Name</h6>
+                                                @if(isNew) { <span class="badge-new">NEW</span> }
+                                                <span class="badge ms-1 @(msg.MessageType == "LiveChat" ? "livechat-badge" : "bg-warning text-dark")" style="font-size: 9px;">@msg.MessageType</span>
+                                            </div>
+                                            <p class="mb-1 text-muted small text-truncate" style="max-width: 250px;">@msg.Subject</p>
+                                            <div class="text-truncate small text-dark" style="max-width: 250px; font-style: italic;">"@msg.Message"</div>
+                                        </div>
+                                    </div>
+                                    <div class="text-end" style="min-width: 140px;">
+                                        <div class="small fw-bold text-muted mb-2">@msg.CreatedAt.ToString("MMM dd, HH:mm")</div>
+                                        <a asp-action="MessageDetails" asp-route-id="@msg.Id" class="btn btn-sm btn-outline-primary px-3 rounded-pill w-100">View Details</a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="p-5 text-center">
+                            <i class="bi bi-chat-slash text-muted" style="font-size: 3rem;"></i>
+                            <p class="mt-3 text-muted">No recent inquiries.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        
+        <!-- Emails Section Below Grid if needed, or I can add it here -->
+        <h4 class="fw-bold mt-4 mb-3 text-theme"><i class="bi bi-envelope-open-fill me-2"></i> Recent Emails</h4>
+        <div class="card border-0 shadow-sm" style="border-radius: 15px;">
+            <div class="card-body p-0">
+                <div class="list-group list-group-flush">
+                    @{
+                        var customerEmails = allMessages.Where(m => m.MessageType == "Email").ToList();
+                    }
+                    @if (customerEmails.Any())
+                    {
+                        foreach (var msg in customerEmails)
+                        {
+                            var isNew = msg.CreatedAt >= twentyFourHoursAgo;
+                            <div class="list-group-item py-3 px-4 @(isNew ? "new-notification" : "")">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="text-info" style="font-size: 1.2rem;"><i class="bi bi-envelope-at"></i></div>
+                                        <div>
+                                            <div class="fw-bold small">@msg.Name @(isNew ? " (New)" : "")</div>
+                                            <div class="text-muted small">@msg.Subject</div>
+                                        </div>
+                                    </div>
+                                    <a asp-action="Emails" class="btn btn-sm btn-link text-decoration-none">Review</a>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="p-4 text-center text-muted small">No recent emails.</div>
+                    }
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
-<h4 class="fw-bold mt-5 mb-3" style="color: #532374;"><i class="bi bi-chat-dots-fill me-2"></i> Customer Messages (Live Chat & Contact)</h4>
-<div class="card border-0 shadow-sm mb-5" style="border-radius: 15px;">
-    <div class="card-body p-0">
-        <div class="list-group list-group-flush">
-            @{
-                var allMessages = ViewBag.RecentMessages as List<E_ShoppingManagement.Models.ContactMessage> ?? new List<E_ShoppingManagement.Models.ContactMessage>();
-                var customerMsgs = allMessages.Where(m => m.MessageType != "Email").ToList();
-            }
-            @if (customerMsgs.Any())
-            {
-                foreach (var msg in customerMsgs)
-                {
-                    <div class="list-group-item py-4 px-4 overflow-hidden position-relative" style="border-left: 5px solid @(msg.MessageType == "LiveChat" ? "#532374" : "#ffc107");">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="d-flex gap-3 align-items-center">
-                                <div class="icon-circle bg-light text-purple" style="width: 50px; height: 50px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; color: #532374;">
-                                    <i class="bi @(msg.MessageType == "LiveChat" ? "bi-chat-heart" : "bi-chat-left-text")" style="font-size: 1.5rem;"></i>
-                                </div>
-                                <div>
-                                    <h6 class="mb-1 fw-bold">From @msg.Name <span class="badge ms-2 @(msg.MessageType == "LiveChat" ? "bg-theme" : "bg-warning text-dark")" style="font-size: 10px;">@msg.MessageType</span></h6>
-                                    <p class="mb-1 text-muted small">@msg.Subject</p>
-                                    <div class="text-truncate small text-dark" style="max-width: 400px;">@msg.Message</div>
-                                </div>
-                            </div>
-                            <div class="text-end">
-                                <div class="small fw-bold text-muted mb-2">@msg.CreatedAt.ToString("MMM dd, yyyy | hh:mm tt")</div>
-                                <a asp-action="MessageDetails" asp-route-id="@msg.Id" class="btn btn-sm btn-outline-primary px-3 rounded-pill">View Response</a>
-                            </div>
-                        </div>
-                    </div>
-                }
-            }
-            else
-            {
-                <div class="p-5 text-center">
-                    <p class="text-muted">No recent general messages.</p>
-                </div>
-            }
-        </div>
-    </div>
-</div>
-
-<h4 class="fw-bold mt-5 mb-3" style="color: #532374;"><i class="bi bi-envelope-fill me-2"></i> Customer Emails</h4>
-<div class="card border-0 shadow-sm" style="border-radius: 15px;">
-    <div class="card-body p-0">
-        <div class="list-group list-group-flush">
-            @{
-                var customerEmails = allMessages.Where(m => m.MessageType == "Email").ToList();
-            }
-            @if (customerEmails.Any())
-            {
-                foreach (var msg in customerEmails)
-                {
-                    <div class="list-group-item py-4 px-4 overflow-hidden position-relative" style="border-left: 5px solid @(msg.Status == "Replied" ? "#28a745" : "#17a2b8");">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="d-flex gap-3 align-items-center">
-                                <div class="icon-circle bg-light text-info" style="width: 50px; height: 50px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%;">
-                                    <i class="bi bi-envelope-check" style="font-size: 1.5rem;"></i>
-                                </div>
-                                <div>
-                                    <h6 class="mb-1 fw-bold">Email from @msg.Name</h6>
-                                    <p class="mb-1 text-muted small">@msg.Subject</p>
-                                    <div class="text-truncate small text-dark" style="max-width: 400px;">@msg.Message</div>
-                                </div>
-                            </div>
-                            <div class="text-end">
-                                <div class="small fw-bold text-muted mb-2">@msg.CreatedAt.ToString("MMM dd, yyyy | hh:mm tt")</div>
-                                <a asp-action="Emails" class="btn btn-sm btn-outline-info px-3 rounded-pill">Manage Emails</a>
-                            </div>
-                        </div>
-                    </div>
-                }
-            }
-            else
-            {
-                <div class="p-5 text-center">
-                    <p class="text-muted">No recent emails.</p>
-                </div>
-            }
-        </div>
-    </div>
-</div>

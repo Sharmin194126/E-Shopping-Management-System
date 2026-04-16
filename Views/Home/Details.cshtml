@@ -574,7 +574,7 @@
 
                             <!-- Reactions -->
                             <div class="d-flex align-items-center gap-3 mb-2">
-                                <button class="btn btn-sm btn-success text-white fw-bold" onclick="reactToReview(@review.Id, 'Like')">
+                                <button class="btn btn-sm text-white fw-bold" style="background: #532374 !important; border: none;" onclick="reactToReview(@review.Id, 'Like')">
                                     <i class="bi bi-hand-thumbs-up"></i> <span id="like-count-@review.Id">@review.LikeCount</span>
                                 </button>
                                 <button class="btn btn-sm @(review.IsDislikedByCurrentUser ? "btn-danger" : "btn-outline-danger")" onclick="reactToReview(@review.Id, 'Dislike')">
@@ -609,9 +609,9 @@
                             <div id="reply-box-@review.Id" class="ms-5 mt-2" style="display: none;">
                                 <div class="card p-2 border-primary shadow-sm">
                                     <div class="d-flex gap-2 mb-2 p-1 bg-light rounded">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary border-0" onclick="insertTool(@review.Id, 'gallery')" title="Add from Gallery"><i class="bi bi-images"></i></button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary border-0" onclick="insertTool(@review.Id, 'attach')" title="Attach File"><i class="bi bi-paperclip"></i></button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary border-0" onclick="insertTool(@review.Id, 'emoji')" title="Insert Emoji"><i class="bi bi-emoji-smile"></i></button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary border-0" onclick="insertTool(@review.Id, 'gallery', this)" title="Add from Gallery"><i class="bi bi-images"></i></button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary border-0" onclick="insertTool(@review.Id, 'attach', this)" title="Attach File"><i class="bi bi-paperclip"></i></button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary border-0" onclick="insertTool(@review.Id, 'emoji', this)" title="Insert Emoji"><i class="bi bi-emoji-smile"></i></button>
                                     </div>
                                     <textarea id="reply-text-@review.Id" class="form-control mb-2" rows="2" placeholder="Write your reply..."></textarea>
                                     <div class="d-flex justify-content-end gap-2">
@@ -665,9 +665,9 @@
 <!-- Chat Box -->
 <div id="chatBox" class="chat-box">
     <div class="chat-header">
-        <div>
-            <h6 class="mb-0">Live Chat Support</h6>
-            <small>We're here to help!</small>
+        <div class="text-white">
+            <h6 class="mb-0 text-white">Live Chat Support</h6>
+            <small class="text-white-50">We're here to help!</small>
         </div>
         <button onclick="toggleChat()" class="btn btn-sm text-white" style="font-size: 20px; padding: 0; border: none; background: transparent;">×</button>
     </div>
@@ -680,6 +680,18 @@
     <div class="chat-footer">
         <input type="text" id="chatInput" class="form-control" style="color: #000 !important; font-weight: 500;" placeholder="Type your message..." onkeypress="if(event.key==='Enter') sendMessage()">
         <button onclick="sendMessage()" class="btn btn-success"><i class="bi bi-send-fill"></i></button>
+    </div>
+</div>
+
+<!-- Emoji Picker Template (hidden) -->
+<div id="emojiPickerTemplate" style="display: none;">
+    <div class="emoji-picker shadow-lg border rounded bg-white p-2" style="position: absolute; z-index: 9999; width: 220px; max-height: 200px; overflow-y: auto;">
+        <div class="d-flex flex-wrap gap-2">
+            @foreach (var emoji in new[] { "😀", "😂", "🥰", "😍", "🤩", "😊", "😜", "😇", "🤔", "🤫", "🥳", "😭", "😤", "🙌", "👏", "👍", "❤️", "🔥", "✨", "💯" })
+            {
+                <span class="emoji-item" style="cursor: pointer; font-size: 1.2rem;" onclick="addEmojiToReply(this, '@emoji')">@emoji</span>
+            }
+        </div>
     </div>
 </div>
 
@@ -731,7 +743,102 @@
 
     function toggleReplyBox(reviewId) {
         const box = document.getElementById(`reply-box-${reviewId}`);
-        box.style.display = box.style.display === 'none' ? 'block' : 'none';
+        const isHidden = box.style.display === 'none';
+        
+        // Close other pickers
+        document.querySelectorAll('.emoji-picker').forEach(p => p.remove());
+
+        box.style.display = isHidden ? 'block' : 'none';
+        if(isHidden) {
+            // Ensure necessary inputs exist
+            if(!document.getElementById(`reply-file-${reviewId}`)) {
+                const card = box.querySelector('.card');
+                const fileInput = document.createElement('input');
+                fileInput.type = 'file';
+                fileInput.id = `reply-file-${reviewId}`;
+                fileInput.style.display = 'none';
+                fileInput.onchange = (e) => handleReplyFiles(reviewId, e.target.files);
+                card.appendChild(fileInput);
+
+                const previewDiv = document.createElement('div');
+                previewDiv.id = `reply-preview-${reviewId}`;
+                previewDiv.className = 'd-flex flex-wrap gap-2 mb-2 p-1';
+                card.insertBefore(previewDiv, box.querySelector('textarea'));
+            }
+        }
+    }
+
+    function insertTool(reviewId, type, btn) {
+        if(type === 'emoji') {
+            const existing = document.getElementById(`ep-${reviewId}`);
+            if(existing) {
+                existing.remove();
+                return;
+            }
+            
+            const template = document.getElementById('emojiPickerTemplate').cloneNode(true);
+            template.style.display = 'block';
+            template.id = `ep-${reviewId}`;
+            const picker = template.querySelector('.emoji-picker');
+            
+            // Re-bind click events for this specific reviewId
+            picker.querySelectorAll('.emoji-item').forEach(item => {
+                const emoji = item.innerText;
+                item.onclick = () => {
+                    const area = document.getElementById(`reply-text-${reviewId}`);
+                    const start = area.selectionStart;
+                    const end = area.selectionEnd;
+                    area.value = area.value.substring(0, start) + emoji + area.value.substring(end);
+                    area.focus();
+                    template.remove();
+                };
+            });
+
+            // Position near button
+            const rect = btn.getBoundingClientRect();
+            template.style.position = 'fixed';
+            template.style.zIndex = '10000';
+            template.style.left = rect.left + 'px';
+            template.style.top = (rect.top + rect.height + 5) + 'px';
+            
+            document.body.appendChild(template);
+            
+            // Close when clicking outside
+            document.addEventListener('click', function closeEP(e) {
+                if(!template.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
+                    template.remove();
+                    document.removeEventListener('click', closeEP);
+                }
+            });
+
+        } else if(type === 'attach' || type === 'gallery') {
+            document.getElementById(`reply-file-${reviewId}`).click();
+        }
+    }
+
+    function handleReplyFiles(reviewId, files) {
+        const previewDiv = document.getElementById(`reply-preview-${reviewId}`);
+        previewDiv.innerHTML = '';
+        Array.from(files).forEach(file => {
+            if(file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.width = '60px';
+                    img.style.height = '60px';
+                    img.style.objectFit = 'cover';
+                    img.className = 'rounded border shadow-sm';
+                    previewDiv.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                const badge = document.createElement('span');
+                badge.className = 'badge bg-secondary p-2';
+                badge.innerHTML = `<i class="bi bi-file-earmark me-1"></i> ${file.name}`;
+                previewDiv.appendChild(badge);
+            }
+        });
     }
 
     function submitReply(reviewId) {
@@ -739,24 +846,27 @@
         const text = textArea.value;
         if (!text.trim()) return;
 
-        $.post('/Review/Reply', { reviewId: reviewId, replyText: text }, function(data) {
-            if (data.success) {
-                location.reload();
+        // Note: For real file upload, use FormData
+        const formData = new FormData();
+        formData.append('reviewId', reviewId);
+        formData.append('replyText', text);
+        const files = document.getElementById(`reply-file-${reviewId}`).files;
+        for(let i=0; i<files.length; i++) {
+            formData.append('attachments', files[i]);
+        }
+
+        $.ajax({
+            url: '/Review/Reply',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(data) {
+                if (data.success) {
+                    location.reload();
+                }
             }
         });
-    }
-
-    function insertTool(reviewId, type) {
-        const area = document.getElementById(`reply-text-${reviewId}`);
-        let content = "";
-        if(type === 'emoji') content = "😊";
-        if(type === 'attach') content = "[Attachment]";
-        if(type === 'gallery') content = "[Image]";
-        
-        const start = area.selectionStart;
-        const end = area.selectionEnd;
-        area.value = area.value.substring(0, start) + content + area.value.substring(end);
-        area.focus();
     }
 
     document.querySelectorAll('.size-select').forEach(radio => {
