@@ -1,4 +1,4 @@
-﻿using E_ShoppingManagement.Data;
+using E_ShoppingManagement.Data;
 using E_ShoppingManagement.Models;
 using E_ShoppingManagement.ViewModels;
 using Microsoft.AspNetCore.Identity;
@@ -62,6 +62,24 @@ namespace E_ShoppingManagement.Controllers
                 ModelState.AddModelError(string.Empty, "Invalid Login Attempt.");
                 return View(model);
             }
+
+            // Update Customer/Employee/DeliveryMan status to Active on login
+            var customer = _context.Customers.FirstOrDefault(c => c.UserId == user.Id);
+            if (customer != null)
+            {
+                customer.Status = "Active";
+            }
+            var employee = _context.Employees.FirstOrDefault(e => e.UserId == user.Id);
+            if (employee != null)
+            {
+                employee.Status = "Active";
+            }
+            var dm = _context.DeliveryMen.FirstOrDefault(d => d.UserId == user.Id);
+            if (dm != null)
+            {
+                dm.Status = "Active";
+            }
+            await _context.SaveChangesAsync();
 
             // Check ReturnUrl first
             if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))

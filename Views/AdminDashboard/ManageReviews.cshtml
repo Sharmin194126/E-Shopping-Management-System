@@ -59,10 +59,10 @@
                                     <span class="text-muted small">No images</span>
                                 }
                             </td>
-                            <td>
+                            <td style="min-width: 120px;">
                                 <form asp-action="UpdateReviewStatus" method="post" class="d-flex align-items-center">
                                     <input type="hidden" name="id" value="@item.Id" />
-                                    <select name="status" class="form-select form-select-sm me-2" onchange="this.form.submit()">
+                                    <select name="status" class="form-select form-select-sm" style="min-width: 100px; font-size: 12px; height: 32px;" onchange="this.form.submit()">
                                         <option value="Pending" selected="@(item.Status == "Pending")">Pending</option>
                                         <option value="Active" selected="@(item.Status == "Active")">Approved</option>
                                         <option value="Rejected" selected="@(item.Status == "Rejected")">Rejected</option>
