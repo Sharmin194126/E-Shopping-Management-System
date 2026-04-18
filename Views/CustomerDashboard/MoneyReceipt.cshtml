@@ -37,6 +37,20 @@
             border-radius: 10px;
             opacity: 0.8;
         }
+        .theme-back-btn { 
+            background: #532374; 
+            color: white; 
+            padding: 10px 25px; 
+            border-radius: 50px; 
+            text-decoration: none; 
+            font-weight: 600; 
+            transition: all 0.3s ease; 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 8px; 
+            border: none;
+        }
+        .theme-back-btn:hover { background: #3d1a55; color: white; transform: translateX(-5px); }
         @@media print {
             .no-print { display: none; }
             body { background: #f2efe9; padding: 0; }
@@ -55,7 +69,7 @@
     <div class="receipt-container">
         <div class="receipt-header d-flex justify-content-between align-items-center">
             <div>
-                <div class="company-name" style="color:#532374;">Moon Shoe</div>
+                <div class="company-name" style="color:#532374;">E-Shop</div>
                 <div>@company?.Address</div>
                 <div>Phone: @company?.ContactNumber</div>
                 <div>Email: @company?.Email</div>

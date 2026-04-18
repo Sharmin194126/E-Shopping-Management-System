@@ -73,13 +73,13 @@
             <div class="reviews row g-3">
                 @foreach (var r in Model.RecentReviews)
                 {
-                    <div class="col-md-6 mb-4">
-                        <div class="review-box h-100" style="width: 75%; margin: 0 auto;">
-                            <div class="review-head d-flex align-items-center mb-2">
-                                <strong class="small" style="color: #000000 !important; font-weight: 800; font-size: 1rem;">@r.CustomerName</strong>
+                    <div class="col-md-3 mb-4">
+                        <div class="review-box h-100">
+                            <div class="review-head d-flex align-items-center mb-1">
+                                <strong class="small" style="color: #000000 !important; font-weight: 700; font-size: 0.85rem;">@r.CustomerName</strong>
                             </div>
-                            <div class="rating text-warning small mb-1">@RenderStars(r.Rating)</div>
-                            <p class="small text-muted mb-0" style="font-size: 0.9rem; line-height: 1.6; color: #333 !important;">"@r.Comment"</p>
+                            <div class="rating text-warning mb-1" style="font-size: 0.7rem;">@RenderStars(r.Rating)</div>
+                            <p class="small text-muted mb-0" style="font-size: 0.8rem; line-height: 1.4; color: #333 !important;">"@r.Comment"</p>
                         </div>
                     </div>
                 }
@@ -109,9 +109,9 @@
     .footer-nav-links a:hover { color: #ffffff; text-decoration: underline; }
     .review-box {
         background: #fdfdfd;
-        padding: 15px;
+        padding: 10px 15px;
         border-radius: 12px;
         border: 1px solid #eeeeee;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        box-shadow: 0 1px 4px rgba(0,0,0,0.01);
     }
 </style>

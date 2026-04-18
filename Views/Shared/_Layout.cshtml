@@ -90,7 +90,10 @@
                 </div>
 
                 <div class="topbar-right d-flex justify-content-end align-items-center gap-4" style="width: 280px;">
-                    <a href="#" onclick="document.getElementById('searchForm').classList.toggle('d-none'); return false;" class="topbar-link"><i class="bi bi-search" style="font-size: 1.1rem;"></i></a>@if (User.Identity.IsAuthenticated)
+                    <a href="#" onclick="document.getElementById('searchForm').classList.toggle('d-none'); return false;" class="topbar-link">
+                        <i class="bi bi-search" style="font-size: 1.1rem;"></i>
+                    </a>
+                    @if (User.Identity.IsAuthenticated)
                     {
                         <div class="cart-wrapper">
                             @await Component.InvokeAsync("CartSummary")

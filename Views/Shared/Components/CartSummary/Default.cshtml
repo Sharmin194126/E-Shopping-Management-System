@@ -1,11 +1,10 @@
 @model int
 
-<li class="nav-item">
-    <a class="nav-link text-dark" href="/Cart">
-        🛒 Cart <span class="badge bg-warning text-dark">@Model</span>
+    <a class="nav-link text-white p-0 d-flex align-items-center" href="/Cart" style="transition: color 0.3s ease;">
+        <i class="bi bi-cart3" style="font-size: 1.1rem;"></i>
+        <span class="badge rounded-pill bg-warning text-dark ms-1" style="font-size: 0.65rem;">@Model</span>
         @if (ViewBag.TotalAmount > 0)
         {
-            <span class="badge bg-success">৳@(ViewBag.TotalAmount is decimal or double or int or float ? ((decimal)ViewBag.TotalAmount).ToString("#,##0") : ViewBag.TotalAmount)</span>
+            <span class="ms-2 fw-bold" style="font-size: 0.9rem; color: #ffffff;">৳@(ViewBag.TotalAmount is decimal or double or int or float ? ((decimal)ViewBag.TotalAmount).ToString("#,##0") : ViewBag.TotalAmount)</span>
         }
     </a>
-</li>
