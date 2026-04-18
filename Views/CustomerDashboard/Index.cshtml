@@ -1,3 +1,4 @@
+@using Microsoft.AspNetCore.Identity
 @model IEnumerable<E_ShoppingManagement.Models.Order>
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -49,6 +50,8 @@
                     <a href="/CustomerDashboard" class="list-group-item list-group-item-action active"><i class="bi bi-grid-1x2 me-2"></i>Dashboard</a>
                     <a href="/CustomerDashboard/Profile" class="list-group-item list-group-item-action"><i class="bi bi-person me-2"></i>My Profile</a>
                     <a href="/CustomerDashboard/Orders" class="list-group-item list-group-item-action"><i class="bi bi-cart3 me-2"></i>My Orders</a>
+                    <a href="/CustomerDashboard/Notifications" class="list-group-item list-group-item-action"><i class="bi bi-bell me-2"></i>Notifications</a>
+                    <a href="/CustomerDashboard/Messages" class="list-group-item list-group-item-action"><i class="bi bi-chat-dots me-2"></i>Messages</a>
                     <a href="/Cart" class="list-group-item list-group-item-action"><i class="bi bi-bag me-2"></i>My Cart</a>
                     <a href="/Home/Tracking" class="list-group-item list-group-item-action text-primary"><i class="bi bi-geo-alt me-2"></i>Track Order</a>
                 </div>
@@ -57,60 +60,92 @@
 
         <!-- Main Content -->
         <div class="col-md-9">
-            <h3 class="mb-4 fw-bold" style="color:#532374;"><i class="bi bi-grid-1x2 me-2"></i>My Dashboard</h3>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="fw-bold mb-0" style="color:#532374;"><i class="bi bi-grid-1x2 me-2"></i>My Dashboard</h3>
+                <div class="d-flex align-items-center gap-3">
+                    @{
+                        var dbContext = Context.RequestServices.GetRequiredService<E_ShoppingManagement.Data.AppDbContext>();
+                        var userMgr = Context.RequestServices.GetRequiredService<UserManager<E_ShoppingManagement.Models.Users>>();
+                        var userObj = await userMgr.GetUserAsync(User);
+                        var lastCheckTime = userObj?.LastNotificationCheck ?? DateTime.MinValue;
+                        var customerObj = dbContext.Customers.FirstOrDefault(c => c.UserId == userObj.Id);
+                        var newCount = customerObj != null ? dbContext.Orders.Count(o => o.CustomerId == customerObj.Id && o.CreatedAt > lastCheckTime) : 0;
+                    }
+                    <a href="/CustomerDashboard/Notifications" class="position-relative text-decoration-none" title="Notifications">
+                        <i class="bi bi-bell-fill" style="font-size: 1.6rem; color: #532374;"></i>
+                        @if (newCount > 0)
+                        {
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:0.65rem; border: 2px solid #fff;">
+                                @newCount
+                            </span>
+                        }
+                    </a>
+                </div>
+            </div>
             
             <style>
-                .stat-card-hover { transition: transform 0.3s ease, box-shadow 0.3s ease; }
-                .stat-card-hover:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.12) !important; z-index: 10; }
+                .stat-card-premium {
+                    border-radius: 16px;
+                    padding: 24px 22px;
+                    display: flex; 
+                    align-items: center; 
+                    justify-content: space-between;
+                    color: #fff !important;
+                    box-shadow: 0 6px 20px rgba(83, 35, 116, 0.15);
+                    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+                    min-height: 115px;
+                    border: none;
+                    position: relative;
+                    overflow: hidden;
+                    text-decoration: none !important;
+                    cursor: pointer;
+                }
+                .stat-card-premium:hover { transform: translateY(-6px) scale(1.02); box-shadow: 0 12px 30px rgba(83, 35, 116, 0.25); }
+                .stat-card-premium::before { content: ''; position: absolute; top: -20px; right: -20px; width: 100px; height: 100px; background: rgba(255,255,255,0.1); border-radius: 50%; z-index: 0; }
+                .stat-card-content { position: relative; z-index: 1; }
+                .stat-card-label { font-size: 11px; font-weight: 700; letter-spacing: 1px; opacity: 0.9; margin-bottom: 6px; text-transform: uppercase; }
+                .stat-card-value { font-size: 32px; font-weight: 800; line-height: 1; }
+                .stat-card-icon { width: 60px; height: 60px; border-radius: 14px; background: rgba(255,255,255,0.22); display: flex; align-items: center; justify-content: center; font-size: 26px; flex-shrink: 0; position: relative; z-index: 1; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+                .card-variant-green { background: linear-gradient(135deg, #065f46 0%, #10b981 100%); }
+                .card-variant-purple { background: linear-gradient(135deg, #532374 0%, #7c3aed 100%); }
+                .card-variant-orange { background: linear-gradient(135deg, #9a3412 0%, #f97316 100%); }
             </style>
 
             <div class="row mb-4 g-3">
                 <div class="col-md-4">
-                    <div class="card text-white shadow-sm h-100 stat-card-hover" style="background: linear-gradient(135deg, #1aa385, #117d65); border: none; border-radius: 12px;">
-                        <div class="card-body d-flex justify-content-between align-items-center p-4">
-                            <div>
-                                <h6 class="card-title mb-1 text-uppercase fw-bold" style="letter-spacing: 1px; font-size: 11px; opacity: 0.9;">Total Spent</h6>
-                                <p class="card-text fw-bold mb-0" style="font-size: 28px;"><span style="font-size: 18px;">৳</span>@Model.Where(o => o.OrderStatus == "Delivered").Sum(o => o.TotalAmount).ToString("#,##0")</p>
-                            </div>
-                            <div style="font-size: 40px; opacity: 0.3;">
-                                <i class="bi bi-wallet2"></i>
-                            </div>
+                    <div class="stat-card-premium card-variant-green">
+                        <div class="stat-card-content">
+                            <div class="stat-card-label">Total Spent</div>
+                            <div class="stat-card-value">৳@Model.Where(o => o.OrderStatus == "Delivered").Sum(o => o.TotalAmount).ToString("#,##0")</div>
                         </div>
+                        <div class="stat-card-icon"><i class="bi bi-wallet2"></i></div>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card text-white shadow-sm h-100 stat-card-hover" style="background: linear-gradient(135deg, #532374, #733c9a); border: none; border-radius: 12px;">
-                        <div class="card-body d-flex justify-content-between align-items-center p-4">
-                            <div>
-                                <h6 class="card-title mb-1 text-uppercase fw-bold" style="letter-spacing: 1px; font-size: 11px; opacity: 0.9;">My Orders</h6>
-                                <p class="card-text fw-bold mb-0" style="font-size: 28px;">@Model.Count()</p>
-                            </div>
-                            <div style="font-size: 40px; opacity: 0.3;">
-                                <i class="bi bi-bag-check-fill"></i>
-                            </div>
+                    <a href="/CustomerDashboard/Orders" class="stat-card-premium card-variant-purple">
+                        <div class="stat-card-content">
+                            <div class="stat-card-label">My Orders</div>
+                            <div class="stat-card-value">@Model.Count()</div>
                         </div>
-                    </div>
+                        <div class="stat-card-icon"><i class="bi bi-bag-check-fill"></i></div>
+                    </a>
                 </div>
                 <div class="col-md-4">
-                    <div class="card text-white shadow-sm h-100 stat-card-hover" style="background: linear-gradient(135deg, #f59e0b, #d97706); border: none; border-radius: 12px;">
-                        <div class="card-body d-flex justify-content-between align-items-center p-4">
-                            <div>
-                                <h6 class="card-title mb-1 text-uppercase fw-bold" style="letter-spacing: 0.5px; font-size: 11px; opacity: 0.9;">Pending / Process</h6>
-                                <p class="card-text fw-bold mb-0" style="font-size: 28px;">@Model.Count(o => o.OrderStatus == "Pending" || o.OrderStatus == "Processing")</p>
-                            </div>
-                            <div style="font-size: 40px; opacity: 0.3;">
-                                <i class="bi bi-hourglass-split"></i>
-                            </div>
+                    <div class="stat-card-premium card-variant-orange">
+                        <div class="stat-card-content">
+                            <div class="stat-card-label">Pending / Process</div>
+                            <div class="stat-card-value">@Model.Count(o => o.OrderStatus == "Pending" || o.OrderStatus == "Processing")</div>
                         </div>
+                        <div class="stat-card-icon"><i class="bi bi-hourglass-split"></i></div>
                     </div>
                 </div>
             </div>
 
-            <div class="card shadow-sm border-0" style="border-radius: 12px; overflow:hidden;">
-                <div class="card-header border-bottom-0 p-4" style="background: linear-gradient(135deg, #532374, #3d1a55); color: #fff;">
+            <div class="card shadow-sm border-0" style="border-radius: 16px; overflow:hidden; background: #f8f6f0 !important;">
+                <div class="card-header border-bottom p-4" style="background: #f8f6f0 !important; color: #532374;">
                     <h5 class="mb-0 fw-bold"><i class="bi bi-clock-history me-2" style="opacity: 0.8;"></i>Recent Orders</h5>
                 </div>
-                <div class="card-body p-0">
+                <div class="card-body p-0" style="background: #f8f6f0 !important;">
                     @if (!Model.Any())
                     {
                         <div class="text-center py-5">
@@ -122,7 +157,7 @@
                     else
                     {
                         <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
+                            <table class="table table-hover align-middle mb-0" style="background: #f8f6f0 !important;">
                                 <thead style="background:#f2efe9; color:#532374;">
                                     <tr>
                                         <th class="ps-4" style="width: 70px;">SL</th>
@@ -133,11 +168,11 @@
                                         <th class="text-center pe-4">Action</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody style="background: #f8f6f0 !important;">
                                     @{ var sl = 1; }
                                     @foreach (var order in Model.OrderByDescending(o=>o.CreatedAt).Take(5))
                                     {
-                                        <tr>
+                                        <tr style="background: #f8f6f0 !important;">
                                             <td class="ps-4">@(sl++)</td>
                                             <td class="fw-bold">#@order.Id</td>
                                             <td><small class="text-muted">@order.CreatedAt.ToString("MMM dd, yyyy | hh:mm tt")</small></td>
@@ -157,7 +192,7 @@
                         </div>
                         @if(Model.Count() > 5)
                         {
-                            <div class="text-center p-3 border-top" style="background:#fafafa;">
+                            <div class="text-center p-3 border-top" style="background:#f2efe9;">
                                 <a href="/CustomerDashboard/Orders" class="text-decoration-none fw-bold" style="color:#532374;">View All Orders <i class="bi bi-arrow-right"></i></a>
                             </div>
                         }

@@ -1,0 +1,78 @@
+@model IEnumerable<E_ShoppingManagement.Models.Order>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Notifications";
+    var lastCheck = ViewBag.LastNotificationCheck as DateTime? ?? DateTime.MinValue;
+}
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold mb-0" style="color:#532374;"><i class="bi bi-bell-fill me-2"></i>My Notifications</h3>
+        <a href="/CustomerDashboard" class="theme-back-btn mb-0 shadow">Back to Dashboard</a>
+    </div>
+
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3">
+            <div class="card shadow-sm mb-4 border-0" style="border-radius: 12px;">
+                <div class="list-group list-group-flush customer-sidebar">
+                    <style>
+                        .customer-sidebar .list-group-item.active { background-color: #f8f6f0 !important; border-color: #532374 !important; border-left: 4px solid #532374 !important; color: #532374 !important; font-weight: 700; }
+                        .customer-sidebar .list-group-item { padding: 14px 20px; transition: 0.2s ease; color: #475569; border: none; border-bottom: 1px solid #f1f5f9; border-left: 4px solid transparent; }
+                        .customer-sidebar .list-group-item:last-child { border-bottom: none; }
+                        .customer-sidebar .list-group-item:hover:not(.active) { background-color: #f8f6f0; color: #532374; border-left-color: #e6e2db; }
+                    </style>
+                    <a href="/CustomerDashboard" class="list-group-item list-group-item-action"><i class="bi bi-grid-1x2 me-2"></i>Dashboard</a>
+                    <a href="/CustomerDashboard/Profile" class="list-group-item list-group-item-action"><i class="bi bi-person me-2"></i>My Profile</a>
+                    <a href="/CustomerDashboard/Orders" class="list-group-item list-group-item-action"><i class="bi bi-cart3 me-2"></i>My Orders</a>
+                    <a href="/CustomerDashboard/Notifications" class="list-group-item list-group-item-action active"><i class="bi bi-bell me-2"></i>Notifications</a>
+                    <a href="/CustomerDashboard/Messages" class="list-group-item list-group-item-action"><i class="bi bi-chat-dots me-2"></i>Messages</a>
+                    <a href="/Cart" class="list-group-item list-group-item-action"><i class="bi bi-bag me-2"></i>My Cart</a>
+                    <a href="/Home/Tracking" class="list-group-item list-group-item-action text-primary"><i class="bi bi-geo-alt me-2"></i>Track Order</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="col-md-9">
+            <div class="card shadow-sm border-0" style="border-radius: 12px;">
+                <div class="card-body p-0">
+                    @if (!Model.Any())
+                    {
+                        <div class="text-center py-5">
+                            <i class="bi bi-bell-slash text-muted" style="font-size: 4rem;"></i>
+                            <p class="mt-3 fs-5 text-muted">No notifications yet.</p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="list-group list-group-flush">
+                            @foreach (var order in Model)
+                            {
+                                bool isNew = order.CreatedAt > lastCheck;
+                                <a href="/CustomerDashboard/OrderDetails/@order.Id" class="list-group-item list-group-item-action p-4 @(isNew ? "bg-light border-start border-4 border-primary" : "")">
+                                    <div class="d-flex w-100 justify-content-between align-items-center">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="rounded-circle bg-primary bg-opacity-10 p-3 text-primary">
+                                                <i class="bi @(order.OrderStatus == "Delivered" ? "bi-check-circle" : (order.OrderStatus == "Cancelled" ? "bi-x-circle" : "bi-box-seam")) fs-4"></i>
+                                            </div>
+                                            <div>
+                                                <h6 class="mb-1 fw-bold">Order #@order.Id Update</h6>
+                                                <p class="mb-1 text-muted">Your order is currently <strong>@order.OrderStatus</strong>.</p>
+                                                <small class="text-secondary"><i class="bi bi-clock me-1"></i>@order.CreatedAt.ToString("MMM dd, yyyy | hh:mm tt")</small>
+                                            </div>
+                                        </div>
+                                        @if (isNew)
+                                        {
+                                            <span class="badge rounded-pill bg-danger">NEW</span>
+                                        }
+                                    </div>
+                                </a>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

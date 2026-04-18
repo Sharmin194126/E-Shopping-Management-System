@@ -6,12 +6,22 @@
 
 <style>
     @@media print {
-        @@page { margin: 0.5cm; }
-        body { background: #ffffff !important; font-size: 10pt; width: 100% !important; margin: 0 !important; padding: 0 !important; }
-        .d-print-none, .admin-sidebar, .dm-sidebar, .admin-header, .shoegee-header, .sidebar, .search-box, nav, footer, .theme-back-btn, .btn { 
+        @@page { 
+            size: auto; 
+            margin: 5mm; 
+        }
+        body { 
+            background: #ffffff !important; 
+            font-size: 9pt; 
+            width: 100% !important; 
+            margin: 0 !important; 
+            padding: 0 !important; 
+            -webkit-print-color-adjust: exact; 
+        }
+        .d-print-none, .admin-sidebar, .dm-sidebar, .admin-header, .shoegee-header, .sidebar, .search-box, nav, footer, .theme-back-btn, .btn, .navbar, .header-top { 
             display: none !important; 
         }
-        .admin-main, .dm-main, .container { 
+        .admin-main, .dm-main, .container, .row, .col-md-8, .col-md-4 { 
             margin: 0 !important; 
             padding: 0 !important;
             width: 100% !important;
@@ -19,18 +29,46 @@
             position: relative !important;
             left: 0 !important;
             top: 0 !important;
+            float: none !important;
+            display: block !important;
         }
         .print-container { 
             display: block !important; 
             width: 100% !important; 
             color: #000 !important;
-            padding: 20px !important;
+            padding: 10px !important;
             background: #fff !important;
         }
-        .print-header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; }
-        .print-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        .print-table th, .print-table td { border: 1px solid #000; padding: 8px; text-align: left; }
-        .print-table th { background-color: #f2efe9 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        .print-header { 
+            text-align: center; 
+            border-bottom: 2px solid #000; 
+            padding-bottom: 10px; 
+            margin-bottom: 20px; 
+        }
+        .print-table { 
+            width: 100% !important; 
+            border-collapse: collapse; 
+            margin-top: 15px; 
+            table-layout: auto !important; 
+        }
+        .print-table th, .print-table td { 
+            border: 1px solid #000; 
+            padding: 6px; 
+            text-align: left; 
+            word-wrap: break-word; 
+        }
+        .print-table th { 
+            background-color: #f2efe9 !important; 
+            -webkit-print-color-adjust: exact; 
+            print-color-adjust: exact; 
+        }
+        /* Ensure columns fit */
+        .print-table th:nth-child(1), .print-table td:nth-child(1) { width: 30%; }
+        .print-table th:nth-child(2), .print-table td:nth-child(2) { width: 10%; }
+        .print-table th:nth-child(3), .print-table td:nth-child(3) { width: 15%; }
+        .print-table th:nth-child(4), .print-table td:nth-child(4) { width: 10%; }
+        .print-table th:nth-child(5), .print-table td:nth-child(5) { width: 15%; }
+        .print-table th:nth-child(6), .print-table td:nth-child(6) { width: 20%; }
     }
 </style>
 
@@ -39,11 +77,11 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Order SL @Model.Id Details</h2>
         <div class="d-flex gap-2">
+            <a href="javascript:history.back()" class="theme-back-btn mb-0">
+                Back
+            </a>
             @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
             {
-                <a href="javascript:history.back()" class="theme-back-btn mb-0">
-                    Back
-                </a>
                 <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit / Manage</a>
             }
             <button onclick="window.print()" class="btn btn-outline-primary"><i class="bi bi-printer"></i> Print Receipt</button>

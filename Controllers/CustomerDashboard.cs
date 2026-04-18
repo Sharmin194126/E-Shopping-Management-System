@@ -1,4 +1,4 @@
-﻿using E_ShoppingManagement.Data;
+using E_ShoppingManagement.Data;
 using E_ShoppingManagement.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -113,7 +113,6 @@ namespace E_ShoppingManagement.Controllers
             if (order == null) return NotFound();
             
             // Only allow if paid (as per user request: "when they paid on online")
-            // But usually we show receipt whenever payment is done.
             if (order.PaymentStatus != "Paid")
             {
                 TempData["Message"] = "Money receipt is only available for paid orders.";
@@ -122,6 +121,45 @@ namespace E_ShoppingManagement.Controllers
 
             ViewBag.CompanyInfo = await _context.FooterInfos.FirstOrDefaultAsync();
             return View(order);
+        }
+
+        public async Task<IActionResult> Notifications()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return RedirectToAction("Login", "Account");
+
+            var customer = await _context.Customers.FirstOrDefaultAsync(c => c.UserId == user.Id);
+            if (customer == null) return NotFound();
+
+            ViewBag.LastNotificationCheck = user.LastNotificationCheck ?? DateTime.UtcNow.AddDays(-1);
+            user.LastNotificationCheck = DateTime.UtcNow;
+            await _userManager.UpdateAsync(user);
+
+            var orders = await _context.Orders
+                .Where(o => o.CustomerId == customer.Id)
+                .OrderByDescending(o => o.CreatedAt)
+                .Take(30)
+                .ToListAsync();
+
+            ViewBag.CustomerName = customer.Name;
+            return View(orders);
+        }
+
+        public async Task<IActionResult> Messages()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return RedirectToAction("Login", "Account");
+
+            var customer = await _context.Customers.FirstOrDefaultAsync(c => c.UserId == user.Id);
+            if (customer == null) return NotFound();
+
+            var messages = await _context.ContactMessages
+                .Where(m => m.Email == user.Email)
+                .OrderByDescending(m => m.CreatedAt)
+                .ToListAsync();
+
+            ViewBag.CustomerName = customer.Name;
+            return View(messages);
         }
     }
 }

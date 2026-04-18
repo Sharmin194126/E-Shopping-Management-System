@@ -16,36 +16,44 @@
                     <h5>@Model.Name</h5>
                     <p class="text-muted">Customer</p>
                 </div>
-                <div class="list-group list-group-flush">
-                    <a href="/CustomerDashboard" class="list-group-item list-group-item-action">Dashboard</a>
-                    <a href="/CustomerDashboard/Profile" class="list-group-item list-group-item-action active">My Profile</a>
-                    <a href="/CustomerDashboard/Orders" class="list-group-item list-group-item-action">My Orders</a>
-                    <a href="/Cart" class="list-group-item list-group-item-action">My Cart</a>
-                    <a href="/Home/Tracking" class="list-group-item list-group-item-action fw-bold text-primary"><i class="bi bi-geo-alt"></i> Track Order</a>
+                <div class="list-group list-group-flush customer-sidebar">
+                    <style>
+                        .customer-sidebar .list-group-item.active { background-color: #f8f6f0 !important; border-color: #532374 !important; border-left: 4px solid #532374 !important; color: #532374 !important; font-weight: 700; }
+                        .customer-sidebar .list-group-item { padding: 14px 20px; transition: 0.2s ease; color: #475569; border: none; border-bottom: 1px solid #f1f5f9; border-left: 4px solid transparent; }
+                        .customer-sidebar .list-group-item:last-child { border-bottom: none; }
+                        .customer-sidebar .list-group-item:hover:not(.active) { background-color: #f8f6f0; color: #532374; border-left-color: #e6e2db; }
+                    </style>
+                    <a href="/CustomerDashboard" class="list-group-item list-group-item-action"><i class="bi bi-grid-1x2 me-2"></i>Dashboard</a>
+                    <a href="/CustomerDashboard/Profile" class="list-group-item list-group-item-action active"><i class="bi bi-person me-2"></i>My Profile</a>
+                    <a href="/CustomerDashboard/Orders" class="list-group-item list-group-item-action"><i class="bi bi-cart3 me-2"></i>My Orders</a>
+                    <a href="/CustomerDashboard/Notifications" class="list-group-item list-group-item-action"><i class="bi bi-bell me-2"></i>Notifications</a>
+                    <a href="/CustomerDashboard/Messages" class="list-group-item list-group-item-action"><i class="bi bi-chat-dots me-2"></i>Messages</a>
+                    <a href="/Cart" class="list-group-item list-group-item-action"><i class="bi bi-bag me-2"></i>My Cart</a>
+                    <a href="/Home/Tracking" class="list-group-item list-group-item-action text-primary"><i class="bi bi-geo-alt me-2"></i>Track Order</a>
                 </div>
             </div>
         </div>
 
         <div class="col-md-9">
-            <h2 class="mb-4">My Profile</h2>
+            <h2 class="mb-4 fw-bold" style="color:#532374;"><i class="bi bi-person-circle me-2"></i>My Profile</h2>
             
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <div class="row mb-3">
-                        <div class="col-md-4 font-weight-bold">Name:</div>
-                        <div class="col-md-8">@Model.Name</div>
+            <div class="card shadow-sm border-0" style="border-radius:12px;">
+                <div class="card-body p-4">
+                    <div class="row mb-4 align-items-center">
+                        <div class="col-md-3 fw-bold text-muted">Full Name:</div>
+                        <div class="col-md-9 fs-5">@Model.Name</div>
                     </div>
-                    <div class="row mb-3">
-                        <div class="col-md-4 font-weight-bold">Email:</div>
-                        <div class="col-md-8">@Model.Email</div>
+                    <div class="row mb-4 align-items-center">
+                        <div class="col-md-3 fw-bold text-muted">Email Address:</div>
+                        <div class="col-md-9 fs-5">@Model.Email</div>
                     </div>
-                    <div class="row mb-3">
-                        <div class="col-md-4 font-weight-bold">Status:</div>
-                        <div class="col-md-8"><span class="badge bg-success">@Model.Status</span></div>
+                    <div class="row mb-4 align-items-center">
+                        <div class="col-md-3 fw-bold text-muted">Account Status:</div>
+                        <div class="col-md-9"><span class="badge bg-success px-3 py-2">@Model.Status</span></div>
                     </div>
-                     <div class="row mb-3">
-                        <div class="col-md-4 font-weight-bold">Member Since:</div>
-                        <div class="col-md-8">@Model.CreatedAt.ToString("MMMM dd, yyyy")</div>
+                     <div class="row mb-4 align-items-center">
+                        <div class="col-md-3 fw-bold text-muted">Member Since:</div>
+                        <div class="col-md-9 fs-5 text-secondary">@Model.CreatedAt.ToString("dd/MM/yyyy hh:mm tt")</div>
                     </div>
                 </div>
             </div>

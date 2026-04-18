@@ -212,7 +212,7 @@
                                     {
                                         case "Delivered": <span class="badge bg-success">Delivered</span> break;
                                         case "Returned": <span class="badge bg-danger">Returned</span> break;
-                                        case "On the way": <span class="badge bg-info">On the way</span> break;
+                                        case "Shipped": <span class="badge bg-info">Shipped</span> break;
                                         case "Waiting": <span class="badge bg-secondary">Waiting</span> break;
                                         default: <span class="badge bg-warning text-dark">@order.OrderStatus</span> break;
                                     }
@@ -259,7 +259,7 @@
                                             <div class="mb-2">
                                                 <label class="small fw-bold">Change Status:</label>
                                                 <select name="status" class="form-select form-select-sm" onchange="toggleReason(this, @order.Id)">
-                                                    <option value="On the way">On the way</option>
+                                                    <option value="Shipped">Shipped</option>
                                                     <option value="Delivered">Delivered</option>
                                                     <option value="Waiting">Waiting (Not received)</option>
                                                     <option value="Returned">Return Parcel</option>

@@ -90,7 +90,7 @@ namespace E_ShoppingManagement.Controllers
 
             ViewBag.DeliveryMan = deliverer;
             ViewBag.Delivered = orders.Count(o => o.OrderStatus == "Delivered");
-            ViewBag.Pending = orders.Count(o => o.OrderStatus == "Shipping" || o.OrderStatus == "Processed" || o.OrderStatus == "On the way");
+            ViewBag.Pending = orders.Count(o => o.OrderStatus == "Shipping" || o.OrderStatus == "Processed" || o.OrderStatus == "Shipped");
             ViewBag.Returned = orders.Count(o => o.OrderStatus == "Returned");
 
             return View(orders);
