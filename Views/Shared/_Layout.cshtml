@@ -94,19 +94,19 @@
                     
                     @if (User.Identity.IsAuthenticated)
                     {
+                        <div class="cart-wrapper">
+                            @await Component.InvokeAsync("CartSummary")
+                        </div>
                         <!-- Notification Button -->
-                        <div class="me-1">
+                        <div class="ms-3">
                             <a href="@notificationLink" class="topbar-link position-relative text-decoration-none" title="View Notifications">
-                                <i class="bi bi-bell-fill" style="font-size: 1.2rem; color: #532374; transition: color 0.3s ease;"></i>
+                                <i class="bi bi-bell-fill" style="font-size: 1.2rem; color: #ffffff; transition: color 0.3s ease;"></i>
                                 @if (newCount > 0) {
                                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:0.6rem;">
                                         @newCount
                                     </span>
                                 }
                             </a>
-                        </div>
-                        <div class="cart-wrapper">
-                            @await Component.InvokeAsync("CartSummary")
                         </div>
                         <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline m-0 p-0">
                             <button type="submit" class="btn btn-link topbar-link p-0 text-decoration-none border-0" style="font-size: 14px;">Logout</button>

@@ -73,13 +73,13 @@
             <div class="reviews row g-3">
                 @foreach (var r in Model.RecentReviews)
                 {
-                    <div class="col-md-4">
-                        <div class="review-box">
+                    <div class="col-md-6 mb-4">
+                        <div class="review-box h-100" style="width: 100%;">
                             <div class="review-head d-flex align-items-center mb-2">
-                                <strong class="small" style="color: #FF6B35; font-weight: 800;">@r.CustomerName</strong>
+                                <strong class="small" style="color: #000000; font-weight: 800; font-size: 1rem;">@r.CustomerName</strong>
                             </div>
                             <div class="rating text-warning small mb-1">@RenderStars(r.Rating)</div>
-                            <p class="small text-muted mb-0">"@r.Comment"</p>
+                            <p class="small text-muted mb-0" style="font-size: 0.9rem; line-height: 1.6;">"@r.Comment"</p>
                         </div>
                     </div>
                 }

@@ -1560,3 +1560,25 @@ thead.table-dark, thead.table-light, thead.bg-dark, thead.bg-light {
 .modal-content, .offcanvas { background-color: #f2efe9 !important; }
 
 .card, .table, .table-light, .list-group-item, .dropdown-menu { background-color: #f2efe9 !important; }
+
+/* =====================
+   GLOBAL DROPDOWN ARROW (caret up-down)
+===================== */
+select {
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23532374' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 15l5 5 5-5M7 9l5-5 5 5'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 1rem center !important;
+    background-size: 1.2em !important;
+    padding-right: 2.5rem !important;
+}
+
+/* =====================
+   DELIVERY MAN CARD HOVER
+===================== */
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1) !important;
+}

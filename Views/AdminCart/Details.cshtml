@@ -60,7 +60,7 @@
                             <td><span class="badge bg-secondary">@item.Quantity.ToString("#,##0")</span></td>
                             <td style="font-weight: bold; color: #2c3e50;">৳@item.LineTotal.ToString("#,##0")</td>
                             <td>
-                                <form asp-action="RemoveItem" method="post" class="d-inline">
+                                <form asp-action="RemoveItem" method="post" class="d-inline" onsubmit="return confirm('Are you sure you want to remove this item from the cart?');">
                                     <input type="hidden" name="cartItemId" value="@item.CartItemId" />
                                     <input type="hidden" name="cartId" value="@Model.CartId" />
                                     <button type="submit" class="btn btn-sm btn-outline-danger">Remove</button>
@@ -74,7 +74,7 @@
 
         <div class="d-flex justify-content-between align-items-center mt-4 p-3" style="background: #f2efe9; border-radius: 8px;">
             <div>
-                <form asp-action="ClearCart" method="post">
+                <form asp-action="ClearCart" method="post" onsubmit="return confirm('Are you sure you want to clear the entire cart? This action cannot be undone.');">
                     <input type="hidden" name="cartId" value="@Model.CartId" />
                     <button type="submit" class="btn btn-danger btn-sm">Clear Entire Cart</button>
                 </form>
