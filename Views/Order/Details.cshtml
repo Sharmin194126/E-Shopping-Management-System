@@ -83,8 +83,12 @@
             @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
             {
                 <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit / Manage</a>
+                <button onclick="window.print()" class="btn btn-outline-primary"><i class="bi bi-printer"></i> Print Receipt</button>
             }
-            <button onclick="window.print()" class="btn btn-outline-primary"><i class="bi bi-printer"></i> Print Receipt</button>
+            else if (User.IsInRole("Customer"))
+            {
+                <a asp-action="MoneyReceipt" asp-route-id="@Model.Id" class="btn btn-success"><i class="bi bi-receipt"></i> View Receipt</a>
+            }
         </div>
     </div>
 

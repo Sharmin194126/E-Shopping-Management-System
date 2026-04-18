@@ -165,6 +165,7 @@
                                         <th>Date & Time</th>
                                         <th>Total</th>
                                         <th>Status</th>
+                                        <th>Payment</th>
                                         <th class="text-center pe-4">Action</th>
                                     </tr>
                                 </thead>
@@ -180,6 +181,11 @@
                                             <td>
                                                 <span class="badge rounded-pill @(order.OrderStatus == "Delivered" ? "bg-success" : (order.OrderStatus == "Cancelled" ? "bg-danger" : "bg-warning text-dark"))">
                                                     @order.OrderStatus
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="badge rounded-pill @(order.PaymentStatus == "Paid" ? "bg-success" : "bg-danger")">
+                                                    @order.PaymentStatus
                                                 </span>
                                             </td>
                                             <td class="text-center pe-4">

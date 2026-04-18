@@ -193,13 +193,14 @@
                     const steps = document.querySelectorAll('.tracking-step');
                     const trackingLine = document.getElementById('trackingLine');
                     
-                    const statusMap = {
-                        "Pending": 1,
-                        "Processing": 2,
-                        "Shipped": 3,
-                        "Delivered": 4,
-                        "Cancelled": 0 
-                    };
+                        const statusMap = {
+                            "Pending": 1,
+                            "Processing": 2,
+                            "Shipped": 3,
+                            "On the way": 3,
+                            "Delivered": 4,
+                            "Cancelled": 0 
+                        };
                     
                     @if (Model != null)
                     {

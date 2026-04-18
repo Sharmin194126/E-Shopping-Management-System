@@ -97,7 +97,7 @@
                         <td colspan="5" class="bg-light">
                             <div class="d-flex justify-content-between align-items-center">
                                 <span><strong>Payment System:</strong> @(Model.PaymentMethod == "COD" ? "Cash on Delivery" : "Online Payment (" + Model.PaymentMethod + ")")</span>
-                                <span><strong>Payment Status:</strong> <span class="badge bg-success">@Model.PaymentStatus</span></span>
+                                <span><strong>Payment Status:</strong> <span class="badge @(Model.PaymentStatus == "Paid" ? "bg-success" : "bg-danger")">@Model.PaymentStatus</span></span>
                             </div>
                         </td>
                     </tr>

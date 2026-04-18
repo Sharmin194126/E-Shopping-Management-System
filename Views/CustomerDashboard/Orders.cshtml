@@ -11,18 +11,28 @@
 </div>
 <div class="row">
          <div class="col-md-3">
-            <div class="card shadow-sm mb-4">
-                <div class="card-body text-center">
-                     <img src="~/images/user-avatar.png" class="rounded-circle mb-3" style="width: 100px; height: 100px; object-fit: cover;" onerror="this.src='https://via.placeholder.com/100'" />
-                    <h5>@ViewBag.CustomerName</h5>
-                    <p class="text-muted">Customer</p>
+            <div class="card shadow-sm mb-4 border-0" style="border-radius: 12px;">
+                <div class="card-body text-center position-relative" style="border-radius: 12px 12px 0 0; overflow: hidden; padding-top: 40px; background: #fff; border-bottom: 1px solid #f1f5f9;">
+                    <!-- Background Cover -->
+                    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 80px; background: linear-gradient(135deg, #532374, #8b5cf6);"></div>
+                    <img src="@(string.IsNullOrEmpty(ViewBag.ProfilePictureUrl) ? "/images/user-avatar.png" : ViewBag.ProfilePictureUrl)" class="rounded-circle mb-2 shadow position-relative" style="width: 100px; height: 100px; object-fit: cover; border: 4px solid #fff; background: #fff; z-index: 2;" onerror="this.src='/images/user-avatar.png'" />
+                    <h5 class="fw-bold mb-1" style="color: #33312e; position: relative; z-index: 2;">@ViewBag.CustomerName</h5>
+                    <p class="text-muted small mb-0 position-relative" style="z-index: 2;"><i class="bi bi-patch-check-fill text-success me-1"></i>Verified Customer</p>
                 </div>
-                <div class="list-group list-group-flush">
-                    <a href="/CustomerDashboard" class="list-group-item list-group-item-action">Dashboard</a>
-                    <a href="/CustomerDashboard/Profile" class="list-group-item list-group-item-action">My Profile</a>
-                    <a href="/CustomerDashboard/Orders" class="list-group-item list-group-item-action active">My Orders</a>
-                    <a href="/Cart" class="list-group-item list-group-item-action">My Cart</a>
-                    <a href="/Home/Tracking" class="list-group-item list-group-item-action fw-bold text-primary"><i class="bi bi-geo-alt"></i> Track Order</a>
+                <div class="list-group list-group-flush customer-sidebar">
+                    <style>
+                        .customer-sidebar .list-group-item.active { background-color: #f8f6f0 !important; border-color: #532374 !important; border-left: 4px solid #532374 !important; color: #532374 !important; font-weight: 700; }
+                        .customer-sidebar .list-group-item { padding: 14px 20px; transition: 0.2s ease; color: #475569; border: none; border-bottom: 1px solid #f1f5f9; border-left: 4px solid transparent; }
+                        .customer-sidebar .list-group-item:last-child { border-bottom: none; }
+                        .customer-sidebar .list-group-item:hover:not(.active) { background-color: #f8f6f0; color: #532374; border-left-color: #e6e2db; }
+                    </style>
+                    <a href="/CustomerDashboard" class="list-group-item list-group-item-action"><i class="bi bi-grid-1x2 me-2"></i>Dashboard</a>
+                    <a href="/CustomerDashboard/Profile" class="list-group-item list-group-item-action"><i class="bi bi-person me-2"></i>My Profile</a>
+                    <a href="/CustomerDashboard/Orders" class="list-group-item list-group-item-action active"><i class="bi bi-cart3 me-2"></i>My Orders</a>
+                    <a href="/CustomerDashboard/Notifications" class="list-group-item list-group-item-action"><i class="bi bi-bell me-2"></i>Notifications</a>
+                    <a href="/CustomerDashboard/Messages" class="list-group-item list-group-item-action"><i class="bi bi-chat-dots me-2"></i>Messages</a>
+                    <a href="/Cart" class="list-group-item list-group-item-action"><i class="bi bi-bag me-2"></i>My Cart</a>
+                    <a href="/Home/Tracking" class="list-group-item list-group-item-action text-primary"><i class="bi bi-geo-alt me-2"></i>Track Order</a>
                 </div>
             </div>
         </div>
@@ -47,6 +57,7 @@
                                         <th>Date & Time</th>
                                         <th>Total (Inc. VAT)</th>
                                         <th>Status</th>
+                                        <th>Payment</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -62,6 +73,11 @@
                                             <td>
                                                 <span class="badge @(order.OrderStatus == "Delivered" ? "bg-success" : (order.OrderStatus == "Cancelled" ? "bg-danger" : "bg-warning text-dark"))">
                                                     @order.OrderStatus
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="badge @(order.PaymentStatus == "Paid" ? "bg-success" : "bg-danger")">
+                                                    @order.PaymentStatus
                                                 </span>
                                             </td>
                                             <td>

@@ -113,7 +113,7 @@ namespace E_ShoppingManagement.Controllers
                 ZipCode = zipCode,
                 PhoneNumber = phone,
                 PaymentMethod = paymentMethod,
-                PaymentStatus = "Pending",
+                PaymentStatus = isCod ? "Unpaid" : "Pending",
                 OrderDetails = new List<OrderDetails>()
             };
 
