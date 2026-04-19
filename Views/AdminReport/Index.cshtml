@@ -185,9 +185,12 @@
     <!-- Pending stock Section -->
     <div class="col-lg-12">
         <div class="page-card shadow-sm border-0 mb-4 overflow-hidden bg-white" style="border-radius: 12px; border: 1px solid #e6e2db !important;">
-            <div class="p-3 bg-light border-bottom d-flex justify-content-between align-items-center">
-                <h5 class="mb-0 fw-bold text-dark"><i class="bi bi-exclamation-triangle-fill me-2 text-warning"></i>Critical Stock Alerts</h5>
-                <span class="badge bg-warning text-dark rounded-pill" style="font-size: 13px;">@Model.PendingStock.Count() Items Need Attention</span>
+            <div class="p-3 bg-light border-bottom d-flex flex-column gap-2">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-bold text-dark"><i class="bi bi-exclamation-triangle-fill me-2 text-warning"></i>Critical Stock Alerts</h5>
+                    <span class="badge bg-warning text-dark rounded-pill" style="font-size: 13px;">@Model.PendingStock.Count() Items Need Attention</span>
+                </div>
+                <p class="mb-0 text-muted small"><i class="bi bi-info-circle me-1"></i>This table highlights products that currently have critically low stock levels (below a safe threshold) or where the amount of stock currently tied up in unfulfilled (pending) orders exceeds the available on-hand stock. Please review and replenish inventory to prevent order delays or cancellations.</p>
             </div>
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">

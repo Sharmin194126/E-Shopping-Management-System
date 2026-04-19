@@ -113,6 +113,16 @@
             <a asp-controller="Home" asp-action="Tracking" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Tracking" ? "active" : "")">
                 <i class="bi bi-geo-alt me-2"></i>Track Customer Order
             </a>
+
+            <!-- Logout -->
+            <div class="mt-auto px-3 pb-3 pt-4 border-top border-white border-opacity-10" style="margin-top: 20px;">
+                <form asp-controller="Account" asp-action="Logout" method="post">
+                    <button type="submit" class="btn w-100 d-flex align-items-center justify-content-center gap-2" style="background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.30); color: #fca5a5; font-weight: 600; padding: 10px 16px; border-radius: 8px;">
+                        <i class="bi bi-box-arrow-right"></i>
+                        Logout
+                    </button>
+                </form>
+            </div>
         </aside>
 
         <!-- MAIN -->

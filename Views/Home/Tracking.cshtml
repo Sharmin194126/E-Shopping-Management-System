@@ -5,6 +5,9 @@
 }
 
 <div class="container mt-5 mb-5">
+    <div class="d-flex justify-content-end mb-3">
+        <a href="javascript:history.back()" class="theme-back-btn m-0 shadow-sm"><i class="bi bi-arrow-left"></i> Back to Previous Page</a>
+    </div>
     @if (ViewBag.Error != null)
     {
         <div class="alert alert-danger text-center">@ViewBag.Error</div>
