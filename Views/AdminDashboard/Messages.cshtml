@@ -7,7 +7,7 @@
 <style>
     .messenger-container {
         display: flex;
-        height: 75vh;
+        height: calc(100vh - 160px);
         background: #f2efe9;
         border-radius: 12px;
         box-shadow: 0 4px 15px rgba(83,35,116,0.08);
@@ -86,6 +86,7 @@
         flex: 1;
         flex-direction: column;
         display: none;
+        min-height: 0;
     }
 
     .chat-wrapper.active-chat {
@@ -108,6 +109,7 @@
         background: #f2efe9;
         display: flex;
         flex-direction: column;
+        min-height: 0;
     }
     
     .chat-bubble {
@@ -329,11 +331,27 @@
                     {
                         var replies = m.Reply.Split('\n', StringSplitOptions.RemoveEmptyEntries);
                         foreach(var r in replies) {
+                            string text = r;
+                            string fileHtml = "";
+                            if (text.Contains("|FILE:")) {
+                                var parts = text.Split("|FILE:"); text = parts[0];
+                                fileHtml = $"<div class='mt-2'><a href='{parts[1]}' target='_blank' class='text-white text-decoration-underline'><i class='bi bi-paperclip'></i> Attached File</a></div>";
+                            }
+                            if (text.Contains("|IMG:")) {
+                                var parts = text.Split("|IMG:"); text = parts[0];
+                                fileHtml = $"<div class='mt-2'><img src='{parts[1]}' style='max-width:200px; border-radius:8px;' onclick=\"window.open(this.src,'_blank')\" /></div>";
+                            }
+                            if (text.Contains("|VOICE:")) {
+                                var parts = text.Split("|VOICE:"); text = parts[0];
+                                fileHtml = $"<div class='mt-2'><audio controls src='{parts[1]}' style='max-width: 220px; height: 35px;'></audio></div>";
+                            }
+
                             <div class="text-center mb-4 mt-2">
                                 <span class="badge bg-light text-muted border">Replied</span>
                             </div>
                             <div class="chat-bubble sent" style="white-space: pre-line;">
-                                @r
+                                @text
+                                @Html.Raw(fileHtml)
                             </div>
                         }
                     }
@@ -345,19 +363,20 @@
                         
                         <label class="btn btn-light rounded-circle chat-tool-btn text-primary p-2 m-0 me-1" title="Attach file">
                             <i class="bi bi-plus-circle-fill fs-5"></i>
-                            <input type="file" name="attachment" class="d-none" />
+                            <input type="file" name="attachment" class="d-none" onchange="toggleSendBtn(this)" />
                         </label>
                         <label class="btn btn-light rounded-circle chat-tool-btn text-primary p-2 m-0 me-2" title="Attach photo">
                             <i class="bi bi-image fs-5"></i>
-                            <input type="file" name="image" accept="image/*" class="d-none" />
+                            <input type="file" name="image" accept="image/*" class="d-none" onchange="toggleSendBtn(this)" />
                         </label>
                         
                         <div class="chat-input-wrapper flex-grow-1 mx-1">
-                            <input type="text" name="reply" class="chat-input" placeholder="Aa" required autocomplete="off" oninput="toggleSendBtn(this)" />
-                            <i class="bi bi-emoji-smile fs-5 text-primary emoji-btn ms-2"></i>
+                            <input type="text" name="reply" id="chatInput-@m.Id" class="chat-input" placeholder="Aa" required autocomplete="off" oninput="toggleSendBtn(this)" />
+                            <i class="bi bi-emoji-smile fs-5 text-primary emoji-btn ms-2" onclick="openEmojiPicker(this, @m.Id)"></i>
                         </div>
                         
-                        <button type="button" class="btn btn-light rounded-circle chat-tool-btn text-primary p-2 m-0 ms-2 mic-btn" title="Send voice record">
+                        <input type="file" name="voice" id="voiceInput-@m.Id" class="d-none" />
+                        <button type="button" class="btn btn-light rounded-circle chat-tool-btn text-primary p-2 m-0 ms-2 mic-btn" title="Send voice record" onclick="toggleVoiceRecord(this, @m.Id)">
                             <i class="bi bi-mic-fill fs-5"></i>
                         </button>
                         <button type="submit" class="chat-send-btn ms-2 d-none" title="Send Reply">
@@ -369,6 +388,9 @@
         }
     </div>
 </div>
+
+<!-- Include Emoji Picker -->
+@await Html.PartialAsync("_EmojiPicker")
 
 <script>
     function openChat(id, element) {
@@ -396,6 +418,12 @@
         if(element) {
             element.classList.add('active');
         }
+        
+        // Scroll to bottom
+        const chatBody = document.getElementById('chatBody-' + id);
+        if(chatBody) {
+            setTimeout(() => { chatBody.scrollTop = chatBody.scrollHeight; }, 50);
+        }
     }
     
     document.addEventListener("DOMContentLoaded", function() {
@@ -411,6 +439,8 @@
                 if (fallbackChat) {
                     document.getElementById('emptyState').style.display = 'none';
                     fallbackChat.classList.add('active-chat');
+                    const cb = document.getElementById('chatBody-@TempData["OpenChatId"]');
+                    if(cb) cb.scrollTop = cb.scrollHeight;
                 }
             }
             </text>
@@ -421,12 +451,91 @@
         const form = inputEl.closest('form');
         const micBtn = form.querySelector('.mic-btn');
         const sendBtn = form.querySelector('.chat-send-btn');
-        if (inputEl.value.trim() !== '') {
+        
+        const hasText = form.querySelector('.chat-input').value.trim() !== '';
+        const hasAttach = form.querySelector('input[name="attachment"]').files.length > 0;
+        const hasImg = form.querySelector('input[name="image"]').files.length > 0;
+        const hasVoice = form.querySelector('input[name="voice"]').files.length > 0;
+        
+        if (hasText || hasAttach || hasImg || hasVoice) {
             micBtn.classList.add('d-none');
             sendBtn.classList.remove('d-none');
+            if(hasAttach || hasImg) {
+                form.querySelector('.chat-input').removeAttribute('required');
+            }
         } else {
             micBtn.classList.remove('d-none');
             sendBtn.classList.add('d-none');
+            form.querySelector('.chat-input').setAttribute('required', 'required');
+        }
+    }
+
+    function openEmojiPicker(btn, id) {
+        const picker = document.getElementById('emojiPickerTemplate');
+        const targetId = 'chatInput-' + id;
+        if (picker.style.display === 'block' && picker.dataset.targetId == targetId) {
+            picker.style.display = 'none';
+            return;
+        }
+        picker.dataset.targetId = targetId;
+        picker.style.display = 'block';
+
+        const rect = btn.getBoundingClientRect();
+        picker.style.position = 'fixed';
+        picker.style.zIndex = '10000';
+        picker.style.left = Math.max(10, rect.left - 250) + 'px';
+        picker.style.top = (rect.top - 310) + 'px';
+        
+        setTimeout(() => {
+            document.addEventListener('click', function closeEP(e) {
+                if(!picker.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
+                    picker.style.display = 'none';
+                    document.removeEventListener('click', closeEP);
+                }
+            });
+        }, 10);
+    }
+
+    let mediaRecorder;
+    let audioChunks = [];
+    
+    async function toggleVoiceRecord(btn, id) {
+        if (!mediaRecorder || mediaRecorder.state === 'inactive') {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+                
+                mediaRecorder.ondataavailable = e => {
+                    audioChunks.push(e.data);
+                };
+                
+                mediaRecorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    const file = new File([audioBlob], "voice_message.webm", { type: 'audio/webm' });
+                    
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(file);
+                    document.getElementById('voiceInput-' + id).files = dataTransfer.files;
+                    
+                    const textInput = document.getElementById('chatInput-' + id);
+                    textInput.value = "🎤 Voice Message Attached";
+                    textInput.readOnly = true;
+                    toggleSendBtn(textInput);
+                    
+                    stream.getTracks().forEach(track => track.stop());
+                };
+                
+                mediaRecorder.start();
+                btn.style.color = '#dc3545';
+                btn.classList.add('pulse');
+            } catch (err) {
+                alert("Microphone access is required to send voice messages.");
+            }
+        } else {
+            mediaRecorder.stop();
+            btn.style.color = '';
+            btn.classList.remove('pulse');
         }
     }
 </script>

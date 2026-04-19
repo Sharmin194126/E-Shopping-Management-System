@@ -656,18 +656,40 @@ namespace E_ShoppingManagement.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ReplyMessage(int id, string reply)
+        public async Task<IActionResult> ReplyMessage(int id, string reply, IFormFile? attachment, IFormFile? image, IFormFile? voice)
         {
             var msg = await _context.ContactMessages.FindAsync(id);
             if (msg != null)
             {
+                string finalReply = reply ?? "";
+                
+                string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "messages");
+                if (!Directory.Exists(uploadsFolder)) {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+
+                if (attachment != null) {
+                    string fName = Guid.NewGuid().ToString() + Path.GetExtension(attachment.FileName);
+                    using (var fs = new FileStream(Path.Combine(uploadsFolder, fName), FileMode.Create)) { await attachment.CopyToAsync(fs); }
+                    finalReply += $"|FILE:/uploads/messages/{fName}";
+                }
+                if (image != null) {
+                    string fName = Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
+                    using (var fs = new FileStream(Path.Combine(uploadsFolder, fName), FileMode.Create)) { await image.CopyToAsync(fs); }
+                    finalReply += $"|IMG:/uploads/messages/{fName}";
+                }
+                if (voice != null) {
+                    string fName = Guid.NewGuid().ToString() + ".webm";
+                    using (var fs = new FileStream(Path.Combine(uploadsFolder, fName), FileMode.Create)) { await voice.CopyToAsync(fs); }
+                    finalReply += $"|VOICE:/uploads/messages/{fName}";
+                }
+
                 if (!string.IsNullOrEmpty(msg.Reply)) {
-                    msg.Reply += "\n" + reply;
+                    msg.Reply += "\n" + finalReply;
                 } else {
-                    msg.Reply = reply;
+                    msg.Reply = finalReply;
                 }
                 msg.Status = "Replied";
-                // In a real app, you'd send an email here.
                 await _context.SaveChangesAsync();
                 TempData["Message"] = "Reply sent successfully.";
                 TempData["OpenChatId"] = id;

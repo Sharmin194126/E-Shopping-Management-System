@@ -683,81 +683,10 @@
     </div>
 </div>
 
-<!-- Emoji Picker Template (hidden) -->
-<div id="emojiPickerTemplate" style="display: none;">
-    <div class="emoji-picker shadow-lg border rounded bg-white" style="position: absolute; z-index: 9999; width: 300px; border-radius: 15px !important; overflow: hidden; background: #fff !important;">
-        <div class="emoji-tabs bg-light d-flex border-bottom" style="padding: 5px;">
-            <button type="button" class="btn btn-sm btn-light flex-grow-1 active" onclick="switchEmojiTab(this, 'smileys')">😀</button>
-            <button type="button" class="btn btn-sm btn-light flex-grow-1" onclick="switchEmojiTab(this, 'nature')">🌿</button>
-            <button type="button" class="btn btn-sm btn-light flex-grow-1" onclick="switchEmojiTab(this, 'food')">🍕</button>
-            <button type="button" class="btn btn-sm btn-light flex-grow-1" onclick="switchEmojiTab(this, 'activities')">⚽</button>
-            <button type="button" class="btn btn-sm btn-light flex-grow-1" onclick="switchEmojiTab(this, 'objects')">💡</button>
-            <button type="button" class="btn btn-sm btn-light flex-grow-1" onclick="switchEmojiTab(this, 'symbols')">❤️</button>
-        </div>
-        <div class="emoji-content p-3" style="max-height: 250px; overflow-y: auto;">
-            <div id="smileys" class="emoji-tab-pane">
-                @foreach (var e in new[] { "😀", "😃", "😄", "😁", "😆", "😅", "😂", "🤣", "😊", "😇", "🙂", "🙃", "😉", "😌", "😍", "🥰", "😘", "😗", "😙", "😚", "😋", "😛", "😝", "😜", "🤪", "🤨", "🧐", "🤓", "😎", "🤩", "🥳", "😏", "😒", "😞", "😔", "😟", "😕", "🙁", "☹️", "😣", "😖", "😫", "😩", "🥺", "😢", "😭", "😤", "😠", "😡", "🤬", "🤯", "😳", "🥵", "🥶", "😱", "😨", "😰", "😥", "😓", "🤗", "🤔", "🤭", "🤫", "🤥", "😶", "😐", "😑", "😬", "🙄", "😯", "😦", "😧", "😮", "😲", "🥱", "😴", "🤤", "😪", "😵", "🤐", "🥴", "🤢", "🤮", "🤧", "😷", "🤒", "🤕" })
-                { <span class="emoji-item" onclick="selectEmoji(this, '@e')">@e</span> }
-            </div>
-            <div id="nature" class="emoji-tab-pane" style="display:none;">
-                @foreach (var e in new[] { "🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼", "🐻‍❄️", "🐨", "🐯", "🦁", "🐮", "🐷", "🐽", "🐸", "🐵", "🐒", "🦍", "🦧", "🐶", "🐕", "🦮", "🐕‍🦺", "🐩", "🐺", "🦊", "🦝", "🐱", "🐈", "🐈‍⬛", "🦁", "🐯", "🐅", "🐆", "🐴", "🐎", "🦄", "🦓", "🦌", "🦬", "🐮", "🐂", "🐃", "🐄", "🐷", "🐖", "🐗", "🐽", "🐏", "🐑", "🐐", "🐪", "🐫", "🦙", "🦒", "🐘", "🦣", "🦏", "🦛", "🐭", "🐁", "🐀", "🐹", "🐰", "🐇", "🐿️", "🦫", "🦔", "🦇", "🐻", "🐻‍❄️", "🐨", "🐼", "🦥", "🦦", "🦨", "🦘", "🦡", "🐾", "🦃", "🐔", "🐓", "🐣", "🐤", "🐥", "🐦", "🐧", "🕊️", "🦅", "🦆", "🦢", "🦉", "🦤", "🦩", " peacock", "🦜" })
-                { <span class="emoji-item" onclick="selectEmoji(this, '@e')">@e</span> }
-            </div>
-            <div id="food" class="emoji-tab-pane" style="display:none;">
-                @foreach (var e in new[] { "🍏", "🍎", "🍐", "🍊", "🍋", "🍌", "🍉", "🍇", "🍓", "🫐", "🍈", "🍒", "🍑", "🥭", "🍍", "🥥", "🥝", "🍅", "🍆", "🥑", "🥦", "🥬", "🥒", "🌶️", "🫑", "🌽", "🥕", "🫒", "🧄", "🧅", "🍄", "🥜", "🫘", "🌰", "🍞", "🥐", "🥖", "🫓", "🥨", "🥯", "🥞", "🧇", "🧀", "🍖", "🍗", "🥩", "🥓", "🍔", "🍟", "🍕", "🌭", "🥪", "🌮", "🌯", "🫔", "🥙", "🧆", "🥚", "🍳", "🥘", "🍲", "🥣", "🥗", "🍿", "🧈", "🧂", "🥫", "🍱", "🍘", "🍙", "🍚", "🍛", "🍜", "🍝", "🍠", "🍢", "🍣", "🍤", "🍥", "🥮", "🍡", "🥟", "🥠", "🥡", "🦀", "🦞", "🦐", "🦑", "🦪", "🍦", "🍧", "🍨", "🍩", "🍪", "🎂", "🍰", "🧁", "🥧", "🍫", "🍬" })
-                { <span class="emoji-item" onclick="selectEmoji(this, '@e')">@e</span> }
-            </div>
-            <div id="activities" class="emoji-tab-pane" style="display:none;">
-                @foreach (var e in new[] { "⚽", "🏀", "🏈", "⚾", "🥎", "🎾", "🏐", "🏉", "🥏", "ビリヤード", "🏓", "🏸", "🏒", "🏑", "🥍", "🏏", "🪃", "🥅", "⛳", "🪁", "🏹", "🎣", "🤿", "🥊", "🥋", "⛸️", "🎿", "🏂", "🪂", "🏋️", "🤼", "🤸", "⛹️", "🤺", "🤾", "🏌️", "🏇", "🧘", "🏄", "🏊", "🤽", "🚣", "🧗", "🚵", "🚴", "🏆", "🥇", "🥈", "🥉", "🏅", "🎖️", "🏵️", "🎫", "🎟️" })
-                { <span class="emoji-item" onclick="selectEmoji(this, '@e')">@e</span> }
-            </div>
-            <div id="objects" class="emoji-tab-pane" style="display:none;">
-                @foreach (var e in new[] { "⌚", "📱", "📲", "💻", "⌨️", "🖱️", "🖲️", "🕹️", "🗜️", "💽", "💾", "💿", "📀", "📼", "📷", "📸", "📹", "🎥", "📽️", "🎞️", "📞", "☎️", "📟", "📠", "📺", "📻", "🎙️", "🎚️", "🎛️", "🧭", "⏱️", "⏲️", "⏰", "🕰️", "⌛", "⏳", "📡", "🔋", "🔌", "💡", "🔦", "🕯️", "🪔", "🧯", "🛢️", "💸", "💵", "💴", "💶", "💷", "🪙", "💰", "💳", "💎", "⚖️", "🪜", "🧰", "🪛", "🔧", "🔨", "⚒️", "🛠️", "⛏️", "🪚", "🔩", "⚙️", "🪮", "🧱", "⛓️", "🧲", "🔫", "💣", "🧨", "🪓", "🔪", "🗡️", "⚔️", "🛡️", "🚬", "⚰️", "🪦", "🏺", "🔮", "📿", "🧿" })
-                { <span class="emoji-item" onclick="selectEmoji(this, '@e')">@e</span> }
-            </div>
-            <div id="symbols" class="emoji-tab-pane" style="display:none;">
-                @foreach (var e in new[] { "❤️", "🧡", "💛", "💚", "💙", "💜", "🖤", "🤍", "🤎", "💔", "❤️‍🔥", "❤️‍🩹", "❣️", "💕", "💞", "💓", "💗", "💖", "💘", "💝", "💟", "☮️", "✝️", "☪️", "🕉️", "☸️", "✡️", "🔯", "🕎", "☯️", "☦️", "🛐", "⛎", "♈", "♉", "♊", "♋", "♌", "♍", "♎", "♏", "♐", "♑", "♒", "♓", "🆔", "⚛️", "🉑", "☢️", "☣️", "📴", "📳", "🈶", "🈚", "🈸", "🈺", "🈷️", "✴️", "🆚", "💮", "🉐", "㊙️", "㊗️", "🈴", "🈵", "🈹", "🈲", "🅰️", "🅱️", "🆎", "🆑", "🅾️", "🆘", "❌", "⭕", "🛑", "⛔", "📛", "🚫", "💯", "💢", "♨️", "🚷", "🚯", "🚳", "🚱", "🔞", "📵", "🚭", "❗", "❕", "❓", "❔", "‼️", "⁉️", "🔅", "🔆", "〽️", "⚠️", "🚸" })
-                { <span class="emoji-item" onclick="selectEmoji(this, '@e')">@e</span> }
-            </div>
-        </div>
-    </div>
-</div>
-
-<style>
-    .emoji-item {
-        cursor: pointer;
-        font-size: 1.5rem;
-        padding: 5px;
-        display: inline-block;
-        transition: transform 0.1s;
-        width: 40px;
-        text-align: center;
-    }
-    .emoji-item:hover { transform: scale(1.2); background: #f0f0f0; border-radius: 5px; }
-    .emoji-tabs .btn.active { background: #532374; color: #fff; }
-</style>
+<!-- Emoji Picker Template is rendered via partial -->
+@await Html.PartialAsync("_EmojiPicker")
 
 <script>
-    function switchEmojiTab(btn, tabId) {
-        const picker = btn.closest('.emoji-picker');
-        picker.querySelectorAll('.emoji-tab-pane').forEach(p => p.style.display = 'none');
-        picker.querySelector('#' + tabId).style.display = 'block';
-        picker.querySelectorAll('.emoji-tabs .btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-    }
-
-    function selectEmoji(span, emoji) {
-        const picker = document.getElementById('emojiPickerTemplate');
-        const reviewId = picker.dataset.reviewId;
-        if(reviewId) {
-            const area = document.getElementById(`reply-text-${reviewId}`);
-            const start = area.selectionStart;
-            const end = area.selectionEnd;
-            area.value = area.value.substring(0, start) + emoji + area.value.substring(end);
-            area.focus();
-            picker.style.display = 'none';
-        }
-    }
 
     function toggleChat() {
         const chatBox = document.getElementById('chatBox');
@@ -809,7 +738,8 @@
         const isHidden = box.style.display === 'none';
         
         // Close other pickers
-        document.querySelectorAll('.emoji-picker').forEach(p => p.remove());
+        const pickerTemplate = document.getElementById('emojiPickerTemplate');
+        if(pickerTemplate) pickerTemplate.style.display = 'none';
 
         box.style.display = isHidden ? 'block' : 'none';
         if(isHidden) {
@@ -835,11 +765,12 @@
     function insertTool(reviewId, type, btn) {
         if(type === 'emoji') {
             const picker = document.getElementById('emojiPickerTemplate');
-            if (picker.style.display === 'block' && picker.dataset.reviewId == reviewId) {
+            const targetId = 'reply-text-' + reviewId;
+            if (picker.style.display === 'block' && picker.dataset.targetId == targetId) {
                 picker.style.display = 'none';
                 return;
             }
-            picker.dataset.reviewId = reviewId;
+            picker.dataset.targetId = targetId;
             picker.style.display = 'block';
 
             // Position near button
