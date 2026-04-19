@@ -325,14 +325,17 @@
                         }
                     </div>
                     
-                    @if (m.Status == "Replied")
+                    @if (!string.IsNullOrEmpty(m.Reply))
                     {
-                        <div class="text-center mb-4 mt-2">
-                            <span class="badge bg-light text-muted border">Replied</span>
-                        </div>
-                        <div class="chat-bubble sent">
-                            A reply was officially sent and delivered to the customer's email inbox via the system.
-                        </div>
+                        var replies = m.Reply.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+                        foreach(var r in replies) {
+                            <div class="text-center mb-4 mt-2">
+                                <span class="badge bg-light text-muted border">Replied</span>
+                            </div>
+                            <div class="chat-bubble sent" style="white-space: pre-line;">
+                                @r
+                            </div>
+                        }
                     }
                 </div>
                 
@@ -395,6 +398,25 @@
         }
     }
     
+    document.addEventListener("DOMContentLoaded", function() {
+        @if(TempData["OpenChatId"] != null)
+        {
+            <text>
+            const el = document.querySelector('.messenger-item[onclick*="openChat(@TempData["OpenChatId"],"]');
+            if (el) {
+                openChat(@TempData["OpenChatId"], el);
+            } else {
+                // fallback if not found
+                const fallbackChat = document.getElementById('chat-@TempData["OpenChatId"]');
+                if (fallbackChat) {
+                    document.getElementById('emptyState').style.display = 'none';
+                    fallbackChat.classList.add('active-chat');
+                }
+            }
+            </text>
+        }
+    });
+
     function toggleSendBtn(inputEl) {
         const form = inputEl.closest('form');
         const micBtn = form.querySelector('.mic-btn');

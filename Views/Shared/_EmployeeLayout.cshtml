@@ -95,6 +95,9 @@
             </a>
 
             <p class="menu-title">PERSONAL</p>
+            <a asp-controller="EmployeeDashboard" asp-action="Profile" class="fw-bold text-warning @(ViewContext.RouteData.Values["Action"]?.ToString() == "Profile" ? "active" : "")">
+                <i class="bi bi-person-circle me-2"></i>My Profile
+            </a>
             <a asp-controller="EmployeeOrder" asp-action="MySales" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "MySales" ? "active" : "")">
                 <i class="bi bi-graph-up-arrow me-2"></i>My Sales Performance
             </a>

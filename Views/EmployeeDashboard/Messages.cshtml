@@ -1,102 +1,433 @@
 @model IEnumerable<E_ShoppingManagement.Models.ContactMessage>
 @{
-    ViewData["Title"] = "Customer Messages";
+    ViewData["Title"] = "Customer Emails";
     Layout = "~/Views/Shared/_EmployeeLayout.cshtml";
 }
 
+<style>
+    .messenger-container {
+        display: flex;
+        height: 75vh;
+        background: #f2efe9;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(83,35,116,0.08);
+        overflow: hidden;
+        border: 1px solid #e6e2db;
+        margin-bottom: 2rem;
+    }
+    
+    .messenger-sidebar {
+        width: 350px;
+        border-right: 1px solid #e6e2db;
+        display: flex;
+        flex-direction: column;
+        background: #f2efe9;
+    }
+    
+    .messenger-sidebar-header {
+        padding: 20px;
+        border-bottom: 1px solid #e6e2db;
+        background: #f2efe9;
+    }
+    
+    .messenger-list {
+        flex: 1;
+        overflow-y: auto;
+    }
+    
+    .messenger-item {
+        padding: 15px 20px;
+        border-bottom: 1px solid #f8f9fa;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+    
+    .messenger-item:hover, .messenger-item.active {
+        background: rgba(83,35,116,0.08);
+    }
+    
+    .messenger-item.active {
+        border-left: 4px solid #532374;
+    }
+    
+    .messenger-item.unread .m-name {
+        font-weight: 700;
+        color: #212529;
+    }
+    
+    .messenger-item.unread .m-preview {
+        font-weight: 600;
+        color: #495057;
+    }
+    
+    .m-avatar {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        background: #532374;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        font-weight: bold;
+        flex-shrink: 0;
+    }
+    
+    .messenger-chat {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        background: #f2efe9;
+        position: relative;
+    }
+    
+    .chat-wrapper {
+        flex: 1;
+        flex-direction: column;
+        display: none;
+    }
+
+    .chat-wrapper.active-chat {
+        display: flex;
+    }
+    
+    .chat-header {
+        padding: 15px 25px;
+        background: #532374;
+        border-bottom: 1px solid rgba(255,255,255,0.15);
+        display: flex;
+        align-items: center;
+    }
+    .chat-header h6, .chat-header small { color: #fff !important; }
+    
+    .chat-body {
+        flex: 1;
+        padding: 25px;
+        overflow-y: auto;
+        background: #f2efe9;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .chat-bubble {
+        max-width: 75%;
+        padding: 12px 18px;
+        border-radius: 18px;
+        margin-bottom: 20px;
+        position: relative;
+        font-size: 0.95rem;
+    }
+    
+    .chat-bubble.received {
+        background: #f2efe9;
+        color: #33312e;
+        align-self: flex-start;
+        border-bottom-left-radius: 4px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    
+    .chat-bubble.sent {
+        background: #532374;
+        color: white;
+        align-self: flex-end;
+        border-bottom-right-radius: 4px;
+        margin-left: auto;
+        box-shadow: 0 2px 5px rgba(83,35,116,0.25);
+    }
+    
+    .chat-footer {
+        padding: 10px 15px;
+        background: #f2efe9;
+        border-top: 1px solid #e6e2db;
+    }
+    
+    .chat-tool-btn {
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        color: #532374;
+        cursor: pointer;
+    }
+    
+    .chat-tool-btn:hover {
+        background: rgba(83,35,116,0.08);
+        color: #3d1a55;
+    }
+    
+    .emoji-btn {
+        cursor: pointer;
+        transition: 0.2s;
+    }
+    
+    .emoji-btn:hover {
+        color: #0b5ed7 !important;
+    }
+    
+    .chat-input-wrapper {
+        display: flex;
+        background: #f2efe9;
+        border-radius: 30px;
+        padding: 5px 15px;
+        align-items: center;
+    }
+    
+    .chat-input {
+        flex: 1;
+        border: none;
+        background: transparent;
+        padding: 10px;
+        outline: none;
+    }
+    
+    .chat-send-btn {
+        background: #532374;
+        color: white;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+        cursor: pointer;
+    }
+    
+    .chat-send-btn:hover {
+        background: #3d1a55;
+    }
+    
+    .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        color: #adb5bd;
+    }
+    
+    .search-box {
+        background: #f2efe9;
+        border-radius: 20px;
+        padding: 8px 15px;
+        display: flex;
+        align-items: center;
+        margin-top: 15px;
+    }
+    
+    .search-box input {
+        border: none;
+        background: transparent;
+        outline: none;
+        width: 100%;
+        margin-left: 10px;
+        font-size: 0.9rem;
+    }
+</style>
+
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h3 class="fw-bold mb-0" style="color: #532374;"><i class="bi bi-envelope-fill me-2"></i> Customer Messages</h3>
-    <a asp-action="Index" class="theme-back-btn mb-0">Back</a>
+    <h2>Customer Emails</h2>
+    <a asp-action="Index" class="theme-back-btn"><i class="bi bi-arrow-left"></i> Back to Dashboard</a>
 </div>
 
-<div class="page-card p-0 overflow-hidden shadow-sm border-0">
-    <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0">
-            <thead style="background: #532374; color: #fff;">
-                <tr>
-                    <th class="ps-4 py-3">Customer Info</th>
-                    <th class="py-3">Subject</th>
-                    <th class="py-3">Message Preview</th>
-                    <th class="py-3">Date</th>
-                    <th class="py-3">Status</th>
-                    <th class="py-3 text-end pe-4">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td class="ps-4">
-                            <div class="fw-bold">@item.Name</div>
-                            <small class="text-muted">@item.Email</small>
-                        </td>
-                        <td>@item.Subject</td>
-                        <td>
-                            <div class="text-truncate" style="max-width: 250px;">@item.Message</div>
-                        </td>
-                        <td>@item.CreatedAt.ToString("MMM dd, yyyy | hh:mm tt")</td>
-                        <td>
-                            @if (item.Status == "Replied")
+<div class="messenger-container">
+    <!-- Sidebar -->
+    <div class="messenger-sidebar">
+        <div class="messenger-sidebar-header">
+            <h4 class="mb-0 fw-bold">Chats</h4>
+            <div class="search-box">
+                <i class="bi bi-search text-muted"></i>
+                <input type="text" placeholder="Search Messenger" />
+            </div>
+        </div>
+        <div class="messenger-list">
+            @if(!Model.Any())
+            {
+                <div class="text-center p-4 text-muted">
+                    No messages yet.
+                </div>
+            }
+            @foreach (var m in Model)
+            {
+                <div class="messenger-item @(m.Status == "Active" ? "unread" : "")" onclick="openChat(@m.Id, this)">
+                    <div class="d-flex align-items-center">
+                        <div class="m-avatar">
+                            @(string.IsNullOrEmpty(m.Name) ? "?" : m.Name.Substring(0, 1).ToUpper())
+                        </div>
+                        <div class="ms-3 flex-grow-1 overflow-hidden">
+                            <div class="d-flex justify-content-between align-items-baseline">
+                                <span class="m-name text-truncate d-block" style="max-width: 130px;">@m.Name</span>
+                                <span class="small text-muted" style="font-size: 0.7rem;">@m.CreatedAt.ToString("MMM dd | hh:mm tt")</span>
+                            </div>
+                            <div class="m-preview text-truncate small" style="color: #6c757d;">
+                                @(m.Status == "Replied" ? "You sent a reply." : m.Subject)
+                            </div>
+                        </div>
+                        @if (m.Status == "Active")
+                        {
+                            <span class="badge bg-primary rounded-pill ms-2" style="width:10px; height: 10px; padding:0;">&nbsp;</span>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Active Chat Area -->
+    <div class="messenger-chat">
+        <div class="empty-state" id="emptyState">
+            <i class="bi bi-chat-dots" style="font-size: 4rem;"></i>
+            <h4 class="mt-3">Select a chat</h4>
+            <p>Choose a conversation from the left to view details</p>
+        </div>
+
+        @foreach(var m in Model)
+        {
+            <div class="chat-wrapper" id="chat-@m.Id">
+                <div class="chat-header">
+                    <div class="m-avatar me-3">
+                        @(string.IsNullOrEmpty(m.Name) ? "?" : m.Name.Substring(0, 1).ToUpper())
+                    </div>
+                    <div>
+                        <h6 class="mb-0 fw-bold">@m.Name</h6>
+                        <small class="text-muted d-block">@m.Email</small>
+                    </div>
+                    <div class="ms-auto">
+                        <span class="badge @(m.Status == "Active" ? "bg-warning text-dark" : "bg-success") rounded-pill px-3">@m.Status</span>
+                    </div>
+                </div>
+                
+                <div class="chat-body" id="chatBody-@m.Id">
+                    <div class="text-center mb-4">
+                        <span class="badge bg-light text-muted border">@m.CreatedAt.ToString("dd MMM yyyy, hh:mm tt")</span>
+                    </div>
+                    
+                    <div class="chat-bubble received">
+                        <strong class="d-block mb-2"><i class="bi bi-chat-quote me-1"></i>Subject: @m.Subject</strong>
+                        <p class="mb-0" style="white-space: pre-line;">@m.Message</p>
+                        
+                        @if (!string.IsNullOrEmpty(m.AttachmentUrl))
+                        {
+                            string ext = System.IO.Path.GetExtension(m.AttachmentUrl).ToLower();
+                            if (ext == ".jpg" || ext == ".jpeg" || ext == ".png" || ext == ".gif" || ext == ".webp")
                             {
-                                <span class="badge bg-success rounded-pill px-3">Replied</span>
+                                <div class="mt-3">
+                                    <img src="@m.AttachmentUrl" class="img-fluid border" style="border-radius: 16px; max-height: 250px; cursor: pointer;" alt="Attachment" onclick="window.open(this.src, '_blank')" />
+                                </div>
                             }
                             else
                             {
-                                <span class="badge bg-warning text-dark rounded-pill px-3">Active</span>
-                            }
-                        </td>
-                        <td class="text-end pe-4">
-                            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#replyModal@(item.Id)">
-                                <i class="bi bi-reply-fill me-1"></i> @(item.Status == "Replied" ? "View Reply" : "Reply")
-                            </button>
-
-                            <!-- Reply Modal -->
-                            <div class="modal fade" id="replyModal@(item.Id)" tabindex="-1" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content text-start">
-                                        <div class="modal-header border-0 pb-0">
-                                            <h5 class="modal-title fw-bold" style="color:#532374;">Message Details</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="mb-3">
-                                                <label class="small text-muted d-block">From</label>
-                                                <strong>@item.Name (@item.Email)</strong>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label class="small text-muted d-block">Subject</label>
-                                                <strong>@item.Subject</strong>
-                                            </div>
-                                            <div class="mb-3 p-3 bg-light rounded-3">
-                                                <label class="small text-muted d-block mb-1">Message</label>
-                                                <p class="mb-0">@item.Message</p>
-                                            </div>
-                                            
-                                            <form asp-action="ReplyMessage" method="post">
-                                                <input type="hidden" name="id" value="@item.Id" />
-                                                <div class="mb-3">
-                                                    <label class="form-label fw-bold">Your Reply</label>
-                                                    <textarea name="reply" class="form-control" rows="4" required placeholder="Write your response here...">@item.Reply</textarea>
-                                                </div>
-                                                <div class="text-end">
-                                                    <button type="button" class="btn btn-light border me-2" data-bs-dismiss="modal">Close</button>
-                                                    <button type="submit" class="btn text-white fw-bold px-4" style="background:#532374;">Send Response</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
+                                <div class="mt-3 p-2 bg-light rounded border">
+                                    <i class="bi bi-paperclip text-primary"></i> <a href="@m.AttachmentUrl" target="_blank" class="text-decoration-none fw-bold">View attached file</a>
                                 </div>
+                            }
+                        }
+                    </div>
+                    
+                    @if (!string.IsNullOrEmpty(m.Reply))
+                    {
+                        var replies = m.Reply.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+                        foreach(var r in replies) {
+                            <div class="text-center mb-4 mt-2">
+                                <span class="badge bg-light text-muted border">Replied</span>
                             </div>
-                        </td>
-                    </tr>
-                }
-                @if (!Model.Any())
-                {
-                    <tr>
-                        <td colspan="6" class="text-center py-5 text-muted">No messages found.</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+                            <div class="chat-bubble sent" style="white-space: pre-line;">
+                                @r
+                            </div>
+                        }
+                    }
+                </div>
+                
+                <div class="chat-footer py-2 px-3">
+                    <form asp-action="ReplyMessage" method="post" class="d-flex w-100 align-items-center m-0" enctype="multipart/form-data">
+                        <input type="hidden" name="id" value="@m.Id" />
+                        
+                        <label class="btn btn-light rounded-circle chat-tool-btn text-primary p-2 m-0 me-1" title="Attach file">
+                            <i class="bi bi-plus-circle-fill fs-5"></i>
+                            <input type="file" name="attachment" class="d-none" />
+                        </label>
+                        <label class="btn btn-light rounded-circle chat-tool-btn text-primary p-2 m-0 me-2" title="Attach photo">
+                            <i class="bi bi-image fs-5"></i>
+                            <input type="file" name="image" accept="image/*" class="d-none" />
+                        </label>
+                        
+                        <div class="chat-input-wrapper flex-grow-1 mx-1">
+                            <input type="text" name="reply" class="chat-input" placeholder="Aa" required autocomplete="off" oninput="toggleSendBtn(this)" />
+                            <i class="bi bi-emoji-smile fs-5 text-primary emoji-btn ms-2"></i>
+                        </div>
+                        
+                        <button type="button" class="btn btn-light rounded-circle chat-tool-btn text-primary p-2 m-0 ms-2 mic-btn" title="Send voice record">
+                            <i class="bi bi-mic-fill fs-5"></i>
+                        </button>
+                        <button type="submit" class="chat-send-btn ms-2 d-none" title="Send Reply">
+                            <i class="bi bi-send-fill fs-5"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        }
     </div>
 </div>
+
+<script>
+    function openChat(id, element) {
+        // Hide empty state
+        var emptyState = document.getElementById('emptyState');
+        if (emptyState) emptyState.style.display = 'none';
+        
+        // Hide all chats
+        document.querySelectorAll('.chat-wrapper').forEach(el => {
+            el.classList.remove('active-chat');
+        });
+        
+        // Remove active class from all items
+        document.querySelectorAll('.messenger-item').forEach(el => {
+            el.classList.remove('active');
+        });
+        
+        // Show selected chat
+        const targetChat = document.getElementById('chat-' + id);
+        if (targetChat) {
+            targetChat.classList.add('active-chat');
+        }
+        
+        // Highlight active item
+        if(element) {
+            element.classList.add('active');
+        }
+    }
+    
+    document.addEventListener("DOMContentLoaded", function() {
+        @if(TempData["OpenChatId"] != null)
+        {
+            <text>
+            const el = document.querySelector('.messenger-item[onclick*="openChat(@TempData["OpenChatId"],"]');
+            if (el) {
+                openChat(@TempData["OpenChatId"], el);
+            } else {
+                // fallback if not found
+                const fallbackChat = document.getElementById('chat-@TempData["OpenChatId"]');
+                if (fallbackChat) {
+                    document.getElementById('emptyState').style.display = 'none';
+                    fallbackChat.classList.add('active-chat');
+                }
+            }
+            </text>
+        }
+    });
+
+    function toggleSendBtn(inputEl) {
+        const form = inputEl.closest('form');
+        const micBtn = form.querySelector('.mic-btn');
+        const sendBtn = form.querySelector('.chat-send-btn');
+        if (inputEl.value.trim() !== '') {
+            micBtn.classList.add('d-none');
+            sendBtn.classList.remove('d-none');
+        } else {
+            micBtn.classList.remove('d-none');
+            sendBtn.classList.add('d-none');
+        }
+    }
+</script>
+

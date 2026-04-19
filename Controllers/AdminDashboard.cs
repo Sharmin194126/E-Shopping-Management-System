@@ -661,10 +661,16 @@ namespace E_ShoppingManagement.Controllers
             var msg = await _context.ContactMessages.FindAsync(id);
             if (msg != null)
             {
+                if (!string.IsNullOrEmpty(msg.Reply)) {
+                    msg.Reply += "\n" + reply;
+                } else {
+                    msg.Reply = reply;
+                }
                 msg.Status = "Replied";
                 // In a real app, you'd send an email here.
                 await _context.SaveChangesAsync();
                 TempData["Message"] = "Reply sent successfully.";
+                TempData["OpenChatId"] = id;
             }
             return RedirectToAction(nameof(Messages));
         }

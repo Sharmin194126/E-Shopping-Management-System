@@ -1,7 +1,7 @@
 @model E_ShoppingManagement.Models.Users
 @{
-    ViewData["Title"] = "Admin Profile";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Employee Profile";
+    Layout = "~/Views/Shared/_EmployeeLayout.cshtml";
 }
 
 <div class="container-fluid mt-4">
@@ -10,7 +10,7 @@
             <div class="page-card p-5">
                 <div class="text-center mb-4">
                     <div class="rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 100px; height: 100px; font-size: 3rem; background:#532374; color:#fff;">
-                        @(Model.FullName?[0] ?? 'A')
+                        @(Model.FullName?[0] ?? 'E')
                     </div>
                     <h2 class="mt-3">@Model.FullName</h2>
                     <span class="badge bg-danger">@Model.Role</span>

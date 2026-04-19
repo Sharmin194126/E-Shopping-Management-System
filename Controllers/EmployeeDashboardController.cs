@@ -52,6 +52,13 @@ namespace E_ShoppingManagement.Controllers
             return View(orders);
         }
 
+        public async Task<IActionResult> Profile()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return RedirectToAction("Login", "Account");
+            return View(user);
+        }
+
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -306,11 +313,16 @@ namespace E_ShoppingManagement.Controllers
             var message = await _context.ContactMessages.FindAsync(id);
             if (message == null) return NotFound();
 
-            message.Reply = reply;
+            if (!string.IsNullOrEmpty(message.Reply)) {
+                message.Reply += "\n" + reply;
+            } else {
+                message.Reply = reply;
+            }
             message.Status = "Replied";
             await _context.SaveChangesAsync();
 
             TempData["Message"] = "Reply sent successfully!";
+            TempData["OpenChatId"] = id;
             return RedirectToAction(nameof(Messages));
         }
 
