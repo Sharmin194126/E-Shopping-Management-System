@@ -132,7 +132,9 @@
                     <li><a asp-controller="Home" asp-action="Deals">Deals</a></li>
                     <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
                     
-                    @if (User.IsInRole("Admin")) { <li><a asp-controller="AdminDashboard" asp-action="Index">Dashboard</a></li> }
+                    @if (User.IsInRole("Admin")) { 
+                        <li><a asp-controller="AdminDashboard" asp-action="Index">Dashboard</a></li>
+                    }
                     else if (User.IsInRole("Employee")) { <li><a asp-controller="EmployeeDashboard" asp-action="Index">Dashboard</a></li> }
                     else if (User.IsInRole("DeliveryMan")) { <li><a asp-controller="DeliveryManDashboard" asp-action="Index">Dashboard</a></li> }
                     else if (User.Identity.IsAuthenticated) { <li><a asp-controller="CustomerDashboard" asp-action="Index">Dashboard</a></li> }
@@ -181,6 +183,11 @@
         }
         setInterval(updateClock, 1000);
         updateClock();
+
+        // Initialize API-driven components
+        $(document).ready(function() {
+            refreshCartSummary();
+        });
     </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

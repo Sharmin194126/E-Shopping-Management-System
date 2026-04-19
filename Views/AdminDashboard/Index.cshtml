@@ -734,7 +734,7 @@
             yearEl.innerText = year;
             
             try {
-                const response = await fetch(`/AdminDashboard/GetYearlyGoalStats?year=${year}`);
+                const response = await fetch(`/v1-api/dashboard/goal-stats?year=${year}`);
                 const data = await response.json();
                 
                 document.getElementById('valTarget').innerText = fmtBDT(data.goal);
