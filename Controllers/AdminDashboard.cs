@@ -258,16 +258,16 @@ namespace E_ShoppingManagement.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateSalesGoal(decimal goalAmount)
+        public IActionResult UpdateSalesGoal(decimal goalAmount, int? year)
         {
-            int currentYear = DateTime.UtcNow.Year;
+            int targetYear = year ?? DateTime.UtcNow.Year;
             string folderPath = System.IO.Path.Combine(_env.WebRootPath, "settings", "goals");
             if (!System.IO.Directory.Exists(folderPath)) System.IO.Directory.CreateDirectory(folderPath);
             
-            string filePath = System.IO.Path.Combine(folderPath, $"admin_goal_{currentYear}.txt");
+            string filePath = System.IO.Path.Combine(folderPath, $"admin_goal_{targetYear}.txt");
             System.IO.File.WriteAllText(filePath, goalAmount.ToString());
             
-            TempData["Message"] = $"Sales goal for {currentYear} updated successfully!";
+            TempData["Message"] = $"Sales goal for {targetYear} updated successfully!";
             TempData["IsSuccess"] = true;
             return RedirectToAction(nameof(Index));
         }

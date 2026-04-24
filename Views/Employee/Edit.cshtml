@@ -69,8 +69,9 @@
         <div class="form-group">
             <label asp-for="Status"></label>
             <select asp-for="Status" class="form-control">
-                <option value="Active" selected="@(Model.Status == "Active")">Active</option>
-                <option value="Inactive" selected="@(Model.Status == "Inactive")">Inactive</option>
+                <option value="Active">Active</option>
+                <option value="Pending">Pending</option>
+                <option value="Inactive">Inactive</option>
             </select>
             <span asp-validation-for="Status" class="text-danger"></span>
         </div>

@@ -11,6 +11,14 @@
         <h2 class="mb-4 text-center accent-heading">Welcome Back</h2>
         <p class="text-center mb-4 accent-subtext small">Please login to your account</p>
         
+        @if (TempData["Message"] != null)
+        {
+            <div class="alert @(TempData["IsSuccess"]?.ToString() == "True" ? "alert-success" : "alert-danger") alert-dismissible fade show small py-2" role="alert">
+                @TempData["Message"]
+                <button type="button" class="btn-close py-2" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        
         <form asp-action="Login" method="post" asp-route-returnUrl="@ViewData["ReturnUrl"]">
             @Html.AntiForgeryToken()
             <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>

@@ -63,23 +63,19 @@ namespace E_ShoppingManagement.Controllers
                 return View(model);
             }
 
-            // Update Customer/Employee/DeliveryMan status to Active on login
+            /* 
+               REMOVED: Do not automatically activate accounts on login. 
+               Activation should only happen via Admin approval.
+            */
+            /*
             var customer = _context.Customers.FirstOrDefault(c => c.UserId == user.Id);
-            if (customer != null)
-            {
-                customer.Status = "Active";
-            }
+            if (customer != null) customer.Status = "Active";
             var employee = _context.Employees.FirstOrDefault(e => e.UserId == user.Id);
-            if (employee != null)
-            {
-                employee.Status = "Active";
-            }
+            if (employee != null) employee.Status = "Active";
             var dm = _context.DeliveryMen.FirstOrDefault(d => d.UserId == user.Id);
-            if (dm != null)
-            {
-                dm.Status = "Active";
-            }
+            if (dm != null) dm.Status = "Active";
             await _context.SaveChangesAsync();
+            */
 
             // Check ReturnUrl first
             if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
@@ -89,6 +85,28 @@ namespace E_ShoppingManagement.Controllers
 
             var roles = await userManager.GetRolesAsync(user);
             var roleList = roles.Select(r => (r ?? string.Empty).Trim()).ToList();
+
+            // Status Check for Employee and DeliveryMan
+            if (roleList.Contains("Employee"))
+            {
+                var emp = _context.Employees.FirstOrDefault(e => e.UserId == user.Id);
+                if (emp != null && emp.Status != "Active")
+                {
+                    await signInManager.SignOutAsync();
+                    ModelState.AddModelError(string.Empty, "Your employee account is pending admin approval.");
+                    return View(model);
+                }
+            }
+            if (roleList.Contains("DeliveryMan"))
+            {
+                var dm = _context.DeliveryMen.FirstOrDefault(d => d.UserId == user.Id);
+                if (dm != null && dm.Status != "Active")
+                {
+                    await signInManager.SignOutAsync();
+                    ModelState.AddModelError(string.Empty, "Your delivery man account is pending admin approval.");
+                    return View(model);
+                }
+            }
 
             if (roleList.Any(r => r.Equals("Admin", StringComparison.OrdinalIgnoreCase)))
                 return RedirectToAction("Index", "AdminDashboard");
@@ -220,15 +238,16 @@ namespace E_ShoppingManagement.Controllers
                     Designation = model.Designation,
                     Salary = model.Salary,
                     PhoneNumber = model.PhoneNumber,
-                    Status = "Active",
+                    Status = "Pending",
                     JoiningDate = DateTime.UtcNow,
                     CreatedAt = DateTime.UtcNow
                 };
                 _context.Employees.Add(employee);
                 await _context.SaveChangesAsync();
 
-                await signInManager.SignInAsync(user, isPersistent: false);
-                return RedirectToAction("Index", "EmployeeDashboard");
+                TempData["Message"] = "Registration successful! Please wait for admin approval before logging in.";
+                TempData["IsSuccess"] = true;
+                return RedirectToAction("Login", "Account");
             }
 
             foreach (var error in result.Errors)
@@ -280,14 +299,15 @@ namespace E_ShoppingManagement.Controllers
                     Email = model.Email,
                     ContactNumber = model.ContactNumber,
                     VehicleInfo = model.VehicleInfo,
-                    Status = "Active",
+                    Status = "Pending",
                     CreatedAt = DateTime.UtcNow
                 };
                 _context.DeliveryMen.Add(deliveryMan);
                 await _context.SaveChangesAsync();
 
-                await signInManager.SignInAsync(user, isPersistent: false);
-                return RedirectToAction("Index", "DeliveryManDashboard");
+                TempData["Message"] = "Registration successful! Please wait for admin approval before logging in.";
+                TempData["IsSuccess"] = true;
+                return RedirectToAction("Login", "Account");
             }
 
             foreach (var error in result.Errors)

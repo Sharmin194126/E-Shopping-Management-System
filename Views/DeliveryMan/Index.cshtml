@@ -34,7 +34,20 @@
                     <td>@item.Name</td>
                     <td>@item.ContactNumber</td>
                     <td>@item.VehicleInfo</td>
-                    <td><span class="badge @(item.Status == "Active" ? "bg-success" : "bg-danger")">@item.Status</span></td>
+                    <td>
+                        @if (item.Status == "Active")
+                        {
+                            <span class="badge bg-success">Active</span>
+                        }
+                        else if (item.Status == "Pending")
+                        {
+                            <span class="badge bg-warning text-dark">Pending</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">@item.Status</span>
+                        }
+                    </td>
                     <td>
                         <div class="d-flex flex-wrap gap-1">
                             <a asp-controller="DeliveryManDashboard" asp-action="Index" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Dashboard</a>

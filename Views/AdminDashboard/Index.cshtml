@@ -204,7 +204,7 @@
                     <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="modal" data-bs-target="#historyGoalModal" title="View Goal History">
                         <i class="bi bi-clock-history"></i> History
                     </button>
-                    <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editGoalModal" title="Edit Current Goal">
+                    <button class="btn btn-sm btn-outline-secondary" onclick="prepareEditGoal()" title="Edit Selected Year Goal">
                         <i class="bi bi-pencil-square"></i> Edit
                     </button>
                 </div>
@@ -524,10 +524,11 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title fw-bold" style="color:#532374;">Update Sales Goal</h5>
+                <h5 class="modal-title fw-bold" style="color:#532374;">Update Sales Goal (<span id="modalYear">@DateTime.Now.Year</span>)</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form asp-controller="AdminDashboard" asp-action="UpdateSalesGoal" method="post">
+                <input type="hidden" id="editGoalYear" name="year" value="@DateTime.Now.Year" />
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="goalAmount" class="form-label">New Target Amount (৳)</label>
@@ -734,7 +735,7 @@
             yearEl.innerText = year;
             
             try {
-                const response = await fetch(`/v1-api/dashboard/goal-stats?year=${year}`);
+                const response = await fetch(`/AdminDashboard/GetYearlyGoalStats?year=${year}`);
                 const data = await response.json();
                 
                 document.getElementById('valTarget').innerText = fmtBDT(data.goal);
@@ -798,8 +799,21 @@
                     divisor: Math.max(1, data.filter(s => s.amount > 0).length)
                 };
                 updateChartRange('prevyear');
-            } catch (error) { console.error('Error fetching yearly sales:', error); }
+            } catch (e) { console.error('Error fetching yearly data:', e); }
         }
+
+        function prepareEditGoal() {
+            const currentYear = document.getElementById('goalDisplayYear').innerText;
+            const currentGoal = document.getElementById('valTarget').innerText.replace('৳', '').replace(/,/g, '');
+            
+            document.getElementById('modalYear').innerText = currentYear;
+            document.getElementById('editGoalYear').value = currentYear;
+            document.getElementById('goalAmount').value = currentGoal;
+            
+            var editModal = new bootstrap.Modal(document.getElementById('editGoalModal'));
+            editModal.show();
+        }
+
 
         function updateDisplayStats(range) {
             const d = chartData[range];
