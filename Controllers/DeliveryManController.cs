@@ -163,5 +163,21 @@ namespace E_ShoppingManagement.Controllers
 
             return RedirectToAction(nameof(Manage));
         }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Disapprove(int id)
+        {
+            var dm = await _context.DeliveryMen.FindAsync(id);
+            if (dm == null) return NotFound();
+
+            dm.Status = "Pending";
+            await _context.SaveChangesAsync();
+
+            TempData["Message"] = "Delivery Man disapproved. They can no longer log in.";
+            TempData["IsSuccess"] = true;
+
+            return RedirectToAction(nameof(Manage));
+        }
     }
 }

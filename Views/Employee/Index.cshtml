@@ -35,6 +35,7 @@
                 <th>Designation</th>
                 <th>Joining Date</th>
                 <th>Status</th>
+                <th>Approval</th>
                 <th style="width: 190px;">Actions</th>
             </tr>
         </thead>
@@ -45,7 +46,7 @@
             @if (!Model.Any())
             {
                 <tr>
-                    <td colspan="8" class="text-center text-muted">No employees found.</td>
+                    <td colspan="9" class="text-center text-muted">No employees found.</td>
                 </tr>
             }
             else
@@ -62,26 +63,38 @@
                         <td>
                             @if (item.Status == "Active")
                             {
-                                <span class="badge bg-success">Active</span>
+                                <span class="badge bg-success">Approved</span>
                             }
                             else if (item.Status == "Pending")
                             {
-                                <span class="badge bg-warning text-dark">Pending</span>
+                                <span class="badge bg-warning text-dark">Disapproved</span>
                             }
                             else
                             {
                                 <span class="badge bg-danger">@item.Status</span>
                             }
                         </td>
+                        <td class="text-center">
+                            @if (item.Status != "Active")
+                            {
+                                <form asp-action="Approve" asp-route-id="@item.Id" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-primary px-3">
+                                        <i class="bi bi-check-circle me-1"></i>Approve
+                                    </button>
+                                </form>
+                            }
+                            else
+                            {
+                                <form asp-action="Disapprove" asp-route-id="@item.Id" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger px-3" onclick="return confirm('Disapprove this employee? They will not be able to log in.')">
+                                        <i class="bi bi-x-circle me-1"></i>Disapprove
+                                    </button>
+                                </form>
+                            }
+                        </td>
                         <td>
                             <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-secondary">Details</a>
                             <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-success">Edit</a>
-                            @if (item.Status == "Pending")
-                            {
-                                <form asp-action="Approve" asp-route-id="@item.Id" method="post" class="d-inline">
-                                    <button type="submit" class="btn btn-sm btn-primary">Approve</button>
-                                </form>
-                            }
                             <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
                         </td>
                     </tr>

@@ -298,5 +298,23 @@ namespace E_ShoppingManagement.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        // DISAPPROVE
+        [HttpPost]
+        public async Task<IActionResult> Disapprove(int id)
+        {
+            var employee = await _context.Employees.FindAsync(id);
+            if (employee == null) return NotFound();
+
+            employee.Status = "Pending";
+            employee.ModifiedAt = DateTime.UtcNow;
+
+            await _context.SaveChangesAsync();
+
+            TempData["Message"] = "Employee disapproved. They can no longer log in.";
+            TempData["IsSuccess"] = true;
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
