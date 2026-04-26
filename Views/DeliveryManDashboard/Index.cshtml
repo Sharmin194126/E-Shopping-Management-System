@@ -106,7 +106,7 @@
         <div class="dm-stat-card dm-card-blue">
             <div class="dm-card-content">
                 <div class="dm-card-label">Total Orders</div>
-                <div class="dm-card-value">@Model.Count()</div>
+                <div class="dm-card-value">@ViewBag.TotalOrdersCount</div>
             </div>
             <div class="dm-card-icon"><i class="bi bi-briefcase-fill"></i></div>
         </div>
@@ -116,7 +116,7 @@
         <div class="dm-stat-card dm-card-orange">
             <div class="dm-card-content">
                 <div class="dm-card-label">Pending Deliveries</div>
-                <div class="dm-card-value">@Model.Count(o => o.OrderStatus != "Delivered" && o.OrderStatus != "Returned")</div>
+                <div class="dm-card-value">@ViewBag.PendingDeliveriesCount</div>
             </div>
             <div class="dm-card-icon"><i class="bi bi-clock-fill"></i></div>
         </div>
@@ -126,7 +126,7 @@
         <div class="dm-stat-card dm-card-green">
             <div class="dm-card-content">
                 <div class="dm-card-label">Completed</div>
-                <div class="dm-card-value">@Model.Count(o => o.OrderStatus == "Delivered")</div>
+                <div class="dm-card-value">@ViewBag.CompletedOrdersCount</div>
             </div>
             <div class="dm-card-icon"><i class="bi bi-patch-check-fill"></i></div>
         </div>
@@ -146,7 +146,7 @@
         <div class="dm-stat-card dm-card-red">
             <div class="dm-card-content">
                 <div class="dm-card-label">Returned Parcels</div>
-                <div class="dm-card-value">@Model.Count(o => o.OrderStatus == "Returned")</div>
+                <div class="dm-card-value">@ViewBag.ReturnedOrdersCount</div>
             </div>
             <div class="dm-card-icon"><i class="bi bi-arrow-return-left"></i></div>
         </div>
@@ -161,7 +161,8 @@
     <div class="col-lg-9">
         <div class="page-card">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h5 class="mb-0 fw-bold"><i class="bi bi-list-check me-2 text-primary"></i>My Assigned Orders</h5>
+                <h5 class="mb-0 fw-bold"><i class="bi bi-list-check me-2 text-primary"></i>Recent Assigned Orders</h5>
+                <a asp-action="AssignedOrders" class="btn btn-sm btn-primary">View All</a>
             </div>
             <div class="table-responsive">
                 <table class="table table-hover align-middle">

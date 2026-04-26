@@ -47,8 +47,11 @@
         </a>
 
         <p class="menu-title">OPERATIONS</p>
-        <a asp-controller="DeliveryManDashboard" asp-action="Index" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "DeliveryManDashboard" && ViewContext.RouteData.Values["Action"]?.ToString() == "Index" ? "active" : "")">
-            <i class="bi bi-list-task me-2"></i>Assigned Orders
+        <a asp-controller="DeliveryManDashboard" asp-action="Index" class="@(ViewData["ActivePage"]?.ToString() == "Dashboard" ? "active" : "")">
+            <i class="bi bi-speedometer2 me-2"></i>Dashboard
+        </a>
+        <a asp-controller="DeliveryManDashboard" asp-action="AssignedOrders" class="@(ViewData["ActivePage"]?.ToString() == "AssignedOrders" ? "active" : "")">
+            <i class="bi bi-list-check me-2"></i>Assigned Orders
         </a>
         <a asp-controller="DeliveryManDashboard" asp-action="Earnings" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Earnings" ? "active" : "")">
             <i class="bi bi-cash-stack me-2"></i>My Earnings

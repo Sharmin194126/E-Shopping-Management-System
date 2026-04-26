@@ -169,7 +169,7 @@
                         var totalItems = pendingOrders.Count + pendingEmps.Count + activeMsgs.Count;
                     }
                     <div class="dropdown">
-                        <a asp-controller="AdminDashboard" asp-action="Notifications" class="position-relative text-decoration-none" title="View Notifications">
+                        <a asp-controller="@(User.IsInRole("Admin") ? "AdminDashboard" : "EmployeeDashboard")" asp-action="Notifications" class="position-relative text-decoration-none" title="View Notifications">
                             <i class="bi bi-bell-fill" style="font-size: 1.4rem; color: #532374;"></i>
                             @{
                                 var currentAction = ViewContext.RouteData.Values["Action"]?.ToString();
@@ -229,7 +229,7 @@
                             }
 
                             <li><hr class="dropdown-divider m-0"></li>
-                            <li><a class="dropdown-item text-center fw-bold py-2" style="color:#532374; font-size:13px;" asp-controller="AdminDashboard" asp-action="Notifications">View All Activity</a></li>
+                            <li><a class="dropdown-item text-center fw-bold py-2" style="color:#532374; font-size:13px;" asp-controller="@(User.IsInRole("Admin") ? "AdminDashboard" : "EmployeeDashboard")" asp-action="Notifications">View All Activity</a></li>
                         </ul>
                     </div>
                     <!-- Profile Link -->

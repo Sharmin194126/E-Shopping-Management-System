@@ -64,16 +64,43 @@ namespace E_ShoppingManagement.Controllers
                 return View("PendingApproval");
             }
 
-            var assignedOrders = await _context.Orders
+            var allAssignedOrders = await _context.Orders
                 .Where(o => o.DeliveryManId == deliveryMan.Id)
                 .Include(o => o.Customer)
                 .OrderByDescending(o => o.CreatedAt)
                 .ToListAsync();
 
+            var recentOrders = allAssignedOrders.Take(10).ToList();
+
             ViewBag.DeliveryMan = deliveryMan;
             ViewBag.DmName = deliveryMan.Name;
-            ViewBag.UnreadNotifications = assignedOrders.Count(o => o.CreatedAt >= DateTime.UtcNow.AddDays(-1));
-            return View(assignedOrders);
+            ViewBag.UnreadNotifications = allAssignedOrders.Count(o => o.CreatedAt >= DateTime.UtcNow.AddDays(-1));
+            ViewBag.TotalOrdersCount = allAssignedOrders.Count;
+            ViewBag.PendingDeliveriesCount = allAssignedOrders.Count(o => o.OrderStatus != "Delivered" && o.OrderStatus != "Returned");
+            ViewBag.CompletedOrdersCount = allAssignedOrders.Count(o => o.OrderStatus == "Delivered");
+            ViewBag.ReturnedOrdersCount = allAssignedOrders.Count(o => o.OrderStatus == "Returned");
+
+            return View(recentOrders);
+        }
+
+        // ─────────────────────────────────────────
+        //  ALL ASSIGNED ORDERS
+        // ─────────────────────────────────────────
+        public async Task<IActionResult> AssignedOrders()
+        {
+            var dm = await GetCurrentDmAsync();
+            if (dm == null) return RedirectToAction("Login", "Account");
+
+            var orders = await _context.Orders
+                .Where(o => o.DeliveryManId == dm.Id)
+                .Include(o => o.Customer)
+                .OrderByDescending(o => o.CreatedAt)
+                .ToListAsync();
+
+            ViewBag.DeliveryMan = dm;
+            ViewBag.DmName = dm.Name;
+            ViewBag.UnreadNotifications = orders.Count(o => o.CreatedAt >= DateTime.UtcNow.AddDays(-1));
+            return View(orders);
         }
 
         // ─────────────────────────────────────────
