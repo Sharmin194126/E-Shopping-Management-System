@@ -1,44 +1,44 @@
-<!-- Emoji Picker Template (hidden) -->
-<div id="emojiPickerTemplate" style="display: none;">
-    <div class="emoji-picker shadow-lg border rounded bg-white" style="position: absolute; z-index: 9999; width: 300px; border-radius: 15px !important; overflow: hidden; background: #fff !important;">
-        <div class="emoji-tabs bg-light d-flex border-bottom" style="padding: 5px;">
-            <button type="button" class="btn btn-sm btn-light flex-grow-1 active" onclick="switchEmojiTab(this, 'smileys')">😀</button>
-            <button type="button" class="btn btn-sm btn-light flex-grow-1" onclick="switchEmojiTab(this, 'nature')">🌿</button>
-            <button type="button" class="btn btn-sm btn-light flex-grow-1" onclick="switchEmojiTab(this, 'food')">🍕</button>
-            <button type="button" class="btn btn-sm btn-light flex-grow-1" onclick="switchEmojiTab(this, 'activities')">⚽</button>
-            <button type="button" class="btn btn-sm btn-light flex-grow-1" onclick="switchEmojiTab(this, 'objects')">💡</button>
-            <button type="button" class="btn btn-sm btn-light flex-grow-1" onclick="switchEmojiTab(this, 'symbols')">❤️</button>
+<div id="emojiPickerTemplate" class="emoji-picker shadow-lg border rounded bg-white" style="display: none; position: fixed; z-index: 10010; width: 300px; border-radius: 15px !important; overflow: hidden; background: #fff !important;">
+    <div class="emoji-tabs bg-light d-flex border-bottom" style="padding: 5px;">
+        <button type="button" class="btn btn-sm btn-light flex-grow-1 active" onclick="switchEmojiTab(this, 'smileys')">😀</button>
+        <button type="button" class="btn btn-sm btn-light flex-grow-1" onclick="switchEmojiTab(this, 'nature')">🌿</button>
+        <button type="button" class="btn btn-sm btn-light flex-grow-1" onclick="switchEmojiTab(this, 'food')">🍕</button>
+        <button type="button" class="btn btn-sm btn-light flex-grow-1" onclick="switchEmojiTab(this, 'activities')">⚽</button>
+        <button type="button" class="btn btn-sm btn-light flex-grow-1" onclick="switchEmojiTab(this, 'objects')">💡</button>
+        <button type="button" class="btn btn-sm btn-light flex-grow-1" onclick="switchEmojiTab(this, 'symbols')">❤️</button>
+    </div>
+    <div class="emoji-content p-3" style="max-height: 250px; overflow-y: auto;">
+        <div id="smileys" class="emoji-tab-pane">
+            @foreach (var e in new[] { "😀", "😃", "😄", "😁", "😆", "😅", "😂", "🤣", "😊", "😇", "🙂", "🙃", "😉", "😌", "😍", "🥰", "😘", "😗", "😙", "😚", "😋", "😛", "😝", "😜", "🤪", "🤨", "🧐", "🤓", "😎", "🤩", "🥳", "😏", "😒", "😞", "😔", "😟", "😕", "🙁", "☹️", "😣", "😖", "😫", "😩", "🥺", "😢", "😭", "😤", "😠", "😡", "🤬", "🤯", "😳", "🥵", "🥶", "😱", "😨", "😰", "😥", "😓", "🤗", "🤔", "🤭", "🤫", "🤥", "😶", "😐", "😑", "😬", "🙄", "😯", "😦", "😧", "😮", "😲", "🥱", "😴", "🤤", "😪", "😵", "🤐", "🥴", "🤢", "🤮", "🤧", "😷", "🤒", "🤕" })
+            { <span class="emoji-item" onclick="selectEmoji(this)">@e</span> }
         </div>
-        <div class="emoji-content p-3" style="max-height: 250px; overflow-y: auto;">
-            <div id="smileys" class="emoji-tab-pane">
-                @foreach (var e in new[] { "😀", "😃", "😄", "😁", "😆", "😅", "😂", "🤣", "😊", "😇", "🙂", "🙃", "😉", "😌", "😍", "🥰", "😘", "😗", "😙", "😚", "😋", "😛", "😝", "😜", "🤪", "🤨", "🧐", "🤓", "😎", "🤩", "🥳", "😏", "😒", "😞", "😔", "😟", "😕", "🙁", "☹️", "😣", "😖", "😫", "😩", "🥺", "😢", "😭", "😤", "😠", "😡", "🤬", "🤯", "😳", "🥵", "🥶", "😱", "😨", "😰", "😥", "😓", "🤗", "🤔", "🤭", "🤫", "🤥", "😶", "😐", "😑", "😬", "🙄", "😯", "😦", "😧", "😮", "😲", "🥱", "😴", "🤤", "😪", "😵", "🤐", "🥴", "🤢", "🤮", "🤧", "😷", "🤒", "🤕" })
-                { <span class="emoji-item" onclick="selectEmoji(this)">@e</span> }
-            </div>
-            <div id="nature" class="emoji-tab-pane" style="display:none;">
-                @foreach (var e in new[] { "🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼", "🐻‍❄️", "🐨", "🐯", "🦁", "🐮", "🐷", "🐽", "🐸", "🐵", "🐒", "🦍", "🦧", "🐶", "🐕", "🦮", "🐕‍🦺", "🐩", "🐺", "🦊", "🦝", "🐱", "🐈", "🐈‍⬛", "🦁", "🐯", "🐅", "🐆", "🐴", "🐎", "🦄", "🦓", "🦌", "🦬", "🐮", "🐂", "🐃", "🐄", "🐷", "🐖", "🐗", "🐽", "🐏", "🐑", "🐐", "🐪", "🐫", "🦙", "🦒", "🐘", "🦣", "🦏", "🦛", "🐭", "🐁", "🐀", "🐹", "🐰", "🐇", "🐿️", "🦫", "🦔", "🦇", "🐻", "🐻‍❄️", "🐨", "🐼", "🦥", "🦦", "🦨", "🦘", "🦡", "🐾", "🦃", "🐔", "🐓", "🐣", "🐤", "🐥", "🐦", "🐧", "🕊️", "🦅", "🦆", "🦢", "🦉", "🦤", "🦩", " peacock", "🦜" })
-                { <span class="emoji-item" onclick="selectEmoji(this)">@e</span> }
-            </div>
-            <div id="food" class="emoji-tab-pane" style="display:none;">
-                @foreach (var e in new[] { "🍏", "🍎", "🍐", "🍊", "🍋", "🍌", "🍉", "🍇", "🍓", "🫐", "🍈", "🍒", "🍑", "🥭", "🍍", "🥥", "🥝", "🍅", "🍆", "🥑", "🥦", "🥬", "🥒", "🌶️", "🫑", "🌽", "🥕", "🫒", "🧄", "🧅", "🍄", "🥜", "🫘", "🌰", "🍞", "🥐", "🥖", "🫓", "🥨", "🥯", "🥞", "🧇", "🧀", "🍖", "🍗", "🥩", "🥓", "🍔", "🍟", "🍕", "🌭", "🥪", "🌮", "🌯", "🫔", "🥙", "🧆", "🥚", "🍳", "🥘", "🍲", "🥣", "🥗", "🍿", "🧈", "🧂", "🥫", "🍱", "🍘", "🍙", "🍚", "🍛", "🍜", "🍝", "🍠", "🍢", "🍣", "🍤", "🍥", "🥮", "🍡", "🥟", "🥠", "🥡", "🦀", "🦞", "🦐", "🦑", "🦪", "🍦", "🍧", "🍨", "🍩", "🍪", "🎂", "🍰", "🧁", "🥧", "🍫", "🍬" })
-                { <span class="emoji-item" onclick="selectEmoji(this)">@e</span> }
-            </div>
-            <div id="activities" class="emoji-tab-pane" style="display:none;">
-                @foreach (var e in new[] { "⚽", "🏀", "🏈", "⚾", "🥎", "🎾", "🏐", "🏉", "🥏", "ビリヤード", "🏓", "🏸", "🏒", "🏑", "🥍", "🏏", "🪃", "🥅", "⛳", "🪁", "🏹", "🎣", "🤿", "🥊", "🥋", "⛸️", "🎿", "🏂", "🪂", "🏋️", "🤼", "🤸", "⛹️", "🤺", "🤾", "🏌️", "🏇", "🧘", "🏄", "🏊", "🤽", "🚣", "🧗", "🚵", "🚴", "🏆", "🥇", "🥈", "🥉", "🏅", "🎖️", "🏵️", "🎫", "🎟️" })
-                { <span class="emoji-item" onclick="selectEmoji(this)">@e</span> }
-            </div>
-            <div id="objects" class="emoji-tab-pane" style="display:none;">
-                @foreach (var e in new[] { "⌚", "📱", "📲", "💻", "⌨️", "🖱️", "🖲️", "🕹️", "🗜️", "💽", "💾", "💿", "📀", "📼", "📷", "📸", "📹", "🎥", "📽️", "🎞️", "📞", "☎️", "📟", "📠", "📺", "📻", "🎙️", "🎚️", "🎛️", "🧭", "⏱️", "⏲️", "⏰", "🕰️", "⌛", "⏳", "📡", "🔋", "🔌", "💡", "🔦", "🕯️", "🪔", "🧯", "🛢️", "💸", "💵", "💴", "💶", "💷", "🪙", "💰", "💳", "💎", "⚖️", "🪜", "🧰", "🪛", "🔧", "🔨", "⚒️", "🛠️", "⛏️", "🪚", "🔩", "⚙️", "🪮", "🧱", "⛓️", "🧲", "🔫", "💣", "🧨", "🪓", "🔪", "🗡️", "⚔️", "🛡️", "🚬", "⚰️", "🪦", "🏺", "🔮", "📿", "🧿" })
-                { <span class="emoji-item" onclick="selectEmoji(this)">@e</span> }
-            </div>
-            <div id="symbols" class="emoji-tab-pane" style="display:none;">
-                @foreach (var e in new[] { "❤️", "🧡", "💛", "💚", "💙", "💜", "🖤", "🤍", "🤎", "💔", "❤️‍🔥", "❤️‍🩹", "❣️", "💕", "💞", "💓", "💗", "💖", "💘", "💝", "💟", "☮️", "✝️", "☪️", "🕉️", "☸️", "✡️", "🔯", "🕎", "☯️", "☦️", "🛐", "⛎", "♈", "♉", "♊", "♋", "♌", "♍", "♎", "♏", "♐", "♑", "♒", "♓", "🆔", "⚛️", "🉑", "☢️", "☣️", "📴", "📳", "🈶", "🈚", "🈸", "🈺", "🈷️", "✴️", "🆚", "💮", "🉐", "㊙️", "㊗️", "🈴", "🈵", "🈹", "🈲", "🅰️", "🅱️", "🆎", "🆑", "🅾️", "🆘", "❌", "⭕", "🛑", "⛔", "📛", "🚫", "💯", "💢", "♨️", "🚷", "🚯", "🚳", "🚱", "🔞", "📵", "🚭", "❗", "❕", "❓", "❔", "‼️", "⁉️", "🔅", "🔆", "〽️", "⚠️", "🚸" })
-                { <span class="emoji-item" onclick="selectEmoji(this)">@e</span> }
-            </div>
+        <div id="nature" class="emoji-tab-pane" style="display:none;">
+            @foreach (var e in new[] { "🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼", "🐨", "🐯", "🦁", "🐮", "🐷", "🐽", "🐸", "🐵", "🐒", "🦍", "🐶", "🐕", "🐩", "🐺", "🦊", "🐱", "🐈", "🦁", "🐯", "🐅", "🐆", "🐴", "🐎", "🦄", "🦓", "🦌", "🐮", "🐂", "🐃", "🐄", "🐷", "🐖", "🐗", "🐽", "🐏", "🐑", "🐐", "🐪", "🐫", "🦙", "🦒", "🐘", "🦏", "🦛", "🐭", "🐁", "🐀", "🐹", "🐰", "🐇", "🐿️", "🦔", "🦇", "🐻", "🐨", "🐼", "🐾", "🦃", "🐔", "🐓", "🐣", "🐤", "🐥", "🐦", "🐧", "🕊️", "🦅", "🦆", "🦢", "🦉", "🦩", "🦜" })
+            { <span class="emoji-item" onclick="selectEmoji(this)">@e</span> }
+        </div>
+        <div id="food" class="emoji-tab-pane" style="display:none;">
+            @foreach (var e in new[] { "🍏", "🍎", "🍐", "🍊", "🍋", "🍌", "🍉", "🍇", "🍓", "🫐", "🍈", "🍒", "🍑", "🥭", "🍍", "🥥", "🥝", "🍅", "🍆", "🥑", "🥦", "🥬", "🥒", "🌶️", "🫑", "🌽", "🥕", "🫒", "🧄", "🧅", "🍄", "🥜", "🍞", "🥐", "🥖", "🥨", "🥯", "🥞", " waffle", "🧀", "🍖", "🍗", "🥩", "🥓", "🍔", "🍟", "🍕", "🌭", "🥪", "🌮", "🌯", "🥙", "🍳", "🥘", "🍲", "🥣", "🥗", "🍿", "🧈", "🧂", "🥫", "🍱", "🍘", "🍙", "🍚", "🍛", "🍜", "🍝", "🍠", "🍢", "🍣", "🍤", "🍥", "🍡", " dumpling", "🍦", "🍧", "🍨", "🍩", "🍪", "🎂", "🍰", "🧁", "🥧", "🍫", "🍬" })
+            { <span class="emoji-item" onclick="selectEmoji(this)">@e</span> }
+        </div>
+        <div id="activities" class="emoji-tab-pane" style="display:none;">
+            @foreach (var e in new[] { "⚽", "🏀", "🏈", "⚾", "🥎", "🎾", "🏐", "🏉", "🥏", "🏓", " badminton", "🏒", "🏑", "🏏", "⛳", "🏹", "🥊", "🥋", "⛸️", "🎿", "🏂", "🏋️", "🤺", "🏄", "🏊", "🚣", "🧗", "🏆", "🥇", "🥈", "🥉", "🏅", "🎖️", "🎫", "🎟️" })
+            { <span class="emoji-item" onclick="selectEmoji(this)">@e</span> }
+        </div>
+        <div id="objects" class="emoji-tab-pane" style="display:none;">
+            @foreach (var e in new[] { "⌚", "📱", "📲", "💻", "⌨️", "🖱️", "🕹️", "📷", "📸", "📹", "🎥", "📞", "☎️", "📟", "📠", "📺", "📻", "🎙️", "🧭", "⏱️", "⏲️", "⏰", "🕰️", "⌛", "⏳", "📡", "🔋", "🔌", "💡", "🔦", "🕯️", "🧯", "💸", "💵", "💰", "💳", "💎", "⚖️", "🧰", "🔧", "🔨", "⚒️", "🛠️", "⛏️", "🔩", "⚙️", "🧱", "⛓️", "🧲", "🔫", "💣", "🧨", "🪓", "🔪", "🗡️", "⚔️", "🛡️", "⚰️", "🏺", "🔮", "📿", "🧿" })
+            { <span class="emoji-item" onclick="selectEmoji(this)">@e</span> }
+        </div>
+        <div id="symbols" class="emoji-tab-pane" style="display:none;">
+            @foreach (var e in new[] { "❤️", "🧡", "💛", "💚", "💙", "💜", "🖤", "🤍", "🤎", "💔", "❣️", "💕", "💞", "💓", "💗", "💖", "💘", "💝", "💟", "☮️", "✝️", "☪️", "🕉️", "☸️", "✡️", "🔯", "🕎", "☯️", "☦️", "🛐", "⛎", "♈", "♉", "♊", "♋", "♌", "♍", "♎", "♏", "♐", "♑", "♒", "♓", "🆔", "⚛️", "🉑", "☢️", "☣️", "📴", "📳", "🈶", "🈚", "✴️", "🆚", "💮", "🉐", "㊙️", "㊗️", "❌", "⭕", "🛑", "⛔", "📛", "🚫", "💯", "💢", "♨️", "❗", "❕", "❓", "❔", "‼️", "⁉️", "⚠️" })
+            { <span class="emoji-item" onclick="selectEmoji(this)">@e</span> }
         </div>
     </div>
 </div>
 
 <style>
+    .emoji-picker {
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2) !important;
+    }
     .emoji-item {
         cursor: pointer;
         font-size: 1.5rem;
@@ -72,12 +72,9 @@
                 const end = area.selectionEnd || 0;
                 area.value = area.value.substring(0, start) + emoji + area.value.substring(end);
                 area.focus();
-                
-                // Trigger input event if it exists (for toggling send buttons etc)
                 area.dispatchEvent(new Event('input', { bubbles: true }));
             }
-            picker.style.display = 'none';
+            $(picker).hide();
         }
     }
-
-    
+</script>
