@@ -1,4 +1,4 @@
-﻿using E_ShoppingManagement.Data;
+using E_ShoppingManagement.Data;
 using E_ShoppingManagement.Models;
 using E_ShoppingManagement.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -281,5 +281,22 @@ namespace E_ShoppingManagement.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // APPROVE
+        [HttpPost]
+        public async Task<IActionResult> Approve(int id)
+        {
+            var employee = await _context.Employees.FindAsync(id);
+            if (employee == null) return NotFound();
+
+            employee.Status = "Active";
+            employee.ModifiedAt = DateTime.UtcNow;
+
+            await _context.SaveChangesAsync();
+
+            TempData["Message"] = "Employee approved successfully. They can now log in.";
+            TempData["IsSuccess"] = true;
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

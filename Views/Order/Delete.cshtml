@@ -1,7 +1,7 @@
 @model E_ShoppingManagement.Models.Order
 @{
     ViewData["Title"] = "Delete Order";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    Layout = User.IsInRole("Admin") ? "~/Views/Shared/_AdminLayout.cshtml" : "~/Views/Shared/_EmployeeLayout.cshtml";
 }
 
 <div class="container mt-4">

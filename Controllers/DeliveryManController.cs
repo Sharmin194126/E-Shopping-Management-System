@@ -22,6 +22,12 @@ namespace E_ShoppingManagement.Controllers
             return View(await _context.DeliveryMen.ToListAsync());
         }
 
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Manage()
+        {
+            return View(await _context.DeliveryMen.ToListAsync());
+        }
+
         public IActionResult Create()
         {
             return View();
@@ -141,6 +147,21 @@ namespace E_ShoppingManagement.Controllers
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Payments), new { id });
+        }
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Approve(int id)
+        {
+            var dm = await _context.DeliveryMen.FindAsync(id);
+            if (dm == null) return NotFound();
+
+            dm.Status = "Active";
+            await _context.SaveChangesAsync();
+
+            TempData["Message"] = "Delivery Man approved successfully. They can now log in.";
+            TempData["IsSuccess"] = true;
+
+            return RedirectToAction(nameof(Manage));
         }
     }
 }

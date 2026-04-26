@@ -1,8 +1,8 @@
-﻿@model E_ShoppingManagement.ViewModels.CustomerViewModel
+@model E_ShoppingManagement.ViewModels.CustomerViewModel
 
 @{
     ViewData["Title"] = "Create Customer";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    Layout = User.IsInRole("Admin") ? "~/Views/Shared/_AdminLayout.cshtml" : "~/Views/Shared/_EmployeeLayout.cshtml";
 }
 
 <h2 class="mb-3">Create Customer</h2>

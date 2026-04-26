@@ -1,8 +1,8 @@
-﻿@model E_ShoppingManagement.Models.Category
+@model E_ShoppingManagement.Models.Category
 
 @{
     ViewData["Title"] = "Category Details";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    Layout = User.IsInRole("Admin") ? "~/Views/Shared/_AdminLayout.cshtml" : "~/Views/Shared/_EmployeeLayout.cshtml";
 }
 
 <h2 class="mb-3 text-center">Category Details</h2>

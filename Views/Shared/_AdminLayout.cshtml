@@ -91,13 +91,16 @@
             <a asp-controller="Customer" asp-action="Index" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Customer" ? "active" : "")">
                 <i class="bi bi-people me-2"></i>Manage Customer
             </a>
-            <a asp-controller="Employee" asp-action="Index" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Employee" ? "active" : "")">
+            <a asp-controller="Employee" asp-action="Index" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Employee" && ViewContext.RouteData.Values["Action"]?.ToString() == "Index" ? "active" : "")">
                 <i class="bi bi-person-badge me-2"></i>Manage Employees
+            </a>
+            <a asp-controller="DeliveryMan" asp-action="Manage" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "DeliveryMan" && ViewContext.RouteData.Values["Action"]?.ToString() == "Manage" ? "active" : "")">
+                <i class="bi bi-person-check me-2"></i>Manage Deliveryman
             </a>
             <a asp-controller="AdminCart" asp-action="Index" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "AdminCart" ? "active" : "")">
                 <i class="bi bi-cart me-2"></i>Manage Carts
             </a>
-            <a asp-controller="DeliveryMan" asp-action="Index" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "DeliveryMan" ? "active" : "")">
+            <a asp-controller="DeliveryMan" asp-action="Index" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "DeliveryMan" && ViewContext.RouteData.Values["Action"]?.ToString() == "Index" ? "active" : "")">
                 <i class="bi bi-truck me-2"></i>Delivery Personnel
             </a>
             <a asp-controller="AdminReport" asp-action="Index" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "AdminReport" ? "active" : "")">
@@ -159,14 +162,16 @@
 
                         var pendingOrders = db.Orders.Where(o => o.OrderStatus == "Pending").ToList();
                         var pendingEmps = db.Employees.Where(e => e.Status == "Pending").ToList();
+                        var pendingDMs = db.DeliveryMen.Where(d => d.Status == "Pending").ToList();
                         var activeMsgs = db.ContactMessages.Where(m => m.Status != "Replied").ToList();
 
                         var newOrdersCount = pendingOrders.Count(o => o.CreatedAt > lastCheck);
                         var newEmpsCount = pendingEmps.Count(e => e.CreatedAt > lastCheck);
+                        var newDMsCount = pendingDMs.Count(d => d.CreatedAt > lastCheck);
                         var newMsgsCount = activeMsgs.Count(m => m.CreatedAt > lastCheck);
                         
-                        var totalNewNotifs = newOrdersCount + newEmpsCount + newMsgsCount;
-                        var totalItems = pendingOrders.Count + pendingEmps.Count + activeMsgs.Count;
+                        var totalNewNotifs = newOrdersCount + newEmpsCount + newDMsCount + newMsgsCount;
+                        var totalItems = pendingOrders.Count + pendingEmps.Count + pendingDMs.Count + activeMsgs.Count;
                     }
                     <div class="dropdown">
                         <a asp-controller="@(User.IsInRole("Admin") ? "AdminDashboard" : "EmployeeDashboard")" asp-action="Notifications" class="position-relative text-decoration-none" title="View Notifications">
@@ -205,6 +210,19 @@
                                             <div>
                                                 <span class="fw-bold">@pendingEmps.Count Pending Approvals</span>
                                                 <small class="text-muted d-block">New employee registrations</small>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                            }
+                            @if (pendingDMs.Any()) {
+                                <li>
+                                    <a class="dropdown-item py-2 border-bottom" asp-controller="DeliveryMan" asp-action="Manage">
+                                        <div class="d-flex gap-2">
+                                            <i class="bi bi-truck text-warning"></i>
+                                            <div>
+                                                <span class="fw-bold">@pendingDMs.Count Pending DeliveryMan</span>
+                                                <small class="text-muted d-block">Needs approval</small>
                                             </div>
                                         </div>
                                     </a>
