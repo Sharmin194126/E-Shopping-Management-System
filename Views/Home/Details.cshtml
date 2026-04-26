@@ -690,290 +690,239 @@
     </div>
 </div>
 
-<!-- Emoji Picker Template is rendered via partial -->
-@await Html.PartialAsync("_EmojiPicker")
-
-<script>
-
-    function toggleChat() {
-        var chatBox = document.getElementById('chatBox');
-        if (chatBox.style.display === 'flex') {
-            chatBox.style.display = 'none';
-        } else {
-            chatBox.style.display = 'flex';
-        }
-    }
-
-    function sendMessage() {
-        const input = document.getElementById('chatInput');
-        const message = input.value.trim();
-        if (!message) return;
-
-        const chatMessages = document.getElementById('chatMessages');
-        const userMsg = document.createElement('div');
-        userMsg.className = 'chat-message user';
-        userMsg.innerHTML = `<strong style="color: #198754;">You</strong><p class="mb-0 small" style="color: #222 !important;">${message}</p>`;
-        chatMessages.appendChild(userMsg);
-        
-        input.value = '';
-        chatMessages.scrollTop = chatMessages.scrollHeight;
- 
-        // Actual post to server
-        $.post('/Home/SendLiveChatMessage', { message: message });
-
-        // Auto-reply after 1 second
-        setTimeout(() => {
-            const supportMsg = document.createElement('div');
-            supportMsg.className = 'chat-message support';
-            supportMsg.innerHTML = `<strong style="color: #532374;">Support Team</strong><p class="mb-0 small" style="color: #444 !important;">Thank you for your message. An agent will respond shortly. For immediate assistance, please call us or visit our <a href="/Home/Contact" style="color: #532374; font-weight: 600;">Contact Page</a>.</p>`;
-            chatMessages.appendChild(supportMsg);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }, 1000);
-    }
-
-    function reactToReview(reviewId, reactionType) {
-        @if (!(User.Identity?.IsAuthenticated ?? false))
-        {
-            <text>window.location.href = '/Account/Login'; return;</text>
-        }
-        
-        $.post('/Review/React', { reviewId: reviewId, reactionType: reactionType }, function(data) {
-            if (data.success) {
-                location.reload(); 
-            }
-        });
-    }
-
-    function toggleReplyBox(reviewId) {
-        const box = document.getElementById(`reply-box-${reviewId}`);
-        const isHidden = box.style.display === 'none';
-        
-        // Close other pickers
-        const pickerTemplate = document.getElementById('emojiPickerTemplate');
-        if(pickerTemplate) pickerTemplate.style.display = 'none';
-
-        box.style.display = isHidden ? 'block' : 'none';
-        if(isHidden) {
-            // Ensure necessary inputs exist
-            if(!document.getElementById(`reply-file-${reviewId}`)) {
-                const card = box.querySelector('.card');
-                const fileInput = document.createElement('input');
-                fileInput.type = 'file';
-                fileInput.id = `reply-file-${reviewId}`;
-                fileInput.multiple = true;
-                fileInput.style.display = 'none';
-                fileInput.onchange = (e) => handleReplyFiles(reviewId, e.target);
-                card.appendChild(fileInput);
-
-                const previewDiv = document.createElement('div');
-                previewDiv.id = `reply-preview-${reviewId}`;
-                previewDiv.className = 'd-flex flex-wrap gap-2 mb-2 p-1';
-                card.insertBefore(previewDiv, box.querySelector('textarea'));
+@section Scripts {
+    @await Html.PartialAsync("_EmojiPicker")
+    <script>
+        function toggleChat() {
+            var chatBox = document.getElementById('chatBox');
+            if (chatBox.style.display === 'flex') {
+                chatBox.style.display = 'none';
+            } else {
+                chatBox.style.display = 'flex';
+                setTimeout(() => document.getElementById('chatInput').focus(), 100);
             }
         }
-    }
 
-    function showEmojiPickerFor(targetId, btn) {
-        const picker = document.getElementById('emojiPickerTemplate');
-        if (picker.style.display === 'block' && picker.dataset.targetId == targetId) {
-            picker.style.display = 'none';
-            return;
-        }
-        picker.dataset.targetId = targetId;
-        picker.style.display = 'block';
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (!message) return;
 
-        // Position near button
-        const rect = btn.getBoundingClientRect();
-        picker.style.position = 'fixed';
-        picker.style.zIndex = '10000';
-        
-        // Calculate best position
-        let left = rect.left - 250;
-        if (left < 10) left = 10; // Keep on screen
-        
-        picker.style.left = left + 'px';
-        picker.style.top = (rect.top + rect.height + 5) + 'px';
-        
-        // Close when clicking outside
-        setTimeout(() => {
-            const closeEP = (e) => {
-                if(!picker.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
-                    picker.style.display = 'none';
-                    document.removeEventListener('click', closeEP);
-                }
-            };
-            document.addEventListener('click', closeEP);
-        }, 10);
-    }
-
-    function insertTool(reviewId, type, btn) {
-        if(type === 'emoji') {
-            showEmojiPickerFor('reply-text-' + reviewId, btn);
-        } else if(type === 'attach' || type === 'gallery') {
-            document.getElementById(`reply-file-${reviewId}`).click();
-        }
-    }
-
-    window.replyFiles = window.replyFiles || {};
-    
-    function handleReplyFiles(reviewId, input) {
-        if(!window.replyFiles[reviewId]) window.replyFiles[reviewId] = [];
-        if(input.files) {
-            Array.from(input.files).forEach(f => window.replyFiles[reviewId].push(f));
-            renderReplyPreviews(reviewId);
-        }
-    }
-
-    function renderReplyPreviews(reviewId) {
-        const previewDiv = document.getElementById(`reply-preview-${reviewId}`);
-        previewDiv.innerHTML = '';
-        const dt = new DataTransfer();
-        window.replyFiles[reviewId].forEach((file, index) => {
-            dt.items.add(file);
-            const container = document.createElement('div');
-            container.className = 'position-relative d-inline-block';
-            container.style.width = '60px';
-            container.style.height = '60px';
+            const chatMessages = document.getElementById('chatMessages');
+            const userMsg = document.createElement('div');
+            userMsg.className = 'chat-message user';
+            userMsg.innerHTML = `<strong style="color: #198754;">You</strong><p class="mb-0 small" style="color: #222 !important;">${message}</p>`;
+            chatMessages.appendChild(userMsg);
             
-            if(file.type.startsWith('image/')) {
+            input.value = '';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+     
+            $.post('/Home/SendLiveChatMessage', { message: message });
+
+            setTimeout(() => {
+                const supportMsg = document.createElement('div');
+                supportMsg.className = 'chat-message support';
+                supportMsg.innerHTML = `<strong style="color: #532374;">Support Team</strong><p class="mb-0 small" style="color: #444 !important;">Thank you for your message. An agent will respond shortly. For immediate assistance, please call us or visit our <a href="/Home/Contact" style="color: #532374; font-weight: 600;">Contact Page</a>.</p>`;
+                chatMessages.appendChild(supportMsg);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 1000);
+        }
+
+        function reactToReview(reviewId, reactionType) {
+            @if (!(User.Identity?.IsAuthenticated ?? false))
+            {
+                <text>window.location.href = '/Account/Login'; return;</text>
+            }
+            $.post('/Review/React', { reviewId: reviewId, reactionType: reactionType }, function(data) {
+                if (data.success) { location.reload(); }
+            });
+        }
+
+        function toggleReplyBox(reviewId) {
+            const box = document.getElementById(`reply-box-${reviewId}`);
+            const isHidden = box.style.display === 'none';
+            const pickerTemplate = document.getElementById('emojiPickerTemplate');
+            if(pickerTemplate) pickerTemplate.style.display = 'none';
+            box.style.display = isHidden ? 'block' : 'none';
+            if(isHidden) {
+                if(!document.getElementById(`reply-file-${reviewId}`)) {
+                    const card = box.querySelector('.card');
+                    const fileInput = document.createElement('input');
+                    fileInput.type = 'file';
+                    fileInput.id = `reply-file-${reviewId}`;
+                    fileInput.multiple = true;
+                    fileInput.style.display = 'none';
+                    fileInput.onchange = (e) => handleReplyFiles(reviewId, e.target);
+                    card.appendChild(fileInput);
+
+                    const previewDiv = document.createElement('div');
+                    previewDiv.id = `reply-preview-${reviewId}`;
+                    previewDiv.className = 'd-flex flex-wrap gap-2 mb-2 p-1';
+                    card.insertBefore(previewDiv, box.querySelector('textarea'));
+                }
+            }
+        }
+
+        function showEmojiPickerFor(targetId, btn) {
+            const picker = document.getElementById('emojiPickerTemplate');
+            if (picker.style.display === 'block' && picker.dataset.targetId == targetId) {
+                picker.style.display = 'none';
+                return;
+            }
+            picker.dataset.targetId = targetId;
+            picker.style.display = 'block';
+            const rect = btn.getBoundingClientRect();
+            picker.style.position = 'fixed';
+            picker.style.zIndex = '10001';
+            let left = rect.left - 250;
+            if (left < 10) left = 10;
+            picker.style.left = left + 'px';
+            picker.style.top = (rect.top + rect.height + 5) + 'px';
+            setTimeout(() => {
+                const closeEP = (e) => {
+                    if(!picker.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
+                        picker.style.display = 'none';
+                        document.removeEventListener('click', closeEP);
+                    }
+                };
+                document.addEventListener('click', closeEP);
+            }, 10);
+        }
+
+        function insertTool(reviewId, type, btn) {
+            if(type === 'emoji') {
+                showEmojiPickerFor('reply-text-' + reviewId, btn);
+            } else if(type === 'attach' || type === 'gallery') {
+                document.getElementById(`reply-file-${reviewId}`).click();
+            }
+        }
+
+        window.replyFiles = window.replyFiles || {};
+        function handleReplyFiles(reviewId, input) {
+            if(!window.replyFiles[reviewId]) window.replyFiles[reviewId] = [];
+            if(input.files) {
+                Array.from(input.files).forEach(f => window.replyFiles[reviewId].push(f));
+                renderReplyPreviews(reviewId);
+            }
+        }
+
+        function renderReplyPreviews(reviewId) {
+            const previewDiv = document.getElementById(`reply-preview-${reviewId}`);
+            previewDiv.innerHTML = '';
+            const dt = new DataTransfer();
+            window.replyFiles[reviewId].forEach((file, index) => {
+                dt.items.add(file);
+                const container = document.createElement('div');
+                container.className = 'position-relative d-inline-block';
+                container.style.width = '60px'; container.style.height = '60px';
+                if(file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.style.width = '100%'; img.style.height = '100%'; img.style.objectFit = 'cover';
+                        img.className = 'rounded border shadow-sm';
+                        container.appendChild(img);
+                        const delBtn = document.createElement('button');
+                        delBtn.innerHTML = '×';
+                        delBtn.className = 'btn btn-danger btn-sm position-absolute top-0 end-0 p-0';
+                        delBtn.style.width = '16px'; delBtn.style.height = '16px'; delBtn.style.fontSize = '12px'; delBtn.style.lineHeight = '1';
+                        delBtn.onclick = (ev) => {
+                            ev.preventDefault();
+                            window.replyFiles[reviewId].splice(index, 1);
+                            renderReplyPreviews(reviewId);
+                        };
+                        container.appendChild(delBtn);
+                    };
+                    reader.readAsDataURL(file);
+                }
+                previewDiv.appendChild(container);
+            });
+            const fileInput = document.getElementById(`reply-file-${reviewId}`);
+            if(fileInput) fileInput.files = dt.files;
+        }
+
+        function submitReply(reviewId) {
+            const textArea = document.getElementById(`reply-text-${reviewId}`);
+            const text = textArea.value;
+            if (!text.trim()) return;
+            const formData = new FormData();
+            formData.append('reviewId', reviewId);
+            formData.append('replyText', text);
+            const files = document.getElementById(`reply-file-${reviewId}`).files;
+            for(let i=0; i<files.length; i++) { formData.append('attachments', files[i]); }
+            $.ajax({
+                url: '/Review/Reply',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(data) { if (data.success) { location.reload(); } }
+            });
+        }
+
+        document.querySelectorAll('.size-select').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const size = this.value;
+                const sizeStockData = document.querySelector(`.size-data[data-size="${size}"]`);
+                const display = document.getElementById('sizeStockDisplay');
+                const qtyInput = document.getElementById('quantityInput');
+                const limitMsg = document.getElementById('stockLimitMsg');
+                if (sizeStockData) {
+                    const stock = parseInt(sizeStockData.getAttribute('data-stock'));
+                    display.innerText = stock > 0 ? `${stock} units currently in stock` : 'Out of Stock';
+                    display.style.color = stock > 0 ? '#198754' : '#dc3545';
+                    qtyInput.setAttribute('max', stock);
+                    limitMsg.innerText = `(Stock: ${stock} units | Max: @(Model.Product.MaxOrderQty > 0 ? Model.Product.MaxOrderQty.ToString() : "No Limit"))`;
+                    if (parseInt(qtyInput.value) > stock) { qtyInput.value = stock > 0 ? 1 : 0; }
+                } else {
+                    display.innerText = 'Stock information not available';
+                    display.style.color = '#6c757d';
+                }
+            });
+        });
+
+        let selectedFiles = [];
+        function previewImages(input) {
+            if (input.files) {
+                selectedFiles = Array.from(input.files).slice(0, 5);
+                renderPreviews();
+            }
+        }
+
+        function renderPreviews() {
+            const preview = document.getElementById('imagePreview');
+            const input = document.querySelector('input[name="images"]');
+            preview.innerHTML = '';
+            const dt = new DataTransfer();
+            selectedFiles.forEach((file, index) => {
+                dt.items.add(file);
                 const reader = new FileReader();
-                reader.onload = (e) => {
+                reader.onload = function(e) {
+                    const container = document.createElement('div');
+                    container.className = 'position-relative';
+                    container.style.width = '80px'; container.style.height = '80px';
                     const img = document.createElement('img');
                     img.src = e.target.result;
-                    img.style.width = '100%';
-                    img.style.height = '100%';
-                    img.style.objectFit = 'cover';
-                    img.className = 'rounded border shadow-sm';
-                    container.appendChild(img);
-                    
+                    img.style.width = '100%'; img.style.height = '100%'; img.style.objectFit = 'cover';
+                    img.style.borderRadius = '8px'; img.style.border = '2px solid #ddd';
                     const delBtn = document.createElement('button');
                     delBtn.innerHTML = '×';
                     delBtn.className = 'btn btn-danger btn-sm position-absolute top-0 end-0 p-0';
-                    delBtn.style.width = '16px';
-                    delBtn.style.height = '16px';
-                    delBtn.style.fontSize = '12px';
-                    delBtn.style.lineHeight = '1';
-                    delBtn.onclick = (ev) => {
-                        ev.preventDefault();
-                        window.replyFiles[reviewId].splice(index, 1);
-                        renderReplyPreviews(reviewId);
+                    delBtn.style.width = '20px'; delBtn.style.height = '20px'; delBtn.style.fontSize = '14px'; delBtn.style.lineHeight = '1';
+                    delBtn.onclick = (e) => {
+                        e.preventDefault();
+                        selectedFiles.splice(index, 1);
+                        renderPreviews();
                     };
+                    container.appendChild(img);
                     container.appendChild(delBtn);
+                    preview.appendChild(container);
                 };
                 reader.readAsDataURL(file);
-            }
-            previewDiv.appendChild(container);
-        });
-        const fileInput = document.getElementById(`reply-file-${reviewId}`);
-        if(fileInput) fileInput.files = dt.files;
-    }
-
-    function submitReply(reviewId) {
-        const textArea = document.getElementById(`reply-text-${reviewId}`);
-        const text = textArea.value;
-        if (!text.trim()) return;
-
-        // Note: For real file upload, use FormData
-        const formData = new FormData();
-        formData.append('reviewId', reviewId);
-        formData.append('replyText', text);
-        const files = document.getElementById(`reply-file-${reviewId}`).files;
-        for(let i=0; i<files.length; i++) {
-            formData.append('attachments', files[i]);
+            });
+            input.files = dt.files;
         }
-
-        $.ajax({
-            url: '/Review/Reply',
-            type: 'POST',
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function(data) {
-                if (data.success) {
-                    location.reload();
-                }
-            }
-        });
-    }
-
-    document.querySelectorAll('.size-select').forEach(radio => {
-        radio.addEventListener('change', function() {
-            const size = this.value;
-            const sizeStockData = document.querySelector(`.size-data[data-size="${size}"]`);
-            const display = document.getElementById('sizeStockDisplay');
-            const qtyInput = document.getElementById('quantityInput');
-            const limitMsg = document.getElementById('stockLimitMsg');
-            
-            if (sizeStockData) {
-                const stock = parseInt(sizeStockData.getAttribute('data-stock'));
-                display.innerText = stock > 0 ? `${stock} units currently in stock` : 'Out of Stock';
-                display.style.color = stock > 0 ? '#198754' : '#dc3545';
-                
-                qtyInput.setAttribute('max', stock);
-                limitMsg.innerText = `(Stock: ${stock} units | Max: @(Model.Product.MaxOrderQty > 0 ? Model.Product.MaxOrderQty.ToString() : "No Limit"))`;
-                
-                if (parseInt(qtyInput.value) > stock) {
-                    qtyInput.value = stock > 0 ? 1 : 0;
-                }
-            } else {
-                display.innerText = 'Stock information not available';
-                display.style.color = '#6c757d';
-            }
-        });
-    });
-
-    let selectedFiles = [];
-
-    function previewImages(input) {
-        if (input.files) {
-            selectedFiles = Array.from(input.files).slice(0, 5);
-            renderPreviews();
-        }
-    }
-
-    function renderPreviews() {
-        const preview = document.getElementById('imagePreview');
-        const input = document.querySelector('input[name="images"]');
-        preview.innerHTML = '';
-        
-        const dt = new DataTransfer();
-        selectedFiles.forEach((file, index) => {
-            dt.items.add(file);
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const container = document.createElement('div');
-                container.className = 'position-relative';
-                container.style.width = '80px';
-                container.style.height = '80px';
-
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                img.style.width = '100%';
-                img.style.height = '100%';
-                img.style.objectFit = 'cover';
-                img.style.borderRadius = '8px';
-                img.style.border = '2px solid #ddd';
-                
-                const delBtn = document.createElement('button');
-                delBtn.innerHTML = '×';
-                delBtn.className = 'btn btn-danger btn-sm position-absolute top-0 end-0 p-0';
-                delBtn.style.width = '20px';
-                delBtn.style.height = '20px';
-                delBtn.style.fontSize = '14px';
-                delBtn.style.lineHeight = '1';
-                delBtn.onclick = (e) => {
-                    e.preventDefault();
-                    selectedFiles.splice(index, 1);
-                    renderPreviews();
-                };
-
-                container.appendChild(img);
-                container.appendChild(delBtn);
-                preview.appendChild(container);
-            };
-            reader.readAsDataURL(file);
-        });
-        input.files = dt.files;
-    }
-</script>
+    </script>
+}
 

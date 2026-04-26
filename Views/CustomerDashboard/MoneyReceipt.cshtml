@@ -53,8 +53,26 @@
         .theme-back-btn:hover { background: #3d1a55; color: white; transform: translateX(-5px); }
         @@media print {
             .no-print { display: none !important; }
-            body { background: #f2efe9; padding: 0; }
-            .receipt-container { box-shadow: none; border: 1px solid #eee; }
+            body { background: white; padding: 0; margin: 0; width: 100%; height: auto; overflow: visible; }
+            .receipt-container { 
+                box-shadow: none !important; 
+                border: none !important; 
+                width: 100% !important; 
+                max-width: 100% !important; 
+                margin: 0 !important; 
+                padding: 10px !important;
+                background: white !important;
+                transform: scale(0.95);
+                transform-origin: top center;
+            }
+            .table { font-size: 10pt; }
+            .company-name { font-size: 32px; }
+            .receipt-title { font-size: 20px; }
+            .paid-stamp { font-size: 24px; }
+            @@page {
+                size: auto;
+                margin: 0.5cm;
+            }
         }
     </style>
 </head>
