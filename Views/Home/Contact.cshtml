@@ -6,6 +6,8 @@
 <style>
     .image-preview-container {
         margin-top: 10px;
+        position: relative;
+        display: inline-block;
     }
     #imagePreview {
         display: none;
@@ -14,6 +16,24 @@
         object-fit: cover;
         border-radius: 10px;
         border: 2px solid #532374;
+    }
+    .remove-image-cross {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        background: #ff4757;
+        color: white;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 14px;
+        border: 2px solid white;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        z-index: 100;
     }
 </style>
 
@@ -108,6 +128,7 @@
                             <small class="text-muted">Upload an image or screenshot for reference.</small>
                             <div class="image-preview-container">
                                 <img id="imagePreview" src="#" alt="Preview" />
+                                <div id="removePreview" class="remove-image-cross" onclick="removeImage()"><i class="bi bi-x"></i></div>
                             </div>
                         </div>
                         
@@ -126,19 +147,23 @@
         function previewImage(event) {
             const input = event.target;
             const preview = document.getElementById('imagePreview');
+            const cross = document.getElementById('removePreview');
             
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
-                
                 reader.onload = function(e) {
                     preview.src = e.target.result;
                     preview.style.display = 'block';
+                    cross.style.display = 'flex';
                 }
-                
                 reader.readAsDataURL(input.files[0]);
-            } else {
-                preview.style.display = 'none';
             }
+        }
+
+        function removeImage() {
+            document.getElementById('attachmentInput').value = "";
+            document.getElementById('imagePreview').style.display = 'none';
+            document.getElementById('removePreview').style.display = 'none';
         }
     </script>
 }

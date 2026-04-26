@@ -3,13 +3,18 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "My Dashboard";
+
+    var dbContext = Context.RequestServices.GetRequiredService<E_ShoppingManagement.Data.AppDbContext>();
+    var userMgr = Context.RequestServices.GetRequiredService<UserManager<E_ShoppingManagement.Models.Users>>();
+    var userObj = await userMgr.GetUserAsync(User);
+    var lastCheckTime = userObj?.LastNotificationCheck ?? DateTime.MinValue;
+    var customerObj = dbContext.Customers.FirstOrDefault(c => c.UserId == userObj.Id);
+    var newCount = customerObj != null ? dbContext.Orders.Count(o => o.CustomerId == customerObj.Id && o.CreatedAt > lastCheckTime) : 0;
 }
 
 <div class="container mt-5">
     
-<div class="d-flex justify-content-end align-items-center mb-3">
-    <a href="javascript:history.back()" class="theme-back-btn mb-0">Back</a>
-</div>
+@* Back button removed as per request *@
 <div class="row">
         <!-- Sidebar / Menu -->
         <div class="col-md-3">
@@ -50,7 +55,13 @@
                     <a href="/CustomerDashboard" class="list-group-item list-group-item-action active"><i class="bi bi-grid-1x2 me-2"></i>Dashboard</a>
                     <a href="/CustomerDashboard/Profile" class="list-group-item list-group-item-action"><i class="bi bi-person me-2"></i>My Profile</a>
                     <a href="/CustomerDashboard/Orders" class="list-group-item list-group-item-action"><i class="bi bi-cart3 me-2"></i>My Orders</a>
-                    <a href="/CustomerDashboard/Notifications" class="list-group-item list-group-item-action"><i class="bi bi-bell me-2"></i>Notifications</a>
+                    <a href="/CustomerDashboard/Notifications" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-bell me-2"></i>Notifications</span>
+                        @if (newCount > 0)
+                        {
+                            <span class="badge rounded-pill bg-danger" style="font-size: 0.7rem;">@newCount</span>
+                        }
+                    </a>
                     <a href="/CustomerDashboard/Messages" class="list-group-item list-group-item-action"><i class="bi bi-chat-dots me-2"></i>Messages</a>
                     <a href="/Cart" class="list-group-item list-group-item-action"><i class="bi bi-bag me-2"></i>My Cart</a>
                     <a href="/Home/Tracking" class="list-group-item list-group-item-action text-primary"><i class="bi bi-geo-alt me-2"></i>Track Order</a>
@@ -68,14 +79,7 @@
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h3 class="fw-bold mb-0" style="color:#532374;"><i class="bi bi-grid-1x2 me-2"></i>My Dashboard</h3>
                 <div class="d-flex align-items-center gap-3">
-                    @{
-                        var dbContext = Context.RequestServices.GetRequiredService<E_ShoppingManagement.Data.AppDbContext>();
-                        var userMgr = Context.RequestServices.GetRequiredService<UserManager<E_ShoppingManagement.Models.Users>>();
-                        var userObj = await userMgr.GetUserAsync(User);
-                        var lastCheckTime = userObj?.LastNotificationCheck ?? DateTime.MinValue;
-                        var customerObj = dbContext.Customers.FirstOrDefault(c => c.UserId == userObj.Id);
-                        var newCount = customerObj != null ? dbContext.Orders.Count(o => o.CustomerId == customerObj.Id && o.CreatedAt > lastCheckTime) : 0;
-                    }
+
                     <a href="/CustomerDashboard/Notifications" class="position-relative text-decoration-none" title="Notifications">
                         <i class="bi bi-bell-fill" style="font-size: 1.6rem; color: #532374;"></i>
                         @if (newCount > 0)
@@ -127,13 +131,13 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <a href="/CustomerDashboard/Orders" class="stat-card-premium card-variant-purple">
+                    <div class="stat-card-premium card-variant-purple">
                         <div class="stat-card-content">
                             <div class="stat-card-label">My Orders</div>
                             <div class="stat-card-value">@Model.Count()</div>
                         </div>
                         <div class="stat-card-icon"><i class="bi bi-bag-check-fill"></i></div>
-                    </a>
+                    </div>
                 </div>
                 <div class="col-md-4">
                     <div class="stat-card-premium card-variant-orange">

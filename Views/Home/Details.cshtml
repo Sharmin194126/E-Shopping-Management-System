@@ -519,7 +519,12 @@
                                     </div>
                                     <div class="col-md-8 mb-3">
                                         <label class="form-label fw-bold" style="color: #532374;">Comments</label>
-                                        <textarea name="comment" class="form-control border-primary" rows="2" placeholder="Write your experience..." required></textarea>
+                                        <div class="position-relative">
+                                            <textarea id="mainReviewComment" name="comment" class="form-control border-primary" rows="3" placeholder="Write your experience..." required></textarea>
+                                            <button type="button" class="btn btn-sm btn-outline-secondary border-0 position-absolute bottom-0 end-0 m-1" onclick="showEmojiPickerFor('mainReviewComment', this)" title="Insert Emoji">
+                                                <i class="bi bi-emoji-smile" style="font-size: 1.2rem;"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="mb-3">
@@ -662,6 +667,8 @@
 </div>
 
 
+@* Floating Live Chat Button removed as per request *@
+
 <!-- Chat Box -->
 <div id="chatBox" class="chat-box">
     <div class="chat-header">
@@ -689,8 +696,12 @@
 <script>
 
     function toggleChat() {
-        const chatBox = document.getElementById('chatBox');
-        chatBox.classList.toggle('active');
+        var chatBox = document.getElementById('chatBox');
+        if (chatBox.style.display === 'flex') {
+            chatBox.style.display = 'none';
+        } else {
+            chatBox.style.display = 'flex';
+        }
     }
 
     function sendMessage() {
@@ -762,34 +773,42 @@
         }
     }
 
+    function showEmojiPickerFor(targetId, btn) {
+        const picker = document.getElementById('emojiPickerTemplate');
+        if (picker.style.display === 'block' && picker.dataset.targetId == targetId) {
+            picker.style.display = 'none';
+            return;
+        }
+        picker.dataset.targetId = targetId;
+        picker.style.display = 'block';
+
+        // Position near button
+        const rect = btn.getBoundingClientRect();
+        picker.style.position = 'fixed';
+        picker.style.zIndex = '10000';
+        
+        // Calculate best position
+        let left = rect.left - 250;
+        if (left < 10) left = 10; // Keep on screen
+        
+        picker.style.left = left + 'px';
+        picker.style.top = (rect.top + rect.height + 5) + 'px';
+        
+        // Close when clicking outside
+        setTimeout(() => {
+            const closeEP = (e) => {
+                if(!picker.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
+                    picker.style.display = 'none';
+                    document.removeEventListener('click', closeEP);
+                }
+            };
+            document.addEventListener('click', closeEP);
+        }, 10);
+    }
+
     function insertTool(reviewId, type, btn) {
         if(type === 'emoji') {
-            const picker = document.getElementById('emojiPickerTemplate');
-            const targetId = 'reply-text-' + reviewId;
-            if (picker.style.display === 'block' && picker.dataset.targetId == targetId) {
-                picker.style.display = 'none';
-                return;
-            }
-            picker.dataset.targetId = targetId;
-            picker.style.display = 'block';
-
-            // Position near button
-            const rect = btn.getBoundingClientRect();
-            picker.style.position = 'fixed';
-            picker.style.zIndex = '10000';
-            picker.style.left = rect.left + 'px';
-            picker.style.top = (rect.top + rect.height + 5) + 'px';
-            
-            // Close when clicking outside
-            setTimeout(() => {
-                document.addEventListener('click', function closeEP(e) {
-                    if(!picker.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
-                        picker.style.display = 'none';
-                        document.removeEventListener('click', closeEP);
-                    }
-                });
-            }, 10);
-
+            showEmojiPickerFor('reply-text-' + reviewId, btn);
         } else if(type === 'attach' || type === 'gallery') {
             document.getElementById(`reply-file-${reviewId}`).click();
         }

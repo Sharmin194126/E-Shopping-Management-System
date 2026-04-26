@@ -52,7 +52,7 @@
         }
         .theme-back-btn:hover { background: #3d1a55; color: white; transform: translateX(-5px); }
         @@media print {
-            .no-print { display: none; }
+            .no-print { display: none !important; }
             body { background: #f2efe9; padding: 0; }
             .receipt-container { box-shadow: none; border: 1px solid #eee; }
         }
@@ -107,10 +107,10 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="d-flex align-items-center gap-3">
                             <strong>Payment Method:</strong>
-                            @if (Model.PaymentMethod == "bKash") {
-                                <div class="payment-badge-receipt"><img src="/images/bkash.png" style="height:25px;" /> bKash</div>
-                            } else if (Model.PaymentMethod == "Nagad") {
-                                <div class="payment-badge-receipt"><img src="/images/nagad.png" style="height:25px;" /> Nagad</div>
+                            @if (string.Equals(Model.PaymentMethod, "bKash", StringComparison.OrdinalIgnoreCase)) {
+                                <div class="payment-badge-receipt">bKash</div>
+                            } else if (string.Equals(Model.PaymentMethod, "Nagad", StringComparison.OrdinalIgnoreCase)) {
+                                <div class="payment-badge-receipt">Nagad</div>
                             } else {
                                 <span class="badge bg-secondary">@(string.IsNullOrEmpty(Model.PaymentMethod) || Model.PaymentMethod == "COD" ? "Cash on Delivery" : Model.PaymentMethod)</span>
                             }
