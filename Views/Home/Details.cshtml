@@ -688,55 +688,65 @@
     </div>
 </div>
 
-<script>
-    // Ensure functions are global
-    window.toggleChat = function() {
-        var $chatBox = $('#chatBox');
-        $chatBox.toggleClass('active');
-        if ($chatBox.hasClass('active')) {
-            $chatBox.show().css('display', 'flex');
-            setTimeout(() => $('#chatInput').focus(), 100);
-        } else {
-            $chatBox.hide();
-        }
-    };
-
-    window.showEmojiPickerFor = function(targetId, btn) {
-        var $picker = $('#emojiPickerTemplate');
-        if (!$picker.length) return;
-        
-        if ($picker.is(':visible') && $picker.attr('data-target-id') === targetId) {
-            $picker.hide();
-            return;
-        }
-        
-        $picker.attr('data-target-id', targetId).show();
-        var rect = btn.getBoundingClientRect();
-        
-        $picker.css({
-            position: 'fixed',
-            zIndex: '10010',
-            left: Math.max(10, rect.left - 250) + 'px',
-            top: (rect.top + rect.height + 5) + 'px'
-        });
-        
-        // Use a slight delay to avoid immediate closing from the same click
-        setTimeout(() => {
-            const closePicker = function(e) {
-                if (!$picker.is(e.target) && $picker.has(e.target).length === 0 && !$(btn).is(e.target) && !$(btn).has(e.target).length) {
-                    $picker.hide();
-                    $(document).off('click', closePicker);
+@section Scripts {
+    <script>
+        // Ensure functions are global for onclick handlers
+        window.toggleChat = function() {
+            var chatBox = document.getElementById('chatBox');
+            if (chatBox) {
+                if (chatBox.style.display === 'flex') {
+                    chatBox.style.display = 'none';
+                    chatBox.classList.remove('active');
+                } else {
+                    chatBox.style.display = 'flex';
+                    chatBox.classList.add('active');
+                    var input = document.getElementById('chatInput');
+                    if(input) setTimeout(function() { input.focus(); }, 100);
                 }
-            };
-            $(document).on('click', closePicker);
-        }, 50);
-    };
-</script>
+            }
+        };
+
+        window.showEmojiPickerFor = function(targetId, btn) {
+            var picker = document.getElementById('emojiPickerTemplate');
+            if (!picker) return;
+            
+            var isVisible = picker.style.display === 'block';
+            var currentTarget = picker.getAttribute('data-target-id');
+            
+            if (isVisible && currentTarget === targetId) {
+                picker.style.display = 'none';
+                return;
+            }
+            
+            picker.setAttribute('data-target-id', targetId);
+            picker.style.display = 'block';
+            
+            var rect = btn.getBoundingClientRect();
+            picker.style.position = 'fixed';
+            picker.style.zIndex = '10010';
+            
+            // Adjust left position to not go off screen
+            var leftPos = rect.left - 250;
+            if (leftPos < 10) leftPos = 10;
+            picker.style.left = leftPos + 'px';
+            picker.style.top = (rect.top + rect.height + 5) + 'px';
+            
+            setTimeout(function() {
+                const closePicker = function(e) {
+                    if (!picker.contains(e.target) && !btn.contains(e.target)) {
+                        picker.style.display = 'none';
+                        document.removeEventListener('click', closePicker);
+                    }
+                };
+                document.addEventListener('click', closePicker);
+            }, 50);
+        };
+    </script>
 
 <!-- Emoji Picker Template -->
 @await Html.PartialAsync("_EmojiPicker")
 
-@section Scripts {
+
     <script>
         function sendMessage() {
             const input = document.getElementById('chatInput');

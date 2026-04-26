@@ -1,424 +1,114 @@
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<E_ShoppingManagement.Models.Users> UserManager
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Delivery Dashboard</title>
+    <title>@ViewData["Title"] - Delivery Man</title>
+
+    <!-- Bootstrap & Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #f8f6f0;
-            color: #33312e;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+    <!-- jQuery & Chart.js -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
-        /* ===== LAYOUT WRAPPER ===== */
-        .dm-wrapper {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        /* ===== SIDEBAR ===== */
-        .dm-sidebar {
-            width: 240px;
-            flex-shrink: 0;
-            background: #532374;
-            display: flex;
-            flex-direction: column;
-            position: fixed;
-            top: 0; left: 0;
-            height: 100vh;
-            z-index: 1000;
-            box-shadow: 4px 0 24px rgba(26, 35, 66, 0.35);
-            overflow-y: auto;
-        }
-
-        /* Sidebar brand / avatar */
-        .dm-sidebar-brand {
-            padding: 28px 20px 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.10);
-            text-align: center;
-        }
-        .dm-sidebar-brand .dm-avatar {
-            width: 72px; height: 72px;
-            border-radius: 50%;
-            background: #3d1a55;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 28px; color: #fff;
-            margin: 0 auto 10px;
-            box-shadow: 0 4px 14px rgba(83,35,116,0.40);
-        }
-        .dm-sidebar-brand .dm-name {
-            font-size: 14px; font-weight: 700; color: #fff;
-        }
-        .dm-sidebar-brand .dm-role {
-            font-size: 11px; color: rgba(255,255,255,0.55);
-            letter-spacing: 1px; text-transform: uppercase; margin-top: 2px;
-        }
-
-        /* Sidebar nav */
-        .dm-nav { padding: 16px 0; flex: 1; }
-
-        .dm-nav-section {
-            font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
-            text-transform: uppercase; color: rgba(255,255,255,0.40);
-            padding: 12px 20px 4px;
-        }
-
-        .dm-nav a {
-            display: flex; align-items: center; gap: 12px;
-            padding: 11px 20px;
-            color: rgba(255,255,255,0.75);
-            text-decoration: none;
-            font-size: 14px; font-weight: 500;
-            border-left: 3px solid transparent;
-            transition: all 0.2s ease;
-            position: relative;
-        }
-        .dm-nav a i { font-size: 17px; width: 20px; text-align: center; }
-        .dm-nav a:hover {
-            color: #fff;
-            background: rgba(255,255,255,0.10);
-            border-left-color: #e5e2db;
-        }
-        .dm-nav a.active {
-            color: #fff;
-            background: rgba(255,255,255,0.18);
-            border-left-color: #e5e2db;
-            font-weight: 600;
-        }
-        .dm-nav a .badge-notif {
-            margin-left: auto;
-            background: #ef4444;
-            color: #fff; font-size: 10px; font-weight: 700;
-            padding: 2px 6px; border-radius: 10px;
-        }
-
-        /* Sidebar logout */
-        .dm-sidebar-footer {
-            padding: 16px 12px 20px;
-            border-top: 1px solid rgba(255,255,255,0.10);
-        }
-        .dm-sidebar-footer form button {
-            display: flex; align-items: center; gap: 10px;
-            width: 100%; padding: 10px 16px;
-            background: rgba(239,68,68,0.15);
-            border: 1px solid rgba(239,68,68,0.30);
-            color: #fca5a5; border-radius: 8px;
-            font-size: 14px; font-weight: 600; cursor: pointer;
-            transition: all 0.2s;
-        }
-        .dm-sidebar-footer form button:hover {
-            background: rgba(239,68,68,0.30);
-            color: #fff;
-        }
-
-        /* ===== MAIN AREA ===== */
-        .dm-main {
-            margin-left: 240px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        /* ===== TOP NAVBAR ===== */
-        .dm-topbar {
-            background: #f8f6f0;
-            backdrop-filter: blur(10px);
-            padding: 14px 28px;
-            border-bottom: 1px solid #e6e2db;
-            box-shadow: 0 2px 12px rgba(83,35,116,0.06);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .dm-topbar .page-title {
-            font-size: 20px; font-weight: 700; color: #1e293b;
-        }
-        .dm-topbar .topbar-right {
-            display: flex; align-items: center; gap: 16px;
-        }
-        .dm-topbar .topbar-right .dm-clock {
-            font-family: 'Courier New', monospace;
-            font-size: 15px; font-weight: 700;
-            color: #532374;
-            background: #f8f6f0;
-            padding: 6px 14px;
-            border-radius: 8px;
-            border: 1px solid #e6e2db;
-        }
-        .dm-topbar .topbar-right .notif-btn {
-            position: relative;
-            background: none; border: none; cursor: pointer;
-            color: #64748b; font-size: 20px;
-            padding: 4px;
-        }
-        .dm-topbar .topbar-right .notif-btn .dot {
-            position: absolute; top: 2px; right: 2px;
-            width: 8px; height: 8px;
-            background: #ef4444; border-radius: 50%;
-        }
-
-        /* ===== CONTENT ===== */
-        .dm-content {
-            padding: 28px;
-            flex: 1;
-        }
-
-        /* ===== PAGE CARD ===== */
-        .page-card {
-            background: #f8f6f0;
-            border-radius: 14px;
-            padding: 24px;
-            box-shadow: 0 2px 16px rgba(0,0,0,0.06);
-            border: 1px solid #e6e2db;
-        }
-
-        /* ===== STAT CARDS ===== */
-        .dm-stat-card {
-            border-radius: 16px;
-            padding: 24px 22px;
-            display: flex; align-items: center; justify-content: space-between;
-            color: #fff;
-            box-shadow: 0 6px 24px rgba(0,0,0,0.13);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            min-height: 112px;
-        }
-        .dm-stat-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.18); }
-        .dm-card-blue   { background: linear-gradient(135deg, #1e88e5 0%, #42a5f5 100%); }
-        .dm-card-orange { background: linear-gradient(135deg, #f9a825 0%, #ffca28 100%); }
-        .dm-card-green  { background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%); }
-        .dm-card-purple { background: linear-gradient(135deg, #6a1b9a 0%, #9c27b0 100%); }
-        .dm-card-red    { background: linear-gradient(135deg, #c62828 0%, #e53935 100%); }
-        .dm-card-teal   { background: linear-gradient(135deg, #00695c 0%, #00897b 100%); }
-
-        .dm-card-content .dm-card-label {
-            font-size: 12px; font-weight: 600;
-            letter-spacing: 0.6px; opacity: 0.88;
-            margin-bottom: 8px; text-transform: uppercase;
-        }
-        .dm-card-content .dm-card-value {
-            font-size: 34px; font-weight: 800; line-height: 1;
-        }
-        .dm-card-icon {
-            width: 64px; height: 64px; border-radius: 50%;
-            background: rgba(255,255,255,0.20);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 28px; flex-shrink: 0;
-            box-shadow: 0 0 0 10px rgba(255,255,255,0.08);
-        }
-
-        /* ===== TABLES ===== */
-        .table th { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
-        .table td { font-size: 14px; vertical-align: middle; }
-        .table-primary th { background: #532374 !important; color: #fff !important; border-color: rgba(255,255,255,0.15) !important; }
-
-        /* ===== ACTIVITY ITEM ===== */
-        .activity-item {
-            display: flex; gap: 14px; align-items: flex-start;
-            padding: 12px 0; border-bottom: 1px solid #f1f5f9;
-        }
-        .activity-item:last-child { border-bottom: none; }
-        .activity-icon {
-            width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 16px; color: #fff;
-        }
-        .activity-text { font-size: 13px; color: #334155; font-weight: 500; }
-        .activity-time { font-size: 11px; color: #94a3b8; margin-top: 2px; }
-
-        /* ===== FORM INPUTS ===== */
-        .page-card input, .page-card select, .page-card textarea {
-            background: #f8f6f0 !important;
-            border: 1px solid #e6e2db !important;
-            color: #33312e !important;
-            border-radius: 8px;
-        }
-        .page-card input:focus, .page-card select:focus {
-            border-color: #532374 !important;
-            box-shadow: 0 0 0 3px rgba(83,35,116,0.15) !important;
-            background: #f8f6f0 !important;
-        }
-        .page-card label { color: #475569; font-weight: 600; font-size: 13px; }
-
-        /* Clock welcome card */
-        .clock-display {
-            font-family: 'Courier New', monospace; font-weight: 700;
-            font-size: 20px; color: #532374; letter-spacing: 1px;
-        }
-    </style>
-    <style>
-        /* GLOBAL THEME SYNC */
-        body, .admin-main, .dm-main, .main-content, .admin-content, .dm-content {
-            background-color: #f8f6f0 !important;
-            background: #f8f6f0 !important;
-        }
-        .page-card, .card, .table-container, .table, .modal-content, .list-group-item, .dropdown-menu {
-            background-color: #f2efe9 !important;
-            background: #f2efe9 !important;
-        }
-        /* Ensure no white background in any container */
-        .container, .container-fluid {
-            background-color: transparent !important;
-        }
-
-        /* BACK BUTTON STYLE */
-        .theme-back-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            border: 2px solid #532374 !important;
-            color: #532374 !important;
-            background: transparent !important;
-            border-radius: 8px !important;
-            padding: 10px 24px !important;
-            font-weight: 700 !important;
-            font-size: 15px !important;
-            text-decoration: none !important;
-            transition: all 0.3s ease !important;
-            margin-bottom: 20px;
-            box-shadow: none !important;
-        }
-
-        .theme-back-btn:hover {
-            background: #532374 !important;
-            color: #ffffff !important;
-            text-decoration: none !important;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(83, 35, 116, 0.2) !important;
-        }
-    </style>
+    <!-- Admin CSS -->
+    <link href="~/css/admin.css" rel="stylesheet" asp-append-version="true" />
 </head>
+
 <body>
-@using Microsoft.AspNetCore.Identity
-@inject UserManager<E_ShoppingManagement.Models.Users> UserManager
-@inject E_ShoppingManagement.Data.AppDbContext _context
-@{
-    var loggedInUser = await UserManager.GetUserAsync(User);
-    var lastCheck = loggedInUser?.LastNotificationCheck ?? DateTime.MinValue;
-    
-    int totalNewNotifs = 0;
-    if (loggedInUser != null)
-    {
-        // For DM, we mostly track assigned orders or messages. Let's assume assigned orders.
-        var dm = _context.DeliveryMen.FirstOrDefault(d => d.UserId == loggedInUser.Id);
-        if (dm != null)
-        {
-            totalNewNotifs = _context.Orders.Count(o => o.DeliveryManId == dm.Id && o.CreatedAt > lastCheck);
-        }
-    }
-    
-    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
-    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
-}
+
 <div class="dm-wrapper">
-    <!-- ===== SIDEBAR ===== -->
+
+    <!-- SIDEBAR -->
     <aside class="dm-sidebar">
-        <!-- Brand -->
-        <div class="dm-sidebar-brand">
-            <div class="dm-avatar"><i class="bi bi-truck"></i></div>
-            <div class="dm-name">@(ViewBag.DmName ?? User.Identity?.Name ?? "Delivery Man")</div>
-            <div class="dm-role">Delivery Partner</div>
+        <!-- Brand & Profile Section -->
+        @{
+            var dmUserLayout = await UserManager.GetUserAsync(User);
+        }
+        <div class="px-3 py-4 text-center border-bottom border-white border-opacity-10 mb-3">
+            <div class="rounded-circle bg-white bg-opacity-10 d-inline-flex align-items-center justify-content-center mb-2" style="width: 64px; height: 64px; border: 2px solid rgba(255,255,255,0.25); box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                <i class="bi bi-truck text-white" style="font-size: 1.8rem;"></i>
+            </div>
+            <div class="text-white fw-bold px-2" style="font-size: 0.95rem; letter-spacing: 0.3px;">@(dmUserLayout?.FullName ?? "Delivery Man")</div>
+            <div class="text-white text-opacity-75 small" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px;">Delivery Personnel</div>
         </div>
-        <!-- Nav Links -->
-        <nav class="dm-nav">
-            <div class="dm-nav-section">Main Menu</div>
-            <a asp-controller="DeliveryManDashboard" asp-action="Index"
-               class="@(ViewData["ActivePage"]?.ToString() == "Dashboard" ? "active" : "")">
-                <i class="bi bi-grid-1x2-fill"></i> Dashboard
-            </a>
-            <a asp-controller="DeliveryManDashboard" asp-action="Earnings"
-               class="@(ViewData["ActivePage"]?.ToString() == "Earnings" ? "active" : "")">
-                <i class="bi bi-cash-coin"></i> Earnings
-            </a>
-            <a asp-controller="DeliveryManDashboard" asp-action="Notifications"
-               class="@(ViewData["ActivePage"]?.ToString() == "Notifications" ? "active" : "")">
-                <i class="bi bi-bell-fill"></i> Notifications
-                @if (totalNewNotifs > 0 && currentAction != "Notifications")
-                {
-                    <span class="badge-notif">@totalNewNotifs</span>
-                }
-            </a>
-            <div class="dm-nav-section">Account</div>
+        
+        <a asp-controller="Home" asp-action="Index">
+            <i class="bi bi-box-arrow-left me-2"></i>Back to Website
+        </a>
+        
+        <a asp-controller="DeliveryManDashboard" asp-action="Index" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "DeliveryManDashboard" && ViewContext.RouteData.Values["Action"]?.ToString() == "Index" ? "active" : "")">
+            <i class="bi bi-speedometer2 me-2"></i>My Dashboard
+        </a>
 
-            <a asp-controller="DeliveryManDashboard" asp-action="Profile"
-               class="@(ViewData["ActivePage"]?.ToString() == "Profile" ? "active" : "")">
-                <i class="bi bi-person-circle"></i> Profile
-            </a>
+        <p class="menu-title">OPERATIONS</p>
+        <a asp-controller="DeliveryManDashboard" asp-action="Index" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "DeliveryManDashboard" && ViewContext.RouteData.Values["Action"]?.ToString() == "Index" ? "active" : "")">
+            <i class="bi bi-list-task me-2"></i>Assigned Orders
+        </a>
+        <a asp-controller="DeliveryManDashboard" asp-action="Earnings" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Earnings" ? "active" : "")">
+            <i class="bi bi-cash-stack me-2"></i>My Earnings
+        </a>
+        <a asp-controller="DeliveryManDashboard" asp-action="Notifications" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Notifications" ? "active" : "")">
+            <i class="bi bi-bell me-2"></i>Notifications
+        </a>
 
-            <a asp-controller="Home" asp-action="Index">
-                <i class="bi bi-box-arrow-left"></i> Back to Website
-            </a>
-        </nav>
+        <p class="menu-title">ACCOUNT</p>
+        <a asp-controller="DeliveryManDashboard" asp-action="Profile" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Profile" ? "active" : "")">
+            <i class="bi bi-person-circle me-2"></i>My Profile
+        </a>
 
         <!-- Logout -->
-        <div class="dm-sidebar-footer">
+        <div class="mt-auto px-3 pb-3 pt-4 border-top border-white border-opacity-10" style="margin-top: 20px;">
             <form asp-controller="Account" asp-action="Logout" method="post">
-                <button type="submit">
-                    <i class="bi bi-box-arrow-right" style="font-size:16px;"></i>
+                <button type="submit" class="btn w-100 d-flex align-items-center justify-content-center gap-2" style="background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.30); color: #fca5a5; font-weight: 600; padding: 10px 16px; border-radius: 8px;">
+                    <i class="bi bi-box-arrow-right"></i>
                     Logout
                 </button>
             </form>
         </div>
     </aside>
 
-    <!-- ===== MAIN ===== -->
+    <!-- MAIN -->
     <main class="dm-main">
 
-        <!-- Top Navbar -->
-        <div class="dm-topbar">
-            <div class="page-title">
-                <i class="bi bi-truck me-2 text-primary"></i>@(ViewData["Title"] ?? "Dashboard")
+        <header class="dm-header d-flex justify-content-between align-items-center px-4 py-3" style="background:#fff; border-bottom:1px solid #e6e2db;">
+            <div class="header-search flex-grow-1 me-4">
+                <h4 class="mb-0 fw-bold" style="color: #532374;">@ViewData["Title"]</h4>
             </div>
-            <div class="topbar-right">
-                @{ 
-                    var topbarDm = ViewBag.DeliveryMan as E_ShoppingManagement.Models.DeliveryMan;
-                    string vehicleIcon = "bi-truck"; // default
-                    if (topbarDm != null && !string.IsNullOrEmpty(topbarDm.VehicleInfo))
-                    {
-                        string vi = topbarDm.VehicleInfo.ToLower();
-                        if (vi.Contains("cycle") || vi.Contains("bicycle")) { vehicleIcon = "bi-bicycle"; }
-                        else if (vi.Contains("bike") || vi.Contains("motorcycle") || vi.Contains("scooter")) { vehicleIcon = "bi-scooter"; }
-                        else if (vi.Contains("car")) { vehicleIcon = "bi-car-front"; }
-                    }
-                }
-                <div class="me-2 d-flex align-items-center" title="Vehicle: @(topbarDm?.VehicleInfo ?? "N/A")" data-bs-toggle="tooltip">
-                    <i class="bi @vehicleIcon fs-4 text-secondary" style="background: #f1f5f9; padding: 6px; border-radius: 50%;"></i>
+            <div class="d-flex align-items-center gap-4">
+                <!-- Notification Button -->
+                <div class="dropdown">
+                    <a asp-controller="DeliveryManDashboard" asp-action="Notifications" class="notif-btn position-relative" title="Notifications">
+                        <i class="bi bi-bell-fill text-primary fs-4" style="color:#532374 !important;"></i>
+                        @if(ViewBag.UnreadNotifications > 0)
+                        {
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:0.65rem;">
+                                @ViewBag.UnreadNotifications
+                            </span>
+                        }
+                    </a>
                 </div>
-                <a asp-controller="DeliveryManDashboard" asp-action="Notifications" class="notif-btn mt-1" title="Notifications">
-                    <i class="bi bi-bell"></i>
-                    @if (totalNewNotifs > 0 && currentAction != "Notifications")
-                    {
-                        <span class="dot"></span>
-                    }
-                </a>
+                <!-- Profile Icon -->
                 <a asp-controller="DeliveryManDashboard" asp-action="Profile" class="notif-btn ms-2" title="Profile">
-                    <i class="bi bi-person-circle text-primary fs-3"></i>
+                    <i class="bi bi-person-circle text-primary fs-3" style="color:#532374 !important;"></i>
                 </a>
             </div>
-        </div>
+        </header>
 
-        <!-- Page Content -->
-        <div class="dm-content">
+        <!-- PAGE CONTENT -->
+        <section class="dm-content">
             @RenderBody()
-        </div>
+        </section>
 
     </main>
+
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 @RenderSection("Scripts", required: false)
 
 </body>

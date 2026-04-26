@@ -4,6 +4,7 @@
     int newCount = 0;
     string notificationLink = "/Home/Notifications";
     string userRole = "";
+    string pLink = "/CustomerDashboard/Profile";
     
     if (User.Identity.IsAuthenticated)
     {
@@ -18,19 +19,23 @@
                        db.Employees.Count(e => e.Status == "Pending" && e.CreatedAt > lastCheck) +
                        db.ContactMessages.Count(m => m.Status != "Replied" && m.CreatedAt > lastCheck);
             notificationLink = "/AdminDashboard/Notifications";
+            pLink = "/AdminDashboard/Profile";
         } else if (userRole == "Employee") {
             var emp = db.Employees.FirstOrDefault(e => e.UserId == userId);
             var empId = emp?.Id ?? 0;
             newCount = db.Orders.Count(o => o.AssignedEmployeeId == empId && o.OrderStatus == "Pending" && o.CreatedAt > lastCheck) +
                        db.ContactMessages.Count(m => m.Status != "Replied" && m.CreatedAt > lastCheck);
             notificationLink = "/EmployeeDashboard/Notifications";
+            pLink = "/EmployeeDashboard/Profile";
         } else if (userRole == "Customer") {
             var cust = db.Customers.FirstOrDefault(c => c.UserId == userId);
             var custId = cust?.Id ?? 0;
             newCount = db.Orders.Count(o => o.CustomerId == custId && (o.CreatedAt > lastCheck || o.ModifiedAt > lastCheck) && o.OrderStatus != "Pending");
             notificationLink = "/Home/Notifications";
+            pLink = "/CustomerDashboard/Profile";
         } else if (userRole == "DeliveryMan") {
             notificationLink = "/DeliveryManDashboard/Notifications";
+            pLink = "/DeliveryManDashboard/Profile";
         }
     }
 }
@@ -48,7 +53,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/E_ShoppingManagement.styles.css" asp-append-version="true" />
-    <style>
+    
+    <!-- jQuery and Core JS -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>    <style>
         /* GLOBAL THEME SYNC */
         body, .admin-main, .dm-main, .main-content, .admin-content, .dm-content {
             background-color: #f8f6f0 !important;
@@ -109,6 +117,12 @@
                                 }
                             </a>
                         </div>
+
+                        <div class="ms-3">
+                            <a href="@pLink" class="topbar-link text-decoration-none" title="My Profile">
+                                <i class="bi bi-person-circle" style="font-size: 1.2rem; color: #ffffff;"></i>
+                            </a>
+                        </div>
                         <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline m-0 p-0">
                             <button type="submit" class="btn btn-link topbar-link p-0 text-decoration-none border-0" style="font-size: 14px;">Logout</button>
                         </form>
@@ -149,8 +163,6 @@
     </div>
 
     @await Component.InvokeAsync("Footer")
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script>
         function updateClock() {

@@ -64,7 +64,7 @@
     function selectEmoji(span) {
         const emoji = span.innerText;
         const picker = document.getElementById('emojiPickerTemplate');
-        const targetId = picker.dataset.targetId;
+        const targetId = picker.getAttribute('data-target-id');
         if(targetId) {
             const area = document.getElementById(targetId);
             if(area) {
@@ -72,9 +72,12 @@
                 const end = area.selectionEnd || 0;
                 area.value = area.value.substring(0, start) + emoji + area.value.substring(end);
                 area.focus();
+                // Move cursor after emoji
+                const newPos = start + emoji.length;
+                area.setSelectionRange(newPos, newPos);
                 area.dispatchEvent(new Event('input', { bubbles: true }));
             }
-            $(picker).hide();
+            picker.style.display = 'none';
         }
     }
 </script>

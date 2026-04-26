@@ -291,10 +291,14 @@ namespace E_ShoppingManagement.Controllers
             {
                 for (int i = 6; i >= 0; i--)
                 {
-                    var date = now.Date.AddDays(-i);
-                    labels.Add(date.ToString("ddd dd"));
+                    var localDate = now.Date.AddDays(-i);
+                    labels.Add(localDate.ToString("ddd dd"));
+                    
+                    var startUtc = localDate.ToUniversalTime();
+                    var endUtc = localDate.AddDays(1).ToUniversalTime();
+
                     var amount = await _context.DeliveryManPayments
-                        .Where(p => p.DeliveryManId == dm.Id && p.CreatedAt.ToLocalTime().Date == date)
+                        .Where(p => p.DeliveryManId == dm.Id && p.CreatedAt >= startUtc && p.CreatedAt < endUtc)
                         .SumAsync(p => p.CommissionAmount);
                     values.Add(amount);
                 }
@@ -303,10 +307,14 @@ namespace E_ShoppingManagement.Controllers
             {
                 for (int i = 29; i >= 0; i--)
                 {
-                    var date = now.Date.AddDays(-i);
-                    labels.Add(date.ToString("MMM dd"));
+                    var localDate = now.Date.AddDays(-i);
+                    labels.Add(localDate.ToString("MMM dd"));
+                    
+                    var startUtc = localDate.ToUniversalTime();
+                    var endUtc = localDate.AddDays(1).ToUniversalTime();
+
                     var amount = await _context.DeliveryManPayments
-                        .Where(p => p.DeliveryManId == dm.Id && p.CreatedAt.ToLocalTime().Date == date)
+                        .Where(p => p.DeliveryManId == dm.Id && p.CreatedAt >= startUtc && p.CreatedAt < endUtc)
                         .SumAsync(p => p.CommissionAmount);
                     values.Add(amount);
                 }
@@ -315,10 +323,14 @@ namespace E_ShoppingManagement.Controllers
             {
                 for (int i = 11; i >= 0; i--)
                 {
-                    var date = new DateTime(now.Year, now.Month, 1).AddMonths(-i);
-                    labels.Add(date.ToString("MMM yyyy"));
+                    var localMonth = new DateTime(now.Year, now.Month, 1).AddMonths(-i);
+                    labels.Add(localMonth.ToString("MMM yyyy"));
+                    
+                    var startUtc = localMonth.ToUniversalTime();
+                    var endUtc = localMonth.AddMonths(1).ToUniversalTime();
+
                     var amount = await _context.DeliveryManPayments
-                        .Where(p => p.DeliveryManId == dm.Id && p.CreatedAt.Year == date.Year && p.CreatedAt.Month == date.Month)
+                        .Where(p => p.DeliveryManId == dm.Id && p.CreatedAt >= startUtc && p.CreatedAt < endUtc)
                         .SumAsync(p => p.CommissionAmount);
                     values.Add(amount);
                 }

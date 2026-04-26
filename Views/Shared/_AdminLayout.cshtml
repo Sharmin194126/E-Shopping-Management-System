@@ -10,6 +10,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet" />
 
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Admin CSS -->
     <link href="~/css/admin.css" rel="stylesheet" />
     <style>
@@ -112,7 +115,7 @@
             <a asp-controller="AdminDashboard" asp-action="EmployeeList" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "EmployeeList" ? "active" : "")">
                 <i class="bi bi-person-lines-fill me-1"></i>Employee Products-Sales
             </a>
-            <a asp-controller="AdminDashboard" asp-action="Profile" class="fw-bold text-warning @(ViewContext.RouteData.Values["Action"]?.ToString() == "Profile" ? "active" : "")">
+            <a asp-controller="@(User.IsInRole("Admin") ? "AdminDashboard" : "EmployeeDashboard")" asp-action="Profile" class="fw-bold text-warning @(ViewContext.RouteData.Values["Action"]?.ToString() == "Profile" ? "active" : "")">
                 <i class="bi bi-person-circle me-2"></i>My Profile
             </a>
             <a asp-controller="PaymentGateway" asp-action="AdminPaymentHistory" class="text-info @(ViewContext.RouteData.Values["Action"]?.ToString() == "AdminPaymentHistory" ? "active" : "")">
@@ -230,7 +233,7 @@
                         </ul>
                     </div>
                     <!-- Profile Link -->
-                    <a asp-controller="AdminDashboard" asp-action="Profile" class="d-flex align-items-center gap-2 text-decoration-none">
+                    <a asp-controller="@(User.IsInRole("Admin") ? "AdminDashboard" : "EmployeeDashboard")" asp-action="Profile" class="d-flex align-items-center gap-2 text-decoration-none" title="My Profile">
                         <i class="bi bi-person-circle" style="font-size: 1.8rem; color: #532374;"></i>
                     </a>
                 </div>
@@ -247,7 +250,5 @@
 
     </div>
 
-    <!-- Bootstrap JS (Required for Dropdowns, Modals, etc.) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
