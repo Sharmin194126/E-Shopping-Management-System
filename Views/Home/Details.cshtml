@@ -138,6 +138,32 @@
         box-shadow: 0 5px 20px rgba(0,0,0,0.15);
         background-repeat: no-repeat;
     }
+    .thumb-img {
+        width: 80px;
+        height: 80px;
+        object-fit: contain;
+        border: 2px solid transparent;
+        cursor: pointer;
+        background: #f8f6f0;
+        transition: border-color 0.3s;
+    }
+    .thumb-img:hover, .thumb-img.active {
+        border-color: #532374;
+    }
+    .delivery-info {
+        background: #fff;
+        padding: 10px 15px;
+        border-radius: 8px;
+        margin-top: 10px;
+        border: 1px solid #eee;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .delivery-info i {
+        color: #532374;
+        font-size: 1.2rem;
+    }
     input[type="number"].no-spin::-webkit-inner-spin-button,
     input[type="number"].no-spin::-webkit-outer-spin-button {
         -webkit-appearance: none;
@@ -179,6 +205,20 @@
             </div>
             <!-- Daraz zoomed result pops out to the right here -->
             <div id="myresult" class="img-zoom-result"></div>
+
+            <!-- Related Images Gallery -->
+            <div class="mt-3 d-flex flex-wrap gap-2 justify-content-center">
+                <img src="@(string.IsNullOrEmpty(Model.Product.ImageUrl) ? "/images/no-image.png" : (Model.Product.ImageUrl.StartsWith("/") ? Model.Product.ImageUrl : "/images/products/" + Model.Product.ImageUrl))" 
+                     class="thumb-img rounded active" onclick="changeMainImage(this.src, this)" />
+                
+                @if (Model.RelatedImages != null && Model.RelatedImages.Any())
+                {
+                    foreach (var imgUrl in Model.RelatedImages)
+                    {
+                        <img src="@imgUrl" class="thumb-img rounded" onclick="changeMainImage(this.src, this)" />
+                    }
+                }
+            </div>
             
             <script>
                 function showZoom() {
@@ -233,6 +273,18 @@
                     
                     result.style.backgroundPosition = "-" + (xPos * cx) + "px -" + (yPos * cy) + "px";
                 }
+
+                function changeMainImage(src, thumb) {
+                    const mainImg = document.getElementById('myimage');
+                    mainImg.src = src;
+                    
+                    // Update active thumbnail
+                    document.querySelectorAll('.thumb-img').forEach(img => img.classList.remove('active'));
+                    thumb.classList.add('active');
+                    
+                    // Reset zoom if visible
+                    hideZoom();
+                }
             </script>
         </div>
         
@@ -243,7 +295,16 @@
                 <div class="alert alert-success">@TempData["Message"]</div>
             }
             <h2>@Model.Product.Name</h2>
-            <div class="mb-2">
+            
+            <div class="delivery-info">
+                <i class="bi bi-truck"></i>
+                <div>
+                    <span class="text-muted small d-block">Delivery Charge</span>
+                    <span class="fw-bold text-dark">৳ @(Model.Product.DeliveryCharge > 0 ? Model.Product.DeliveryCharge.ToString("#,##0") : "Free")</span>
+                </div>
+            </div>
+
+            <div class="mb-2 mt-2">
                 <span class="text-warning fs-5">@Html.Raw(RenderStars(Model.Product.AverageRating))</span>
                 <span class="text-muted">(@Model.Product.AverageRating.ToString("0.0")) | @Model.TotalReviews.ToString("#,##0") Reviews</span>
             </div>

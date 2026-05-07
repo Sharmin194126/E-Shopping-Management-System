@@ -1,4 +1,4 @@
-﻿using E_ShoppingManagement.Models;
+using E_ShoppingManagement.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,6 +31,7 @@ namespace E_ShoppingManagement.Data
         public DbSet<PaymentHistory> PaymentHistories { get; set; }
         public DbSet<DisplaySection> DisplaySections { get; set; }
         public DbSet<DeliveryManPayment> DeliveryManPayments { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

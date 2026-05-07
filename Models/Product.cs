@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace E_ShoppingManagement.Models
 {
@@ -45,9 +45,11 @@ namespace E_ShoppingManagement.Models
         public decimal VatPercentage { get; set; } = 0;
         public decimal OfferPercentage { get; set; } = 0;
         public int? MaxOrderQty { get; set; }
+        public decimal DeliveryCharge { get; set; } = 0;
 
         // Relationship to Employee
         public int? AssignedEmployeeId { get; set; }
         public Employee? AssignedEmployee { get; set; }
+        public ICollection<ProductImage>? ProductImages { get; set; }
     }
 }

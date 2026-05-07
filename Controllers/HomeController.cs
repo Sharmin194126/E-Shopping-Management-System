@@ -112,7 +112,8 @@ namespace E_ShoppingManagement.Controllers
                 RelatedProducts = relatedProducts,
                 RatingSummary = ratingSummary,
                 TotalReviews = reviews.Count,
-                SizeStocks = await _context.ProductSizeStocks.Where(ss => ss.ProductId == id).ToListAsync()
+                SizeStocks = await _context.ProductSizeStocks.Where(ss => ss.ProductId == id).ToListAsync(),
+                RelatedImages = await _context.ProductImages.Where(pi => pi.ProductId == id).Select(pi => pi.ImageUrl).ToListAsync()
             };
 
             return View(viewModel);

@@ -63,7 +63,13 @@ namespace E_ShoppingManagement.ViewModels
         [Display(Name = "Assign to Employee")]
         public int? AssignedEmployeeId { get; set; }
 
+        [Display(Name = "Delivery Charge")]
+        public decimal DeliveryCharge { get; set; } = 0;
+
         public List<Models.ProductSizeStock>? SizeStocks { get; set; }
+
+        public List<IFormFile>? RelatedImages { get; set; }
+        public List<string>? ExistingRelatedImages { get; set; }
 
         // Dropdowns
         public IEnumerable<SelectListItem>? CategoryList { get; set; }

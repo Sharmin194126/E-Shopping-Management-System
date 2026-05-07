@@ -144,6 +144,7 @@ namespace E_ShoppingManagement.Controllers
                 AvailableSizes = model.AvailableSizes,
                 IsApproved = model.Status == "Approved", 
                 ImageUrl = fileName,
+                DeliveryCharge = model.DeliveryCharge,
                 CreatedBy = User.Identity?.Name,
                 CreatedAt = DateTime.UtcNow,
                 ModifiedAt = DateTime.UtcNow
@@ -151,6 +152,30 @@ namespace E_ShoppingManagement.Controllers
 
             _context.Products.Add(product);
             _context.SaveChanges();
+
+            // Save Related Images
+            if (model.RelatedImages != null && model.RelatedImages.Any())
+            {
+                string uploadsFolder = Path.Combine(_env.WebRootPath, "images/products");
+                foreach (var file in model.RelatedImages)
+                {
+                    if (file.Length > 0)
+                    {
+                        string fileNameRel = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                        string filePathRel = Path.Combine(uploadsFolder, fileNameRel);
+                        using (var stream = new FileStream(filePathRel, FileMode.Create))
+                        {
+                            file.CopyTo(stream);
+                        }
+                        _context.ProductImages.Add(new ProductImage
+                        {
+                            ProductId = product.Id,
+                            ImageUrl = "/images/products/" + fileNameRel
+                        });
+                    }
+                }
+                _context.SaveChanges();
+            }
 
             // Save Size-wise stock
             if (model.SizeStocks != null && model.SizeStocks.Any())
@@ -202,12 +227,14 @@ namespace E_ShoppingManagement.Controllers
                 DisplayCategory = product.DisplayCategory,
                 AvailableSizes = product.AvailableSizes,
                 IsApproved = product.IsApproved,
+                DeliveryCharge = product.DeliveryCharge,
                 CategoryList = GetCategoryList(),
                 ProductTypeList = GetProductTypeList(),
                 DisplayCategoryList = GetDisplayCategoryList(),
                 StatusList = GetStatusList(),
                 SizeStocks = await _context.ProductSizeStocks.Where(s => s.ProductId == id).ToListAsync(),
-                ExistingImageUrl = product.ImageUrl
+                ExistingImageUrl = product.ImageUrl,
+                ExistingRelatedImages = await _context.ProductImages.Where(pi => pi.ProductId == id).Select(pi => pi.ImageUrl).ToListAsync()
             };
 
             return View(vm);
@@ -273,6 +300,7 @@ namespace E_ShoppingManagement.Controllers
             product.DisplayCategory = model.DisplayCategory;
             product.AvailableSizes = model.AvailableSizes;
             product.IsApproved = model.Status == "Approved";
+            product.DeliveryCharge = model.DeliveryCharge;
             product.ModifiedAt = DateTime.UtcNow;
             product.ModifiedBy = User.Identity?.Name;
 
@@ -292,6 +320,30 @@ namespace E_ShoppingManagement.Controllers
             }
 
             _context.SaveChanges();
+
+            // Handle Related Images in Edit
+            if (model.RelatedImages != null && model.RelatedImages.Any())
+            {
+                string uploadsFolder = Path.Combine(_env.WebRootPath, "images/products");
+                foreach (var file in model.RelatedImages)
+                {
+                    if (file.Length > 0)
+                    {
+                        string fileNameRel = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                        string filePathRel = Path.Combine(uploadsFolder, fileNameRel);
+                        using (var stream = new FileStream(filePathRel, FileMode.Create))
+                        {
+                            file.CopyTo(stream);
+                        }
+                        _context.ProductImages.Add(new ProductImage
+                        {
+                            ProductId = product.Id,
+                            ImageUrl = "/images/products/" + fileNameRel
+                        });
+                    }
+                }
+                _context.SaveChanges();
+            }
 
             // Update Size-wise stock
             var oldStocks = _context.ProductSizeStocks.Where(s => s.ProductId == product.Id).ToList();

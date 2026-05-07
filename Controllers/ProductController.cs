@@ -173,6 +173,7 @@ namespace E_ShoppingManagement.Controllers
                 OfferPercentage = model.OfferPercentage,
                 MaxOrderQty = model.MaxOrderQty,
                 AssignedEmployeeId = model.AssignedEmployeeId,
+                DeliveryCharge = model.DeliveryCharge,
                 CreatedBy = User.Identity?.Name,
                 CreatedAt = DateTime.UtcNow,
                 ModifiedAt = DateTime.UtcNow
@@ -180,6 +181,30 @@ namespace E_ShoppingManagement.Controllers
 
             _context.Products.Add(product);
             _context.SaveChanges();
+
+            // Save Related Images
+            if (model.RelatedImages != null && model.RelatedImages.Any())
+            {
+                string uploadsFolder = Path.Combine(_env.WebRootPath, "images/products");
+                foreach (var file in model.RelatedImages)
+                {
+                    if (file.Length > 0)
+                    {
+                        string fileNameRel = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                        string filePathRel = Path.Combine(uploadsFolder, fileNameRel);
+                        using (var stream = new FileStream(filePathRel, FileMode.Create))
+                        {
+                            file.CopyTo(stream);
+                        }
+                        _context.ProductImages.Add(new ProductImage
+                        {
+                            ProductId = product.Id,
+                            ImageUrl = "/images/products/" + fileNameRel
+                        });
+                    }
+                }
+                _context.SaveChanges();
+            }
 
             // Save Size-wise stock
             if (model.SizeStocks != null && model.SizeStocks.Any())
@@ -226,8 +251,10 @@ namespace E_ShoppingManagement.Controllers
                 OfferPercentage = product.OfferPercentage,
                 MaxOrderQty = product.MaxOrderQty,
                 AssignedEmployeeId = product.AssignedEmployeeId,
+                DeliveryCharge = product.DeliveryCharge,
                 SizeStocks = _context.ProductSizeStocks.Where(s => s.ProductId == id).ToList(),
-                ExistingImageUrl = product.ImageUrl
+                ExistingImageUrl = product.ImageUrl,
+                ExistingRelatedImages = _context.ProductImages.Where(pi => pi.ProductId == id).Select(pi => pi.ImageUrl).ToList()
             };
 
             // Fix for legacy data: if RegularPrice is 0 but Price is set, assume Price is the Regular Price
@@ -279,6 +306,7 @@ namespace E_ShoppingManagement.Controllers
             product.OfferPercentage = model.OfferPercentage;
             product.MaxOrderQty = model.MaxOrderQty;
             product.AssignedEmployeeId = model.AssignedEmployeeId;
+            product.DeliveryCharge = model.DeliveryCharge;
             product.ModifiedAt = DateTime.UtcNow;
             product.ModifiedBy = User.Identity?.Name;
 
@@ -299,6 +327,30 @@ namespace E_ShoppingManagement.Controllers
             }
 
             _context.SaveChanges();
+
+            // Handle Related Images in Edit
+            if (model.RelatedImages != null && model.RelatedImages.Any())
+            {
+                string uploadsFolder = Path.Combine(_env.WebRootPath, "images/products");
+                foreach (var file in model.RelatedImages)
+                {
+                    if (file.Length > 0)
+                    {
+                        string fileNameRel = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                        string filePathRel = Path.Combine(uploadsFolder, fileNameRel);
+                        using (var stream = new FileStream(filePathRel, FileMode.Create))
+                        {
+                            file.CopyTo(stream);
+                        }
+                        _context.ProductImages.Add(new ProductImage
+                        {
+                            ProductId = product.Id,
+                            ImageUrl = "/images/products/" + fileNameRel
+                        });
+                    }
+                }
+                _context.SaveChanges();
+            }
 
             // Update Size-wise stock
             var oldStocks = _context.ProductSizeStocks.Where(s => s.ProductId == product.Id).ToList();
