@@ -1,4 +1,6 @@
 @model E_ShoppingManagement.ViewComponents.FooterViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
 @{
     string RenderStars(double rating) {
@@ -16,10 +18,10 @@
             <!-- Brand & Payments -->
             <div class="col-md-3">
                 <h4 class="brand-text" style="font-family: 'French Script MT', cursive; color: #FF6B35; font-size: 2rem;">E-Shop</h4>
-                <p class="small" style="color: #FFD700;">Direct Merchant Payments for Secure Shopping.</p>
+                <p class="small" style="color: #FFD700;">@Localizer["Direct Merchant Payments for Secure Shopping."]</p>
                 
                 <div class="mt-4">
-                    <h6 class="small fw-bold text-uppercase mb-2" style="color: #FFD700;">Secure Payments</h6>
+                    <h6 class="small fw-bold text-uppercase mb-2" style="color: #FFD700;">@Localizer["Secure Payments"]</h6>
                     <div class="footer-payments d-flex flex-wrap gap-2">
                         @if (Model.PaymentMethods != null)
                         {
@@ -40,22 +42,22 @@
 
             <!-- Links -->
             <div class="col-md-3">
-                <h5>Help & Services</h5>
+                <h5>@Localizer["Help & Services"]</h5>
                 <ul class="list-unstyled mt-3 footer-nav-links">
-                    <li><a asp-controller="Home" asp-action="HelpCenter">Help Center</a></li>
-                    <li><a asp-controller="Home" asp-action="Returns">Returns & Refunds</a></li>
-                    <li><a asp-controller="Home" asp-action="Tracking">Track Your Order</a></li>
+                    <li><a asp-controller="Home" asp-action="HelpCenter">@Localizer["Help Center"]</a></li>
+                    <li><a asp-controller="Home" asp-action="Returns">@Localizer["Returns & Refunds"]</a></li>
+                    <li><a asp-controller="Home" asp-action="Tracking">@Localizer["Track Your Order"]</a></li>
                 </ul>
             </div>
 
             <!-- Contact -->
             <div class="col-md-6">
-                <h5>Address & Contact</h5>
+                <h5>@Localizer["Address & Contact"]</h5>
                 <div class="mt-3">
                     <p class="mb-1"><strong>@Model.Info.Address</strong></p>
                     <div class="d-flex flex-column gap-1">
-                        <span class="small fw-semibold" style="color: #FFD700;">Email: @Model.Info.Email</span>
-                        <span class="small fw-semibold" style="color: #FFD700;">Phone: @Model.Info.ContactNumber</span>
+                        <span class="small fw-semibold" style="color: #FFD700;">@Localizer["Email"]: @Model.Info.Email</span>
+                        <span class="small fw-semibold" style="color: #FFD700;">@Localizer["Phone"]: @Model.Info.ContactNumber</span>
                     </div>
                     <div class="social-links mt-3">
                         @if (!string.IsNullOrEmpty(Model.Info.FacebookUrl)) { <a href="@Model.Info.FacebookUrl" class="btn btn-sm btn-outline-primary rounded-circle">FB</a> }
@@ -69,7 +71,7 @@
         @if (Model.RecentReviews.Any())
         {
             <hr class="my-5 border-secondary">
-            <h5 class="text-center mb-4">What Our Customers Say</h5>
+            <h5 class="text-center mb-4">@Localizer["What Our Customers Say"]</h5>
             <div class="reviews row g-3">
                 @foreach (var r in Model.RecentReviews)
                 {

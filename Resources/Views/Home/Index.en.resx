@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="0" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Discover Your Style" xml:space="preserve">
+    <value>Discover Your Style</value>
+  </data>
+  <data name="Your ultimate destination for fashion, beauty and pure luxury." xml:space="preserve">
+    <value>Your ultimate destination for fashion, beauty and pure luxury.</value>
+  </data>
+  <data name="Shop Now" xml:space="preserve">
+    <value>Shop Now</value>
+  </data>
+  <data name="Welcome To E-Shop" xml:space="preserve">
+    <value>Welcome To E-Shop</value>
+  </data>
+  <data name="Your trusted online shopping destination for fashion, beauty and electronics. Enjoy premium products, exclusive deals and fast delivery." xml:space="preserve">
+    <value>Your trusted online shopping destination for fashion, beauty and electronics. Enjoy premium products, exclusive deals and fast delivery.</value>
+  </data>
+  <data name="Featured Items" xml:space="preserve">
+    <value>Featured Items</value>
+  </data>
+  <data name="Shop by Categories" xml:space="preserve">
+    <value>Shop by Categories</value>
+  </data>
+  <data name="Exclusive Items" xml:space="preserve">
+    <value>Exclusive Items</value>
+  </data>
+  <data name="Offer Price" xml:space="preserve">
+    <value>Offer Price</value>
+  </data>
+  <data name="Just For You" xml:space="preserve">
+    <value>Just For You</value>
+  </data>
+  <data name="Restock" xml:space="preserve">
+    <value>Restock</value>
+  </data>
+  <data name="Add to Cart" xml:space="preserve">
+    <value>Add to Cart</value>
+  </data>
+</root>

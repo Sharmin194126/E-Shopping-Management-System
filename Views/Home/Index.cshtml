@@ -1,4 +1,6 @@
 @model E_ShoppingManagement.ViewModels.HomeIndexViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     var isLoggedIn = User.Identity?.IsAuthenticated ?? false;
@@ -129,7 +131,7 @@
                 else if (dispSection.Name.Contains("You")) { <text>❤️</text> }
                 else if (dispSection.Name.Contains("Restock")) { <text>🔁</text> }
                 else { <text>📦</text> }
-                <span>@dispSection.Name</span>
+                <span>@Localizer[dispSection.Name]</span>
             </a>
         }
     </div>
@@ -155,15 +157,15 @@
 
             <!-- WELCOME TEXT OVERLAY -->
             <div class="welcome-overlay" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: white; width: 100%; z-index: 2;">
-                <h2 style="font-family: 'Playfair Display', serif; font-size: 58px; font-weight: 500; margin-bottom: 15px; color: #fff; text-shadow: 0 4px 12px rgba(0,0,0,0.3);">Discover Your Style</h2>
-                <p style="font-size: 16px; font-weight: 500; letter-spacing: 0.5px; opacity: 0.95; color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.3); margin-bottom: 25px;">Your ultimate destination for fashion, beauty and pure luxury.</p>
-                <a href="#featureditems" class="btn" style="background: #f8f6f0; color: #33312e; padding: 12px 35px; border-radius: 30px; font-weight: 600; font-size: 14px; text-decoration: none;">Shop Now</a>
+                <h2 style="font-family: 'Playfair Display', serif; font-size: 58px; font-weight: 500; margin-bottom: 15px; color: #fff; text-shadow: 0 4px 12px rgba(0,0,0,0.3);">@Localizer["Discover Your Style"]</h2>
+                <p style="font-size: 16px; font-weight: 500; letter-spacing: 0.5px; opacity: 0.95; color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.3); margin-bottom: 25px;">@Localizer["Your ultimate destination for fashion, beauty and pure luxury."]</p>
+                <a href="#featureditems" class="btn" style="background: #f8f6f0; color: #33312e; padding: 12px 35px; border-radius: 30px; font-weight: 600; font-size: 14px; text-decoration: none;">@Localizer["Shop Now"]</a>
             </div>
         </div>
 
         <div class="welcome" style="margin-top: 50px;">
-            <h2 style="font-family: 'Playfair Display', serif; text-align: center; color: #532374; margin-bottom: 40px; font-weight: 700;">Welcome To E-Shop</h2>
-            <p style="text-align: center; color: #55534e; font-size: 16px; font-family: 'Inter', sans-serif;">Your trusted online shopping destination for fashion, beauty and electronics. Enjoy premium products, exclusive deals and fast delivery.</p>
+            <h2 style="font-family: 'Playfair Display', serif; text-align: center; color: #532374; margin-bottom: 40px; font-weight: 700;">@Localizer["Welcome To E-Shop"]</h2>
+            <p style="text-align: center; color: #55534e; font-size: 16px; font-family: 'Inter', sans-serif;">@Localizer["Your trusted online shopping destination for fashion, beauty and electronics. Enjoy premium products, exclusive deals and fast delivery."]</p>
         </div>
 
         @foreach (var dispSection in allSectionsToRender)
@@ -228,7 +230,7 @@
                                     <form asp-controller="Cart" asp-action="AddToCart" method="get" class="m-0 p-0">
                                         <input type="hidden" name="productId" value="@item.Id" />
                                         <input type="hidden" name="qty" value="1" />
-                                        <button type="submit" class="border-0 add-btn-pill">Add to Cart</button>
+                                        <button type="submit" class="border-0 add-btn-pill">@Localizer["Add to Cart"]</button>
                                     </form>
                                 </div>
                             </div>

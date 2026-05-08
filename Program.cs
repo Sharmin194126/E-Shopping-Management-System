@@ -8,8 +8,12 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ── MVC + JSON ────────────────────────────────────────────────────────────────
+// ── Localization ──────────────────────────────────────────────────────────────
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
 builder.Services.AddControllersWithViews()
+    .AddViewLocalization()
+    .AddDataAnnotationsLocalization()
     .AddJsonOptions(options => {
         options.JsonSerializerOptions.ReferenceHandler =
             System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
@@ -40,6 +44,15 @@ builder.Services.AddIdentity<Users, IdentityRole>(options =>
 var app = builder.Build();
 
 await SeedService.SeedDatabase(app.Services);
+
+// ── Localization Middleware ───────────────────────────────────────────────────
+var supportedCultures = new[] { "en-US", "bn-BD" };
+var localizationOptions = new RequestLocalizationOptions()
+    .SetDefaultCulture(supportedCultures[0])
+    .AddSupportedCultures(supportedCultures)
+    .AddSupportedUICultures(supportedCultures);
+
+app.UseRequestLocalization(localizationOptions);
 
 // ── Middleware ────────────────────────────────────────────────────────────────
 if (!app.Environment.IsDevelopment())

@@ -1,4 +1,6 @@
 @using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @inject UserManager<E_ShoppingManagement.Models.Users> UserManager
 @{
     int newCount = 0;
@@ -77,27 +79,52 @@
         <div class="shoegee-topbar">
             <div class="container-fluid d-flex justify-content-between align-items-center px-4 py-3">
                 
-                <div class="topbar-left d-flex align-items-center gap-3" style="width: 280px;">
+                <div class="topbar-left d-flex align-items-center gap-3" style="min-width: 280px; flex: 1;">
                     <!-- Digital Clock Widget -->
                     <div id="digital-clock-widget" class="digital-clock-widget">
                         <div id="clock-day" class="clock-day"></div>
                         <div id="clock-date" class="clock-date"></div>
                         <div id="clock-time" class="clock-time"></div>
                     </div>
-                    <a href="#" onclick="document.getElementById('searchForm').classList.toggle('d-none'); return false;" class="topbar-link">Search</a>
-                    <form id="searchForm" class="d-none position-absolute mt-2" asp-controller="Home" asp-action="Search" method="get" style="z-index: 1000; display:flex;">
-                        <input class="form-control form-control-sm me-1 border-0" type="search" name="query" placeholder="Type to search..." style="border-radius:20px; width: 180px; padding-left: 15px;">
-                        <button class="btn btn-sm" type="submit" style="background: #e5e2db; color: #3c3935; border-radius:20px; padding: 0 15px;">Go</button>
-                    </form>
+                    <div class="d-flex align-items-center">
+                        <a href="#" onclick="document.getElementById('searchForm').classList.toggle('d-none'); return false;" class="topbar-link">@Localizer["Search"]</a>
+                        <form id="searchForm" class="d-none ms-2" asp-controller="Home" asp-action="Search" method="get" style="z-index: 1000; display:flex;">
+                            <input class="form-control form-control-sm me-1 border-0" type="search" name="query" placeholder="@Localizer["Type to search..."]" style="border-radius:20px; width: 350px; padding-left: 15px;">
+                            <button class="btn btn-sm" type="submit" style="background: #e5e2db; color: #3c3935; border-radius:20px; padding: 0 15px;">@Localizer["Go"]</button>
+                        </form>
+                    </div>
                 </div>
                 
-                <div class="topbar-center text-center flex-grow-1">
+                <div class="topbar-center text-center mx-3" style="flex: 0 0 auto;">
                     <a href="/Home/Index" class="text-decoration-none">
                         <h2 class="shoegee-brand mb-0">E-Shop</h2>
                     </a>
                 </div>
 
-                <div class="topbar-right d-flex justify-content-end align-items-center gap-4" style="width: 280px;">
+                <div class="topbar-right d-flex justify-content-end align-items-center gap-4" style="min-width: 280px; flex: 1;">
+                    <!-- Language Selection -->
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-outline-light dropdown-toggle text-white border-0" type="button" id="langDropdown" data-bs-toggle="dropdown" style="font-size: 14px;">
+                            <i class="bi bi-translate"></i> @(System.Threading.Thread.CurrentThread.CurrentUICulture.Name == "bn-BD" ? "বাংলা" : "English")
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
+                            <li>
+                                <form asp-controller="Home" asp-action="SetLanguage" method="post">
+                                    <input type="hidden" name="culture" value="en-US" />
+                                    <input type="hidden" name="returnUrl" value="@(Context.Request.Path + Context.Request.QueryString)" />
+                                    <button type="submit" class="dropdown-item">English</button>
+                                </form>
+                            </li>
+                            <li>
+                                <form asp-controller="Home" asp-action="SetLanguage" method="post">
+                                    <input type="hidden" name="culture" value="bn-BD" />
+                                    <input type="hidden" name="returnUrl" value="@(Context.Request.Path + Context.Request.QueryString)" />
+                                    <button type="submit" class="dropdown-item">বাংলা (Bangla)</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+
                     <a href="#" onclick="document.getElementById('searchForm').classList.toggle('d-none'); return false;" class="topbar-link">
                         <i class="bi bi-search" style="font-size: 1.1rem;"></i>
                     </a>
@@ -124,14 +151,14 @@
                             </a>
                         </div>
                         <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline m-0 p-0">
-                            <button type="submit" class="btn btn-link topbar-link p-0 text-decoration-none border-0" style="font-size: 14px;">Logout</button>
+                            <button type="submit" class="btn btn-link topbar-link p-0 text-decoration-none border-0" style="font-size: 14px;">@Localizer["Logout"]</button>
                         </form>
                     }
                     else
                     {
-                        <a class="topbar-link" asp-controller="Account" asp-action="Login">Login</a>
+                        <a class="topbar-link" asp-controller="Account" asp-action="Login">@Localizer["Login"]</a>
                         <span class="text-white mx-2">|</span>
-                        <a class="topbar-link fw-bold text-white text-decoration-none" asp-controller="Account" asp-action="Register">Sign Up</a>
+                        <a class="topbar-link fw-bold text-white text-decoration-none" asp-controller="Account" asp-action="Register">@Localizer["Sign Up"]</a>
                     }
                 </div>
                 
@@ -141,17 +168,17 @@
         <div class="shoegee-nav-container">
             <nav class="shoegee-pill-nav">
                 <ul class="d-flex list-unstyled mb-0 gap-5 justify-content-center w-100">
-                    <li><a asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-controller="Home" asp-action="CategoryProducts" asp-route-typeId="">Categories</a></li>
-                    <li><a asp-controller="Home" asp-action="Deals">Deals</a></li>
-                    <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
+                    <li><a asp-controller="Home" asp-action="Index">@Localizer["Home"]</a></li>
+                    <li><a asp-controller="Home" asp-action="CategoryProducts" asp-route-typeId="">@Localizer["Categories"]</a></li>
+                    <li><a asp-controller="Home" asp-action="Deals">@Localizer["Deals"]</a></li>
+                    <li><a asp-controller="Home" asp-action="Contact">@Localizer["Contact"]</a></li>
                     
                     @if (User.IsInRole("Admin")) { 
-                        <li><a asp-controller="AdminDashboard" asp-action="Index">Dashboard</a></li>
+                        <li><a asp-controller="AdminDashboard" asp-action="Index">@Localizer["Dashboard"]</a></li>
                     }
-                    else if (User.IsInRole("Employee")) { <li><a asp-controller="EmployeeDashboard" asp-action="Index">Dashboard</a></li> }
-                    else if (User.IsInRole("DeliveryMan")) { <li><a asp-controller="DeliveryManDashboard" asp-action="Index">Dashboard</a></li> }
-                    else if (User.Identity.IsAuthenticated) { <li><a asp-controller="CustomerDashboard" asp-action="Index">Dashboard</a></li> }
+                    else if (User.IsInRole("Employee")) { <li><a asp-controller="EmployeeDashboard" asp-action="Index">@Localizer["Dashboard"]</a></li> }
+                    else if (User.IsInRole("DeliveryMan")) { <li><a asp-controller="DeliveryManDashboard" asp-action="Index">@Localizer["Dashboard"]</a></li> }
+                    else if (User.Identity.IsAuthenticated) { <li><a asp-controller="CustomerDashboard" asp-action="Index">@Localizer["Dashboard"]</a></li> }
                 </ul>
             </nav>
         </div>
