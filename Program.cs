@@ -45,15 +45,6 @@ var app = builder.Build();
 
 await SeedService.SeedDatabase(app.Services);
 
-// ── Localization Middleware ───────────────────────────────────────────────────
-var supportedCultures = new[] { "en-US", "bn-BD" };
-var localizationOptions = new RequestLocalizationOptions()
-    .SetDefaultCulture(supportedCultures[0])
-    .AddSupportedCultures(supportedCultures)
-    .AddSupportedUICultures(supportedCultures);
-
-app.UseRequestLocalization(localizationOptions);
-
 // ── Middleware ────────────────────────────────────────────────────────────────
 if (!app.Environment.IsDevelopment())
 {
@@ -65,6 +56,16 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+// ── Localization Middleware ───────────────────────────────────────────────────
+var supportedCultures = new[] { "en-US", "bn-BD" };
+var localizationOptions = new RequestLocalizationOptions()
+    .SetDefaultCulture(supportedCultures[0])
+    .AddSupportedCultures(supportedCultures)
+    .AddSupportedUICultures(supportedCultures);
+
+app.UseRequestLocalization(localizationOptions);
+
 app.UseAuthentication();
 app.UseAuthorization();
 
