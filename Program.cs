@@ -11,7 +11,7 @@ using System.Globalization;
 var builder = WebApplication.CreateBuilder(args);
 
 // ── Localization ──────────────────────────────────────────────────────────────
-builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+builder.Services.AddLocalization();
 
 builder.Services.AddControllersWithViews()
     .AddViewLocalization()
@@ -60,7 +60,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 // ── Localization Middleware ───────────────────────────────────────────────────
-var supportedCultures = new[] { "en", "bn" };
+var supportedCultures = new[] { "en", "en-US", "bn", "bn-BD" };
 var localizationOptions = new RequestLocalizationOptions()
     .SetDefaultCulture("en")
     .AddSupportedCultures(supportedCultures)

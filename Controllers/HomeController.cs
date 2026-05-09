@@ -451,12 +451,18 @@ namespace E_ShoppingManagement.Controllers
         [HttpPost]
         public IActionResult SetLanguage(string culture, string returnUrl)
         {
+            // Set the cookie for the selected culture
             Response.Cookies.Append(
                 CookieRequestCultureProvider.DefaultCookieName,
                 CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
                 new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
             );
 
+            // Redirect back to the original page
+            if (string.IsNullOrEmpty(returnUrl))
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return LocalRedirect(returnUrl);
         }
     }
