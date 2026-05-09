@@ -851,4 +851,24 @@
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
+
+
+  <data name="Shop by Categories" xml:space="preserve">
+    <value>Shop by Categories</value>
+  </data>
+  <data name="MEN PRODUCTS" xml:space="preserve">
+    <value>MEN PRODUCTS</value>
+  </data>
+  <data name="WOMEN PRODUCTS" xml:space="preserve">
+    <value>WOMEN PRODUCTS</value>
+  </data>
+  <data name="KIDS" xml:space="preserve">
+    <value>KIDS</value>
+  </data>
+  <data name="ELECTRONICS" xml:space="preserve">
+    <value>ELECTRONICS</value>
+  </data>
+  <data name="PANJABI" xml:space="preserve">
+    <value>PANJABI</value>
+  </data>
 </root>

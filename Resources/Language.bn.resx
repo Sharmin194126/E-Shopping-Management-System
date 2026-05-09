@@ -801,4 +801,23 @@
   <data name="Women" xml:space="preserve">
     <value>মহিলা</value>
   </data>
+
+  <data name="Shop by Categories" xml:space="preserve">
+    <value>বিভাগ অনুযায়ী কেনাকাটা করুন</value>
+  </data>
+  <data name="MEN PRODUCTS" xml:space="preserve">
+    <value>পুরুষদের পণ্য</value>
+  </data>
+  <data name="WOMEN PRODUCTS" xml:space="preserve">
+    <value>মহিলাদের পণ্য</value>
+  </data>
+  <data name="KIDS" xml:space="preserve">
+    <value>বাচ্চাদের</value>
+  </data>
+  <data name="ELECTRONICS" xml:space="preserve">
+    <value>ইলেকট্রনিক্স</value>
+  </data>
+  <data name="PANJABI" xml:space="preserve">
+    <value>পাঞ্জাবি</value>
+  </data>
 </root>
