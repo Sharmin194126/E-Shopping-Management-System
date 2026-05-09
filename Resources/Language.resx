@@ -755,4 +755,100 @@
   <data name="Offer Price" xml:space="preserve">
     <value>Offer Price</value>
   </data>
+  <data name="Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="Filter Products" xml:space="preserve">
+    <value>Filter Products</value>
+  </data>
+  <data name="Product Types" xml:space="preserve">
+    <value>Product Types</value>
+  </data>
+  <data name="Price Range" xml:space="preserve">
+    <value>Price Range</value>
+  </data>
+  <data name="Available Sizes" xml:space="preserve">
+    <value>Available Sizes</value>
+  </data>
+  <data name="Clear All Filters" xml:space="preserve">
+    <value>Clear All Filters</value>
+  </data>
+  <data name="Explore Products" xml:space="preserve">
+    <value>Explore Products</value>
+  </data>
+  <data name="Search results for" xml:space="preserve">
+    <value>Search results for</value>
+  </data>
+  <data name="items found" xml:space="preserve">
+    <value>items found</value>
+  </data>
+  <data name="+ Add New Product" xml:space="preserve">
+    <value>+ Add New Product</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="Del" xml:space="preserve">
+    <value>Del</value>
+  </data>
+  <data name="Add to Cart" xml:space="preserve">
+    <value>Add to Cart</value>
+  </data>
+  <data name="Buy Now" xml:space="preserve">
+    <value>Buy Now</value>
+  </data>
+  <data name="No products found matching your criteria." xml:space="preserve">
+    <value>No products found matching your criteria.</value>
+  </data>
+  <data name="All Categories" xml:space="preserve">
+    <value>All Categories</value>
+  </data>
+  <data name="All Types" xml:space="preserve">
+    <value>All Types</value>
+  </data>
+  <data name="All Prices" xml:space="preserve">
+    <value>All Prices</value>
+  </data>
+  <data name="Below ৳500" xml:space="preserve">
+    <value>Below ৳500</value>
+  </data>
+  <data name="Under ৳500 - ৳2000" xml:space="preserve">
+    <value>Under ৳500 - ৳2000</value>
+  </data>
+  <data name="Above ৳2000" xml:space="preserve">
+    <value>Above ৳2000</value>
+  </data>
+  <data name="Above ৳10000" xml:space="preserve">
+    <value>Above ৳10000</value>
+  </data>
+  <data name="Men products" xml:space="preserve">
+    <value>Men products</value>
+  </data>
+  <data name="Women products" xml:space="preserve">
+    <value>Women products</value>
+  </data>
+  <data name="Kids" xml:space="preserve">
+    <value>Kids</value>
+  </data>
+  <data name="Electronics" xml:space="preserve">
+    <value>Electronics</value>
+  </data>
+  <data name="Panjabi" xml:space="preserve">
+    <value>Panjabi</value>
+  </data>
+  <data name="Men" xml:space="preserve">
+    <value>Men</value>
+  </data>
+  <data name="Women" xml:space="preserve">
+    <value>Women</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
 </root>

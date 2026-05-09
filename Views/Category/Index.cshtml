@@ -1,33 +1,33 @@
 @model IEnumerable<E_ShoppingManagement.Models.Category>
 
 @{
-    ViewData["Title"] = "Categories";
+    ViewData["Title"] = Localizer["Categories"];
     Layout = User.IsInRole("Admin") ? "~/Views/Shared/_AdminLayout.cshtml" : "~/Views/Shared/_EmployeeLayout.cshtml";
 }
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2>Category List</h2>
-    <a asp-controller="AdminDashboard" asp-action="Index" class="theme-back-btn mb-0">Back</a>
+    <h2>@Localizer["Category List"]</h2>
+    <a asp-controller="AdminDashboard" asp-action="Index" class="theme-back-btn mb-0">@Localizer["Back"]</a>
 </div>
 
 <div class="page-card p-3">
 
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="mb-0">All Categories</h5>
+        <h5 class="mb-0">@Localizer["All Categories"]</h5>
         <a asp-action="Create" class="btn btn-primary">
-            Create New Category
+            @Localizer["Create New Category"]
         </a>
     </div>
 
     <table class="table table-hover table-bordered align-middle text-center">
         <thead style="background:#532374; color:#fff;">
             <tr>
-                <th style="width:70px;">SL No</th>
-                <th style="width:90px;">Image</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Status</th>
-                <th style="width:220px;">Actions</th>
+                <th style="width:70px;">@Localizer["SL No"]</th>
+                <th style="width:90px;">@Localizer["Image"]</th>
+                <th>@Localizer["Name"]</th>
+                <th>@Localizer["Description"]</th>
+                <th>@Localizer["Status"]</th>
+                <th style="width:220px;">@Localizer["Actions"]</th>
             </tr>
         </thead>
         <tbody>
@@ -37,7 +37,7 @@
             @if (!Model.Any())
             {
                 <tr>
-                    <td colspan="5" class="text-muted">No categories found.</td>
+                    <td colspan="6" class="text-muted">@Localizer["No categories found."]</td>
                 </tr>
             }
             else
@@ -55,10 +55,10 @@
                             }
                             else
                             {
-                                <span class="text-muted small">N/A</span>
+                                <span class="text-muted small">@Localizer["N/A"]</span>
                             }
                         </td>
-                        <td class="text-start fw-bold">@item.Name</td>
+                        <td class="text-start fw-bold">@Localizer[item.Name]</td>
                         <td>
                             <div style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="@item.Description">
                                 @item.Description
@@ -66,13 +66,13 @@
                         </td>
                         <td>
                             <span class="badge @(item.Status == "Active" ? "badge-status-active" : "badge-status-inactive")">
-                                @item.Status
+                                @Localizer[item.Status]
                             </span>
                         </td>
                         <td>
-                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-secondary me-1">View</a>
-                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-success me-1">Edit</a>
-                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-secondary me-1">@Localizer["View"]</a>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-success me-1">@Localizer["Edit"]</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">@Localizer["Delete"]</a>
                         </td>
                     </tr>
                 }

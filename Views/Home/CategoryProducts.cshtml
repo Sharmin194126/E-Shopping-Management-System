@@ -1,6 +1,6 @@
 @model E_ShoppingManagement.ViewModels.CategoryProductsViewModel
 @{
-    ViewData["Title"] = "Explore Products";
+    ViewData["Title"] = Localizer["Explore Products"];
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     string RenderStars(double rating) {
@@ -13,12 +13,12 @@
 }
 
 <div class="container-fluid mt-4">
-    <a href="javascript:history.back()" class="theme-back-btn ms-3"><i class="bi bi-arrow-left"></i> Back</a>
+    <a href="javascript:history.back()" class="theme-back-btn ms-3"><i class="bi bi-arrow-left"></i> @Localizer["Back"]</a>
     <div class="row">
         <!-- Sidebar Filter -->
         <aside class="col-md-3">
             <div class="page-card p-3 shadow-sm border-0 sticky-top" style="top: 20px;">
-                <h5 class="mb-4 border-bottom pb-2">Filter Products</h5>
+                <h5 class="mb-4 border-bottom pb-2">@Localizer["Filter Products"]</h5>
                 <style>
                     .form-check-input:checked { background-color: #532374 !important; border-color: #532374 !important; }
                     .form-check-input:focus { border-color: #532374 !important; box-shadow: 0 0 0 0.25rem rgba(83, 35, 116, 0.25) !important; }
@@ -27,63 +27,63 @@
                     <input type="hidden" name="query" value="@Model.SearchQuery" />
                     
                     <div class="mb-4">
-                        <h6 class="mb-2">Product Categories</h6>
+                        <h6 class="mb-2">@Localizer["Product Categories"]</h6>
                         <select name="categoryId" class="form-select border-dark" onchange="this.form.submit()">
-                            <option value="">All Categories</option>
+                            <option value="">@Localizer["All Categories"]</option>
                             @foreach (var cat in Model.Categories)
                             {
-                                <option value="@cat.Id" selected="@(Model.SelectedCategory == cat.Id)">@cat.Name</option>
+                                <option value="@cat.Id" selected="@(Model.SelectedCategory == cat.Id)">@Localizer[cat.Name]</option>
                             }
                         </select>
                     </div>
 
                     <div class="mb-4">
-                        <h6 class="mb-2">Product Types</h6>
+                        <h6 class="mb-2">@Localizer["Product Types"]</h6>
                         <select name="typeId" class="form-select border-dark" onchange="this.form.submit()">
-                            <option value="">All Types</option>
+                            <option value="">@Localizer["All Types"]</option>
                             @foreach (var type in Model.ProductTypes)
                             {
-                                <option value="@type.Id" selected="@(Model.SelectedType == type.Id)">@type.Name</option>
+                                <option value="@type.Id" selected="@(Model.SelectedType == type.Id)">@Localizer[type.Name]</option>
                             }
                         </select>
                     </div>
 
                     <div class="mb-4">
-                        <h6 class="mb-2">Price Range</h6>
+                        <h6 class="mb-2">@Localizer["Price Range"]</h6>
                         @{
                             var selectedPriceText = Model.PriceRange switch {
-                                "low" => "Below ৳500",
-                                "mid" => "Under ৳500 - ৳2000",
-                                "high" => "Above ৳2000",
-                                "very-high" => "Above ৳10000",
-                                _ => "All Prices"
+                                "low" => Localizer["Below ৳500"].Value,
+                                "mid" => Localizer["Under ৳500 - ৳2000"].Value,
+                                "high" => Localizer["Above ৳2000"].Value,
+                                "very-high" => Localizer["Above ৳10000"].Value,
+                                _ => Localizer["All Prices"].Value
                             };
                         }
                         <div class="mb-2">
-                             <span class="text-danger fw-bold">Selected: </span> 
+                             <span class="text-danger fw-bold">@Localizer["Selected"]: </span> 
                              <span class="text-dark fw-bold">@selectedPriceText</span>
                         </div>
                         <div class="form-check mb-2">
                             <input class="form-check-input" type="radio" name="priceRange" value="low" id="p-low" onchange="this.form.submit()" style="accent-color: #532374;" @(Model.PriceRange == "low" ? "checked" : "")>
-                            <label class="form-check-label fw-bold ps-1" style="color: black !important;" for="p-low">Below ৳500</label>
+                            <label class="form-check-label fw-bold ps-1" style="color: black !important;" for="p-low">@Localizer["Below ৳500"]</label>
                         </div>
                         <div class="form-check mb-2">
                             <input class="form-check-input" type="radio" name="priceRange" value="mid" id="p-mid" onchange="this.form.submit()" style="accent-color: #532374;" @(Model.PriceRange == "mid" ? "checked" : "")>
-                            <label class="form-check-label fw-bold ps-1" style="color: black !important;" for="p-mid">Under ৳500 - ৳2000</label>
+                            <label class="form-check-label fw-bold ps-1" style="color: black !important;" for="p-mid">@Localizer["Under ৳500 - ৳2000"]</label>
                         </div>
                         <div class="form-check mb-2">
                             <input class="form-check-input" type="radio" name="priceRange" value="high" id="p-high" onchange="this.form.submit()" style="accent-color: #532374;" @(Model.PriceRange == "high" ? "checked" : "")>
-                            <label class="form-check-label fw-bold ps-1" style="color: black !important;" for="p-high">Above ৳2000</label>
+                            <label class="form-check-label fw-bold ps-1" style="color: black !important;" for="p-high">@Localizer["Above ৳2000"]</label>
                         </div>
                          <div class="form-check mb-2">
                             <input class="form-check-input" type="radio" name="priceRange" value="very-high" id="p-vh" onchange="this.form.submit()" style="accent-color: #532374;" @(Model.PriceRange == "very-high" ? "checked" : "")>
-                            <label class="form-check-label fw-bold ps-1" style="color: black !important;" for="p-vh">Above ৳10000</label>
+                            <label class="form-check-label fw-bold ps-1" style="color: black !important;" for="p-vh">@Localizer["Above ৳10000"]</label>
                         </div>
                     </div>
 
                     <div class="mb-4">
                     
-                        <h6 class="mb-2">Available Sizes</h6>
+                        <h6 class="mb-2">@Localizer["Available Sizes"]</h6>
                         <div class="d-flex flex-wrap gap-2">
                             @foreach (var s in new[] { "S", "M", "L", "XL", "XXL", "3XL" })
                             {
@@ -95,7 +95,7 @@
                         </div>
                     </div>
 
-                    <a href="/Home/CategoryProducts" class="btn btn-outline-danger btn-sm w-100 mt-2">Clear All Filters</a>
+                    <a href="/Home/CategoryProducts" class="btn btn-outline-danger btn-sm w-100 mt-2">@Localizer["Clear All Filters"]</a>
                 </form>
             </div>
         </aside>
@@ -104,10 +104,10 @@
         <main class="col-md-9">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h4>
-                    @if (!string.IsNullOrEmpty(Model.SearchQuery)) { @:Search results for "@Model.SearchQuery"
-                    } else { @:Explore Products
+                    @if (!string.IsNullOrEmpty(Model.SearchQuery)) { @Localizer["Search results for"] @:"@Model.SearchQuery"
+                    } else { @Localizer["Explore Products"]
                     }
-                    <small class="text-muted fs-6">(@Model.Products.Count items found)</small>
+                    <small class="text-muted fs-6">(@Model.Products.Count @Localizer["items found"])</small>
                 </h4>
             </div>
 
@@ -117,11 +117,11 @@
                     <div class="col-12 mb-3">
                         @if (User.IsInRole("Employee"))
                         {
-                            <a asp-controller="EmployeeProduct" asp-action="Create" class="btn btn-sm" style="background-color: #532374; color: white;">+ Add New Product</a>
+                            <a asp-controller="EmployeeProduct" asp-action="Create" class="btn btn-sm" style="background-color: #532374; color: white;">@Localizer["+ Add New Product"]</a>
                         }
                         else
                         {
-                            <a asp-controller="Product" asp-action="Create" class="btn btn-sm" style="background-color: #532374; color: white;">+ Add New Product</a>
+                            <a asp-controller="Product" asp-action="Create" class="btn btn-sm" style="background-color: #532374; color: white;">@Localizer["+ Add New Product"]</a>
                         }
                     </div>
                 }
@@ -134,11 +134,11 @@
                             {
                                 <div class="admin-actions position-absolute top-0 end-0 p-2 d-flex gap-1" style="z-index: 10;">
                                     @if(User.IsInRole("Admin")) {
-                                        <a asp-controller="Product" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-xs btn-light shadow-sm" style="font-size: 10px; padding: 2px 5px;">Edit</a>
-                                        <a asp-controller="Product" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-xs btn-danger shadow-sm text-white" style="font-size: 10px; padding: 2px 5px;">Del</a>
+                                        <a asp-controller="Product" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-xs btn-light shadow-sm" style="font-size: 10px; padding: 2px 5px;">@Localizer["Edit"]</a>
+                                        <a asp-controller="Product" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-xs btn-danger shadow-sm text-white" style="font-size: 10px; padding: 2px 5px;">@Localizer["Del"]</a>
                                     } else if(User.IsInRole("Employee")) {
-                                        <a asp-controller="EmployeeProduct" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-xs btn-light shadow-sm" style="font-size: 10px; padding: 2px 5px;">Edit</a>
-                                        <a asp-controller="EmployeeProduct" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-xs btn-danger shadow-sm text-white" style="font-size: 10px; padding: 2px 5px;">Del</a>
+                                        <a asp-controller="EmployeeProduct" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-xs btn-light shadow-sm" style="font-size: 10px; padding: 2px 5px;">@Localizer["Edit"]</a>
+                                        <a asp-controller="EmployeeProduct" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-xs btn-danger shadow-sm text-white" style="font-size: 10px; padding: 2px 5px;">@Localizer["Del"]</a>
                                     }
                                 </div>
                             }
@@ -160,22 +160,22 @@
                                     </div>
                                     <div class="stock-badge">
                                         @if(item.StockQty > 0) {
-                                            <span class="badge bg-info text-white extra-small" style="font-size: 0.7rem; padding: 3px 8px;">STOCK: @item.StockQty.ToString("#,##0")</span>
+                                            <span class="badge bg-info text-white extra-small" style="font-size: 0.7rem; padding: 3px 8px;">@Localizer["STOCK"]: @item.StockQty.ToString("#,##0")</span>
                                         } else {
-                                            <span class="badge bg-danger text-white extra-small" style="font-size: 0.7rem; padding: 3px 8px;">EMPTY</span>
+                                            <span class="badge bg-danger text-white extra-small" style="font-size: 0.7rem; padding: 3px 8px;">@Localizer["EMPTY"]</span>
                                         }
                                     </div>
                                 </div>
 
                                 <div class="d-flex justify-content-between align-items-center mb-2">
                                     <div class="text-warning small" style="font-size: 0.7rem;">@RenderStars(item.AverageRating)</div>
-                                    <span class="badge @(item.Status == "Active" ? "bg-primary" : "bg-dark") text-white extra-small" style="font-size: 0.6rem; padding: 1px 5px; font-weight: 800; letter-spacing: 0.5px;">@item.Status.ToUpper()</span>
+                                    <span class="badge @(item.Status == "Active" ? "bg-primary" : "bg-dark") text-white extra-small" style="font-size: 0.6rem; padding: 1px 5px; font-weight: 800; letter-spacing: 0.5px;">@Localizer[item.Status].Value.ToUpper()</span>
                                 </div>
                             </a>
 
                             <div class="d-grid gap-2 mt-auto">
-                                <a href="/Home/Details/@item.Id" class="btn btn-sm text-white" style="background-color: #532374;">Add to Cart</a>
-                                <a href="/Home/Details/@item.Id" class="btn btn-outline-danger btn-sm">Buy Now</a>
+                                <a href="/Home/Details/@item.Id" class="btn btn-sm text-white" style="background-color: #532374;">@Localizer["Add to Cart"]</a>
+                                <a href="/Home/Details/@item.Id" class="btn btn-outline-danger btn-sm">@Localizer["Buy Now"]</a>
                             </div>
                         </div>
                     </div>
@@ -184,7 +184,7 @@
                 {
                     <div class="col-12 text-center py-5">
                         <img src="/images/no-results.png" style="width: 150px; opacity: 0.5;">
-                        <p class="mt-3 text-muted">No products found matching your criteria.</p>
+                        <p class="mt-3 text-muted">@Localizer["No products found matching your criteria."]</p>
                     </div>
                 }
             </div>

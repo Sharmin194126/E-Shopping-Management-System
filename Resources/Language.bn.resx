@@ -725,4 +725,80 @@
   <data name="Offer Price" xml:space="preserve">
     <value>অফার মূল্য</value>
   </data>
+
+  <data name="Filter Products" xml:space="preserve">
+    <value>পণ্য ফিল্টার করুন</value>
+  </data>
+  <data name="Price Range" xml:space="preserve">
+    <value>মূল্য সীমা</value>
+  </data>
+  <data name="Available Sizes" xml:space="preserve">
+    <value>উপলব্ধ সাইজ</value>
+  </data>
+  <data name="Clear All Filters" xml:space="preserve">
+    <value>সব ফিল্টার মুছুন</value>
+  </data>
+  <data name="Explore Products" xml:space="preserve">
+    <value>পণ্য অন্বেষণ করুন</value>
+  </data>
+  <data name="Search results for" xml:space="preserve">
+    <value>অনুসন্ধানের ফলাফল:</value>
+  </data>
+  <data name="items found" xml:space="preserve">
+    <value>টি পণ্য পাওয়া গেছে</value>
+  </data>
+  <data name="+ Add New Product" xml:space="preserve">
+    <value>+ নতুন পণ্য যোগ করুন</value>
+  </data>
+  <data name="Del" xml:space="preserve">
+    <value>মুছুন</value>
+  </data>
+  <data name="Buy Now" xml:space="preserve">
+    <value>এখনই কিনুন</value>
+  </data>
+  <data name="No products found matching your criteria." xml:space="preserve">
+    <value>আপনার শর্তানুসারে কোনো পণ্য পাওয়া যায়নি।</value>
+  </data>
+  <data name="All Categories" xml:space="preserve">
+    <value>সব ক্যাটাগরি</value>
+  </data>
+  <data name="All Types" xml:space="preserve">
+    <value>সব ধরন</value>
+  </data>
+  <data name="All Prices" xml:space="preserve">
+    <value>সব মূল্য</value>
+  </data>
+  <data name="Below ৳500" xml:space="preserve">
+    <value>৳৫০০ এর নিচে</value>
+  </data>
+  <data name="Under ৳500 - ৳2000" xml:space="preserve">
+    <value>৳৫০০ - ৳২০০০ এর মধ্যে</value>
+  </data>
+  <data name="Above ৳2000" xml:space="preserve">
+    <value>৳২০০০ এর উপরে</value>
+  </data>
+  <data name="Above ৳10000" xml:space="preserve">
+    <value>৳১০,০০০ এর উপরে</value>
+  </data>
+  <data name="Men products" xml:space="preserve">
+    <value>পুরুষদের পণ্য</value>
+  </data>
+  <data name="Women products" xml:space="preserve">
+    <value>মহিলাদের পণ্য</value>
+  </data>
+  <data name="Kids" xml:space="preserve">
+    <value>বাচ্চাদের</value>
+  </data>
+  <data name="Electronics" xml:space="preserve">
+    <value>ইলেকট্রনিক্স</value>
+  </data>
+  <data name="Panjabi" xml:space="preserve">
+    <value>পাঞ্জাবি</value>
+  </data>
+  <data name="Men" xml:space="preserve">
+    <value>পুরুষ</value>
+  </data>
+  <data name="Women" xml:space="preserve">
+    <value>মহিলা</value>
+  </data>
 </root>

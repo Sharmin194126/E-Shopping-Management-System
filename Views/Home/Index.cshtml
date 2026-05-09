@@ -182,8 +182,8 @@
                                 <a href="/Home/CategoryProducts?categoryId=@cat.Id" style="display: block; position: relative;" onmouseover="this.parentElement.style.transform='translateY(-5px)'" onmouseout="this.parentElement.style.transform='translateY(0)'">
                                     <img src="@(string.IsNullOrEmpty(cat.ImageUrl) ? "/images/no-image.png" : (cat.ImageUrl.StartsWith("/") ? cat.ImageUrl : "/images/categories/" + cat.ImageUrl))" alt="@cat.Name" style="width: 140px; height: 140px; object-fit: cover; filter: brightness(0.6); display: block; border-radius: 12px;" />
                                     <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #fff; font-weight: 700; font-size: 16px; text-shadow: 0px 2px 6px rgba(0,0,0,0.8); z-index: 2; width: 90%; text-align: center; letter-spacing: 0.5px; text-transform: uppercase;">
-                                        @cat.Name
-                                    </div>
+                                         @Localizer[cat.Name]
+                                     </div>
                                 </a>
                             </div>
                         }

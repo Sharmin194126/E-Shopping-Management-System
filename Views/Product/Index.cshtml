@@ -8,15 +8,15 @@
 
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2 class="mb-0">Products</h2>
-    <a href="javascript:history.back()" class="theme-back-btn mb-0">Back</a>
+    <h2 class="mb-0">@Localizer["Products"]</h2>
+    <a href="javascript:history.back()" class="theme-back-btn mb-0">@Localizer["Back"]</a>
 </div>
 
 <div class="page-card mb-3">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="mb-0">All Products</h5>
+        <h5 class="mb-0">@Localizer["All Products"]</h5>
         <a asp-action="Create" class="btn btn-primary">
-            <i class="bi bi-plus-circle"></i> Add New Product
+            <i class="bi bi-plus-circle"></i> @Localizer["+ Add New Product"]
         </a>
     </div>
 
@@ -25,22 +25,22 @@
             <select class="form-control"
                     name="categoryId"
                     asp-items="@(ViewBag.CategoryList as SelectList)">
-                <option value="">All Categories</option>
+                <option value="">@Localizer["All Categories"]</option>
             </select>
         </div>
         <div class="col-md-3">
             <select class="form-control"
                     name="productTypeId"
                     asp-items="@(ViewBag.ProductTypeList as SelectList)">
-                <option value="">All Product Types</option>
+                <option value="">@Localizer["All Types"]</option>
             </select>
         </div>
         <div class="col-md-3">
             <input type="text" name="query" class="form-control" placeholder="Search product name..." value="@ViewBag.CurrentQuery" />
         </div>
         <div class="col-md-3 d-flex gap-2">
-            <button type="submit" class="btn btn-secondary flex-grow-1">Filter</button>
-            <a asp-action="Index" class="btn btn-outline-danger flex-grow-1">Clear Filter</a>
+            <button type="submit" class="btn btn-secondary flex-grow-1">@Localizer["Filter"]</button>
+            <a asp-action="Index" class="btn btn-outline-danger flex-grow-1">@Localizer["Clear Filter"]</a>
         </div>
     </form>
 
@@ -54,18 +54,18 @@
     <table class="table table-hover table-bordered">
         <thead style="background:#532374; color:#fff;">
             <tr>
-                <th style="width:60px;">SL No</th>
-                <th style="width:100px;">Image</th>
-                <th>Name</th>
-                <th>Category</th>
-                <th>Type</th>
-                <th>Price</th>
-                <th>Offer %</th>
-                <th>Offer Price</th>
-                <th>Stock</th>
-                <th>Status</th>
-                <th>Approval</th>
-                <th style="width: 190px;">Actions</th>
+                <th style="width:60px;">@Localizer["SL No"]</th>
+                <th style="width:100px;">@Localizer["Image"]</th>
+                <th>@Localizer["Name"]</th>
+                <th>@Localizer["Category"]</th>
+                <th>@Localizer["Type"]</th>
+                <th>@Localizer["Price"]</th>
+                <th>@Localizer["Offer %"]</th>
+                <th>@Localizer["Offer Price"]</th>
+                <th>@Localizer["Stock"]</th>
+                <th>@Localizer["Status"]</th>
+                <th>@Localizer["Approval"]</th>
+                <th style="width: 190px;">@Localizer["Actions"]</th>
             </tr>
         </thead>
         <tbody>
@@ -75,7 +75,7 @@
             @if (!Model.Any())
             {
                 <tr>
-                    <td colspan="12" class="text-center text-muted">No products found.</td>
+                    <td colspan="12" class="text-center text-muted">@Localizer["No products found."]</td>
                 </tr>
             }
             else
@@ -97,8 +97,8 @@
                             }
                         </td>
                         <td class="fw-bold">@item.Name</td>
-                        <td>@item.Category?.Name</td>
-                        <td><span class="badge bg-light text-dark border">@item.ProductType?.Name</span></td>
+                        <td>@Localizer[item.Category?.Name ?? ""]</td>
+                        <td><span class="badge bg-light text-dark border">@Localizer[item.ProductType?.Name ?? ""]</span></td>
                         <td>
                             @if (item.OfferPercentage > 0)
                             {
@@ -115,28 +115,28 @@
                         </td>
                         <td>
                             <span class="badge @(item.StockQty <= 10 ? "badge-stock-low" : "badge-stock-ok")">
-                                @item.StockQty Units
+                                @item.StockQty @Localizer["Units"]
                             </span>
                         </td>
                         <td>
                             <span class="badge @(item.Status == "Active" ? "badge-status-active" : (item.Status == "Pending" ? "bg-warning text-dark" : "badge-status-inactive"))">
-                                @item.Status
+                                @Localizer[item.Status]
                             </span>
                         </td>
                         <td>
                             @if (item.IsApproved)
                             {
-                                <span class="badge bg-success"><i class="bi bi-check-circle"></i> Yes</span>
+                                <span class="badge bg-success"><i class="bi bi-check-circle"></i> @Localizer["Yes"]</span>
                             }
                             else
                             {
-                                <span class="badge bg-warning text-dark"><i class="bi bi-clock"></i> Pending</span>
+                                <span class="badge bg-warning text-dark"><i class="bi bi-clock"></i> @Localizer["Pending"]</span>
                             }
                         </td>
                         <td>
-                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-secondary">Details</a>
-                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-success">Edit</a>
-                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-secondary">@Localizer["Details"]</a>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-success">@Localizer["Edit"]</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">@Localizer["Delete"]</a>
                         </td>
                     </tr>
                 }

@@ -1,0 +1,824 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="0" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Search" xml:space="preserve"><value>à¦…à¦¨à§à¦¸à¦¨à§à¦§à¦¾à¦¨</value></data>
+  <data name="Type to search..." xml:space="preserve"><value>à¦…à¦¨à§à¦¸à¦¨à§à¦§à¦¾à¦¨ à¦•à¦°à¦¤à§‡ à¦Ÿà¦¾à¦‡à¦ª à¦•à¦°à§à¦¨...</value></data>
+  <data name="Go" xml:space="preserve"><value>à¦¯à¦¾à¦¨</value></data>
+  <data name="Logout" xml:space="preserve"><value>à¦²à¦—à¦†à¦‰à¦Ÿ</value></data>
+  <data name="Login" xml:space="preserve"><value>à¦²à¦—à¦‡à¦¨</value></data>
+  <data name="Sign Up" xml:space="preserve"><value>à¦¸à¦¾à¦‡à¦¨ à¦†à¦ª</value></data>
+  <data name="Home" xml:space="preserve"><value>à¦¹à§‹à¦®</value></data>
+  <data name="Categories" xml:space="preserve"><value>à¦¬à¦¿à¦­à¦¾à¦—à¦¸à¦®à§‚à¦¹</value></data>
+  <data name="Deals" xml:space="preserve"><value>à¦…à¦«à¦¾à¦°</value></data>
+  <data name="Contact" xml:space="preserve"><value>à¦¯à§‹à¦—à¦¾à¦¯à§‹à¦—</value></data>
+  <data name="Dashboard" xml:space="preserve"><value>à¦¡à§à¦¯à¦¾à¦¶à¦¬à§‹à¦°à§à¦¡</value></data>
+  <data name="Back to Website" xml:space="preserve"><value>à¦“à¦¯à¦¼à§‡à¦¬à¦¸à¦¾à¦‡à¦Ÿà§‡ à¦«à¦¿à¦°à§‡ à¦¯à¦¾à¦¨</value></data>
+  <data name="System Admin" xml:space="preserve"><value>à¦¸à¦¿à¦¸à§à¦Ÿà§‡à¦® à¦…à§à¦¯à¦¾à¦¡à¦®à¦¿à¦¨</value></data>
+  <data name="Store Employee" xml:space="preserve"><value>à¦¸à§à¦Ÿà§‹à¦° à¦•à¦°à§à¦®à¦šà¦¾à¦°à§€</value></data>
+  <data name="Products" xml:space="preserve"><value>à¦ªà¦£à§à¦¯à¦¸à¦®à§‚à¦¹</value></data>
+  <data name="Product Types" xml:space="preserve"><value>à¦ªà¦£à§à¦¯à§‡à¦° à¦§à¦°à¦¨</value></data>
+  <data name="Homepage Sections" xml:space="preserve"><value>à¦¹à§‹à¦®à¦ªà§‡à¦œ à¦¸à§‡à¦•à¦¶à¦¨</value></data>
+  <data name="Manage Customer" xml:space="preserve"><value>à¦—à§à¦°à¦¾à¦¹à¦• à¦¬à§à¦¯à¦¬à¦¸à§à¦¥à¦¾à¦ªà¦¨à¦¾</value></data>
+  <data name="Manage Employees" xml:space="preserve"><value>à¦•à¦°à§à¦®à¦šà¦¾à¦°à§€ à¦¬à§à¦¯à¦¬à¦¸à§à¦¥à¦¾à¦ªà¦¨à¦¾</value></data>
+  <data name="Manage Deliveryman" xml:space="preserve"><value>à¦¡à§‡à¦²à¦¿à¦­à¦¾à¦°à¦¿à¦®à§à¦¯à¦¾à¦¨ à¦¬à§à¦¯à¦¬à¦¸à§à¦¥à¦¾à¦ªà¦¨à¦¾</value></data>
+  <data name="Manage Carts" xml:space="preserve"><value>à¦•à¦¾à¦°à§à¦Ÿ à¦¬à§à¦¯à¦¬à¦¸à§à¦¥à¦¾à¦ªà¦¨à¦¾</value></data>
+  <data name="Delivery Personnel" xml:space="preserve"><value>à¦¡à§‡à¦²à¦¿à¦­à¦¾à¦°à¦¿ à¦•à¦°à§à¦®à§€</value></data>
+  <data name="Reports" xml:space="preserve"><value>à¦°à¦¿à¦ªà§‹à¦°à§à¦Ÿ</value></data>
+  <data name="Manage Reviews" xml:space="preserve"><value>à¦°à¦¿à¦­à¦¿à¦‰ à¦¬à§à¦¯à¦¬à¦¸à§à¦¥à¦¾à¦ªà¦¨à¦¾</value></data>
+  <data name="Messages" xml:space="preserve"><value>à¦¬à¦¾à¦°à§à¦¤à¦¾</value></data>
+  <data name="Emails" xml:space="preserve"><value>à¦‡à¦®à§‡à¦‡à¦²</value></data>
+  <data name="Employee Products-Sales" xml:space="preserve"><value>à¦•à¦°à§à¦®à¦šà¦¾à¦°à§€ à¦ªà¦£à§à¦¯-à¦¬à¦¿à¦•à§à¦°à¦¯à¦¼</value></data>
+  <data name="My Profile" xml:space="preserve"><value>à¦†à¦®à¦¾à¦° à¦ªà§à¦°à§‹à¦«à¦¾à¦‡à¦²</value></data>
+  <data name="Payment History" xml:space="preserve"><value>à¦ªà§‡à¦®à§‡à¦¨à§à¦Ÿ à¦‡à¦¤à¦¿à¦¹à¦¾à¦¸</value></data>
+  <data name="Manage Banners" xml:space="preserve"><value>à¦¬à§à¦¯à¦¾à¦¨à¦¾à¦° à¦¬à§à¦¯à¦¬à¦¸à§à¦¥à¦¾à¦ªà¦¨à¦¾</value></data>
+  <data name="Track Customer Order" xml:space="preserve"><value>à¦…à¦°à§à¦¡à¦¾à¦° à¦Ÿà§à¦°à§à¦¯à¦¾à¦•à¦¿à¦‚</value></data>
+  <data name="Manage Orders" xml:space="preserve"><value>à¦…à¦°à§à¦¡à¦¾à¦° à¦¬à§à¦¯à¦¬à¦¸à§à¦¥à¦¾à¦ªà¦¨à¦¾</value></data>
+  <data name="Pending Orders" xml:space="preserve"><value>à¦…à¦ªà§‡à¦•à§à¦·à¦®à¦¾à¦¨ à¦…à¦°à§à¦¡à¦¾à¦°</value></data>
+  <data name="Customer Messages" xml:space="preserve"><value>à¦—à§à¦°à¦¾à¦¹à¦• à¦¬à¦¾à¦°à§à¦¤à¦¾</value></data>
+  <data name="Customer Emails" xml:space="preserve"><value>à¦—à§à¦°à¦¾à¦¹à¦• à¦‡à¦®à§‡à¦‡à¦²</value></data>
+  <data name="Back" xml:space="preserve"><value>à¦«à¦¿à¦°à§‡ à¦¯à¦¾à¦¨</value></data>
+  <data name="Edit" xml:space="preserve"><value>à¦¸à¦®à§à¦ªà¦¾à¦¦à¦¨à¦¾</value></data>
+  <data name="Save" xml:space="preserve"><value>à¦¸à¦‚à¦°à¦•à§à¦·à¦£ à¦•à¦°à§à¦¨</value></data>
+  <data name="Delete" xml:space="preserve"><value>à¦®à§à¦›à§‡ à¦«à§‡à¦²à§à¦¨</value></data>
+  <data name="Update" xml:space="preserve"><value>à¦†à¦ªà¦¡à§‡à¦Ÿ à¦•à¦°à§à¦¨</value></data>
+  <data name="Create" xml:space="preserve"><value>à¦¤à§ˆà¦°à¦¿ à¦•à¦°à§à¦¨</value></data>
+  <data name="Edit Delivery Man" xml:space="preserve"><value>à¦¡à§‡à¦²à¦¿à¦­à¦¾à¦°à¦¿à¦®à§à¦¯à¦¾à¦¨ à¦¸à¦®à§à¦ªà¦¾à¦¦à¦¨à¦¾</value></data>
+  <data name="Contact Number" xml:space="preserve"><value>à¦¯à§‹à¦—à¦¾à¦¯à§‹à¦— à¦¨à¦®à§à¦¬à¦°</value></data>
+  <data name="Must be exactly 11 digits" xml:space="preserve"><value>à¦…à¦¬à¦¶à§à¦¯à¦‡ à§§à§§ à¦¸à¦‚à¦–à§à¦¯à¦¾à¦° à¦¹à¦¤à§‡ à¦¹à¦¬à§‡</value></data>
+  <data name="Name" xml:space="preserve"><value>à¦¨à¦¾à¦®</value></data>
+  <data name="Vehicle Info" xml:space="preserve"><value>à¦¯à¦¾à¦¨à§‡à¦° à¦¤à¦¥à§à¦¯</value></data>
+  <data name="Cancel" xml:space="preserve"><value>à¦¬à¦¾à¦¤à¦¿à¦² à¦•à¦°à§à¦¨</value></data>
+  <data name="Save Changes" xml:space="preserve"><value>à¦ªà¦°à¦¿à¦¬à¦°à§à¦¤à¦¨ à¦¸à¦‚à¦°à¦•à§à¦·à¦£ à¦•à¦°à§à¦¨</value></data>
+  <data name="Status" xml:space="preserve"><value>à¦…à¦¬à¦¸à§à¦¥à¦¾</value></data>
+  <data name="Active" xml:space="preserve"><value>à¦¸à¦•à§à¦°à¦¿à¦¯à¦¼</value></data>
+  <data name="Inactive" xml:space="preserve"><value>à¦¨à¦¿à¦·à§à¦•à§à¦°à¦¿à¦¯à¦¼</value></data>
+  <data name="Pending" xml:space="preserve"><value>à¦…à¦ªà§‡à¦•à§à¦·à¦®à¦¾à¦¨</value></data>
+  <data name="Live Chat Support Available!" xml:space="preserve">
+    <value>à¦²à¦¾à¦‡à¦­ à¦šà§à¦¯à¦¾à¦Ÿ à¦¸à¦¾à¦ªà§‹à¦°à§à¦Ÿ à¦‰à¦ªà¦²à¦¬à§à¦§!</value>
+  </data>
+  <data name="Connect with our product experts instantly via our Live Chat button for real-time assistance." xml:space="preserve">
+    <value>à¦°à¦¿à¦¯à¦¼à§‡à¦²-à¦Ÿà¦¾à¦‡à¦® à¦¸à¦¹à¦¾à¦¯à¦¼à¦¤à¦¾à¦° à¦œà¦¨à§à¦¯ à¦†à¦®à¦¾à¦¦à§‡à¦° à¦²à¦¾à¦‡à¦­ à¦šà§à¦¯à¦¾à¦Ÿ à¦¬à¦¾à¦Ÿà¦¨à§‡à¦° à¦®à¦¾à¦§à§à¦¯à¦®à§‡ à¦¤à¦¾à§Žà¦•à§à¦·à¦£à¦¿à¦•à¦­à¦¾à¦¬à§‡ à¦†à¦®à¦¾à¦¦à§‡à¦° à¦ªà¦£à§à¦¯ à¦¬à¦¿à¦¶à§‡à¦·à¦œà§à¦žà¦¦à§‡à¦° à¦¸à¦¾à¦¥à§‡ à¦¸à¦‚à¦¯à§‹à¦— à¦•à¦°à§à¦¨à¥¤</value>
+  </data>
+  <data name="Start Chat Now" xml:space="preserve">
+    <value>à¦à¦–à¦¨à¦‡ à¦šà§à¦¯à¦¾à¦Ÿ à¦¶à§à¦°à§ à¦•à¦°à§à¦¨</value>
+  </data>
+  <data name="Back to Exploration" xml:space="preserve">
+    <value>à¦…à¦¨à§à¦¬à§‡à¦·à¦£à§‡ à¦«à¦¿à¦°à§‡ à¦¯à¦¾à¦¨</value>
+  </data>
+  <data name="Delivery Charge" xml:space="preserve">
+    <value>à¦¡à§‡à¦²à¦¿à¦­à¦¾à¦°à¦¿ à¦šà¦¾à¦°à§à¦œ</value>
+  </data>
+  <data name="Free" xml:space="preserve">
+    <value>à¦«à§à¦°à¦¿</value>
+  </data>
+  <data name="Reviews" xml:space="preserve">
+    <value>à¦°à¦¿à¦­à¦¿à¦‰</value>
+  </data>
+  <data name="OFF" xml:space="preserve">
+    <value>à¦›à¦¾à¦¡à¦¼</value>
+  </data>
+  <data name="Limited Time Offer!" xml:space="preserve">
+    <value>à¦¸à§€à¦®à¦¿à¦¤ à¦¸à¦®à¦¯à¦¼à§‡à¦° à¦…à¦«à¦¾à¦°!</value>
+  </data>
+  <data name="Regular Price" xml:space="preserve">
+    <value>à¦¨à¦¿à¦¯à¦¼à¦®à¦¿à¦¤ à¦®à§‚à¦²à§à¦¯</value>
+  </data>
+  <data name="Offer Price" xml:space="preserve">
+    <value>à¦…à¦«à¦¾à¦° à¦®à§‚à¦²à§à¦¯</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>à¦®à§‚à¦²à§à¦¯</value>
+  </data>
+  <data name="VAT" xml:space="preserve">
+    <value>à¦­à§à¦¯à¦¾à¦Ÿ</value>
+  </data>
+  <data name="Grand Total" xml:space="preserve">
+    <value>à¦¸à¦°à§à¦¬à¦®à§‹à¦Ÿ à¦®à§‚à¦²à§à¦¯</value>
+  </data>
+  <data name="Select Size" xml:space="preserve">
+    <value>à¦¸à¦¾à¦‡à¦œ à¦¨à¦¿à¦°à§à¦¬à¦¾à¦šà¦¨ à¦•à¦°à§à¦¨</value>
+  </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>à¦ªà¦°à¦¿à¦®à¦¾à¦£</value>
+  </data>
+  <data name="Stock" xml:space="preserve">
+    <value>à¦¸à§à¦Ÿà¦•</value>
+  </data>
+  <data name="units" xml:space="preserve">
+    <value>à¦Ÿà¦¿</value>
+  </data>
+  <data name="Max" xml:space="preserve">
+    <value>à¦¸à¦°à§à¦¬à§‹à¦šà§à¦š</value>
+  </data>
+  <data name="No Limit" xml:space="preserve">
+    <value>à¦•à§‹à¦¨ à¦¸à§€à¦®à¦¾ à¦¨à§‡à¦‡</value>
+  </data>
+  <data name="View More" xml:space="preserve">
+    <value>à¦†à¦°à¦“ à¦¦à§‡à¦–à§à¦¨</value>
+  </data>
+  <data name="Ratings &amp; Reviews" xml:space="preserve">
+    <value>à¦°à§‡à¦Ÿà¦¿à¦‚ à¦à¦¬à¦‚ à¦°à¦¿à¦­à¦¿à¦‰</value>
+  </data>
+  <data name="Based on" xml:space="preserve">
+    <value>à¦­à¦¿à¦¤à§à¦¤à¦¿ à¦•à¦°à§‡</value>
+  </data>
+  <data name="reviews" xml:space="preserve">
+    <value>à¦°à¦¿à¦­à¦¿à¦‰</value>
+  </data>
+  <data name="Customer Experience" xml:space="preserve">
+    <value>à¦—à§à¦°à¦¾à¦¹à¦• à¦…à¦­à¦¿à¦œà§à¦žà¦¤à¦¾</value>
+  </data>
+  <data name="Give a Review" xml:space="preserve">
+    <value>à¦à¦•à¦Ÿà¦¿ à¦°à¦¿à¦­à¦¿à¦‰ à¦¦à¦¿à¦¨</value>
+  </data>
+  <data name="Select Stars" xml:space="preserve">
+    <value>à¦¤à¦¾à¦°à¦•à¦¾ à¦¨à¦¿à¦°à§à¦¬à¦¾à¦šà¦¨ à¦•à¦°à§à¦¨</value>
+  </data>
+  <data name="5 Stars" xml:space="preserve">
+    <value>à§« à¦¤à¦¾à¦°à¦•à¦¾</value>
+  </data>
+  <data name="4 Stars" xml:space="preserve">
+    <value>à§ª à¦¤à¦¾à¦°à¦•à¦¾</value>
+  </data>
+  <data name="3 Stars" xml:space="preserve">
+    <value>à§© à¦¤à¦¾à¦°à¦•à¦¾</value>
+  </data>
+  <data name="2 Stars" xml:space="preserve">
+    <value>à§¨ à¦¤à¦¾à¦°à¦•à¦¾</value>
+  </data>
+  <data name="1 Star" xml:space="preserve">
+    <value>à§§ à¦¤à¦¾à¦°à¦•à¦¾</value>
+  </data>
+  <data name="Comments" xml:space="preserve">
+    <value>à¦®à¦¨à§à¦¤à¦¬à§à¦¯</value>
+  </data>
+  <data name="Write your experience..." xml:space="preserve">
+    <value>à¦†à¦ªà¦¨à¦¾à¦° à¦…à¦­à¦¿à¦œà§à¦žà¦¤à¦¾ à¦²à¦¿à¦–à§à¦¨...</value>
+  </data>
+  <data name="Insert Emoji" xml:space="preserve">
+    <value>à¦‡à¦®à§‹à¦œà¦¿ à¦¯à§à¦•à§à¦¤ à¦•à¦°à§à¦¨</value>
+  </data>
+  <data name="Add Photos (Optional)" xml:space="preserve">
+    <value>à¦›à¦¬à¦¿ à¦¯à§‹à¦— à¦•à¦°à§à¦¨ (à¦à¦šà§à¦›à¦¿à¦•)</value>
+  </data>
+  <data name="You can upload up to 5 images" xml:space="preserve">
+    <value>à¦†à¦ªà¦¨à¦¿ à§«à¦Ÿà¦¿ à¦ªà¦°à§à¦¯à¦¨à§à¦¤ à¦›à¦¬à¦¿ à¦†à¦ªà¦²à§‹à¦¡ à¦•à¦°à¦¤à§‡ à¦ªà¦¾à¦°à§‡à¦¨</value>
+  </data>
+  <data name="Submit Review" xml:space="preserve">
+    <value>à¦°à¦¿à¦­à¦¿à¦‰ à¦œà¦®à¦¾ à¦¦à¦¿à¦¨</value>
+  </data>
+  <data name="Only customers can leave reviews." xml:space="preserve">
+    <value>à¦¶à§à¦§à§à¦®à¦¾à¦¤à§à¦° à¦—à§à¦°à¦¾à¦¹à¦•à¦°à¦¾ à¦°à¦¿à¦­à¦¿à¦‰ à¦¦à¦¿à¦¤à§‡ à¦ªà¦¾à¦°à¦¬à§‡à¦¨à¥¤</value>
+  </data>
+  <data name="Please login to share your feedback." xml:space="preserve">
+    <value>à¦†à¦ªà¦¨à¦¾à¦° à¦®à¦¤à¦¾à¦®à¦¤ à¦¶à§‡à¦¯à¦¼à¦¾à¦° à¦•à¦°à¦¤à§‡ à¦…à¦¨à§à¦—à§à¦°à¦¹ à¦•à¦°à§‡ à¦²à¦—à¦‡à¦¨ à¦•à¦°à§à¦¨à¥¤</value>
+  </data>
+  <data name="Login Now" xml:space="preserve">
+    <value>à¦à¦–à¦¨à¦‡ à¦²à¦—à¦‡à¦¨ à¦•à¦°à§à¦¨</value>
+  </data>
+  <data name="Verified Purchase" xml:space="preserve">
+    <value>à¦¯à¦¾à¦šà¦¾à¦‡à¦•à§ƒà¦¤ à¦•à§à¦°à¦¯à¦¼</value>
+  </data>
+  <data name="Reply" xml:space="preserve">
+    <value>à¦‰à¦¤à§à¦¤à¦° à¦¦à¦¿à¦¨</value>
+  </data>
+  <data name="Seller Response" xml:space="preserve">
+    <value>à¦¬à¦¿à¦•à§à¦°à§‡à¦¤à¦¾à¦° à¦ªà§à¦°à¦¤à¦¿à¦•à§à¦°à¦¿à¦¯à¦¼à¦¾</value>
+  </data>
+  <data name="Add from Gallery" xml:space="preserve">
+    <value>à¦—à§à¦¯à¦¾à¦²à¦¾à¦°à¦¿ à¦¥à§‡à¦•à§‡ à¦¯à§‹à¦— à¦•à¦°à§à¦¨</value>
+  </data>
+  <data name="Attach File" xml:space="preserve">
+    <value>à¦«à¦¾à¦‡à¦² à¦¸à¦‚à¦¯à§à¦•à§à¦¤ à¦•à¦°à§à¦¨</value>
+  </data>
+  <data name="Write your reply..." xml:space="preserve">
+    <value>à¦†à¦ªà¦¨à¦¾à¦° à¦‰à¦¤à§à¦¤à¦° à¦²à¦¿à¦–à§à¦¨...</value>
+  </data>
+  <data name="Post Reply" xml:space="preserve">
+    <value>à¦‰à¦¤à§à¦¤à¦° à¦ªà§‹à¦¸à§à¦Ÿ à¦•à¦°à§à¦¨</value>
+  </data>
+  <data name="No reviews yet. Be the first to review this product!" xml:space="preserve">
+    <value>à¦à¦–à¦¨à¦“ à¦•à§‹à¦¨ à¦°à¦¿à¦­à¦¿à¦‰ à¦¨à§‡à¦‡à¥¤ à¦à¦‡ à¦ªà¦£à§à¦¯à¦Ÿà¦¿ à¦°à¦¿à¦­à¦¿à¦‰ à¦¦à¦¿à¦¤à§‡ à¦ªà§à¦°à¦¥à¦® à¦¹à¦¨!</value>
+  </data>
+  <data name="Related Products" xml:space="preserve">
+    <value>à¦¸à¦®à§à¦ªà¦°à§à¦•à¦¿à¦¤ à¦ªà¦£à§à¦¯à¦¸à¦®à§‚à¦¹</value>
+  </data>
+  <data name="No related products found." xml:space="preserve">
+    <value>à¦•à§‹à¦¨ à¦¸à¦®à§à¦ªà¦°à§à¦•à¦¿à¦¤ à¦ªà¦£à§à¦¯ à¦ªà¦¾à¦“à¦¯à¦¼à¦¾ à¦¯à¦¾à¦¯à¦¼à¦¨à¦¿à¥¤</value>
+  </data>
+  <data name="My Cart" xml:space="preserve">
+    <value>à¦†à¦®à¦¾à¦° à¦•à¦¾à¦°à§à¦Ÿ</value>
+  </data>
+  <data name="Your cart is empty." xml:space="preserve">
+    <value>à¦†à¦ªà¦¨à¦¾à¦° à¦•à¦¾à¦°à§à¦Ÿ à¦–à¦¾à¦²à¦¿à¥¤</value>
+  </data>
+  <data name="SL" xml:space="preserve">
+    <value>à¦•à§à¦°à¦®à¦¿à¦•</value>
+  </data>
+  <data name="Image" xml:space="preserve">
+    <value>à¦›à¦¬à¦¿</value>
+  </data>
+  <data name="Product" xml:space="preserve">
+    <value>à¦ªà¦£à§à¦¯</value>
+  </data>
+  <data name="Total" xml:space="preserve">
+    <value>à¦®à§‹à¦Ÿ</value>
+  </data>
+  <data name="Actions" xml:space="preserve">
+    <value>à¦ªà¦¦à¦•à§à¦·à§‡à¦ª</value>
+  </data>
+  <data name="Inc. VAT" xml:space="preserve">
+    <value>à¦­à§à¦¯à¦¾à¦Ÿà¦¸à¦¹</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>à¦¸à¦°à¦¿à¦¯à¦¼à§‡ à¦¦à¦¿à¦¨</value>
+  </data>
+  <data name="Clear Cart" xml:space="preserve">
+    <value>à¦•à¦¾à¦°à§à¦Ÿ à¦–à¦¾à¦²à¦¿ à¦•à¦°à§à¦¨</value>
+  </data>
+  <data name="Total (Inc. VAT)" xml:space="preserve">
+    <value>à¦¸à¦°à§à¦¬à¦®à§‹à¦Ÿ (à¦­à§à¦¯à¦¾à¦Ÿà¦¸à¦¹)</value>
+  </data>
+  <data name="Checkout Now" xml:space="preserve">
+    <value>à¦à¦–à¦¨à¦‡ à¦šà§‡à¦•à¦†à¦‰à¦Ÿ à¦•à¦°à§à¦¨</value>
+  </data>
+  <data name="Welcome Back" xml:space="preserve">
+    <value>à¦«à¦¿à¦°à§‡ à¦†à¦¸à¦¾à¦¯à¦¼ à¦¸à§à¦¬à¦¾à¦—à¦¤à¦®</value>
+  </data>
+  <data name="Please login to your account" xml:space="preserve">
+    <value>à¦…à¦¨à§à¦—à§à¦°à¦¹ à¦•à¦°à§‡ à¦†à¦ªà¦¨à¦¾à¦° à¦…à§à¦¯à¦¾à¦•à¦¾à¦‰à¦¨à§à¦Ÿà§‡ à¦²à¦—à¦‡à¦¨ à¦•à¦°à§à¦¨</value>
+  </data>
+  <data name="Email Address" xml:space="preserve">
+    <value>à¦‡à¦®à§‡à¦‡à¦² à¦ à¦¿à¦•à¦¾à¦¨à¦¾</value>
+  </data>
+  <data name="Enter your email" xml:space="preserve">
+    <value>à¦†à¦ªà¦¨à¦¾à¦° à¦‡à¦®à§‡à¦‡à¦² à¦²à¦¿à¦–à§à¦¨</value>
+  </data>
+  <data name="Enter your password" xml:space="preserve">
+    <value>à¦†à¦ªà¦¨à¦¾à¦° à¦ªà¦¾à¦¸à¦“à¦¯à¦¼à¦¾à¦°à§à¦¡ à¦²à¦¿à¦–à§à¦¨</value>
+  </data>
+  <data name="Remember Me" xml:space="preserve">
+    <value>à¦†à¦®à¦¾à¦•à§‡ à¦®à¦¨à§‡ à¦°à¦¾à¦–à§à¦¨</value>
+  </data>
+  <data name="Forgot Password?" xml:space="preserve">
+    <value>à¦ªà¦¾à¦¸à¦“à¦¯à¦¼à¦¾à¦°à§à¦¡ à¦­à§à¦²à§‡ à¦—à§‡à¦›à§‡à¦¨?</value>
+  </data>
+  <data name="Don't have an account?" xml:space="preserve">
+    <value>à¦…à§à¦¯à¦¾à¦•à¦¾à¦‰à¦¨à§à¦Ÿ à¦¨à§‡à¦‡?</value>
+  </data>
+  <data name="Create Account" xml:space="preserve">
+    <value>à¦…à§à¦¯à¦¾à¦•à¦¾à¦‰à¦¨à§à¦Ÿ à¦¤à§ˆà¦°à¦¿ à¦•à¦°à§à¦¨</value>
+  </data>
+  <data name="Back to Home" xml:space="preserve">
+    <value>à¦¹à§‹à¦®à§‡ à¦«à¦¿à¦°à§‡ à¦¯à¦¾à¦¨</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>à¦¨à¦¿à¦¬à¦¨à§à¦§à¦¨ à¦•à¦°à§à¦¨</value>
+  </data>
+  <data name="Choose your account type to proceed" xml:space="preserve">
+    <value>à¦à¦—à¦¿à¦¯à¦¼à§‡ à¦¯à§‡à¦¤à§‡ à¦†à¦ªà¦¨à¦¾à¦° à¦…à§à¦¯à¦¾à¦•à¦¾à¦‰à¦¨à§à¦Ÿà§‡à¦° à¦§à¦°à¦¨ à¦¬à§‡à¦›à§‡ à¦¨à¦¿à¦¨</value>
+  </data>
+  <data name="Register as Customer" xml:space="preserve">
+    <value>à¦—à§à¦°à¦¾à¦¹à¦• à¦¹à¦¿à¦¸à§‡à¦¬à§‡ à¦¨à¦¿à¦¬à¦¨à§à¦§à¦¨ à¦•à¦°à§à¦¨</value>
+  </data>
+  <data name="Register as Employee" xml:space="preserve">
+    <value>à¦•à¦°à§à¦®à¦šà¦¾à¦°à§€ à¦¹à¦¿à¦¸à§‡à¦¬à§‡ à¦¨à¦¿à¦¬à¦¨à§à¦§à¦¨ à¦•à¦°à§à¦¨</value>
+  </data>
+  <data name="Join as Delivery Man" xml:space="preserve">
+    <value>à¦¡à§‡à¦²à¦¿à¦­à¦¾à¦°à¦¿ à¦®à§à¦¯à¦¾à¦¨ à¦¹à¦¿à¦¸à§‡à¦¬à§‡ à¦¯à§‹à¦— à¦¦à¦¿à¦¨</value>
+  </data>
+  <data name="Already have an account?" xml:space="preserve">
+    <value>à¦‡à¦¤à¦¿à¦®à¦§à§à¦¯à§‡à¦‡ à¦à¦•à¦Ÿà¦¿ à¦…à§à¦¯à¦¾à¦•à¦¾à¦‰à¦¨à§à¦Ÿ à¦†à¦›à§‡?</value>
+  </data>
+  <data name="Login Here" xml:space="preserve">
+    <value>à¦à¦–à¦¾à¦¨à§‡ à¦²à¦—à¦‡à¦¨ à¦•à¦°à§à¦¨</value>
+  </data>
+  <data name="Checkout" xml:space="preserve">
+    <value>à¦šà§‡à¦•à¦†à¦‰à¦Ÿ</value>
+  </data>
+  <data name="Your Summary" xml:space="preserve">
+    <value>à¦†à¦ªà¦¨à¦¾à¦° à¦¸à¦¾à¦°à¦¾à¦‚à¦¶</value>
+  </data>
+  <data name="Qty" xml:space="preserve">
+    <value>à¦ªà¦°à¦¿à¦®à¦¾à¦£</value>
+  </data>
+  <data name="incl. VAT" xml:space="preserve">
+    <value>à¦­à§à¦¯à¦¾à¦Ÿà¦¸à¦¹</value>
+  </data>
+  <data name="Subtotal" xml:space="preserve">
+    <value>à¦‰à¦ªà¦®à§‹à¦Ÿ</value>
+  </data>
+  <data name="Total VAT" xml:space="preserve">
+    <value>à¦®à§‹à¦Ÿ à¦­à§à¦¯à¦¾à¦Ÿ</value>
+  </data>
+  <data name="Grand Total (with VAT)" xml:space="preserve">
+    <value>à¦¸à¦°à§à¦¬à¦®à§‹à¦Ÿ (à¦­à§à¦¯à¦¾à¦Ÿà¦¸à¦¹)</value>
+  </data>
+  <data name="Step 1: Shipping Details" xml:space="preserve">
+    <value>à¦§à¦¾à¦ª à§§: à¦¶à¦¿à¦ªà¦¿à¦‚ à¦¬à¦¿à¦¬à¦°à¦£</value>
+  </data>
+  <data name="Customer Full Name" xml:space="preserve">
+    <value>à¦—à§à¦°à¦¾à¦¹à¦•à§‡à¦° à¦ªà§à¦°à§‹ à¦¨à¦¾à¦®</value>
+  </data>
+  <data name="Active Contact Number" xml:space="preserve">
+    <value>à¦¸à¦•à§à¦°à¦¿à¦¯à¦¼ à¦¯à§‹à¦—à¦¾à¦¯à§‹à¦— à¦¨à¦®à§à¦¬à¦°</value>
+  </data>
+  <data name="e.g. 017xxxxxxxx" xml:space="preserve">
+    <value>à¦‰à¦¦à¦¾à¦ƒ à§¦à§§à§­à§§à§§xxxxxx</value>
+  </data>
+  <data name="Please enter a valid BD phone number (e.g. 017xxxxxxxx)" xml:space="preserve">
+    <value>à¦…à¦¨à§à¦—à§à¦°à¦¹ à¦•à¦°à§‡ à¦à¦•à¦Ÿà¦¿ à¦¸à¦ à¦¿à¦• à¦¬à¦¿à¦¡à¦¿ à¦«à§‹à¦¨ à¦¨à¦®à§à¦¬à¦° à¦²à¦¿à¦–à§à¦¨ (à¦‰à¦¦à¦¾à¦ƒ à§¦à§§à§­à§§à§§xxxxxx)</value>
+  </data>
+  <data name="Must be a valid Bangladesh phone number" xml:space="preserve">
+    <value>à¦…à¦¬à¦¶à§à¦¯à¦‡ à¦à¦•à¦Ÿà¦¿ à¦¸à¦ à¦¿à¦• à¦¬à¦¾à¦‚à¦²à¦¾à¦¦à§‡à¦¶ à¦«à§‹à¦¨ à¦¨à¦®à§à¦¬à¦° à¦¹à¦¤à§‡ à¦¹à¦¬à§‡</value>
+  </data>
+  <data name="Full Delivery Address" xml:space="preserve">
+    <value>à¦ªà§à¦°à§‹ à¦¡à§‡à¦²à¦¿à¦­à¦¾à¦°à¦¿ à¦ à¦¿à¦•à¦¾à¦¨à¦¾</value>
+  </data>
+  <data name="Address (House, Road, Area)" xml:space="preserve">
+    <value>à¦ à¦¿à¦•à¦¾à¦¨à¦¾ (à¦¬à¦¾à¦¸à¦¾, à¦°à¦¾à¦¸à§à¦¤à¦¾, à¦à¦²à¦¾à¦•à¦¾)</value>
+  </data>
+  <data name="City Name" xml:space="preserve">
+    <value>à¦¶à¦¹à¦°à§‡à¦° à¦¨à¦¾à¦®</value>
+  </data>
+  <data name="Zip/Postal Code" xml:space="preserve">
+    <value>à¦œà¦¿à¦ª/à¦ªà§‹à¦¸à§à¦Ÿà¦¾à¦² à¦•à§‹à¦¡</value>
+  </data>
+  <data name="Step 2: Payment Method" xml:space="preserve">
+    <value>à¦§à¦¾à¦ª à§¨: à¦ªà§‡à¦®à§‡à¦¨à§à¦Ÿ à¦ªà¦¦à§à¦§à¦¤à¦¿</value>
+  </data>
+  <data name="Cash on Delivery" xml:space="preserve">
+    <value>à¦•à§à¦¯à¦¾à¦¶ à¦…à¦¨ à¦¡à§‡à¦²à¦¿à¦­à¦¾à¦°à¦¿</value>
+  </data>
+  <data name="PAY ON RECEIVE" xml:space="preserve">
+    <value>à¦—à§à¦°à¦¹à¦£à§‡à¦° à¦¸à¦®à§Ÿ à¦ªà§‡à¦®à§‡à¦¨à§à¦Ÿ à¦•à¦°à§à¦¨</value>
+  </data>
+  <data name="Pay with cash when you receive the parcel at your doorstep." xml:space="preserve">
+    <value>à¦†à¦ªà¦¨à¦¾à¦° à¦¦à§‹à¦°à¦—à§‹à¦¡à¦¼à¦¾à¦¯à¦¼ à¦ªà¦¾à¦°à§à¦¸à§‡à¦² à¦ªà¦¾à¦“à¦¯à¦¼à¦¾à¦° à¦¸à¦®à¦¯à¦¼ à¦¨à¦—à¦¦à§‡ à¦ªà§‡à¦®à§‡à¦¨à§à¦Ÿ à¦•à¦°à§à¦¨à¥¤</value>
+  </data>
+  <data name="Online Payment" xml:space="preserve">
+    <value>à¦…à¦¨à¦²à¦¾à¦‡à¦¨ à¦ªà§‡à¦®à§‡à¦¨à§à¦Ÿ</value>
+  </data>
+  <data name="Pay with" xml:space="preserve">
+    <value>à¦ªà§‡à¦®à§‡à¦¨à§à¦Ÿ à¦•à¦°à§à¦¨</value>
+  </data>
+  <data name="Online payment methods are currently being updated by Admin." xml:space="preserve">
+    <value>à¦…à¦¨à¦²à¦¾à¦‡à¦¨ à¦ªà§‡à¦®à§‡à¦¨à§à¦Ÿ à¦ªà¦¦à§à¦§à¦¤à¦¿ à¦¬à¦°à§à¦¤à¦®à¦¾à¦¨à§‡ à¦à¦¡à¦®à¦¿à¦¨ à¦¦à§à¦¬à¦¾à¦°à¦¾ à¦†à¦ªà¦¡à§‡à¦Ÿ à¦•à¦°à¦¾ à¦¹à¦šà§à¦›à§‡à¥¤</value>
+  </data>
+  <data name="Confirm Order &amp; Proceed" xml:space="preserve">
+    <value>à¦…à¦°à§à¦¡à¦¾à¦° à¦¨à¦¿à¦¶à§à¦šà¦¿à¦¤ à¦•à¦°à§à¦¨ à¦à¦¬à¦‚ à¦à¦—à¦¿à¦¯à¦¼à§‡ à¦¯à¦¾à¦¨</value>
+  </data>
+  <data name="Direct Merchant Payments for Secure Shopping." xml:space="preserve">
+    <value>à¦¸à§à¦°à¦•à§à¦·à¦¿à¦¤ à¦•à§‡à¦¨à¦¾à¦•à¦¾à¦Ÿà¦¾à¦° à¦œà¦¨à§à¦¯ à¦¸à¦°à¦¾à¦¸à¦°à¦¿ à¦®à¦¾à¦°à§à¦šà§‡à¦¨à§à¦Ÿ à¦ªà§‡à¦®à§‡à¦¨à§à¦Ÿà¥¤</value>
+  </data>
+  <data name="Secure Payments" xml:space="preserve">
+    <value>à¦¸à§à¦°à¦•à§à¦·à¦¿à¦¤ à¦ªà§‡à¦®à§‡à¦¨à§à¦Ÿ</value>
+  </data>
+  <data name="Help &amp; Services" xml:space="preserve">
+    <value>à¦¸à¦¾à¦¹à¦¾à¦¯à§à¦¯ à¦à¦¬à¦‚ à¦¸à§‡à¦¬à¦¾</value>
+  </data>
+  <data name="Help Center" xml:space="preserve">
+    <value>à¦¸à¦¹à¦¾à¦¯à¦¼à¦¤à¦¾ à¦•à§‡à¦¨à§à¦¦à§à¦°</value>
+  </data>
+  <data name="Returns &amp; Refunds" xml:space="preserve">
+    <value>à¦°à¦¿à¦Ÿà¦¾à¦°à§à¦¨ à¦à¦¬à¦‚ à¦°à¦¿à¦«à¦¾à¦¨à§à¦¡</value>
+  </data>
+  <data name="Track Your Order" xml:space="preserve">
+    <value>à¦†à¦ªà¦¨à¦¾à¦° à¦…à¦°à§à¦¡à¦¾à¦° à¦Ÿà§à¦°à§à¦¯à¦¾à¦• à¦•à¦°à§à¦¨</value>
+  </data>
+  <data name="Address &amp; Contact" xml:space="preserve">
+    <value>à¦ à¦¿à¦•à¦¾à¦¨à¦¾ à¦à¦¬à¦‚ à¦¯à§‹à¦—à¦¾à¦¯à§‹à¦—</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>à¦‡à¦®à§‡à¦‡à¦²</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>à¦«à§‹à¦¨</value>
+  </data>
+  <data name="What Our Customers Say" xml:space="preserve">
+    <value>à¦†à¦®à¦¾à¦¦à§‡à¦° à¦—à§à¦°à¦¾à¦¹à¦•à¦°à¦¾ à¦¯à¦¾ à¦¬à¦²à§‡à¦¨</value>
+  </data>
+  <data name="Featured Items" xml:space="preserve">
+    <value>à¦¸à§‡à¦°à¦¾ à¦ªà¦£à§à¦¯à¦¸à¦®à§‚à¦¹</value>
+  </data>
+  <data name="Exclusive Items" xml:space="preserve">
+    <value>à¦à¦•à§à¦¸à¦•à§à¦²à§à¦¸à¦¿à¦­ à¦†à¦‡à¦Ÿà§‡à¦®</value>
+  </data>
+  <data name="Just For You" xml:space="preserve">
+    <value>à¦¶à§à¦§à§ à¦†à¦ªà¦¨à¦¾à¦° à¦œà¦¨à§à¦¯</value>
+  </data>
+  <data name="Restock" xml:space="preserve">
+    <value>à¦ªà§à¦¨à¦°à¦¾à¦¯à¦¼ à¦¸à§à¦Ÿà¦•à¦•à§ƒà¦¤</value>
+  </data>
+  <data name="Product Category" xml:space="preserve">
+    <value>à¦ªà¦£à§à¦¯à§‡à¦° à¦¬à¦¿à¦­à¦¾à¦—</value>
+  </data>
+  <data name="Discover Your Style" xml:space="preserve">
+    <value>à¦†à¦ªà¦¨à¦¾à¦° à¦¸à§à¦Ÿà¦¾à¦‡à¦² à¦†à¦¬à¦¿à¦·à§à¦•à¦¾à¦° à¦•à¦°à§à¦¨</value>
+  </data>
+  <data name="Your ultimate destination for fashion, beauty and pure luxury." xml:space="preserve">
+    <value>à¦«à§à¦¯à¦¾à¦¶à¦¨, à¦¸à§Œà¦¨à§à¦¦à¦°à§à¦¯ à¦à¦¬à¦‚ à¦¬à¦¿à¦¶à§à¦¦à§à¦§ à¦¬à¦¿à¦²à¦¾à¦¸à¦¿à¦¤à¦¾à¦° à¦œà¦¨à§à¦¯ à¦†à¦ªà¦¨à¦¾à¦° à¦šà§‚à¦¡à¦¼à¦¾à¦¨à§à¦¤ à¦—à¦¨à§à¦¤à¦¬à§à¦¯à¥¤</value>
+  </data>
+  <data name="Shop Now" xml:space="preserve">
+    <value>à¦à¦–à¦¨à¦‡ à¦•à¦¿à¦¨à§à¦¨</value>
+  </data>
+  <data name="Welcome To E-Shop" xml:space="preserve">
+    <value>à¦‡-à¦¶à¦ªà§‡ à¦¸à§à¦¬à¦¾à¦—à¦¤à¦®</value>
+  </data>
+  <data name="Your trusted online shopping destination for fashion, beauty and electronics. Enjoy premium products, exclusive deals and fast delivery." xml:space="preserve">
+    <value>à¦«à§à¦¯à¦¾à¦¶à¦¨, à¦¸à§Œà¦¨à§à¦¦à¦°à§à¦¯ à¦à¦¬à¦‚ à¦‡à¦²à§‡à¦•à¦Ÿà§à¦°à¦¨à¦¿à¦•à§à¦¸à§‡à¦° à¦œà¦¨à§à¦¯ à¦†à¦ªà¦¨à¦¾à¦° à¦¬à¦¿à¦¶à§à¦¬à¦¸à§à¦¤ à¦…à¦¨à¦²à¦¾à¦‡à¦¨ à¦¶à¦ªà¦¿à¦‚ à¦—à¦¨à§à¦¤à¦¬à§à¦¯à¥¤ à¦ªà§à¦°à¦¿à¦®à¦¿à¦¯à¦¼à¦¾à¦® à¦ªà¦£à§à¦¯, à¦à¦•à¦šà§‡à¦Ÿà¦¿à¦¯à¦¼à¦¾ à¦¡à¦¿à¦² à¦à¦¬à¦‚ à¦¦à§à¦°à§à¦¤ à¦¡à§‡à¦²à¦¿à¦­à¦¾à¦°à¦¿ à¦‰à¦ªà¦­à§‹à¦— à¦•à¦°à§à¦¨à¥¤</value>
+  </data>
+  <data name="Admin Dashboard Overview" xml:space="preserve">
+    <value>à¦…à§à¦¯à¦¾à¦¡à¦®à¦¿à¦¨ à¦¡à§à¦¯à¦¾à¦¶à¦¬à§‹à¦°à§à¦¡ à¦“à¦­à¦¾à¦°à¦­à¦¿à¦‰</value>
+  </data>
+  <data name="Account Profile" xml:space="preserve">
+    <value>à¦…à§à¦¯à¦¾à¦•à¦¾à¦‰à¦¨à§à¦Ÿ à¦ªà§à¦°à§‹à¦«à¦¾à¦‡à¦²</value>
+  </data>
+  <data name="Delivered Orders" xml:space="preserve">
+    <value>à¦¡à§‡à¦²à¦¿à¦­à¦¾à¦°à¦¿ à¦•à¦°à¦¾ à¦…à¦°à§à¦¡à¦¾à¦°</value>
+  </data>
+  <data name="Pending Orders" xml:space="preserve">
+    <value>à¦…à¦ªà§‡à¦•à§à¦·à¦®à¦¾à¦¨ à¦…à¦°à§à¦¡à¦¾à¦°</value>
+  </data>
+  <data name="In Processing" xml:space="preserve">
+    <value>à¦ªà§à¦°à¦•à§à¦°à¦¿à¦¯à¦¼à¦¾à¦•à¦°à¦£ à¦šà¦²à¦›à§‡</value>
+  </data>
+  <data name="Shipped Orders" xml:space="preserve">
+    <value>à¦¶à¦¿à¦ª à¦•à¦°à¦¾ à¦…à¦°à§à¦¡à¦¾à¦°</value>
+  </data>
+  <data name="Total Revenue" xml:space="preserve">
+    <value>à¦®à§‹à¦Ÿ à¦°à¦¾à¦œà¦¸à§à¦¬</value>
+  </data>
+  <data name="Quick Management" xml:space="preserve">
+    <value>à¦¦à§à¦°à§à¦¤ à¦¬à§à¦¯à¦¬à¦¸à§à¦¥à¦¾à¦ªà¦¨à¦¾</value>
+  </data>
+  <data name="Products" xml:space="preserve">
+    <value>à¦ªà¦£à§à¦¯à¦¸à¦®à§‚à¦¹</value>
+  </data>
+  <data name="Employee Goal Set" xml:space="preserve">
+    <value>à¦•à¦°à§à¦®à¦šà¦¾à¦°à§€ à¦²à¦•à§à¦·à§à¦¯ à¦¨à¦¿à¦°à§à¦§à¦¾à¦°à¦£</value>
+  </data>
+  <data name="Customers" xml:space="preserve">
+    <value>à¦—à§à¦°à¦¾à¦¹à¦•à¦¸à¦®à§‚à¦¹</value>
+  </data>
+  <data name="Employees" xml:space="preserve">
+    <value>à¦•à¦°à§à¦®à¦šà¦¾à¦°à§€à¦¸à¦®à§‚à¦¹</value>
+  </data>
+  <data name="Delivery Men" xml:space="preserve">
+    <value>à¦¡à§‡à¦²à¦¿à¦­à¦¾à¦°à¦¿ à¦®à§à¦¯à¦¾à¦¨</value>
+  </data>
+  <data name="Reports" xml:space="preserve">
+    <value>à¦°à¦¿à¦ªà§‹à¦°à§à¦Ÿ</value>
+  </data>
+  <data name="Footer Settings" xml:space="preserve">
+    <value>à¦«à§à¦Ÿà¦¾à¦° à¦¸à§‡à¦Ÿà¦¿à¦‚à¦¸</value>
+  </data>
+  <data name="Payment Methods" xml:space="preserve">
+    <value>à¦ªà§‡à¦®à§‡à¦¨à§à¦Ÿ à¦ªà¦¦à§à¦§à¦¤à¦¿</value>
+  </data>
+  <data name="Total Sales" xml:space="preserve">
+    <value>à¦®à§‹à¦Ÿ à¦¬à¦¿à¦•à§à¦°à¦¯à¦¼</value>
+  </data>
+  <data name="All time revenue" xml:space="preserve">
+    <value>à¦¸à¦°à§à¦¬à¦•à¦¾à¦²à§‡à¦° à¦°à¦¾à¦œà¦¸à§à¦¬</value>
+  </data>
+  <data name="Total Profit (Ex. VAT)" xml:space="preserve">
+    <value>à¦®à§‹à¦Ÿ à¦²à¦¾à¦­ (à¦­à§à¦¯à¦¾à¦Ÿ à¦¬à§à¦¯à¦¤à§€à¦¤)</value>
+  </data>
+  <data name="After VAT deduction" xml:space="preserve">
+    <value>à¦­à§à¦¯à¦¾à¦Ÿ à¦•à¦°à§à¦¤à¦¨à§‡à¦° à¦ªà¦°</value>
+  </data>
+  <data name="VAT Collected" xml:space="preserve">
+    <value>à¦¸à¦‚à¦—à§ƒà¦¹à§€à¦¤ à¦­à§à¦¯à¦¾à¦Ÿ</value>
+  </data>
+  <data name="Total tax revenue" xml:space="preserve">
+    <value>à¦®à§‹à¦Ÿ à¦•à¦° à¦°à¦¾à¦œà¦¸à§à¦¬</value>
+  </data>
+  <data name="Weekly Sales" xml:space="preserve">
+    <value>à¦¸à¦¾à¦ªà§à¦¤à¦¾à¦¹à¦¿à¦• à¦¬à¦¿à¦•à§à¦°à¦¯à¦¼</value>
+  </data>
+  <data name="Last 7 days" xml:space="preserve">
+    <value>à¦—à¦¤ à§­ à¦¦à¦¿à¦¨</value>
+  </data>
+  <data name="Sales Goal" xml:space="preserve">
+    <value>à¦¬à¦¿à¦•à§à¦°à¦¯à¦¼ à¦²à¦•à§à¦·à§à¦¯</value>
+  </data>
+  <data name="History" xml:space="preserve">
+    <value>à¦‡à¦¤à¦¿à¦¹à¦¾à¦¸</value>
+  </data>
+  <data name="Target" xml:space="preserve">
+    <value>à¦²à¦•à§à¦·à§à¦¯</value>
+  </data>
+  <data name="Full Year Goal" xml:space="preserve">
+    <value>à¦ªà§à¦°à§‹ à¦¬à¦›à¦°à§‡à¦° à¦²à¦•à§à¦·à§à¦¯</value>
+  </data>
+  <data name="Remaining" xml:space="preserve">
+    <value>à¦…à¦¬à¦¶à¦¿à¦·à§à¦Ÿ</value>
+  </data>
+  <data name="To reach target" xml:space="preserve">
+    <value>à¦²à¦•à§à¦·à§à¦¯à§‡ à¦ªà§Œà¦à¦›à¦¾à¦¤à§‡</value>
+  </data>
+  <data name="achieved" xml:space="preserve">
+    <value>à¦…à¦°à§à¦œà¦¿à¦¤</value>
+  </data>
+  <data name="Note: Goal for" xml:space="preserve">
+    <value>à¦¦à§à¦°à¦·à§à¦Ÿà¦¬à§à¦¯: à¦²à¦•à§à¦·à§à¦¯</value>
+  </data>
+  <data name="Product Sales" xml:space="preserve">
+    <value>à¦ªà¦£à§à¦¯ à¦¬à¦¿à¦•à§à¦°à¦¯à¦¼</value>
+  </data>
+  <data name="Weekly" xml:space="preserve">
+    <value>à¦¸à¦¾à¦ªà§à¦¤à¦¾à¦¹à¦¿à¦•</value>
+  </data>
+  <data name="Monthly" xml:space="preserve">
+    <value>à¦®à¦¾à¦¸à¦¿à¦•</value>
+  </data>
+  <data name="Yearly" xml:space="preserve">
+    <value>à¦¬à¦¾à¦°à§à¦·à¦¿à¦•</value>
+  </data>
+  <data name="Year" xml:space="preserve">
+    <value>à¦¬à¦›à¦°</value>
+  </data>
+  <data name="Previous Year" xml:space="preserve">
+    <value>à¦ªà§‚à¦°à§à¦¬à¦¬à¦°à§à¦¤à§€ à¦¬à¦›à¦°</value>
+  </data>
+  <data name="Next Year" xml:space="preserve">
+    <value>à¦ªà¦°à¦¬à¦°à§à¦¤à§€ à¦¬à¦›à¦°</value>
+  </data>
+  <data name="Total Amount" xml:space="preserve">
+    <value>à¦®à§‹à¦Ÿ à¦ªà¦°à¦¿à¦®à¦¾à¦£</value>
+  </data>
+  <data name="Total Pieces" xml:space="preserve">
+    <value>à¦®à§‹à¦Ÿ à¦¸à¦‚à¦–à§à¦¯à¦¾</value>
+  </data>
+  <data name="Avg / Period" xml:space="preserve">
+    <value>à¦—à¦¡à¦¼ / à¦¸à¦®à¦¯à¦¼à¦•à¦¾à¦²</value>
+  </data>
+  <data name="Top Moving Products" xml:space="preserve">
+    <value>à¦¶à§€à¦°à§à¦· à¦¬à¦¿à¦•à§à¦°à¦¯à¦¼ à¦ªà¦£à§à¦¯à¦¸à¦®à§‚à¦¹</value>
+  </data>
+  <data name="Pcs" xml:space="preserve">
+    <value>à¦Ÿà¦¿</value>
+  </data>
+  <data name="View Full Report" xml:space="preserve">
+    <value>à¦¸à¦®à§à¦ªà§‚à¦°à§à¦£ à¦°à¦¿à¦ªà§‹à¦°à§à¦Ÿ à¦¦à§‡à¦–à§à¦¨</value>
+  </data>
+  <data name="Sales by Product Type" xml:space="preserve">
+    <value>à¦ªà¦£à§à¦¯à§‡à¦° à¦§à¦°à¦¨ à¦…à¦¨à§à¦¯à¦¾à¦¯à¦¼à§€ à¦¬à¦¿à¦•à§à¦°à¦¯à¦¼</value>
+  </data>
+  <data name="Full Sales Archives" xml:space="preserve">
+    <value>à¦¸à¦®à§à¦ªà§‚à¦°à§à¦£ à¦¬à¦¿à¦•à§à¦°à¦¯à¦¼ à¦¸à¦‚à¦°à¦•à§à¦·à¦£à¦¾à¦—à¦¾à¦°</value>
+  </data>
+  <data name="Monthly View" xml:space="preserve">
+    <value>à¦®à¦¾à¦¸à¦¿à¦• à¦¦à§ƒà¦¶à§à¦¯</value>
+  </data>
+  <data name="Yearly Summary" xml:space="preserve">
+    <value>à¦¬à¦¾à¦°à§à¦·à¦¿à¦• à¦¸à¦¾à¦°à¦¾à¦‚à¦¶</value>
+  </data>
+  <data name="Month / Year" xml:space="preserve">
+    <value>à¦®à¦¾à¦¸ / à¦¬à¦›à¦°</value>
+  </data>
+  <data name="Revenue (Inc. VAT)" xml:space="preserve">
+    <value>à¦°à¦¾à¦œà¦¸à§à¦¬ (à¦­à§à¦¯à¦¾à¦Ÿà¦¸à¦¹)</value>
+  </data>
+  <data name="Pieces" xml:space="preserve">
+    <value>à¦ªà¦¿à¦¸</value>
+  </data>
+  <data name="Report" xml:space="preserve">
+    <value>à¦°à¦¿à¦ªà§‹à¦°à§à¦Ÿ</value>
+  </data>
+  <data name="Fiscal Year" xml:space="preserve">
+    <value>à¦…à¦°à§à¦¥à¦¬à¦›à¦°</value>
+  </data>
+  <data name="Annual Revenue" xml:space="preserve">
+    <value>à¦¬à¦¾à¦°à§à¦·à¦¿à¦• à¦°à¦¾à¦œà¦¸à§à¦¬</value>
+  </data>
+  <data name="Items Sold" xml:space="preserve">
+    <value>à¦¬à¦¿à¦•à§à¦°à¦¿à¦¤ à¦ªà¦£à§à¦¯</value>
+  </data>
+  <data name="Avg / Month" xml:space="preserve">
+    <value>à¦—à¦¡à¦¼ / à¦®à¦¾à¦¸</value>
+  </data>
+  <data name="Update Sales Goal" xml:space="preserve">
+    <value>à¦¬à¦¿à¦•à§à¦°à¦¯à¦¼ à¦²à¦•à§à¦·à§à¦¯ à¦†à¦ªà¦¡à§‡à¦Ÿ à¦•à¦°à§à¦¨</value>
+  </data>
+  <data name="New Target Amount" xml:space="preserve">
+    <value>à¦¨à¦¤à§à¦¨ à¦²à¦•à§à¦·à§à¦¯ à¦ªà¦°à¦¿à¦®à¦¾à¦£</value>
+  </data>
+  <data name="Save New Target" xml:space="preserve">
+    <value>à¦¨à¦¤à§à¦¨ à¦²à¦•à§à¦·à§à¦¯ à¦¸à¦‚à¦°à¦•à§à¦·à¦£ à¦•à¦°à§à¦¨</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>à¦¬à¦¨à§à¦§ à¦•à¦°à§à¦¨</value>
+  </data>
+  <data name="My Dashboard" xml:space="preserve">
+    <value>à¦†à¦®à¦¾à¦° à¦¡à§à¦¯à¦¾à¦¶à¦¬à§‹à¦°à§à¦¡</value>
+  </data>
+  <data name="Total Spent" xml:space="preserve">
+    <value>à¦®à§‹à¦Ÿ à¦–à¦°à¦š</value>
+  </data>
+  <data name="Recent Orders" xml:space="preserve">
+    <value>à¦¸à¦¾à¦®à§à¦ªà§à¦°à¦¤à¦¿à¦• à¦…à¦°à§à¦¡à¦¾à¦°</value>
+  </data>
+  <data name="You haven't placed any orders yet." xml:space="preserve">
+    <value>à¦†à¦ªà¦¨à¦¿ à¦à¦–à¦¨à¦“ à¦•à§‹à¦¨à§‹ à¦…à¦°à§à¦¡à¦¾à¦° à¦•à¦°à§‡à¦¨à¦¨à¦¿à¥¤</value>
+  </data>
+  <data name="Start Shopping" xml:space="preserve">
+    <value>à¦•à§‡à¦¨à¦¾à¦•à¦¾à¦Ÿà¦¾ à¦¶à§à¦°à§ à¦•à¦°à§à¦¨</value>
+  </data>
+  <data name="Order ID" xml:space="preserve">
+    <value>à¦…à¦°à§à¦¡à¦¾à¦° à¦†à¦‡à¦¡à¦¿</value>
+  </data>
+  <data name="Date &amp; Time" xml:space="preserve">
+    <value>à¦¤à¦¾à¦°à¦¿à¦– à¦“ à¦¸à¦®à¦¯à¦¼</value>
+  </data>
+  <data name="Payment" xml:space="preserve">
+    <value>à¦ªà§‡à¦®à§‡à¦¨à§à¦Ÿ</value>
+  </data>
+  <data name="Action" xml:space="preserve">
+    <value>à¦…à§à¦¯à¦¾à¦•à¦¶à¦¨</value>
+  </data>
+  <data name="View All Orders" xml:space="preserve">
+    <value>à¦¸à¦¬ à¦…à¦°à§à¦¡à¦¾à¦° à¦¦à§‡à¦–à§à¦¨</value>
+  </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>à¦¡à§à¦¯à¦¾à¦¶à¦¬à§‹à¦°à§à¦¡</value>
+  </data>
+  <data name="My Profile" xml:space="preserve">
+    <value>à¦†à¦®à¦¾à¦° à¦ªà§à¦°à§‹à¦«à¦¾à¦‡à¦²</value>
+  </data>
+  <data name="Track Order" xml:space="preserve">
+    <value>à¦…à¦°à§à¦¡à¦¾à¦° à¦Ÿà§à¦°à§à¦¯à¦¾à¦• à¦•à¦°à§à¦¨</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>à¦²à¦—à¦†à¦‰à¦Ÿ</value>
+  </data>
+  <data name="Verified Customer" xml:space="preserve">
+    <value>à¦¯à¦¾à¦šà¦¾à¦‡à¦•à§ƒà¦¤ à¦—à§à¦°à¦¾à¦¹à¦•</value>
+  </data>
+  <data name="Customer" xml:space="preserve">
+    <value>à¦—à§à¦°à¦¾à¦¹à¦•</value>
+  </data>
+  <data name="Pending / Process" xml:space="preserve">
+    <value>à¦…à¦ªà§‡à¦•à§à¦·à¦®à¦¾à¦¨ / à¦ªà§à¦°à¦•à§à¦°à¦¿à¦¯à¦¼à¦¾à¦§à§€à¦¨</value>
+  </data>
+  <data name="Product Categories" xml:space="preserve">
+    <value>à¦ªà¦£à§à¦¯à§‡à¦° à¦¬à¦¿à¦­à¦¾à¦—à¦¸à¦®à§‚à¦¹</value>
+  </data>
+  <data name="Offer Price" xml:space="preserve">
+    <value>à¦…à¦«à¦¾à¦° à¦®à§‚à¦²à§à¦¯</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>à¦ªà§‡à¦›à¦¨à§‡</value>
+  </data>
+  <data name="Filter Products" xml:space="preserve">
+    <value>à¦ªà¦£à§à¦¯ à¦«à¦¿à¦²à§à¦Ÿà¦¾à¦° à¦•à¦°à§à¦¨</value>
+  </data>
+  <data name="Product Types" xml:space="preserve">
+    <value>à¦ªà¦£à§à¦¯à§‡à¦° à¦§à¦°à¦¨</value>
+  </data>
+  <data name="Price Range" xml:space="preserve">
+    <value>à¦®à§‚à¦²à§à¦¯ à¦¸à§€à¦®à¦¾</value>
+  </data>
+  <data name="Available Sizes" xml:space="preserve">
+    <value>à¦‰à¦ªà¦²à¦¬à§à¦§ à¦¸à¦¾à¦‡à¦œ</value>
+  </data>
+  <data name="Clear All Filters" xml:space="preserve">
+    <value>à¦¸à¦¬ à¦«à¦¿à¦²à§à¦Ÿà¦¾à¦° à¦®à§à¦›à§à¦¨</value>
+  </data>
+  <data name="Explore Products" xml:space="preserve">
+    <value>à¦ªà¦£à§à¦¯ à¦…à¦¨à§à¦¬à§‡à¦·à¦£ à¦•à¦°à§à¦¨</value>
+  </data>
+  <data name="Search results for" xml:space="preserve">
+    <value>à¦…à¦¨à§à¦¸à¦¨à§à¦§à¦¾à¦¨à§‡à¦° à¦«à¦²à¦¾à¦«à¦²:</value>
+  </data>
+  <data name="items found" xml:space="preserve">
+    <value>à¦Ÿà¦¿ à¦ªà¦£à§à¦¯ à¦ªà¦¾à¦“à¦¯à¦¼à¦¾ à¦—à§‡à¦›à§‡</value>
+  </data>
+  <data name="+ Add New Product" xml:space="preserve">
+    <value>+ à¦¨à¦¤à§à¦¨ à¦ªà¦£à§à¦¯ à¦¯à§‹à¦— à¦•à¦°à§à¦¨</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>à¦¸à¦®à§à¦ªà¦¾à¦¦à¦¨à¦¾</value>
+  </data>
+  <data name="Del" xml:space="preserve">
+    <value>à¦®à§à¦›à§à¦¨</value>
+  </data>
+  <data name="Add to Cart" xml:space="preserve">
+    <value>à¦•à¦¾à¦°à§à¦Ÿà§‡ à¦¯à§‹à¦— à¦•à¦°à§à¦¨</value>
+  </data>
+  <data name="Buy Now" xml:space="preserve">
+    <value>à¦à¦–à¦¨à¦‡ à¦•à¦¿à¦¨à§à¦¨</value>
+  </data>
+  <data name="No products found matching your criteria." xml:space="preserve">
+    <value>à¦†à¦ªà¦¨à¦¾à¦° à¦¶à¦°à§à¦¤à¦¾à¦¨à§à¦¸à¦¾à¦°à§‡ à¦•à§‹à¦¨à§‹ à¦ªà¦£à§à¦¯ à¦ªà¦¾à¦“à¦¯à¦¼à¦¾ à¦¯à¦¾à¦¯à¦¼à¦¨à¦¿à¥¤</value>
+  </data>
+  <data name="All Categories" xml:space="preserve">
+    <value>à¦¸à¦¬ à¦•à§à¦¯à¦¾à¦Ÿà¦¾à¦—à¦°à¦¿</value>
+  </data>
+  <data name="All Types" xml:space="preserve">
+    <value>à¦¸à¦¬ à¦§à¦°à¦¨</value>
+  </data>
+  <data name="All Prices" xml:space="preserve">
+    <value>à¦¸à¦¬ à¦®à§‚à¦²à§à¦¯</value>
+  </data>
+  <data name="Below à§³500" xml:space="preserve">
+    <value>à§³à§«à§¦à§¦ à¦à¦° à¦¨à¦¿à¦šà§‡</value>
+  </data>
+  <data name="Under à§³500 - à§³2000" xml:space="preserve">
+    <value>à§³à§«à§¦à§¦ - à§³à§¨à§¦à§¦à§¦ à¦à¦° à¦®à¦§à§à¦¯à§‡</value>
+  </data>
+  <data name="Above à§³2000" xml:space="preserve">
+    <value>à§³à§¨à§¦à§¦à§¦ à¦à¦° à¦‰à¦ªà¦°à§‡</value>
+  </data>
+  <data name="Above à§³10000" xml:space="preserve">
+    <value>à§³à§§à§¦,à§¦à§¦à§¦ à¦à¦° à¦‰à¦ªà¦°à§‡</value>
+  </data>
+  <data name="Men products" xml:space="preserve">
+    <value>à¦ªà§à¦°à§à¦·à¦¦à§‡à¦° à¦ªà¦£à§à¦¯</value>
+  </data>
+  <data name="Women products" xml:space="preserve">
+    <value>à¦®à¦¹à¦¿à¦²à¦¾à¦¦à§‡à¦° à¦ªà¦£à§à¦¯</value>
+  </data>
+  <data name="Kids" xml:space="preserve">
+    <value>à¦¬à¦¾à¦šà§à¦šà¦¾à¦¦à§‡à¦°</value>
+  </data>
+  <data name="Electronics" xml:space="preserve">
+    <value>à¦‡à¦²à§‡à¦•à¦Ÿà§à¦°à¦¨à¦¿à¦•à§à¦¸</value>
+  </data>
+  <data name="Panjabi" xml:space="preserve">
+    <value>à¦ªà¦¾à¦žà§à¦œà¦¾à¦¬à¦¿</value>
+  </data>
+  <data name="Men" xml:space="preserve">
+    <value>à¦ªà§à¦°à§à¦·</value>
+  </data>
+  <data name="Women" xml:space="preserve">
+    <value>à¦®à¦¹à¦¿à¦²à¦¾</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>à¦®à§à¦›à§à¦¨</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>à¦¸à¦‚à¦°à¦•à§à¦·à¦£ à¦•à¦°à§à¦¨</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>বাতিল করুন</value>
+  </data>
+</root>
