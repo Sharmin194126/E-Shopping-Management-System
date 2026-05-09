@@ -42,10 +42,11 @@
     }
 }
 <!DOCTYPE html>
-<html lang="en">
+<html lang="@(System.Threading.Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName)">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="google" content="notranslate" />
     <title>@ViewData["Title"] - E_ShoppingManagement</title>
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
@@ -58,7 +59,8 @@
     
     <!-- jQuery and Core JS -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>    <style>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
         /* GLOBAL THEME SYNC */
         body, .admin-main, .dm-main, .main-content, .admin-content, .dm-content {
             background-color: #f8f6f0 !important;
@@ -72,10 +74,37 @@
         .container, .container-fluid {
             background-color: transparent !important;
         }
-        /* Google Translate Hiding */
-        .goog-te-banner-frame.skiptranslate, .goog-te-gadget-icon { display: none !important; }
+        
+        /* STICKY HEADER (Daraz Style) */
+        .shoegee-header {
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 10000 !important;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        /* 
+           EXTREMELY AGGRESSIVE GOOGLE TRANSLATE HIDING 
+           This makes the translation feel "Native" like Daraz.
+        */
+        .goog-te-banner-frame.skiptranslate, 
+        .goog-te-banner-frame, 
+        .goog-te-gadget-icon, 
+        #goog-gt-tt, 
+        .goog-te-balloon-frame,
+        .goog-te-menu-value span:nth-child(2),
+        .goog-te-gadget-simple img { 
+            display: none !important; 
+            visibility: hidden !important;
+            opacity: 0 !important;
+        }
         body { top: 0px !important; }
-        .goog-te-gadget-simple { background-color: transparent !important; border: none !important; }
+        .goog-te-gadget-simple { background-color: transparent !important; border: none !important; padding: 0 !important; }
+        .goog-text-highlight { background-color: transparent !important; box-shadow: none !important; }
+        
+        /* Hide the "Original Text" popup when hovering */
+        #goog-gt-tt, .goog-te-balloon-frame { display: none !important; }
+        .goog-text-highlight { background: none !important; box-shadow: none !important; }
     </style>
 </head>
 <body>
@@ -196,7 +225,7 @@
     @await Component.InvokeAsync("Footer")
     <script src="~/js/site.js" asp-append-version="true"></script>
 
-    <!-- Google Translate Integration for "All Text" Translation -->
+    <!-- Google Translate Invisible Integration -->
     <div id="google_translate_element" style="display:none"></div>
     <script type="text/javascript">
         function googleTranslateElementInit() {
@@ -215,8 +244,18 @@
             if (select) {
                 select.value = langCode;
                 select.dispatchEvent(new Event('change'));
+                // Extremely aggressive body top reset
+                const resetTop = () => { 
+                    document.body.style.top = "0px";
+                    const banner = document.querySelector('.goog-te-banner-frame');
+                    if (banner) banner.style.display = 'none';
+                };
+                resetTop();
+                setTimeout(resetTop, 100);
+                setTimeout(resetTop, 500);
+                setTimeout(resetTop, 1000);
             } else {
-                setTimeout(() => triggerTranslation(langCode), 500);
+                setTimeout(() => triggerTranslation(langCode), 300);
             }
         }
 
@@ -249,21 +288,28 @@
             setInterval(updateClock, 1000);
             updateClock();
 
-            // Automatic Translation Check
-            const cookies = document.cookie.split('; ');
-            const cultureCookie = cookies.find(row => row.startsWith('.AspNetCore.Culture='));
-            if (cultureCookie && cultureCookie.includes('bn-BD')) {
+            // Native-like Culture Sync
+            const culture = "@(System.Threading.Thread.CurrentThread.CurrentUICulture.Name)";
+            if (culture === "bn-BD") {
                 triggerTranslation('bn');
             } else {
-                // If English is selected but Google Translate is active, reset it
+                // Force back to English if needed
                 const select = document.querySelector('.goog-te-combo');
                 if (select && select.value !== '') {
                     select.value = '';
                     select.dispatchEvent(new Event('change'));
                 }
             }
+
+            // Hide Google Translate UI elements continuously
+            setInterval(() => {
+                document.body.style.top = "0px";
+                const banner = document.querySelector('.goog-te-banner-frame');
+                if (banner) banner.style.display = 'none';
+            }, 500);
         });
     </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
