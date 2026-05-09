@@ -186,15 +186,15 @@
 <div class="live-chat-banner">
     <div class="container d-flex justify-content-between align-items-center">
         <div>
-            <h4 class="mb-1" style="color: #FFD700 !important; font-weight: 800;"><i class="bi bi-chat-text-fill me-2"></i>Live Chat Support Available!</h4>
-            <p class="mb-0 small" style="color: #ffffff !important; font-weight: 600;">Connect with our product experts instantly via our Live Chat button for real-time assistance.</p>
+            <h4 class="mb-1" style="color: #FFD700 !important; font-weight: 800;"><i class="bi bi-chat-text-fill me-2"></i>@Localizer["Live Chat Support Available!"]</h4>
+            <p class="mb-0 small" style="color: #ffffff !important; font-weight: 600;">@Localizer["Connect with our product experts instantly via our Live Chat button for real-time assistance."]</p>
         </div>
-        <button onclick="toggleChat()" class="btn btn-warning fw-bold px-4 text-dark shadow-sm">Start Chat Now</button>
+        <button onclick="toggleChat()" class="btn btn-warning fw-bold px-4 text-dark shadow-sm">@Localizer["Start Chat Now"]</button>
     </div>
 </div>
 
 <div class="container mt-2">
-    <a href="javascript:history.back()" class="theme-back-btn"><i class="bi bi-arrow-left"></i> Back to Exploration</a>
+    <a href="javascript:history.back()" class="theme-back-btn"><i class="bi bi-arrow-left"></i> @Localizer["Back to Exploration"]</a>
     <div class="row">
         <!-- Image Section -->
         <div class="col-md-5 position-relative">
@@ -299,21 +299,21 @@
             <div class="delivery-info">
                 <i class="bi bi-truck"></i>
                 <div>
-                    <span class="text-muted small d-block">Delivery Charge</span>
-                    <span class="fw-bold text-dark">৳ @(Model.Product.DeliveryCharge > 0 ? Model.Product.DeliveryCharge.ToString("#,##0") : "Free")</span>
+                    <span class="text-muted small d-block">@Localizer["Delivery Charge"]</span>
+                    <span class="fw-bold text-dark">৳ @(Model.Product.DeliveryCharge > 0 ? Model.Product.DeliveryCharge.ToString("#,##0") : Localizer["Free"])</span>
                 </div>
             </div>
 
             <div class="mb-2 mt-2">
                 <span class="text-warning fs-5">@Html.Raw(RenderStars(Model.Product.AverageRating))</span>
-                <span class="text-muted">(@Model.Product.AverageRating.ToString("0.0")) | @Model.TotalReviews.ToString("#,##0") Reviews</span>
+                <span class="text-muted">(@Model.Product.AverageRating.ToString("0.0")) | @Model.TotalReviews.ToString("#,##0") @Localizer["Reviews"]</span>
             </div>
             <div class="price-area mb-3 p-3 rounded" style="background: rgba(83,35,116,0.05); border-left: 4px solid #532374;">
                 @if (Model.Product.OfferPercentage > 0)
                 {
                     <div class="d-flex align-items-center gap-2 mb-2">
-                        <span class="badge bg-danger">@Model.Product.OfferPercentage% OFF</span>
-                        <span class="text-danger fw-bold small text-uppercase" style="letter-spacing: 1px;">Limited Time Offer!</span>
+                        <span class="badge bg-danger">@Model.Product.OfferPercentage% @Localizer["OFF"]</span>
+                        <span class="text-danger fw-bold small text-uppercase" style="letter-spacing: 1px;">@Localizer["Limited Time Offer!"]</span>
                     </div>
                 }
                 
@@ -321,7 +321,7 @@
                     @if (Model.Product.RegularPrice > Model.Product.Price)
                     {
                         <div>
-                            <span class="text-muted small">Regular Price: </span>
+                            <span class="text-muted small">@Localizer["Regular Price"]: </span>
                             <span class="text-muted text-decoration-line-through">৳ @Model.Product.RegularPrice.ToString("#,##0")</span>
                         </div>
                     }
@@ -329,7 +329,7 @@
                         <h3 class="text-danger fw-bold mb-0" style="font-size: 2rem;">৳ @Model.Product.Price.ToString("#,##0")</h3>
                         @if (Model.Product.OfferPercentage > 0)
                         {
-                            <span class="text-muted small">(Offer Price)</span>
+                            <span class="text-muted small">(@Localizer["Offer Price"])</span>
                         }
                     </div>
                 </div>
@@ -341,15 +341,15 @@
                     
                     <div class="mt-2 border-top pt-2">
                         <div class="text-muted small d-flex justify-content-between" style="max-width: 250px;">
-                            <span>Price:</span>
+                            <span>@Localizer["Price"]:</span>
                             <span class="fw-bold">৳ @Model.Product.Price.ToString("#,##0")</span>
                         </div>
                         <div class="text-muted small d-flex justify-content-between" style="max-width: 250px;">
-                            <span>VAT (@Model.Product.VatPercentage%):</span>
+                            <span>@Localizer["VAT"] (@Model.Product.VatPercentage%):</span>
                             <span class="fw-bold text-success">+ ৳ @vAmt.ToString("#,##0")</span>
                         </div>
                         <div class="text-dark fw-bold d-flex justify-content-between" style="max-width: 250px; font-size: 1.1rem;">
-                            <span>Grand Total:</span>
+                            <span>@Localizer["Grand Total"]:</span>
                             <span class="text-danger">৳ @totalWVat.ToString("#,##0")</span>
                         </div>
                     </div>
@@ -367,7 +367,7 @@
                 @if (sizes != null && sizes.Any())
                 {
                     <div class="mb-3">
-                        <label class="form-label fw-bold text-dark fs-5">Select Size:</label>
+                        <label class="form-label fw-bold text-dark fs-5">@Localizer["Select Size"]:</label>
                         <div class="d-flex gap-2 mb-2">
                             @foreach (var size in sizes)
                             {
@@ -393,7 +393,7 @@
                 }
                 
                 <div class="mb-3">
-                    <label class="form-label fw-bold text-dark fs-5">Quantity:</label>
+                    <label class="form-label fw-bold text-dark fs-5">@Localizer["Quantity"]:</label>
                     <div class="d-flex align-items-center gap-3">
                         <div class="input-group" style="width: 180px; border: 1px solid #ccc; border-radius: 4px; overflow: hidden; background: #f8f6f0; height: 38px;">
                             <button class="btn btn-light px-2 fw-bold border-end" type="button" onclick="changeQty(-1)" style="font-size: 16px; color: #333; padding-bottom: 2px; width: 40px;">-</button>
@@ -404,10 +404,16 @@
                             <button class="btn btn-light px-2 fw-bold border-start" type="button" onclick="changeQty(1)" style="font-size: 16px; color: #333; padding-bottom: 2px; width: 40px;">+</button>
                         </div>
                         <span id="stockLimitMsg" class="text-muted small">
-                            (Stock: @Model.Product.StockQty.ToString("#,##0") units | Max: @(Model.Product.MaxOrderQty > 0 ? (Model.Product.MaxOrderQty ?? 0).ToString("#,##0") : "No Limit"))
+                            (@Localizer["Stock"]: @Model.Product.StockQty.ToString("#,##0") @Localizer["units"] | @Localizer["Max"]: @(Model.Product.MaxOrderQty > 0 ? (Model.Product.MaxOrderQty ?? 0).ToString("#,##0") : Localizer["No Limit"]))
                         </span>
                     </div>
                     <div id="qtyMessage" class="text-danger small fw-bold mt-2" style="display: none;"></div>
+                </div>
+
+                <div class="d-flex flex-wrap gap-2 mt-4">
+                    <button type="submit" formaction="/Cart/AddToCart" class="btn btn-warning text-white btn-lg px-4 fw-bold">@Localizer["Add to Cart"]</button>
+                    <button type="submit" formaction="/Cart/BuyNow" class="btn btn-danger btn-lg px-4 fw-bold">@Localizer["Buy Now"]</button>
+                    <a href="/Home/CategoryProducts?typeId=@Model.Product.ProductTypeId" class="btn btn-outline-secondary btn-lg px-4">@Localizer["View More"] @Model.Product.ProductType?.Name</a>
                 </div>
 
                 <script>
@@ -515,11 +521,6 @@
                     });
                 </script>
                 
-                <div class="d-flex flex-wrap gap-2 mt-4">
-                    <button type="submit" formaction="/Cart/AddToCart" class="btn btn-warning text-white btn-lg px-4 fw-bold">Add to Cart</button>
-                    <button type="submit" formaction="/Cart/BuyNow" class="btn btn-danger btn-lg px-4 fw-bold">Buy Now</button>
-                    <a href="/Home/CategoryProducts?typeId=@Model.Product.ProductTypeId" class="btn btn-outline-secondary btn-lg px-4">View More @Model.Product.ProductType?.Name</a>
-                </div>
             </form>
         </div>
     </div>
@@ -529,11 +530,11 @@
     <!-- Ratings Summary and Review List -->
     <div class="row">
         <div class="col-md-4">
-            <h4>Ratings & Reviews</h4>
+            <h4>@Localizer["Ratings & Reviews"]</h4>
             <div class="text-center p-4 bg-light rounded">
                 <h1 class="display-3 fw-bold text-dark">@Model.Product.AverageRating.ToString("0.0")</h1>
                 <div class="text-warning fs-3">@Html.Raw(RenderStars(Model.Product.AverageRating))</div>
-                <div class="text-muted">Based on @Model.TotalReviews reviews</div>
+                <div class="text-muted">@Localizer["Based on"] @Model.TotalReviews @Localizer["reviews"]</div>
             </div>
             
             <div class="mt-4">
@@ -553,12 +554,12 @@
         </div>
 
         <div class="col-md-8 ps-md-5">
-            <h4 class="mb-4">Customer Experience</h4>
+            <h4 class="mb-4">@Localizer["Customer Experience"]</h4>
             
             <!-- Submit Review Section -->
             <div class="card mb-4 border-primary">
                 <div class="card-body">
-                    <h5>Give a Review</h5>
+                    <h5>@Localizer["Give a Review"]</h5>
                     @if (User.Identity?.IsAuthenticated ?? false)
                     {
                         if (User.IsInRole("Customer"))
@@ -567,43 +568,43 @@
                                 <input type="hidden" name="productId" value="@Model.Product.Id" />
                                 <div class="row">
                                     <div class="col-md-3 mb-3">
-                                        <label class="form-label fw-bold" style="color: #532374;">Select Stars</label>
+                                        <label class="form-label fw-bold" style="color: #532374;">@Localizer["Select Stars"]</label>
                                         <select name="rating" class="form-select border-primary" required>
-                                            <option value="5">★★★★★ (5 Stars)</option>
-                                            <option value="4">★★★★☆ (4 Stars)</option>
-                                            <option value="3">★★★☆☆ (3 Stars)</option>
-                                            <option value="2">★★☆☆☆ (2 Stars)</option>
-                                            <option value="1">★☆☆☆☆ (1 Star)</option>
+                                            <option value="5">★★★★★ (@Localizer["5 Stars"])</option>
+                                            <option value="4">★★★★☆ (@Localizer["4 Stars"])</option>
+                                            <option value="3">★★★☆☆ (@Localizer["3 Stars"])</option>
+                                            <option value="2">★★☆☆☆ (@Localizer["2 Stars"])</option>
+                                            <option value="1">★☆☆☆☆ (@Localizer["1 Star"])</option>
                                         </select>
                                     </div>
                                     <div class="col-md-8 mb-3">
-                                        <label class="form-label fw-bold" style="color: #532374;">Comments</label>
+                                        <label class="form-label fw-bold" style="color: #532374;">@Localizer["Comments"]</label>
                                         <div class="position-relative">
-                                            <textarea id="mainReviewComment" name="comment" class="form-control border-primary" rows="3" placeholder="Write your experience..." required></textarea>
-                                            <button type="button" class="btn btn-sm btn-outline-secondary border-0 position-absolute bottom-0 end-0 m-1" onclick="showEmojiPickerFor('mainReviewComment', this)" title="Insert Emoji">
+                                            <textarea id="mainReviewComment" name="comment" class="form-control border-primary" rows="3" placeholder="@Localizer["Write your experience..."]" required></textarea>
+                                            <button type="button" class="btn btn-sm btn-outline-secondary border-0 position-absolute bottom-0 end-0 m-1" onclick="showEmojiPickerFor('mainReviewComment', this)" title="@Localizer["Insert Emoji"]">
                                                 <i class="bi bi-emoji-smile" style="font-size: 1.2rem;"></i>
                                             </button>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label fw-bold" style="color: #532374;">Add Photos (Optional)</label>
+                                    <label class="form-label fw-bold" style="color: #532374;">@Localizer["Add Photos (Optional)"]</label>
                                     <input type="file" name="images" class="form-control" accept="image/*" multiple onchange="previewImages(this)" />
-                                    <small class="text-muted">You can upload up to 5 images</small>
+                                    <small class="text-muted">@Localizer["You can upload up to 5 images"]</small>
                                     <div id="imagePreview" class="mt-2 d-flex gap-2 flex-wrap"></div>
                                 </div>
-                                <button type="submit" class="btn btn-primary px-4 fw-bold">Submit Review</button>
+                                <button type="submit" class="btn btn-primary px-4 fw-bold">@Localizer["Submit Review"]</button>
                             </form>
                         }
                         else
                         {
-                            <p class="text-muted mb-0">Only customers can leave reviews.</p>
+                            <p class="text-muted mb-0">@Localizer["Only customers can leave reviews."]</p>
                         }
                     }
                     else
                     {
-                        <p class="mb-2">Please login to share your feedback.</p>
-                        <a asp-controller="Account" asp-action="Login" class="theme-back-btn" style="padding: 5px 20px !important; display: inline-block;">Login Now</a>
+                        <p class="mb-2">@Localizer["Please login to share your feedback."]</p>
+                        <a asp-controller="Account" asp-action="Login" class="theme-back-btn" style="padding: 5px 20px !important; display: inline-block;">@Localizer["Login Now"]</a>
                     }
                 </div>
             </div>
@@ -616,12 +617,12 @@
                     {
                         <div class="border-bottom mb-4 pb-3">
                             <div class="d-flex justify-content-between">
-                                <div>
-                                    <span class="text-warning">@Html.Raw(RenderStars(review.Rating))</span>
-                                    <span class="ms-2 fw-bold" style="color: #FF6B35;">@review.CustomerName</span>
-                                    <span class="badge bg-light text-success ms-2 small" style="font-size: 0.7rem;">Verified Purchase</span>
-                                </div>
-                                <small class="text-muted">@review.CreatedAt.ToString("MMM dd, yyyy | hh:mm tt")</small>
+                                 <div>
+                                     <span class="text-warning">@Html.Raw(RenderStars(review.Rating))</span>
+                                     <span class="ms-2 fw-bold" style="color: #FF6B35;">@review.CustomerName</span>
+                                     <span class="badge bg-light text-success ms-2 small" style="font-size: 0.7rem;">@Localizer["Verified Purchase"]</span>
+                                 </div>
+                                 <small class="text-muted">@review.CreatedAt.ToString("MMM dd, yyyy | hh:mm tt")</small>
                             </div>
                             
                             <p class="mt-2 mb-2 text-dark">@review.Comment</p>
@@ -646,7 +647,7 @@
                                 </button>
                                 @if (User.Identity?.IsAuthenticated == true && (User.IsInRole("Admin") || User.IsInRole("Employee")))
                                 {
-                                    <button class="btn btn-link btn-sm text-decoration-none" onclick="toggleReplyBox(@review.Id)">Reply</button>
+                                    <button class="btn btn-link btn-sm text-decoration-none" onclick="toggleReplyBox(@review.Id)">@Localizer["Reply"]</button>
                                 }
                             </div>
 
@@ -659,7 +660,7 @@
                                         <div class="mb-2">
                                             <div class="d-flex align-items-center gap-2">
                                                 <span class="fw-bold small @(reply.IsSeller ? "text-danger" : "text-primary")">
-                                                    @(reply.IsSeller ? "Seller Response" : reply.ReplierName)
+                                                    @(reply.IsSeller ? Localizer["Seller Response"] : reply.ReplierName)
                                                 </span>
                                                 <small class="text-muted" style="font-size: 0.7rem;">@reply.CreatedAt.ToString("MMM dd, HH:mm")</small>
                                             </div>
@@ -673,14 +674,14 @@
                             <div id="reply-box-@review.Id" class="ms-5 mt-2" style="display: none;">
                                 <div class="card p-2 border-primary shadow-sm">
                                     <div class="d-flex gap-2 mb-2 p-1 bg-light rounded">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary border-0" onclick="insertTool(@review.Id, 'gallery', this)" title="Add from Gallery"><i class="bi bi-images"></i></button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary border-0" onclick="insertTool(@review.Id, 'attach', this)" title="Attach File"><i class="bi bi-paperclip"></i></button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary border-0" onclick="insertTool(@review.Id, 'emoji', this)" title="Insert Emoji"><i class="bi bi-emoji-smile"></i></button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary border-0" onclick="insertTool(@review.Id, 'gallery', this)" title="@Localizer["Add from Gallery"]"><i class="bi bi-images"></i></button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary border-0" onclick="insertTool(@review.Id, 'attach', this)" title="@Localizer["Attach File"]"><i class="bi bi-paperclip"></i></button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary border-0" onclick="insertTool(@review.Id, 'emoji', this)" title="@Localizer["Insert Emoji"]"><i class="bi bi-emoji-smile"></i></button>
                                     </div>
-                                    <textarea id="reply-text-@review.Id" class="form-control mb-2" rows="2" placeholder="Write your reply..."></textarea>
+                                    <textarea id="reply-text-@review.Id" class="form-control mb-2" rows="2" placeholder="@Localizer["Write your reply..."]"></textarea>
                                     <div class="d-flex justify-content-end gap-2">
-                                        <button type="button" class="btn btn-sm btn-secondary" onclick="toggleReplyBox(@review.Id)">Cancel</button>
-                                        <button type="button" class="btn btn-sm btn-primary" onclick="submitReply(@review.Id)">Post Reply</button>
+                                        <button type="button" class="btn btn-sm btn-secondary" onclick="toggleReplyBox(@review.Id)">@Localizer["Cancel"]</button>
+                                        <button type="button" class="btn btn-sm btn-primary" onclick="submitReply(@review.Id)">@Localizer["Post Reply"]</button>
                                     </div>
                                 </div>
                             </div>
@@ -689,7 +690,7 @@
                 }
                 else
                 {
-                    <p class="text-muted">No reviews yet. Be the first to review this product!</p>
+                    <p class="text-muted">@Localizer["No reviews yet. Be the first to review this product!"]</p>
                 }
             </div>
         </div>
@@ -697,7 +698,7 @@
 
     <!-- Related Products Section -->
     <div class="mt-5 mb-5">
-        <h4 class="mb-4">Related Products</h4>
+        <h4 class="mb-4">@Localizer["Related Products"]</h4>
         <div class="row">
             @if (Model.RelatedProducts != null && Model.RelatedProducts.Any())
             {
@@ -719,7 +720,7 @@
             }
             else
             {
-                <p class="text-muted col-12">No related products found.</p>
+                <p class="text-muted col-12">@Localizer["No related products found."]</p>
             }
         </div>
     </div>

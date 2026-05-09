@@ -110,4 +110,349 @@
   <data name="Active" xml:space="preserve"><value>সক্রিয়</value></data>
   <data name="Inactive" xml:space="preserve"><value>নিষ্ক্রিয়</value></data>
   <data name="Pending" xml:space="preserve"><value>অপেক্ষমান</value></data>
+  <data name="Live Chat Support Available!" xml:space="preserve">
+    <value>লাইভ চ্যাট সাপোর্ট উপলব্ধ!</value>
+  </data>
+  <data name="Connect with our product experts instantly via our Live Chat button for real-time assistance." xml:space="preserve">
+    <value>রিয়েল-টাইম সহায়তার জন্য আমাদের লাইভ চ্যাট বাটনের মাধ্যমে তাৎক্ষণিকভাবে আমাদের পণ্য বিশেষজ্ঞদের সাথে সংযোগ করুন।</value>
+  </data>
+  <data name="Start Chat Now" xml:space="preserve">
+    <value>এখনই চ্যাট শুরু করুন</value>
+  </data>
+  <data name="Back to Exploration" xml:space="preserve">
+    <value>অন্বেষণে ফিরে যান</value>
+  </data>
+  <data name="Delivery Charge" xml:space="preserve">
+    <value>ডেলিভারি চার্জ</value>
+  </data>
+  <data name="Free" xml:space="preserve">
+    <value>ফ্রি</value>
+  </data>
+  <data name="Reviews" xml:space="preserve">
+    <value>রিভিউ</value>
+  </data>
+  <data name="OFF" xml:space="preserve">
+    <value>ছাড়</value>
+  </data>
+  <data name="Limited Time Offer!" xml:space="preserve">
+    <value>সীমিত সময়ের অফার!</value>
+  </data>
+  <data name="Regular Price" xml:space="preserve">
+    <value>নিয়মিত মূল্য</value>
+  </data>
+  <data name="Offer Price" xml:space="preserve">
+    <value>অফার মূল্য</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>মূল্য</value>
+  </data>
+  <data name="VAT" xml:space="preserve">
+    <value>ভ্যাট</value>
+  </data>
+  <data name="Grand Total" xml:space="preserve">
+    <value>সর্বমোট মূল্য</value>
+  </data>
+  <data name="Select Size" xml:space="preserve">
+    <value>সাইজ নির্বাচন করুন</value>
+  </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>পরিমাণ</value>
+  </data>
+  <data name="Stock" xml:space="preserve">
+    <value>স্টক</value>
+  </data>
+  <data name="units" xml:space="preserve">
+    <value>টি</value>
+  </data>
+  <data name="Max" xml:space="preserve">
+    <value>সর্বোচ্চ</value>
+  </data>
+  <data name="No Limit" xml:space="preserve">
+    <value>কোন সীমা নেই</value>
+  </data>
+  <data name="View More" xml:space="preserve">
+    <value>আরও দেখুন</value>
+  </data>
+  <data name="Ratings &amp; Reviews" xml:space="preserve">
+    <value>রেটিং এবং রিভিউ</value>
+  </data>
+  <data name="Based on" xml:space="preserve">
+    <value>ভিত্তি করে</value>
+  </data>
+  <data name="reviews" xml:space="preserve">
+    <value>রিভিউ</value>
+  </data>
+  <data name="Customer Experience" xml:space="preserve">
+    <value>গ্রাহক অভিজ্ঞতা</value>
+  </data>
+  <data name="Give a Review" xml:space="preserve">
+    <value>একটি রিভিউ দিন</value>
+  </data>
+  <data name="Select Stars" xml:space="preserve">
+    <value>তারকা নির্বাচন করুন</value>
+  </data>
+  <data name="5 Stars" xml:space="preserve">
+    <value>৫ তারকা</value>
+  </data>
+  <data name="4 Stars" xml:space="preserve">
+    <value>৪ তারকা</value>
+  </data>
+  <data name="3 Stars" xml:space="preserve">
+    <value>৩ তারকা</value>
+  </data>
+  <data name="2 Stars" xml:space="preserve">
+    <value>২ তারকা</value>
+  </data>
+  <data name="1 Star" xml:space="preserve">
+    <value>১ তারকা</value>
+  </data>
+  <data name="Comments" xml:space="preserve">
+    <value>মন্তব্য</value>
+  </data>
+  <data name="Write your experience..." xml:space="preserve">
+    <value>আপনার অভিজ্ঞতা লিখুন...</value>
+  </data>
+  <data name="Insert Emoji" xml:space="preserve">
+    <value>ইমোজি যুক্ত করুন</value>
+  </data>
+  <data name="Add Photos (Optional)" xml:space="preserve">
+    <value>ছবি যোগ করুন (ঐচ্ছিক)</value>
+  </data>
+  <data name="You can upload up to 5 images" xml:space="preserve">
+    <value>আপনি ৫টি পর্যন্ত ছবি আপলোড করতে পারেন</value>
+  </data>
+  <data name="Submit Review" xml:space="preserve">
+    <value>রিভিউ জমা দিন</value>
+  </data>
+  <data name="Only customers can leave reviews." xml:space="preserve">
+    <value>শুধুমাত্র গ্রাহকরা রিভিউ দিতে পারবেন।</value>
+  </data>
+  <data name="Please login to share your feedback." xml:space="preserve">
+    <value>আপনার মতামত শেয়ার করতে অনুগ্রহ করে লগইন করুন।</value>
+  </data>
+  <data name="Login Now" xml:space="preserve">
+    <value>এখনই লগইন করুন</value>
+  </data>
+  <data name="Verified Purchase" xml:space="preserve">
+    <value>যাচাইকৃত ক্রয়</value>
+  </data>
+  <data name="Reply" xml:space="preserve">
+    <value>উত্তর দিন</value>
+  </data>
+  <data name="Seller Response" xml:space="preserve">
+    <value>বিক্রেতার প্রতিক্রিয়া</value>
+  </data>
+  <data name="Add from Gallery" xml:space="preserve">
+    <value>গ্যালারি থেকে যোগ করুন</value>
+  </data>
+  <data name="Attach File" xml:space="preserve">
+    <value>ফাইল সংযুক্ত করুন</value>
+  </data>
+  <data name="Write your reply..." xml:space="preserve">
+    <value>আপনার উত্তর লিখুন...</value>
+  </data>
+  <data name="Post Reply" xml:space="preserve">
+    <value>উত্তর পোস্ট করুন</value>
+  </data>
+  <data name="No reviews yet. Be the first to review this product!" xml:space="preserve">
+    <value>এখনও কোন রিভিউ নেই। এই পণ্যটি রিভিউ দিতে প্রথম হন!</value>
+  </data>
+  <data name="Related Products" xml:space="preserve">
+    <value>সম্পর্কিত পণ্যসমূহ</value>
+  </data>
+  <data name="No related products found." xml:space="preserve">
+    <value>কোন সম্পর্কিত পণ্য পাওয়া যায়নি।</value>
+  </data>
+  <data name="My Cart" xml:space="preserve">
+    <value>আমার কার্ট</value>
+  </data>
+  <data name="Your cart is empty." xml:space="preserve">
+    <value>আপনার কার্ট খালি।</value>
+  </data>
+  <data name="SL" xml:space="preserve">
+    <value>ক্রমিক</value>
+  </data>
+  <data name="Image" xml:space="preserve">
+    <value>ছবি</value>
+  </data>
+  <data name="Product" xml:space="preserve">
+    <value>পণ্য</value>
+  </data>
+  <data name="Total" xml:space="preserve">
+    <value>মোট</value>
+  </data>
+  <data name="Actions" xml:space="preserve">
+    <value>পদক্ষেপ</value>
+  </data>
+  <data name="Inc. VAT" xml:space="preserve">
+    <value>ভ্যাটসহ</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>সরিয়ে দিন</value>
+  </data>
+  <data name="Clear Cart" xml:space="preserve">
+    <value>কার্ট খালি করুন</value>
+  </data>
+  <data name="Total (Inc. VAT)" xml:space="preserve">
+    <value>সর্বমোট (ভ্যাটসহ)</value>
+  </data>
+  <data name="Checkout Now" xml:space="preserve">
+    <value>এখনই চেকআউট করুন</value>
+  </data>
+  <data name="Welcome Back" xml:space="preserve">
+    <value>ফিরে আসায় স্বাগতম</value>
+  </data>
+  <data name="Please login to your account" xml:space="preserve">
+    <value>অনুগ্রহ করে আপনার অ্যাকাউন্টে লগইন করুন</value>
+  </data>
+  <data name="Email Address" xml:space="preserve">
+    <value>ইমেইল ঠিকানা</value>
+  </data>
+  <data name="Enter your email" xml:space="preserve">
+    <value>আপনার ইমেইল লিখুন</value>
+  </data>
+  <data name="Enter your password" xml:space="preserve">
+    <value>আপনার পাসওয়ার্ড লিখুন</value>
+  </data>
+  <data name="Remember Me" xml:space="preserve">
+    <value>আমাকে মনে রাখুন</value>
+  </data>
+  <data name="Forgot Password?" xml:space="preserve">
+    <value>পাসওয়ার্ড ভুলে গেছেন?</value>
+  </data>
+  <data name="Don't have an account?" xml:space="preserve">
+    <value>অ্যাকাউন্ট নেই?</value>
+  </data>
+  <data name="Create Account" xml:space="preserve">
+    <value>অ্যাকাউন্ট তৈরি করুন</value>
+  </data>
+  <data name="Back to Home" xml:space="preserve">
+    <value>হোমে ফিরে যান</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>নিবন্ধন করুন</value>
+  </data>
+  <data name="Choose your account type to proceed" xml:space="preserve">
+    <value>এগিয়ে যেতে আপনার অ্যাকাউন্টের ধরন বেছে নিন</value>
+  </data>
+  <data name="Register as Customer" xml:space="preserve">
+    <value>গ্রাহক হিসেবে নিবন্ধন করুন</value>
+  </data>
+  <data name="Register as Employee" xml:space="preserve">
+    <value>কর্মচারী হিসেবে নিবন্ধন করুন</value>
+  </data>
+  <data name="Join as Delivery Man" xml:space="preserve">
+    <value>ডেলিভারি ম্যান হিসেবে যোগ দিন</value>
+  </data>
+  <data name="Already have an account?" xml:space="preserve">
+    <value>ইতিমধ্যেই একটি অ্যাকাউন্ট আছে?</value>
+  </data>
+  <data name="Login Here" xml:space="preserve">
+    <value>এখানে লগইন করুন</value>
+  </data>
+  <data name="Checkout" xml:space="preserve">
+    <value>চেকআউট</value>
+  </data>
+  <data name="Your Summary" xml:space="preserve">
+    <value>আপনার সারাংশ</value>
+  </data>
+  <data name="Qty" xml:space="preserve">
+    <value>পরিমাণ</value>
+  </data>
+  <data name="incl. VAT" xml:space="preserve">
+    <value>ভ্যাটসহ</value>
+  </data>
+  <data name="Subtotal" xml:space="preserve">
+    <value>উপমোট</value>
+  </data>
+  <data name="Total VAT" xml:space="preserve">
+    <value>মোট ভ্যাট</value>
+  </data>
+  <data name="Grand Total (with VAT)" xml:space="preserve">
+    <value>সর্বমোট (ভ্যাটসহ)</value>
+  </data>
+  <data name="Step 1: Shipping Details" xml:space="preserve">
+    <value>ধাপ ১: শিপিং বিবরণ</value>
+  </data>
+  <data name="Customer Full Name" xml:space="preserve">
+    <value>গ্রাহকের পুরো নাম</value>
+  </data>
+  <data name="Active Contact Number" xml:space="preserve">
+    <value>সক্রিয় যোগাযোগ নম্বর</value>
+  </data>
+  <data name="e.g. 017xxxxxxxx" xml:space="preserve">
+    <value>উদাঃ ০১৭১১xxxxxx</value>
+  </data>
+  <data name="Please enter a valid BD phone number (e.g. 017xxxxxxxx)" xml:space="preserve">
+    <value>অনুগ্রহ করে একটি সঠিক বিডি ফোন নম্বর লিখুন (উদাঃ ০১৭১১xxxxxx)</value>
+  </data>
+  <data name="Must be a valid Bangladesh phone number" xml:space="preserve">
+    <value>অবশ্যই একটি সঠিক বাংলাদেশ ফোন নম্বর হতে হবে</value>
+  </data>
+  <data name="Full Delivery Address" xml:space="preserve">
+    <value>পুরো ডেলিভারি ঠিকানা</value>
+  </data>
+  <data name="Address (House, Road, Area)" xml:space="preserve">
+    <value>ঠিকানা (বাসা, রাস্তা, এলাকা)</value>
+  </data>
+  <data name="City Name" xml:space="preserve">
+    <value>শহরের নাম</value>
+  </data>
+  <data name="Zip/Postal Code" xml:space="preserve">
+    <value>জিপ/পোস্টাল কোড</value>
+  </data>
+  <data name="Step 2: Payment Method" xml:space="preserve">
+    <value>ধাপ ২: পেমেন্ট পদ্ধতি</value>
+  </data>
+  <data name="Cash on Delivery" xml:space="preserve">
+    <value>ক্যাশ অন ডেলিভারি</value>
+  </data>
+  <data name="PAY ON RECEIVE" xml:space="preserve">
+    <value>গ্রহণের সময় পেমেন্ট করুন</value>
+  </data>
+  <data name="Pay with cash when you receive the parcel at your doorstep." xml:space="preserve">
+    <value>আপনার দোরগোড়ায় পার্সেল পাওয়ার সময় নগদে পেমেন্ট করুন।</value>
+  </data>
+  <data name="Online Payment" xml:space="preserve">
+    <value>অনলাইন পেমেন্ট</value>
+  </data>
+  <data name="Pay with" xml:space="preserve">
+    <value>পেমেন্ট করুন</value>
+  </data>
+  <data name="Online payment methods are currently being updated by Admin." xml:space="preserve">
+    <value>অনলাইন পেমেন্ট পদ্ধতি বর্তমানে এডমিন দ্বারা আপডেট করা হচ্ছে।</value>
+  </data>
+  <data name="Confirm Order &amp; Proceed" xml:space="preserve">
+    <value>অর্ডার নিশ্চিত করুন এবং এগিয়ে যান</value>
+  </data>
+  <data name="Direct Merchant Payments for Secure Shopping." xml:space="preserve">
+    <value>সুরক্ষিত কেনাকাটার জন্য সরাসরি মার্চেন্ট পেমেন্ট।</value>
+  </data>
+  <data name="Secure Payments" xml:space="preserve">
+    <value>সুরক্ষিত পেমেন্ট</value>
+  </data>
+  <data name="Help &amp; Services" xml:space="preserve">
+    <value>সাহায্য এবং সেবা</value>
+  </data>
+  <data name="Help Center" xml:space="preserve">
+    <value>সহায়তা কেন্দ্র</value>
+  </data>
+  <data name="Returns &amp; Refunds" xml:space="preserve">
+    <value>রিটার্ন এবং রিফান্ড</value>
+  </data>
+  <data name="Track Your Order" xml:space="preserve">
+    <value>আপনার অর্ডার ট্র্যাক করুন</value>
+  </data>
+  <data name="Address &amp; Contact" xml:space="preserve">
+    <value>ঠিকানা এবং যোগাযোগ</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>ইমেইল</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>ফোন</value>
+  </data>
+  <data name="What Our Customers Say" xml:space="preserve">
+    <value>আমাদের গ্রাহকরা যা বলেন</value>
+  </data>
 </root>
