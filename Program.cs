@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -58,11 +60,14 @@ app.UseStaticFiles();
 app.UseRouting();
 
 // ── Localization Middleware ───────────────────────────────────────────────────
-var supportedCultures = new[] { "en-US", "bn-BD" };
+var supportedCultures = new[] { "en", "bn" };
 var localizationOptions = new RequestLocalizationOptions()
-    .SetDefaultCulture(supportedCultures[0])
+    .SetDefaultCulture("en")
     .AddSupportedCultures(supportedCultures)
     .AddSupportedUICultures(supportedCultures);
+
+// Add cookie provider to allow manual language switching
+localizationOptions.RequestCultureProviders.Insert(0, new CookieRequestCultureProvider());
 
 app.UseRequestLocalization(localizationOptions);
 

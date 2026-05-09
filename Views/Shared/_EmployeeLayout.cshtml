@@ -1,6 +1,4 @@
 @using Microsoft.AspNetCore.Identity
-@using Microsoft.AspNetCore.Mvc.Localization
-@inject IViewLocalizer Localizer
 @inject UserManager<E_ShoppingManagement.Models.Users> UserManager
 <!DOCTYPE html>
 <html lang="@(System.Threading.Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName)">
@@ -150,6 +148,29 @@
                         var totalNewNotifs = newOrdersCount + newMsgsCount;
                         var totalItems = pendingOrders.Count + activeMsgs.Count;
                     }
+                    <!-- Language Selection -->
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-outline-primary dropdown-toggle border-0" type="button" id="langDropdown" data-bs-toggle="dropdown" style="font-size: 14px; color: #532374;">
+                            <i class="bi bi-translate"></i> @(System.Threading.Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName == "bn" ? "বাংলা" : "English")
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="langDropdown" style="border-radius: 10px;">
+                            <li>
+                                <form asp-controller="Home" asp-action="SetLanguage" method="post">
+                                    <input type="hidden" name="culture" value="en" />
+                                    <input type="hidden" name="returnUrl" value="@(Context.Request.Path + Context.Request.QueryString)" />
+                                    <button type="submit" class="dropdown-item">English</button>
+                                </form>
+                            </li>
+                            <li>
+                                <form asp-controller="Home" asp-action="SetLanguage" method="post">
+                                    <input type="hidden" name="culture" value="bn" />
+                                    <input type="hidden" name="returnUrl" value="@(Context.Request.Path + Context.Request.QueryString)" />
+                                    <button type="submit" class="dropdown-item">বাংলা (Bangla)</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+
                     <div class="dropdown">
                         <a asp-controller="EmployeeDashboard" asp-action="Notifications" class="position-relative text-decoration-none" title="@Localizer["View Notifications"]">
                             <i class="bi bi-bell-fill" style="font-size: 1.3rem; color: #532374;"></i>

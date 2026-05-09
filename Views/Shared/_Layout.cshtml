@@ -1,6 +1,4 @@
 @using Microsoft.AspNetCore.Identity
-@using Microsoft.AspNetCore.Mvc.Localization
-@inject IViewLocalizer Localizer
 @inject UserManager<E_ShoppingManagement.Models.Users> UserManager
 @{
     int newCount = 0;
@@ -115,19 +113,19 @@
                     <!-- Language Selection -->
                     <div class="dropdown">
                         <button class="btn btn-sm btn-outline-light dropdown-toggle text-white border-0" type="button" id="langDropdown" data-bs-toggle="dropdown" style="font-size: 14px;">
-                            <i class="bi bi-translate"></i> @(System.Threading.Thread.CurrentThread.CurrentUICulture.Name == "bn-BD" ? "বাংলা" : "English")
+                            <i class="bi bi-translate"></i> @(System.Threading.Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName == "bn" ? "বাংলা" : "English")
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
                             <li>
                                 <form asp-controller="Home" asp-action="SetLanguage" method="post">
-                                    <input type="hidden" name="culture" value="en-US" />
+                                    <input type="hidden" name="culture" value="en" />
                                     <input type="hidden" name="returnUrl" value="@(Context.Request.Path + Context.Request.QueryString)" />
                                     <button type="submit" class="dropdown-item">English</button>
                                 </form>
                             </li>
                             <li>
                                 <form asp-controller="Home" asp-action="SetLanguage" method="post">
-                                    <input type="hidden" name="culture" value="bn-BD" />
+                                    <input type="hidden" name="culture" value="bn" />
                                     <input type="hidden" name="returnUrl" value="@(Context.Request.Path + Context.Request.QueryString)" />
                                     <button type="submit" class="dropdown-item">বাংলা (Bangla)</button>
                                 </form>
