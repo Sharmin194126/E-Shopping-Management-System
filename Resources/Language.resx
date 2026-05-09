@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -58,70 +58,198 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Search" xml:space="preserve"><value>Search</value></data>
-  <data name="Type to search..." xml:space="preserve"><value>Type to search...</value></data>
-  <data name="Go" xml:space="preserve"><value>Go</value></data>
-  <data name="Logout" xml:space="preserve"><value>Logout</value></data>
-  <data name="Login" xml:space="preserve"><value>Login</value></data>
-  <data name="Sign Up" xml:space="preserve"><value>Sign Up</value></data>
-  <data name="Home" xml:space="preserve"><value>Home</value></data>
-  <data name="Categories" xml:space="preserve"><value>Categories</value></data>
-  <data name="Deals" xml:space="preserve"><value>Deals</value></data>
-  <data name="Contact" xml:space="preserve"><value>Contact</value></data>
-  <data name="Dashboard" xml:space="preserve"><value>Dashboard</value></data>
-  <data name="Back to Website" xml:space="preserve"><value>Back to Website</value></data>
-  <data name="System Admin" xml:space="preserve"><value>System Admin</value></data>
-  <data name="Store Employee" xml:space="preserve"><value>Store Employee</value></data>
-  <data name="Products" xml:space="preserve"><value>Products</value></data>
-  <data name="Product Types" xml:space="preserve"><value>Product Types</value></data>
-  <data name="Homepage Sections" xml:space="preserve"><value>Homepage Sections</value></data>
-  <data name="Manage Customer" xml:space="preserve"><value>Manage Customer</value></data>
-  <data name="Manage Employees" xml:space="preserve"><value>Manage Employees</value></data>
-  <data name="Manage Deliveryman" xml:space="preserve"><value>Manage Deliveryman</value></data>
-  <data name="Manage Carts" xml:space="preserve"><value>Manage Carts</value></data>
-  <data name="Delivery Personnel" xml:space="preserve"><value>Delivery Personnel</value></data>
-  <data name="Reports" xml:space="preserve"><value>Reports</value></data>
-  <data name="Manage Reviews" xml:space="preserve"><value>Manage Reviews</value></data>
-  <data name="Messages" xml:space="preserve"><value>Messages</value></data>
-  <data name="Emails" xml:space="preserve"><value>Emails</value></data>
-  <data name="Employee Products-Sales" xml:space="preserve"><value>Employee Products-Sales</value></data>
-  <data name="My Profile" xml:space="preserve"><value>My Profile</value></data>
-  <data name="Payment History" xml:space="preserve"><value>Payment History</value></data>
-  <data name="Manage Banners" xml:space="preserve"><value>Manage Banners</value></data>
-  <data name="Track Customer Order" xml:space="preserve"><value>Track Customer Order</value></data>
-  <data name="Manage Orders" xml:space="preserve"><value>Manage Orders</value></data>
-  <data name="Pending Orders" xml:space="preserve"><value>Pending Orders</value></data>
-  <data name="Customer Messages" xml:space="preserve"><value>Customer Messages</value></data>
-  <data name="Customer Emails" xml:space="preserve"><value>Customer Emails</value></data>
-  <data name="Back" xml:space="preserve"><value>Back</value></data>
-  <data name="Edit" xml:space="preserve"><value>Edit</value></data>
-  <data name="Save" xml:space="preserve"><value>Save</value></data>
-  <data name="Delete" xml:space="preserve"><value>Delete</value></data>
-  <data name="Update" xml:space="preserve"><value>Update</value></data>
-  <data name="Create" xml:space="preserve"><value>Create</value></data>
-  <data name="Edit Delivery Man" xml:space="preserve"><value>Edit Delivery Man</value></data>
-  <data name="Contact Number" xml:space="preserve"><value>Contact Number</value></data>
-  <data name="Must be exactly 11 digits" xml:space="preserve"><value>Must be exactly 11 digits</value></data>
-  <data name="Name" xml:space="preserve"><value>Name</value></data>
-  <data name="Vehicle Info" xml:space="preserve"><value>Vehicle Info</value></data>
-  <data name="Cancel" xml:space="preserve"><value>Cancel</value></data>
-  <data name="Save Changes" xml:space="preserve"><value>Save Changes</value></data>
-  <data name="Status" xml:space="preserve"><value>Status</value></data>
-  <data name="Active" xml:space="preserve"><value>Active</value></data>
-  <data name="Inactive" xml:space="preserve"><value>Inactive</value></data>
-  <data name="Pending" xml:space="preserve"><value>Pending</value></data>
-  <data name="Edit Delivery Man" xml:space="preserve"><value>Edit Delivery Man</value></data>
-  <data name="Contact Number" xml:space="preserve"><value>Contact Number</value></data>
-  <data name="Must be exactly 11 digits" xml:space="preserve"><value>Must be exactly 11 digits</value></data>
-  <data name="Name" xml:space="preserve"><value>Name</value></data>
-  <data name="Vehicle Info" xml:space="preserve"><value>Vehicle Info</value></data>
-  <data name="Cancel" xml:space="preserve"><value>Cancel</value></data>
-  <data name="Save Changes" xml:space="preserve"><value>Save Changes</value></data>
-  <data name="Status" xml:space="preserve"><value>Status</value></data>
-  <data name="Active" xml:space="preserve"><value>Active</value></data>
-  <data name="Inactive" xml:space="preserve"><value>Inactive</value></data>
-  <data name="Pending" xml:space="preserve"><value>Pending</value></data>
-  <data name="Save" xml:space="preserve"><value>Save</value></data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="Type to search..." xml:space="preserve">
+    <value>Type to search...</value>
+  </data>
+  <data name="Go" xml:space="preserve">
+    <value>Go</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="Sign Up" xml:space="preserve">
+    <value>Sign Up</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="Categories" xml:space="preserve">
+    <value>Categories</value>
+  </data>
+  <data name="Deals" xml:space="preserve">
+    <value>Deals</value>
+  </data>
+  <data name="Contact" xml:space="preserve">
+    <value>Contact</value>
+  </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
+  <data name="Back to Website" xml:space="preserve">
+    <value>Back to Website</value>
+  </data>
+  <data name="System Admin" xml:space="preserve">
+    <value>System Admin</value>
+  </data>
+  <data name="Store Employee" xml:space="preserve">
+    <value>Store Employee</value>
+  </data>
+  <data name="Products" xml:space="preserve">
+    <value>Products</value>
+  </data>
+  <data name="Product Types" xml:space="preserve">
+    <value>Product Types</value>
+  </data>
+  <data name="Homepage Sections" xml:space="preserve">
+    <value>Homepage Sections</value>
+  </data>
+  <data name="Manage Customer" xml:space="preserve">
+    <value>Manage Customer</value>
+  </data>
+  <data name="Manage Employees" xml:space="preserve">
+    <value>Manage Employees</value>
+  </data>
+  <data name="Manage Deliveryman" xml:space="preserve">
+    <value>Manage Deliveryman</value>
+  </data>
+  <data name="Manage Carts" xml:space="preserve">
+    <value>Manage Carts</value>
+  </data>
+  <data name="Delivery Personnel" xml:space="preserve">
+    <value>Delivery Personnel</value>
+  </data>
+  <data name="Reports" xml:space="preserve">
+    <value>Reports</value>
+  </data>
+  <data name="Manage Reviews" xml:space="preserve">
+    <value>Manage Reviews</value>
+  </data>
+  <data name="Messages" xml:space="preserve">
+    <value>Messages</value>
+  </data>
+  <data name="Emails" xml:space="preserve">
+    <value>Emails</value>
+  </data>
+  <data name="Employee Products-Sales" xml:space="preserve">
+    <value>Employee Products-Sales</value>
+  </data>
+  <data name="My Profile" xml:space="preserve">
+    <value>My Profile</value>
+  </data>
+  <data name="Payment History" xml:space="preserve">
+    <value>Payment History</value>
+  </data>
+  <data name="Manage Banners" xml:space="preserve">
+    <value>Manage Banners</value>
+  </data>
+  <data name="Track Customer Order" xml:space="preserve">
+    <value>Track Customer Order</value>
+  </data>
+  <data name="Manage Orders" xml:space="preserve">
+    <value>Manage Orders</value>
+  </data>
+  <data name="Pending Orders" xml:space="preserve">
+    <value>Pending Orders</value>
+  </data>
+  <data name="Customer Messages" xml:space="preserve">
+    <value>Customer Messages</value>
+  </data>
+  <data name="Customer Emails" xml:space="preserve">
+    <value>Customer Emails</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="Edit Delivery Man" xml:space="preserve">
+    <value>Edit Delivery Man</value>
+  </data>
+  <data name="Contact Number" xml:space="preserve">
+    <value>Contact Number</value>
+  </data>
+  <data name="Must be exactly 11 digits" xml:space="preserve">
+    <value>Must be exactly 11 digits</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Vehicle Info" xml:space="preserve">
+    <value>Vehicle Info</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Save Changes" xml:space="preserve">
+    <value>Save Changes</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Active" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="Inactive" xml:space="preserve">
+    <value>Inactive</value>
+  </data>
+  <data name="Pending" xml:space="preserve">
+    <value>Pending</value>
+  </data>
+  <data name="Edit Delivery Man" xml:space="preserve">
+    <value>Edit Delivery Man</value>
+  </data>
+  <data name="Contact Number" xml:space="preserve">
+    <value>Contact Number</value>
+  </data>
+  <data name="Must be exactly 11 digits" xml:space="preserve">
+    <value>Must be exactly 11 digits</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Vehicle Info" xml:space="preserve">
+    <value>Vehicle Info</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Save Changes" xml:space="preserve">
+    <value>Save Changes</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Active" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="Inactive" xml:space="preserve">
+    <value>Inactive</value>
+  </data>
+  <data name="Pending" xml:space="preserve">
+    <value>Pending</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
   <data name="Discover Your Style" xml:space="preserve">
     <value>Discover Your Style</value>
   </data>
@@ -809,38 +937,17 @@
   <data name="All Prices" xml:space="preserve">
     <value>All Prices</value>
   </data>
-  <data name="Below ৳500" xml:space="preserve">
-    <value>Below ৳500</value>
+  <data name="Below à§³500" xml:space="preserve">
+    <value>Below à§³500</value>
   </data>
-  <data name="Under ৳500 - ৳2000" xml:space="preserve">
-    <value>Under ৳500 - ৳2000</value>
+  <data name="Under à§³500 - à§³2000" xml:space="preserve">
+    <value>Under à§³500 - à§³2000</value>
   </data>
-  <data name="Above ৳2000" xml:space="preserve">
-    <value>Above ৳2000</value>
+  <data name="Above à§³2000" xml:space="preserve">
+    <value>Above à§³2000</value>
   </data>
-  <data name="Above ৳10000" xml:space="preserve">
-    <value>Above ৳10000</value>
-  </data>
-  <data name="Men products" xml:space="preserve">
-    <value>Men products</value>
-  </data>
-  <data name="Women products" xml:space="preserve">
-    <value>Women products</value>
-  </data>
-  <data name="Kids" xml:space="preserve">
-    <value>Kids</value>
-  </data>
-  <data name="Electronics" xml:space="preserve">
-    <value>Electronics</value>
-  </data>
-  <data name="Panjabi" xml:space="preserve">
-    <value>Panjabi</value>
-  </data>
-  <data name="Men" xml:space="preserve">
-    <value>Men</value>
-  </data>
-  <data name="Women" xml:space="preserve">
-    <value>Women</value>
+  <data name="Above à§³10000" xml:space="preserve">
+    <value>Above à§³10000</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
@@ -851,24 +958,22 @@
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
-
-
   <data name="Shop by Categories" xml:space="preserve">
     <value>Shop by Categories</value>
   </data>
-  <data name="MEN PRODUCTS" xml:space="preserve">
-    <value>MEN PRODUCTS</value>
+  <data name="Women Products" xml:space="preserve">
+    <value>Women Products</value>
   </data>
-  <data name="WOMEN PRODUCTS" xml:space="preserve">
-    <value>WOMEN PRODUCTS</value>
+  <data name="Panjabi" xml:space="preserve">
+    <value>Panjabi</value>
   </data>
-  <data name="KIDS" xml:space="preserve">
-    <value>KIDS</value>
+  <data name="Kids Products" xml:space="preserve">
+    <value>Kids Products</value>
   </data>
-  <data name="ELECTRONICS" xml:space="preserve">
-    <value>ELECTRONICS</value>
+  <data name="Men Products" xml:space="preserve">
+    <value>Men Products</value>
   </data>
-  <data name="PANJABI" xml:space="preserve">
-    <value>PANJABI</value>
+  <data name="Electronics" xml:space="preserve">
+    <value>Electronics</value>
   </data>
 </root>
