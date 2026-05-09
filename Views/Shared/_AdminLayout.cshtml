@@ -1,10 +1,13 @@
 @using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @inject UserManager<E_ShoppingManagement.Models.Users> UserManager
 <!DOCTYPE html>
-<html lang="en">
+<html lang="@(System.Threading.Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName)">
 <head>
     <meta charset="utf-8" />
-    <title>@ViewData["Title"] - Admin</title>
+    <meta name="google" content="notranslate" />
+    <title>@ViewData["Title"] - @Localizer["Admin"]</title>
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
@@ -66,70 +69,70 @@
             </div>
             
             <a asp-controller="Home" asp-action="Index">
-                <i class="bi bi-box-arrow-left me-2"></i>Back to Website
+                <i class="bi bi-box-arrow-left me-2"></i>@Localizer["Back to Website"]
             </a>
             
             <a asp-controller="AdminDashboard" asp-action="Index" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "AdminDashboard" && ViewContext.RouteData.Values["Action"]?.ToString() == "Index" ? "active" : "")">
-                <i class="bi bi-speedometer2 me-2"></i>Dashboard
+                <i class="bi bi-speedometer2 me-2"></i>@Localizer["Dashboard"]
             </a>
 
-            <p class="menu-title">CATEGORY</p>
+            <p class="menu-title">@Localizer["CATEGORY"]</p>
             <a asp-controller="Category" asp-action="Index" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Category" ? "active" : "")">
-                <i class="bi bi-tags me-2"></i>Categories
+                <i class="bi bi-tags me-2"></i>@Localizer["Categories"]
             </a>
             <a asp-controller="Product" asp-action="Index" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Product" ? "active" : "")">
-                <i class="bi bi-box-seam me-2"></i>Products
+                <i class="bi bi-box-seam me-2"></i>@Localizer["Products"]
             </a>
             <a asp-controller="ProductType" asp-action="Index" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "ProductType" ? "active" : "")">
-                <i class="bi bi-collection me-2"></i>Product Types
+                <i class="bi bi-collection me-2"></i>@Localizer["Product Types"]
             </a>
             <a asp-controller="AdminDashboard" asp-action="ManageDisplaySections" class="text-warning @(ViewContext.RouteData.Values["Action"]?.ToString() == "ManageDisplaySections" ? "active" : "")">
-                <i class="bi bi-house-gear me-2"></i>Homepage Sections
+                <i class="bi bi-house-gear me-2"></i>@Localizer["Homepage Sections"]
             </a>
 
-            <p class="menu-title">SYSTEM</p>
+            <p class="menu-title">@Localizer["SYSTEM"]</p>
             <a asp-controller="Customer" asp-action="Index" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Customer" ? "active" : "")">
-                <i class="bi bi-people me-2"></i>Manage Customer
+                <i class="bi bi-people me-2"></i>@Localizer["Manage Customer"]
             </a>
             <a asp-controller="Employee" asp-action="Index" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Employee" && ViewContext.RouteData.Values["Action"]?.ToString() == "Index" ? "active" : "")">
-                <i class="bi bi-person-badge me-2"></i>Manage Employees
+                <i class="bi bi-person-badge me-2"></i>@Localizer["Manage Employees"]
             </a>
             <a asp-controller="DeliveryMan" asp-action="Manage" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "DeliveryMan" && ViewContext.RouteData.Values["Action"]?.ToString() == "Manage" ? "active" : "")">
-                <i class="bi bi-person-check me-2"></i>Manage Deliveryman
+                <i class="bi bi-person-check me-2"></i>@Localizer["Manage Deliveryman"]
             </a>
             <a asp-controller="AdminCart" asp-action="Index" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "AdminCart" ? "active" : "")">
-                <i class="bi bi-cart me-2"></i>Manage Carts
+                <i class="bi bi-cart me-2"></i>@Localizer["Manage Carts"]
             </a>
             <a asp-controller="DeliveryMan" asp-action="Index" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "DeliveryMan" && ViewContext.RouteData.Values["Action"]?.ToString() == "Index" ? "active" : "")">
-                <i class="bi bi-truck me-2"></i>Delivery Personnel
+                <i class="bi bi-truck me-2"></i>@Localizer["Delivery Personnel"]
             </a>
             <a asp-controller="AdminReport" asp-action="Index" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "AdminReport" ? "active" : "")">
-                <i class="bi bi-file-earmark-bar-graph me-2"></i>Reports
+                <i class="bi bi-file-earmark-bar-graph me-2"></i>@Localizer["Reports"]
             </a>
             <a asp-controller="AdminDashboard" asp-action="ManageReviews" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "ManageReviews" ? "active" : "")">
-                <i class="bi bi-star me-2"></i>Manage Reviews
+                <i class="bi bi-star me-2"></i>@Localizer["Manage Reviews"]
             </a>
             <a asp-controller="AdminDashboard" asp-action="Messages" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Messages" ? "active" : "")">
-                <i class="bi bi-chat-dots me-2"></i>Messages
+                <i class="bi bi-chat-dots me-2"></i>@Localizer["Messages"]
             </a>
             <a asp-controller="AdminDashboard" asp-action="Emails" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Emails" ? "active" : "")">
-                <i class="bi bi-envelope me-2"></i>Emails
+                <i class="bi bi-envelope me-2"></i>@Localizer["Emails"]
             </a>
             <a asp-controller="AdminDashboard" asp-action="EmployeeList" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "EmployeeList" ? "active" : "")">
-                <i class="bi bi-person-lines-fill me-1"></i>Employee Products-Sales
+                <i class="bi bi-person-lines-fill me-1"></i>@Localizer["Employee Products-Sales"]
             </a>
             <a asp-controller="@(User.IsInRole("Admin") ? "AdminDashboard" : "EmployeeDashboard")" asp-action="Profile" class="fw-bold text-warning @(ViewContext.RouteData.Values["Action"]?.ToString() == "Profile" ? "active" : "")">
-                <i class="bi bi-person-circle me-2"></i>My Profile
+                <i class="bi bi-person-circle me-2"></i>@Localizer["My Profile"]
             </a>
             <a asp-controller="PaymentGateway" asp-action="AdminPaymentHistory" class="text-info @(ViewContext.RouteData.Values["Action"]?.ToString() == "AdminPaymentHistory" ? "active" : "")">
-                <i class="bi bi-credit-card me-2"></i>Payment History
+                <i class="bi bi-credit-card me-2"></i>@Localizer["Payment History"]
             </a>
             <a asp-controller="Banner" asp-action="Index" class="text-success @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Banner" ? "active" : "")">
-                <i class="bi bi-images me-2"></i>Manage Banners
+                <i class="bi bi-images me-2"></i>@Localizer["Manage Banners"]
             </a>
-            <p class="menu-title">TRACKING</p>
+            <p class="menu-title">@Localizer["TRACKING"]</p>
             <a asp-controller="Home" asp-action="Tracking" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Tracking" ? "active" : "")">
-                <i class="bi bi-geo-alt me-2"></i>Track Customer Order
+                <i class="bi bi-geo-alt me-2"></i>@Localizer["Track Customer Order"]
             </a>
 
             <!-- Logout -->
@@ -137,7 +140,7 @@
                 <form asp-controller="Account" asp-action="Logout" method="post">
                     <button type="submit" class="btn w-100 d-flex align-items-center justify-content-center gap-2" style="background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.30); color: #fca5a5; font-weight: 600; padding: 10px 16px; border-radius: 8px;">
                         <i class="bi bi-box-arrow-right"></i>
-                        Logout
+                        @Localizer["Logout"]
                     </button>
                 </form>
             </div>
@@ -149,7 +152,7 @@
             <header class="admin-header d-flex justify-content-between align-items-center px-4 py-3" style="background:#fff; border-bottom:1px solid #e6e2db;">
                 <div class="header-search flex-grow-1 me-4">
                     <form asp-controller="Product" asp-action="Index" method="get" class="position-relative">
-                        <input type="text" name="query" placeholder="Search products, orders, customers..." class="form-control" style="border-radius:10px; padding-left:45px; background: #f8f6f0; border: 1px solid #e6e2db; height: 45px;" />
+                        <input type="text" name="query" placeholder="@Localizer["Search products, orders, customers..."]" class="form-control" style="border-radius:10px; padding-left:45px; background: #f8f6f0; border: 1px solid #e6e2db; height: 45px;" />
                         <i class="bi bi-search position-absolute" style="left: 15px; top: 50%; transform: translateY(-50%); color: #532374; font-size: 1.1rem;"></i>
                     </form>
                 </div>
@@ -174,7 +177,7 @@
                         var totalItems = pendingOrders.Count + pendingEmps.Count + pendingDMs.Count + activeMsgs.Count;
                     }
                     <div class="dropdown">
-                        <a asp-controller="@(User.IsInRole("Admin") ? "AdminDashboard" : "EmployeeDashboard")" asp-action="Notifications" class="position-relative text-decoration-none" title="View Notifications">
+                        <a asp-controller="@(User.IsInRole("Admin") ? "AdminDashboard" : "EmployeeDashboard")" asp-action="Notifications" class="position-relative text-decoration-none" title="@Localizer["View Notifications"]">
                             <i class="bi bi-bell-fill" style="font-size: 1.4rem; color: #532374;"></i>
                             @{
                                 var currentAction = ViewContext.RouteData.Values["Action"]?.ToString();
@@ -187,7 +190,7 @@
                             }
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="adminNotificationDropdown" style="width: 320px; border-radius: 12px; background: #fff !important;">
-                            <li><h6 class="dropdown-header fw-bold" style="background:#532374; color:#fff; border-radius: 12px 12px 0 0; margin-top:-8px; padding:12px 15px;">Admin Notifications</h6></li>
+                            <li><h6 class="dropdown-header fw-bold" style="background:#532374; color:#fff; border-radius: 12px 12px 0 0; margin-top:-8px; padding:12px 15px;">@Localizer["Admin Notifications"]</h6></li>
                             
                             @if (pendingOrders.Any()) {
                                 <li>
@@ -195,8 +198,8 @@
                                         <div class="d-flex gap-2">
                                             <i class="bi bi-cart-plus text-primary"></i>
                                             <div>
-                                                <span class="fw-bold">@pendingOrders.Count Pending Orders</span>
-                                                <small class="text-muted d-block">Needs processing</small>
+                                                <span class="fw-bold">@pendingOrders.Count @Localizer["Pending Orders"]</span>
+                                                <small class="text-muted d-block">@Localizer["Needs processing"]</small>
                                             </div>
                                         </div>
                                     </a>
@@ -208,8 +211,8 @@
                                         <div class="d-flex gap-2">
                                             <i class="bi bi-person-plus text-success"></i>
                                             <div>
-                                                <span class="fw-bold">@pendingEmps.Count Pending Approvals</span>
-                                                <small class="text-muted d-block">New employee registrations</small>
+                                                <span class="fw-bold">@pendingEmps.Count @Localizer["Pending Approvals"]</span>
+                                                <small class="text-muted d-block">@Localizer["New employee registrations"]</small>
                                             </div>
                                         </div>
                                     </a>
@@ -221,8 +224,8 @@
                                         <div class="d-flex gap-2">
                                             <i class="bi bi-truck text-warning"></i>
                                             <div>
-                                                <span class="fw-bold">@pendingDMs.Count Pending DeliveryMan</span>
-                                                <small class="text-muted d-block">Needs approval</small>
+                                                <span class="fw-bold">@pendingDMs.Count @Localizer["Pending DeliveryMan"]</span>
+                                                <small class="text-muted d-block">@Localizer["Needs approval"]</small>
                                             </div>
                                         </div>
                                     </a>
@@ -234,8 +237,8 @@
                                         <div class="d-flex gap-2">
                                             <i class="bi bi-envelope text-info"></i>
                                             <div>
-                                                <span class="fw-bold">@activeMsgs.Count New Messages</span>
-                                                <small class="text-muted d-block">From contact form</small>
+                                                <span class="fw-bold">@activeMsgs.Count @Localizer["New Messages"]</span>
+                                                <small class="text-muted d-block">@Localizer["From contact form"]</small>
                                             </div>
                                         </div>
                                     </a>
@@ -243,15 +246,15 @@
                             }
 
                             @if (totalItems == 0) {
-                                <li><div class="dropdown-item py-3 text-center text-muted">No new notifications</div></li>
+                                <li><div class="dropdown-item py-3 text-center text-muted">@Localizer["No new notifications"]</div></li>
                             }
 
                             <li><hr class="dropdown-divider m-0"></li>
-                            <li><a class="dropdown-item text-center fw-bold py-2" style="color:#532374; font-size:13px;" asp-controller="@(User.IsInRole("Admin") ? "AdminDashboard" : "EmployeeDashboard")" asp-action="Notifications">View All Activity</a></li>
+                            <li><a class="dropdown-item text-center fw-bold py-2" style="color:#532374; font-size:13px;" asp-controller="@(User.IsInRole("Admin") ? "AdminDashboard" : "EmployeeDashboard")" asp-action="Notifications">@Localizer["View All Activity"]</a></li>
                         </ul>
                     </div>
                     <!-- Profile Link -->
-                    <a asp-controller="@(User.IsInRole("Admin") ? "AdminDashboard" : "EmployeeDashboard")" asp-action="Profile" class="d-flex align-items-center gap-2 text-decoration-none" title="My Profile">
+                    <a asp-controller="@(User.IsInRole("Admin") ? "AdminDashboard" : "EmployeeDashboard")" asp-action="Profile" class="d-flex align-items-center gap-2 text-decoration-none" title="@Localizer["My Profile"]">
                         <i class="bi bi-person-circle" style="font-size: 1.8rem; color: #532374;"></i>
                     </a>
                 </div>
@@ -263,58 +266,7 @@
             </section>
 
             @RenderSection("Scripts", required: false)
-
-            <!-- Google Translate Invisible Integration -->
-            <div id="google_translate_element" style="display:none"></div>
-            <script type="text/javascript">
-                function googleTranslateElementInit() {
-                    new google.translate.TranslateElement({
-                        pageLanguage: 'en',
-                        includedLanguages: 'bn,en',
-                        autoDisplay: false
-                    }, 'google_translate_element');
-                }
-            </script>
-            <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-
-            <script>
-                function triggerTranslation(langCode) {
-                    const select = document.querySelector('.goog-te-combo');
-                    if (select) {
-                        select.value = langCode;
-                        select.dispatchEvent(new Event('change'));
-                        const resetTop = () => { 
-                            document.body.style.top = "0px";
-                            const banner = document.querySelector('.goog-te-banner-frame');
-                            if (banner) banner.style.display = 'none';
-                        };
-                        resetTop();
-                        setTimeout(resetTop, 500);
-                        setTimeout(resetTop, 1000);
-                    } else {
-                        setTimeout(() => triggerTranslation(langCode), 500);
-                    }
-                }
-
-                $(document).ready(function() {
-                    const culture = "@(System.Threading.Thread.CurrentThread.CurrentUICulture.Name)";
-                    if (culture === "bn-BD") {
-                        triggerTranslation('bn');
-                    }
-                    setInterval(() => {
-                        document.body.style.top = "0px";
-                        const banner = document.querySelector('.goog-te-banner-frame');
-                        if (banner) banner.style.display = 'none';
-                    }, 500);
-                });
-            </script>
         </main>
     </div>
-    <style>
-        .goog-te-banner-frame.skiptranslate, .goog-te-banner-frame, .goog-te-gadget-icon, #goog-gt-tt, .goog-te-balloon-frame { 
-            display: none !important; visibility: hidden !important; opacity: 0 !important;
-        }
-        body { top: 0px !important; }
-    </style>
 </body>
 </html>

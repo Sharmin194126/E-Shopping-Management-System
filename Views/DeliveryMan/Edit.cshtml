@@ -1,43 +1,40 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @model E_ShoppingManagement.Models.DeliveryMan
 @{
-    ViewData["Title"] = "Edit Delivery Man";
+    ViewData["Title"] = Localizer["Edit Delivery Man"];
     Layout = User.IsInRole("Admin") ? "~/Views/Shared/_AdminLayout.cshtml" : "~/Views/Shared/_EmployeeLayout.cshtml";
 }
 
 
-<a href="javascript:history.back()" class="theme-back-btn mb-1">Back</a>
-<h2>Edit Delivery Man</h2>
+<a href="javascript:history.back()" class="theme-back-btn mb-1">@Localizer["Back"]</a>
+<h2>@Localizer["Edit Delivery Man"]</h2>
 
 <div class="page-card p-4" style="background: #f2efe9; border-radius: 8px; max-width: 600px;">
     <form asp-action="Edit" method="post">
         <input type="hidden" asp-for="Id" />
         <div class="mb-3">
-            <label asp-for="Name" class="form-label"></label>
+            <label asp-for="Name" class="form-label">@Localizer["Name"]</label>
             <input asp-for="Name" class="form-control" required />
         </div>
         <div class="mb-3">
-            <label asp-for="ContactNumber" class="form-label">Contact Number</label>
-            <input asp-for="ContactNumber" class="form-control" pattern="[0-9]{11}" maxlength="11" minlength="11" placeholder="01XXXXXXXXX" title="Please enter exactly 11 digits" required />
-            <small class="text-muted">Must be exactly 11 digits</small>
+            <label asp-for="ContactNumber" class="form-label">@Localizer["Contact Number"]</label>
+            <input asp-for="ContactNumber" class="form-control" pattern="[0-9]{11}" maxlength="11" minlength="11" placeholder="01XXXXXXXXX" title="@Localizer["Please enter exactly 11 digits"]" required />
+            <small class="text-muted">@Localizer["Must be exactly 11 digits"]</small>
         </div>
         <div class="mb-3">
-            <label asp-for="VehicleInfo" class="form-label"></label>
+            <label asp-for="VehicleInfo" class="form-label">@Localizer["Vehicle Info"]</label>
             <input asp-for="VehicleInfo" class="form-control" />
         </div>
         <div class="mb-3">
-            <label asp-for="Status" class="form-label"></label>
+            <label asp-for="Status" class="form-label">@Localizer["Status"]</label>
             <select asp-for="Status" class="form-control">
-                <option value="Active">Approved</option>
-                <option value="Pending">Disapproved</option>
-                <option value="Inactive">Inactive</option>
+                <option value="Active">@Localizer["Active"]</option>
+                <option value="Pending">@Localizer["Pending"]</option>
+                <option value="Inactive">@Localizer["Inactive"]</option>
             </select>
         </div>
-        <button type="submit" class="btn btn-primary">Save Changes</button>
-        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn btn-primary">@Localizer["Save Changes"]</button>
+        <a asp-action="Index" class="btn btn-secondary">@Localizer["Cancel"]</a>
     </form>
-</div>
-
-
-
-
 
