@@ -455,4 +455,274 @@
   <data name="What Our Customers Say" xml:space="preserve">
     <value>আমাদের গ্রাহকরা যা বলেন</value>
   </data>
+  <data name="Featured Items" xml:space="preserve">
+    <value>সেরা পণ্যসমূহ</value>
+  </data>
+  <data name="Exclusive Items" xml:space="preserve">
+    <value>এক্সক্লুসিভ আইটেম</value>
+  </data>
+  <data name="Just For You" xml:space="preserve">
+    <value>শুধু আপনার জন্য</value>
+  </data>
+  <data name="Restock" xml:space="preserve">
+    <value>পুনরায় স্টককৃত</value>
+  </data>
+  <data name="Product Category" xml:space="preserve">
+    <value>পণ্যের বিভাগ</value>
+  </data>
+  <data name="Discover Your Style" xml:space="preserve">
+    <value>আপনার স্টাইল আবিষ্কার করুন</value>
+  </data>
+  <data name="Your ultimate destination for fashion, beauty and pure luxury." xml:space="preserve">
+    <value>ফ্যাশন, সৌন্দর্য এবং বিশুদ্ধ বিলাসিতার জন্য আপনার চূড়ান্ত গন্তব্য।</value>
+  </data>
+  <data name="Shop Now" xml:space="preserve">
+    <value>এখনই কিনুন</value>
+  </data>
+  <data name="Welcome To E-Shop" xml:space="preserve">
+    <value>ই-শপে স্বাগতম</value>
+  </data>
+  <data name="Your trusted online shopping destination for fashion, beauty and electronics. Enjoy premium products, exclusive deals and fast delivery." xml:space="preserve">
+    <value>ফ্যাশন, সৌন্দর্য এবং ইলেকট্রনিক্সের জন্য আপনার বিশ্বস্ত অনলাইন শপিং গন্তব্য। প্রিমিয়াম পণ্য, একচেটিয়া ডিল এবং দ্রুত ডেলিভারি উপভোগ করুন।</value>
+  </data>
+  <data name="Admin Dashboard Overview" xml:space="preserve">
+    <value>অ্যাডমিন ড্যাশবোর্ড ওভারভিউ</value>
+  </data>
+  <data name="Account Profile" xml:space="preserve">
+    <value>অ্যাকাউন্ট প্রোফাইল</value>
+  </data>
+  <data name="Delivered Orders" xml:space="preserve">
+    <value>ডেলিভারি করা অর্ডার</value>
+  </data>
+  <data name="Pending Orders" xml:space="preserve">
+    <value>অপেক্ষমান অর্ডার</value>
+  </data>
+  <data name="In Processing" xml:space="preserve">
+    <value>প্রক্রিয়াকরণ চলছে</value>
+  </data>
+  <data name="Shipped Orders" xml:space="preserve">
+    <value>শিপ করা অর্ডার</value>
+  </data>
+  <data name="Total Revenue" xml:space="preserve">
+    <value>মোট রাজস্ব</value>
+  </data>
+  <data name="Quick Management" xml:space="preserve">
+    <value>দ্রুত ব্যবস্থাপনা</value>
+  </data>
+  <data name="Products" xml:space="preserve">
+    <value>পণ্যসমূহ</value>
+  </data>
+  <data name="Employee Goal Set" xml:space="preserve">
+    <value>কর্মচারী লক্ষ্য নির্ধারণ</value>
+  </data>
+  <data name="Customers" xml:space="preserve">
+    <value>গ্রাহকসমূহ</value>
+  </data>
+  <data name="Employees" xml:space="preserve">
+    <value>কর্মচারীসমূহ</value>
+  </data>
+  <data name="Delivery Men" xml:space="preserve">
+    <value>ডেলিভারি ম্যান</value>
+  </data>
+  <data name="Reports" xml:space="preserve">
+    <value>রিপোর্ট</value>
+  </data>
+  <data name="Footer Settings" xml:space="preserve">
+    <value>ফুটার সেটিংস</value>
+  </data>
+  <data name="Payment Methods" xml:space="preserve">
+    <value>পেমেন্ট পদ্ধতি</value>
+  </data>
+  <data name="Total Sales" xml:space="preserve">
+    <value>মোট বিক্রয়</value>
+  </data>
+  <data name="All time revenue" xml:space="preserve">
+    <value>সর্বকালের রাজস্ব</value>
+  </data>
+  <data name="Total Profit (Ex. VAT)" xml:space="preserve">
+    <value>মোট লাভ (ভ্যাট ব্যতীত)</value>
+  </data>
+  <data name="After VAT deduction" xml:space="preserve">
+    <value>ভ্যাট কর্তনের পর</value>
+  </data>
+  <data name="VAT Collected" xml:space="preserve">
+    <value>সংগৃহীত ভ্যাট</value>
+  </data>
+  <data name="Total tax revenue" xml:space="preserve">
+    <value>মোট কর রাজস্ব</value>
+  </data>
+  <data name="Weekly Sales" xml:space="preserve">
+    <value>সাপ্তাহিক বিক্রয়</value>
+  </data>
+  <data name="Last 7 days" xml:space="preserve">
+    <value>গত ৭ দিন</value>
+  </data>
+  <data name="Sales Goal" xml:space="preserve">
+    <value>বিক্রয় লক্ষ্য</value>
+  </data>
+  <data name="History" xml:space="preserve">
+    <value>ইতিহাস</value>
+  </data>
+  <data name="Target" xml:space="preserve">
+    <value>লক্ষ্য</value>
+  </data>
+  <data name="Full Year Goal" xml:space="preserve">
+    <value>পুরো বছরের লক্ষ্য</value>
+  </data>
+  <data name="Remaining" xml:space="preserve">
+    <value>অবশিষ্ট</value>
+  </data>
+  <data name="To reach target" xml:space="preserve">
+    <value>লক্ষ্যে পৌঁছাতে</value>
+  </data>
+  <data name="achieved" xml:space="preserve">
+    <value>অর্জিত</value>
+  </data>
+  <data name="Note: Goal for" xml:space="preserve">
+    <value>দ্রষ্টব্য: লক্ষ্য</value>
+  </data>
+  <data name="Product Sales" xml:space="preserve">
+    <value>পণ্য বিক্রয়</value>
+  </data>
+  <data name="Weekly" xml:space="preserve">
+    <value>সাপ্তাহিক</value>
+  </data>
+  <data name="Monthly" xml:space="preserve">
+    <value>মাসিক</value>
+  </data>
+  <data name="Yearly" xml:space="preserve">
+    <value>বার্ষিক</value>
+  </data>
+  <data name="Year" xml:space="preserve">
+    <value>বছর</value>
+  </data>
+  <data name="Previous Year" xml:space="preserve">
+    <value>পূর্ববর্তী বছর</value>
+  </data>
+  <data name="Next Year" xml:space="preserve">
+    <value>পরবর্তী বছর</value>
+  </data>
+  <data name="Total Amount" xml:space="preserve">
+    <value>মোট পরিমাণ</value>
+  </data>
+  <data name="Total Pieces" xml:space="preserve">
+    <value>মোট সংখ্যা</value>
+  </data>
+  <data name="Avg / Period" xml:space="preserve">
+    <value>গড় / সময়কাল</value>
+  </data>
+  <data name="Top Moving Products" xml:space="preserve">
+    <value>শীর্ষ বিক্রয় পণ্যসমূহ</value>
+  </data>
+  <data name="Pcs" xml:space="preserve">
+    <value>টি</value>
+  </data>
+  <data name="View Full Report" xml:space="preserve">
+    <value>সম্পূর্ণ রিপোর্ট দেখুন</value>
+  </data>
+  <data name="Sales by Product Type" xml:space="preserve">
+    <value>পণ্যের ধরন অনুযায়ী বিক্রয়</value>
+  </data>
+  <data name="Full Sales Archives" xml:space="preserve">
+    <value>সম্পূর্ণ বিক্রয় সংরক্ষণাগার</value>
+  </data>
+  <data name="Monthly View" xml:space="preserve">
+    <value>মাসিক দৃশ্য</value>
+  </data>
+  <data name="Yearly Summary" xml:space="preserve">
+    <value>বার্ষিক সারাংশ</value>
+  </data>
+  <data name="Month / Year" xml:space="preserve">
+    <value>মাস / বছর</value>
+  </data>
+  <data name="Revenue (Inc. VAT)" xml:space="preserve">
+    <value>রাজস্ব (ভ্যাটসহ)</value>
+  </data>
+  <data name="Pieces" xml:space="preserve">
+    <value>পিস</value>
+  </data>
+  <data name="Report" xml:space="preserve">
+    <value>রিপোর্ট</value>
+  </data>
+  <data name="Fiscal Year" xml:space="preserve">
+    <value>অর্থবছর</value>
+  </data>
+  <data name="Annual Revenue" xml:space="preserve">
+    <value>বার্ষিক রাজস্ব</value>
+  </data>
+  <data name="Items Sold" xml:space="preserve">
+    <value>বিক্রিত পণ্য</value>
+  </data>
+  <data name="Avg / Month" xml:space="preserve">
+    <value>গড় / মাস</value>
+  </data>
+  <data name="Update Sales Goal" xml:space="preserve">
+    <value>বিক্রয় লক্ষ্য আপডেট করুন</value>
+  </data>
+  <data name="New Target Amount" xml:space="preserve">
+    <value>নতুন লক্ষ্য পরিমাণ</value>
+  </data>
+  <data name="Save New Target" xml:space="preserve">
+    <value>নতুন লক্ষ্য সংরক্ষণ করুন</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>বন্ধ করুন</value>
+  </data>
+  <data name="My Dashboard" xml:space="preserve">
+    <value>আমার ড্যাশবোর্ড</value>
+  </data>
+  <data name="Total Spent" xml:space="preserve">
+    <value>মোট খরচ</value>
+  </data>
+  <data name="Recent Orders" xml:space="preserve">
+    <value>সাম্প্রতিক অর্ডার</value>
+  </data>
+  <data name="You haven't placed any orders yet." xml:space="preserve">
+    <value>আপনি এখনও কোনো অর্ডার করেননি।</value>
+  </data>
+  <data name="Start Shopping" xml:space="preserve">
+    <value>কেনাকাটা শুরু করুন</value>
+  </data>
+  <data name="Order ID" xml:space="preserve">
+    <value>অর্ডার আইডি</value>
+  </data>
+  <data name="Date &amp; Time" xml:space="preserve">
+    <value>তারিখ ও সময়</value>
+  </data>
+  <data name="Payment" xml:space="preserve">
+    <value>পেমেন্ট</value>
+  </data>
+  <data name="Action" xml:space="preserve">
+    <value>অ্যাকশন</value>
+  </data>
+  <data name="View All Orders" xml:space="preserve">
+    <value>সব অর্ডার দেখুন</value>
+  </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>ড্যাশবোর্ড</value>
+  </data>
+  <data name="My Profile" xml:space="preserve">
+    <value>আমার প্রোফাইল</value>
+  </data>
+  <data name="Track Order" xml:space="preserve">
+    <value>অর্ডার ট্র্যাক করুন</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>লগআউট</value>
+  </data>
+  <data name="Verified Customer" xml:space="preserve">
+    <value>যাচাইকৃত গ্রাহক</value>
+  </data>
+  <data name="Customer" xml:space="preserve">
+    <value>গ্রাহক</value>
+  </data>
+  <data name="Pending / Process" xml:space="preserve">
+    <value>অপেক্ষমান / প্রক্রিয়াধীন</value>
+  </data>
+  <data name="Product Categories" xml:space="preserve">
+    <value>পণ্যের বিভাগসমূহ</value>
+  </data>
+  <data name="Offer Price" xml:space="preserve">
+    <value>অফার মূল্য</value>
+  </data>
 </root>

@@ -485,4 +485,274 @@
   <data name="What Our Customers Say" xml:space="preserve">
     <value>What Our Customers Say</value>
   </data>
+  <data name="Featured Items" xml:space="preserve">
+    <value>Featured Items</value>
+  </data>
+  <data name="Exclusive Items" xml:space="preserve">
+    <value>Exclusive Items</value>
+  </data>
+  <data name="Just For You" xml:space="preserve">
+    <value>Just For You</value>
+  </data>
+  <data name="Restock" xml:space="preserve">
+    <value>Restock</value>
+  </data>
+  <data name="Product Category" xml:space="preserve">
+    <value>Product Category</value>
+  </data>
+  <data name="Discover Your Style" xml:space="preserve">
+    <value>Discover Your Style</value>
+  </data>
+  <data name="Your ultimate destination for fashion, beauty and pure luxury." xml:space="preserve">
+    <value>Your ultimate destination for fashion, beauty and pure luxury.</value>
+  </data>
+  <data name="Shop Now" xml:space="preserve">
+    <value>Shop Now</value>
+  </data>
+  <data name="Welcome To E-Shop" xml:space="preserve">
+    <value>Welcome To E-Shop</value>
+  </data>
+  <data name="Your trusted online shopping destination for fashion, beauty and electronics. Enjoy premium products, exclusive deals and fast delivery." xml:space="preserve">
+    <value>Your trusted online shopping destination for fashion, beauty and electronics. Enjoy premium products, exclusive deals and fast delivery.</value>
+  </data>
+  <data name="Admin Dashboard Overview" xml:space="preserve">
+    <value>Admin Dashboard Overview</value>
+  </data>
+  <data name="Account Profile" xml:space="preserve">
+    <value>Account Profile</value>
+  </data>
+  <data name="Delivered Orders" xml:space="preserve">
+    <value>Delivered Orders</value>
+  </data>
+  <data name="Pending Orders" xml:space="preserve">
+    <value>Pending Orders</value>
+  </data>
+  <data name="In Processing" xml:space="preserve">
+    <value>In Processing</value>
+  </data>
+  <data name="Shipped Orders" xml:space="preserve">
+    <value>Shipped Orders</value>
+  </data>
+  <data name="Total Revenue" xml:space="preserve">
+    <value>Total Revenue</value>
+  </data>
+  <data name="Quick Management" xml:space="preserve">
+    <value>Quick Management</value>
+  </data>
+  <data name="Products" xml:space="preserve">
+    <value>Products</value>
+  </data>
+  <data name="Employee Goal Set" xml:space="preserve">
+    <value>Employee Goal Set</value>
+  </data>
+  <data name="Customers" xml:space="preserve">
+    <value>Customers</value>
+  </data>
+  <data name="Employees" xml:space="preserve">
+    <value>Employees</value>
+  </data>
+  <data name="Delivery Men" xml:space="preserve">
+    <value>Delivery Men</value>
+  </data>
+  <data name="Reports" xml:space="preserve">
+    <value>Reports</value>
+  </data>
+  <data name="Footer Settings" xml:space="preserve">
+    <value>Footer Settings</value>
+  </data>
+  <data name="Payment Methods" xml:space="preserve">
+    <value>Payment Methods</value>
+  </data>
+  <data name="Total Sales" xml:space="preserve">
+    <value>Total Sales</value>
+  </data>
+  <data name="All time revenue" xml:space="preserve">
+    <value>All time revenue</value>
+  </data>
+  <data name="Total Profit (Ex. VAT)" xml:space="preserve">
+    <value>Total Profit (Ex. VAT)</value>
+  </data>
+  <data name="After VAT deduction" xml:space="preserve">
+    <value>After VAT deduction</value>
+  </data>
+  <data name="VAT Collected" xml:space="preserve">
+    <value>VAT Collected</value>
+  </data>
+  <data name="Total tax revenue" xml:space="preserve">
+    <value>Total tax revenue</value>
+  </data>
+  <data name="Weekly Sales" xml:space="preserve">
+    <value>Weekly Sales</value>
+  </data>
+  <data name="Last 7 days" xml:space="preserve">
+    <value>Last 7 days</value>
+  </data>
+  <data name="Sales Goal" xml:space="preserve">
+    <value>Sales Goal</value>
+  </data>
+  <data name="History" xml:space="preserve">
+    <value>History</value>
+  </data>
+  <data name="Target" xml:space="preserve">
+    <value>Target</value>
+  </data>
+  <data name="Full Year Goal" xml:space="preserve">
+    <value>Full Year Goal</value>
+  </data>
+  <data name="Remaining" xml:space="preserve">
+    <value>Remaining</value>
+  </data>
+  <data name="To reach target" xml:space="preserve">
+    <value>To reach target</value>
+  </data>
+  <data name="achieved" xml:space="preserve">
+    <value>achieved</value>
+  </data>
+  <data name="Note: Goal for" xml:space="preserve">
+    <value>Note: Goal for</value>
+  </data>
+  <data name="Product Sales" xml:space="preserve">
+    <value>Product Sales</value>
+  </data>
+  <data name="Weekly" xml:space="preserve">
+    <value>Weekly</value>
+  </data>
+  <data name="Monthly" xml:space="preserve">
+    <value>Monthly</value>
+  </data>
+  <data name="Yearly" xml:space="preserve">
+    <value>Yearly</value>
+  </data>
+  <data name="Year" xml:space="preserve">
+    <value>Year</value>
+  </data>
+  <data name="Previous Year" xml:space="preserve">
+    <value>Previous Year</value>
+  </data>
+  <data name="Next Year" xml:space="preserve">
+    <value>Next Year</value>
+  </data>
+  <data name="Total Amount" xml:space="preserve">
+    <value>Total Amount</value>
+  </data>
+  <data name="Total Pieces" xml:space="preserve">
+    <value>Total Pieces</value>
+  </data>
+  <data name="Avg / Period" xml:space="preserve">
+    <value>Avg / Period</value>
+  </data>
+  <data name="Top Moving Products" xml:space="preserve">
+    <value>Top Moving Products</value>
+  </data>
+  <data name="Pcs" xml:space="preserve">
+    <value>Pcs</value>
+  </data>
+  <data name="View Full Report" xml:space="preserve">
+    <value>View Full Report</value>
+  </data>
+  <data name="Sales by Product Type" xml:space="preserve">
+    <value>Sales by Product Type</value>
+  </data>
+  <data name="Full Sales Archives" xml:space="preserve">
+    <value>Full Sales Archives</value>
+  </data>
+  <data name="Monthly View" xml:space="preserve">
+    <value>Monthly View</value>
+  </data>
+  <data name="Yearly Summary" xml:space="preserve">
+    <value>Yearly Summary</value>
+  </data>
+  <data name="Month / Year" xml:space="preserve">
+    <value>Month / Year</value>
+  </data>
+  <data name="Revenue (Inc. VAT)" xml:space="preserve">
+    <value>Revenue (Inc. VAT)</value>
+  </data>
+  <data name="Pieces" xml:space="preserve">
+    <value>Pieces</value>
+  </data>
+  <data name="Report" xml:space="preserve">
+    <value>Report</value>
+  </data>
+  <data name="Fiscal Year" xml:space="preserve">
+    <value>Fiscal Year</value>
+  </data>
+  <data name="Annual Revenue" xml:space="preserve">
+    <value>Annual Revenue</value>
+  </data>
+  <data name="Items Sold" xml:space="preserve">
+    <value>Items Sold</value>
+  </data>
+  <data name="Avg / Month" xml:space="preserve">
+    <value>Avg / Month</value>
+  </data>
+  <data name="Update Sales Goal" xml:space="preserve">
+    <value>Update Sales Goal</value>
+  </data>
+  <data name="New Target Amount" xml:space="preserve">
+    <value>New Target Amount</value>
+  </data>
+  <data name="Save New Target" xml:space="preserve">
+    <value>Save New Target</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="My Dashboard" xml:space="preserve">
+    <value>My Dashboard</value>
+  </data>
+  <data name="Total Spent" xml:space="preserve">
+    <value>Total Spent</value>
+  </data>
+  <data name="Recent Orders" xml:space="preserve">
+    <value>Recent Orders</value>
+  </data>
+  <data name="You haven't placed any orders yet." xml:space="preserve">
+    <value>You haven't placed any orders yet.</value>
+  </data>
+  <data name="Start Shopping" xml:space="preserve">
+    <value>Start Shopping</value>
+  </data>
+  <data name="Order ID" xml:space="preserve">
+    <value>Order ID</value>
+  </data>
+  <data name="Date &amp; Time" xml:space="preserve">
+    <value>Date &amp; Time</value>
+  </data>
+  <data name="Payment" xml:space="preserve">
+    <value>Payment</value>
+  </data>
+  <data name="Action" xml:space="preserve">
+    <value>Action</value>
+  </data>
+  <data name="View All Orders" xml:space="preserve">
+    <value>View All Orders</value>
+  </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
+  <data name="My Profile" xml:space="preserve">
+    <value>My Profile</value>
+  </data>
+  <data name="Track Order" xml:space="preserve">
+    <value>Track Order</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+  <data name="Verified Customer" xml:space="preserve">
+    <value>Verified Customer</value>
+  </data>
+  <data name="Customer" xml:space="preserve">
+    <value>Customer</value>
+  </data>
+  <data name="Pending / Process" xml:space="preserve">
+    <value>Pending / Process</value>
+  </data>
+  <data name="Product Categories" xml:space="preserve">
+    <value>Product Categories</value>
+  </data>
+  <data name="Offer Price" xml:space="preserve">
+    <value>Offer Price</value>
+  </data>
 </root>

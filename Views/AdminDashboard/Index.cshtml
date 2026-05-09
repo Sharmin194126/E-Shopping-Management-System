@@ -51,9 +51,9 @@
 </style>
 
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h3 class="fw-bold mb-0" style="color:#532374;">📊 Admin Dashboard Overview</h3>
+    <h3 class="fw-bold mb-0" style="color:#532374;">📊 @Localizer["Admin Dashboard Overview"]</h3>
     <a asp-controller="@(User.IsInRole("Admin") ? "AdminDashboard" : "EmployeeDashboard")" asp-action="Profile" class="btn btn-warning fw-bold text-dark shadow-sm px-4">
-        <i class="bi bi-person-circle me-2"></i> Account Profile
+        <i class="bi bi-person-circle me-2"></i> @Localizer["Account Profile"]
     </a>
 </div>
 
@@ -62,7 +62,7 @@
     <div class="col-md">
         <a asp-action="OrdersByStatus" asp-route-status="Delivered" class="stat-card-premium card-variant-green">
             <div class="stat-card-content">
-                <div class="stat-card-label">Delivered Orders</div>
+                <div class="stat-card-label">@Localizer["Delivered Orders"]</div>
                 <div class="stat-card-value">@Model.TotalDelivered.ToString("#,##0")</div>
             </div>
             <div class="stat-card-icon"><i class="bi bi-bag-check-fill"></i></div>
@@ -71,7 +71,7 @@
     <div class="col-md">
         <a asp-action="OrdersByStatus" asp-route-status="Pending" class="stat-card-premium card-variant-orange">
             <div class="stat-card-content">
-                <div class="stat-card-label">Pending Orders</div>
+                <div class="stat-card-label">@Localizer["Pending Orders"]</div>
                 <div class="stat-card-value">@Model.TotalPending.ToString("#,##0")</div>
             </div>
             <div class="stat-card-icon"><i class="bi bi-clock-history"></i></div>
@@ -80,7 +80,7 @@
     <div class="col-md">
         <a asp-action="OrdersByStatus" asp-route-status="Processing" class="stat-card-premium card-variant-blue">
             <div class="stat-card-content">
-                <div class="stat-card-label">In Processing</div>
+                <div class="stat-card-label">@Localizer["In Processing"]</div>
                 <div class="stat-card-value">@Model.TotalProcessing.ToString("#,##0")</div>
             </div>
             <div class="stat-card-icon"><i class="bi bi-gear-wide-connected"></i></div>
@@ -89,7 +89,7 @@
     <div class="col-md">
         <a asp-action="OrdersByStatus" asp-route-status="Shipped" class="stat-card-premium card-variant-cyan">
             <div class="stat-card-content">
-                <div class="stat-card-label">Shipped Orders</div>
+                <div class="stat-card-label">@Localizer["Shipped Orders"]</div>
                 <div class="stat-card-value">@Model.TotalShipped.ToString("#,##0")</div>
             </div>
             <div class="stat-card-icon"><i class="bi bi-truck"></i></div>
@@ -98,7 +98,7 @@
     <div class="col-md">
         <div class="stat-card-premium card-variant-purple">
             <div class="stat-card-content">
-                <div class="stat-card-label">Total Revenue</div>
+                <div class="stat-card-label">@Localizer["Total Revenue"]</div>
                 <div class="stat-card-value">৳@Model.TotalRevenue.ToString("#,##0")</div>
             </div>
             <div class="stat-card-icon"><i class="bi bi-cash-stack"></i></div>
@@ -109,31 +109,31 @@
 
 <!-- MANAGEMENT QUICK LINKS -->
 <div class="mb-4">
-    <h5 class="fw-bold mb-3"><i class="bi bi-lightning-fill text-warning me-2"></i>Quick Management</h5>
+    <h5 class="fw-bold mb-3"><i class="bi bi-lightning-fill text-warning me-2"></i>@Localizer["Quick Management"]</h5>
     <div class="row g-2 nav-shortcuts">
         <div class="col-6 col-md-3">
-            <a asp-controller="Product" asp-action="Index" class="btn btn-outline-success w-100 py-2">Products</a>
+            <a asp-controller="Product" asp-action="Index" class="btn btn-outline-success w-100 py-2">@Localizer["Products"]</a>
         </div>
         <div class="col-6 col-md-3">
-            <a asp-controller="AdminDashboard" asp-action="SetEmployeeGoals" class="btn btn-outline-primary w-100 py-2">Employee Goal Set</a>
+            <a asp-controller="AdminDashboard" asp-action="SetEmployeeGoals" class="btn btn-outline-primary w-100 py-2">@Localizer["Employee Goal Set"]</a>
         </div>
         <div class="col-6 col-md-3">
-            <a asp-controller="Customer" asp-action="Index" class="btn btn-outline-info w-100 py-2">Customers</a>
+            <a asp-controller="Customer" asp-action="Index" class="btn btn-outline-info w-100 py-2">@Localizer["Customers"]</a>
         </div>
         <div class="col-6 col-md-3">
-            <a asp-controller="Employee" asp-action="Index" class="btn btn-outline-dark w-100 py-2">Employees</a>
+            <a asp-controller="Employee" asp-action="Index" class="btn btn-outline-dark w-100 py-2">@Localizer["Employees"]</a>
         </div>
         <div class="col-6 col-md-3">
-            <a asp-controller="DeliveryMan" asp-action="Index" class="btn btn-outline-secondary w-100 py-2">Delivery Men</a>
+            <a asp-controller="DeliveryMan" asp-action="Index" class="btn btn-outline-secondary w-100 py-2">@Localizer["Delivery Men"]</a>
         </div>
         <div class="col-6 col-md-3">
-            <a asp-controller="AdminReport" asp-action="Index" class="btn btn-outline-danger w-100 py-2">Reports</a>
+            <a asp-controller="AdminReport" asp-action="Index" class="btn btn-outline-danger w-100 py-2">@Localizer["Reports"]</a>
         </div>
         <div class="col-6 col-md-3">
-            <a asp-controller="AdminDashboard" asp-action="FooterSettings" class="btn btn-outline-warning w-100 py-2">Footer Settings</a>
+            <a asp-controller="AdminDashboard" asp-action="FooterSettings" class="btn btn-outline-warning w-100 py-2">@Localizer["Footer Settings"]</a>
         </div>
         <div class="col-6 col-md-3">
-            <a asp-controller="AdminDashboard" asp-action="PaymentMethods" class="btn btn-outline-dark w-100 py-2">Payment Methods</a>
+            <a asp-controller="AdminDashboard" asp-action="PaymentMethods" class="btn btn-outline-dark w-100 py-2">@Localizer["Payment Methods"]</a>
         </div>
     </div>
 
@@ -153,33 +153,33 @@
             <div class="col-6">
                 <div class="analytics-metric-card" style="background: linear-gradient(135deg,#6f2da8,#532374);">
                     <div class="amc-icon"><i class="bi bi-graph-up-arrow"></i></div>
-                    <div class="amc-label">Total Sales</div>
+                    <div class="amc-label">@Localizer["Total Sales"]</div>
                     <div class="amc-value">৳@Model.TotalRevenue.ToString("#,##0")</div>
-                    <div class="amc-sub">All time revenue</div>
+                    <div class="amc-sub">@Localizer["All time revenue"]</div>
                 </div>
             </div>
             <div class="col-6">
                 <div class="analytics-metric-card" style="background: linear-gradient(135deg,#1a7a6e,#138d75);">
                     <div class="amc-icon"><i class="bi bi-currency-exchange"></i></div>
-                    <div class="amc-label">Total Profit (Ex. VAT)</div>
+                    <div class="amc-label">@Localizer["Total Profit (Ex. VAT)"]</div>
                     <div class="amc-value">৳@Model.TotalProfit.ToString("#,##0")</div>
-                    <div class="amc-sub">After VAT deduction</div>
+                    <div class="amc-sub">@Localizer["After VAT deduction"]</div>
                 </div>
             </div>
             <div class="col-6">
                 <div class="analytics-metric-card" style="background: linear-gradient(135deg,#8b4513,#a0522d);">
                     <div class="amc-icon"><i class="bi bi-receipt-cutoff"></i></div>
-                    <div class="amc-label">VAT Collected</div>
+                    <div class="amc-label">@Localizer["VAT Collected"]</div>
                     <div class="amc-value">৳@Model.TotalExpenses.ToString("#,##0")</div>
-                    <div class="amc-sub">Total tax revenue</div>
+                    <div class="amc-sub">@Localizer["Total tax revenue"]</div>
                 </div>
             </div>
             <div class="col-6">
                 <div class="analytics-metric-card" style="background: linear-gradient(135deg,#1565c0,#1976d2);">
                     <div class="amc-icon"><i class="bi bi-calendar-week"></i></div>
-                    <div class="amc-label">Weekly Sales</div>
+                    <div class="amc-label">@Localizer["Weekly Sales"]</div>
                     <div class="amc-value">৳@Model.WeeklyRevenue.ToString("#,##0")</div>
-                    <div class="amc-sub">Last 7 days</div>
+                    <div class="amc-sub">@Localizer["Last 7 days"]</div>
                 </div>
             </div>
         </div>
@@ -189,7 +189,7 @@
         <div class="h-100 p-4 rounded-3 shadow-sm" style="background:#fff; border:1px solid #e6e2db;">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <div class="d-flex align-items-center gap-2">
-                    <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-trophy-fill text-warning me-2"></i>Sales Goal</h6>
+                    <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-trophy-fill text-warning me-2"></i>@Localizer["Sales Goal"]</h6>
                     <div class="d-flex align-items-center border rounded-pill px-2" style="background:#f8f6f0; height:28px;">
                         <button class="btn btn-sm p-0 border-0" onclick="updateGoalYear(-1)" style="font-size:10px;">
                             <i class="bi bi-chevron-left"></i>
@@ -201,24 +201,24 @@
                     </div>
                 </div>
                 <div>
-                    <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="modal" data-bs-target="#historyGoalModal" title="View Goal History">
-                        <i class="bi bi-clock-history"></i> History
+                    <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="modal" data-bs-target="#historyGoalModal" title="@Localizer["View Goal History"]">
+                        <i class="bi bi-clock-history"></i> @Localizer["History"]
                     </button>
-                    <button class="btn btn-sm btn-outline-secondary" onclick="prepareEditGoal()" title="Edit Selected Year Goal">
-                        <i class="bi bi-pencil-square"></i> Edit
+                    <button class="btn btn-sm btn-outline-secondary" onclick="prepareEditGoal()" title="@Localizer["Edit Selected Year Goal"]">
+                        <i class="bi bi-pencil-square"></i> @Localizer["Edit"]
                     </button>
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col-6">
-                    <div class="small text-muted">Target</div>
+                    <div class="small text-muted">@Localizer["Target"]</div>
                     <div class="fw-bold fs-5" id="valTarget" style="color:#532374;">৳@Model.SalesGoal.ToString("#,##0")</div>
-                    <div class="small text-muted">Full Year Goal</div>
+                    <div class="small text-muted">@Localizer["Full Year Goal"]</div>
                 </div>
                 <div class="col-6 border-start">
-                    <div class="small text-muted">Remaining</div>
+                    <div class="small text-muted">@Localizer["Remaining"]</div>
                     <div class="fw-bold fs-5 text-danger" id="valRemaining">৳@(goalRemaining > 0 ? goalRemaining.ToString("#,##0") : "0")</div>
-                    <div class="small text-muted">To reach target</div>
+                    <div class="small text-muted">@Localizer["To reach target"]</div>
                 </div>
             </div>
             <div class="d-flex align-items-center gap-3">
@@ -227,8 +227,8 @@
                     <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:14px;font-weight:700;color:#532374;" id="valPercent">@goalPercent%</div>
                 </div>
                 <div>
-                    <div class="fw-bold text-dark" id="valAchieved">৳@currentYearSales.ToString("#,##0") achieved</div>
-                    <div class="small text-muted" id="goalNote">Note: Goal for <span id="noteYear">@DateTime.Now.Year</span></div>
+                    <div class="fw-bold text-dark" id="valAchieved">৳@currentYearSales.ToString("#,##0") @Localizer["achieved"]</div>
+                    <div class="small text-muted" id="goalNote">@Localizer["Note: Goal for"] <span id="noteYear">@DateTime.Now.Year</span></div>
                     <div class="progress mt-2" style="height:6px;">
                         <div class="progress-bar" id="valProgressBar" style="width:@goalPercent%; background:#532374;"></div>
                     </div>
@@ -247,13 +247,13 @@
             <div class="px-4 pt-4 pb-2">
                 <div class="d-flex justify-content-between align-items-start mb-3">
                     <div>
-                        <div class="small mb-1" style="color:#6c757d; text-transform:uppercase; letter-spacing:.5px; font-size:11px;">Product Sales</div>
+                        <div class="small mb-1" style="color:#6c757d; text-transform:uppercase; letter-spacing:.5px; font-size:11px;">@Localizer["Product Sales"]</div>
                         <div id="chartHeaderAmount" class="fw-bold" style="color:#33312e; font-size:1.8rem; line-height:1;">৳0</div>
                     </div>
                     <div class="dropdown">
                         <button class="btn btn-sm dropdown-toggle" id="rangeDropdownBtn"
                                 data-bs-toggle="dropdown" data-bs-display="static" style="background:#f8f6f0; color:#532374; border:1px solid #e6e2db; border-radius:8px; font-size:13px;">
-                            <span id="rangeDropdownLabel">Weekly</span>
+                            <span id="rangeDropdownLabel">@Localizer["Weekly"]</span>
                         </button>
                         <style>
                             .light-dropdown-menu .dropdown-item {
@@ -265,19 +265,19 @@
                             }
                         </style>
                         <ul class="dropdown-menu dropdown-menu-end light-dropdown-menu" style="background:#fff !important; border:1px solid #e6e2db !important; min-width:150px;">
-                            <li><a class="dropdown-item chart-range-item" href="#" data-range="weekly">Weekly (Last 7 Days)</a></li>
-                            <li><a class="dropdown-item chart-range-item" href="#" data-range="monthly">Monthly (Last 30 Days)</a></li>
-                            <li><a class="dropdown-item chart-range-item" href="#" data-range="yearly">Yearly (@DateTime.Now.Year)</a></li>
+                            <li><a class="dropdown-item chart-range-item" href="#" data-range="weekly">@Localizer["Weekly"] (@Localizer["Last 7 days"])</a></li>
+                            <li><a class="dropdown-item chart-range-item" href="#" data-range="monthly">@Localizer["Monthly"] (@Localizer["Last 30 Days"])</a></li>
+                            <li><a class="dropdown-item chart-range-item" href="#" data-range="yearly">@Localizer["Yearly"] (@DateTime.Now.Year)</a></li>
                             <li><hr class="dropdown-divider" style="border-color:#e6e2db;"></li>
                             <li class="dropdown-item px-3 py-2">
                                 <div class="d-flex align-items-center justify-content-between border rounded-pill px-2" style="background:#f8f6f0;">
-                                    <button class="btn btn-sm p-0 border-0" onclick="updateYear(-1); event.stopPropagation();" title="Previous Year">
+                                    <button class="btn btn-sm p-0 border-0" onclick="updateYear(-1); event.stopPropagation();" title="@Localizer["Previous Year"]">
                                         <i class="bi bi-chevron-left" style="color:#532374; font-weight:bold;"></i>
                                     </button>
                                     <div class="chart-range-item text-center flex-grow-1 fw-bold" data-range="prevyear" style="cursor:pointer; color:#532374; font-size:12px;">
-                                        Year <span id="displayYear">@(DateTime.Now.Year - 1)</span>
+                                        @Localizer["Year"] <span id="displayYear">@(DateTime.Now.Year - 1)</span>
                                     </div>
-                                    <button class="btn btn-sm p-0 border-0" onclick="updateYear(1); event.stopPropagation();" title="Next Year">
+                                    <button class="btn btn-sm p-0 border-0" onclick="updateYear(1); event.stopPropagation();" title="@Localizer["Next Year"]">
                                         <i class="bi bi-chevron-right" style="color:#532374; font-weight:bold;"></i>
                                     </button>
                                 </div>
@@ -288,15 +288,15 @@
                 <!-- Mini stats -->
                 <div class="row g-3 mb-3">
                     <div class="col-4">
-                        <div class="small" style="color:#6c757d; font-size:11px;">Total Amount</div>
+                        <div class="small" style="color:#6c757d; font-size:11px;">@Localizer["Total Amount"]</div>
                         <div class="fw-bold" id="rangeTotalAmount" style="color:#532374; font-size:1rem;">৳0</div>
                     </div>
                     <div class="col-4">
-                        <div class="small" style="color:#6c757d; font-size:11px;">Total Pieces</div>
+                        <div class="small" style="color:#6c757d; font-size:11px;">@Localizer["Total Pieces"]</div>
                         <div class="fw-bold" id="rangeTotalPieces" style="color:#28a745; font-size:1rem;">0</div>
                     </div>
                     <div class="col-4">
-                        <div class="small" style="color:#6c757d; font-size:11px;">Avg / Period</div>
+                        <div class="small" style="color:#6c757d; font-size:11px;">@Localizer["Avg / Period"]</div>
                         <div class="fw-bold" id="rangeAvgOrder" style="color:#fd7e14; font-size:1rem;">৳0</div>
                     </div>
                 </div>
@@ -314,7 +314,7 @@
     <div class="col-lg-4">
         <div class="shadow-sm rounded-3 overflow-hidden h-100" style="background:#fff; border:1px solid #e6e2db;">
             <div class="p-3 border-bottom" style="background:#fafafa;">
-                <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-stars text-warning me-2"></i>Top Moving Products</h6>
+                <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-stars text-warning me-2"></i>@Localizer["Top Moving Products"]</h6>
             </div>
             <div class="p-2">
                 @{ int topRank = 1; }
@@ -328,14 +328,14 @@
                             <small class="text-muted">@prod.Category</small>
                         </div>
                         <div class="text-end">
-                            <div class="badge rounded-pill" style="background:#532374; font-size:11px;">@prod.TotalQuantity Pcs</div>
+                            <div class="badge rounded-pill" style="background:#532374; font-size:11px;">@prod.TotalQuantity @Localizer["Pcs"]</div>
                             <div class="small text-success fw-bold">৳@prod.TotalRevenue.ToString("#,##0")</div>
                         </div>
                     </a>
                     topRank++;
                 }
                 <div class="p-2 pt-3 border-top">
-                    <a asp-controller="AdminReport" asp-action="Index" class="btn btn-sm btn-outline-secondary w-100">View Full Report</a>
+                    <a asp-controller="AdminReport" asp-action="Index" class="btn btn-sm btn-outline-secondary w-100">@Localizer["View Full Report"]</a>
                 </div>
             </div>
         </div>
@@ -348,7 +348,7 @@
     <div class="col-lg-5">
         <div class="shadow-sm rounded-3 overflow-hidden h-100" style="background:#fff; border:1px solid #e6e2db;">
             <div class="p-3 border-bottom" style="background:#fafafa;">
-                <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-pie-chart-fill text-info me-2"></i>Sales by Product Type</h6>
+                <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-pie-chart-fill text-info me-2"></i>@Localizer["Sales by Product Type"]</h6>
             </div>
             <div class="p-3" style="height:320px; position:relative;">
                 <canvas id="typePieChart"></canvas>
@@ -363,10 +363,10 @@
     <div class="col-lg-7">
         <div class="shadow-sm rounded-3 overflow-hidden h-100" style="background:#fff; border:1px solid #e6e2db;">
             <div class="p-3 border-bottom d-flex justify-content-between align-items-center" style="background:#fafafa;">
-                <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-archive-fill text-danger me-2"></i>Full Sales Archives</h6>
+                <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-archive-fill text-danger me-2"></i>@Localizer["Full Sales Archives"]</h6>
                 <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-sm btn-outline-primary active" id="btnMonthly" onclick="toggleHistoryView('monthly')">Monthly View</button>
-                    <button type="button" class="btn btn-sm btn-outline-primary" id="btnYearly" onclick="toggleHistoryView('yearly')">Yearly Summary</button>
+                    <button type="button" class="btn btn-sm btn-outline-primary active" id="btnMonthly" onclick="toggleHistoryView('monthly')">@Localizer["Monthly View"]</button>
+                    <button type="button" class="btn btn-sm btn-outline-primary" id="btnYearly" onclick="toggleHistoryView('yearly')">@Localizer["Yearly Summary"]</button>
                 </div>
             </div>
 
@@ -375,10 +375,10 @@
                 <table class="table table-hover align-middle mb-0" style="font-size:13px;">
                     <thead style="background:#532374; color:#fff; position:sticky; top:0;">
                         <tr>
-                            <th class="ps-3">Month / Year</th>
-                            <th class="text-end">Revenue (Inc. VAT)</th>
-                            <th class="text-center">Pieces</th>
-                            <th class="text-center">Report</th>
+                            <th class="ps-3">@Localizer["Month / Year"]</th>
+                            <th class="text-end">@Localizer["Revenue (Inc. VAT)"]</th>
+                            <th class="text-center">@Localizer["Pieces"]</th>
+                            <th class="text-center">@Localizer["Report"]</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -387,8 +387,8 @@
                             <tr>
                                 <td class="ps-3 fw-bold">@month.MonthName @month.Year | @DateTime.Now.ToString("MMM dd, yyyy | hh:mm tt")</td>
                                 <td class="text-end fw-bold text-success">৳@month.Amount.ToString("#,##0")</td>
-                                <td class="text-center"><span class="badge bg-light text-dark border">@month.Pieces.ToString("#,##0") Pcs</span></td>
-                                <td class="text-center"><a asp-controller="AdminReport" asp-action="Index" class="btn btn-sm btn-outline-secondary px-2 py-0">View</a></td>
+                                <td class="text-center"><span class="badge bg-light text-dark border">@month.Pieces.ToString("#,##0") @Localizer["Pcs"]</span></td>
+                                <td class="text-center"><a asp-controller="AdminReport" asp-action="Index" class="btn btn-sm btn-outline-secondary px-2 py-0">@Localizer["View"]</a></td>
                             </tr>
                         }
                     </tbody>
@@ -400,10 +400,10 @@
                 <table class="table table-hover align-middle mb-0" style="font-size:13px;">
                     <thead style="background:#532374; color:#fff; position:sticky; top:0;">
                         <tr>
-                            <th class="ps-3">Fiscal Year</th>
-                            <th class="text-end">Annual Revenue</th>
-                            <th class="text-center">Items Sold</th>
-                            <th class="text-center">Avg / Month</th>
+                            <th class="ps-3">@Localizer["Fiscal Year"]</th>
+                            <th class="text-end">@Localizer["Annual Revenue"]</th>
+                            <th class="text-center">@Localizer["Items Sold"]</th>
+                            <th class="text-center">@Localizer["Avg / Month"]</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -414,7 +414,7 @@
                             <tr>
                                 <td class="ps-3 fw-bold fs-6">@yg.Key</td>
                                 <td class="text-end fw-bold text-primary">৳@yt.ToString("#,##0")</td>
-                                <td class="text-center fw-bold">@yp.ToString("#,##0") <small class="text-muted">Pcs</small></td>
+                                <td class="text-center fw-bold">@yp.ToString("#,##0") <small class="text-muted">@Localizer["Pcs"]</small></td>
                                 <td class="text-center text-muted">৳@((yt/12).ToString("#,##0"))</td>
                             </tr>
                         }
@@ -448,18 +448,18 @@
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content" style="background:#f2efe9; border:none;">
             <div class="modal-header" style="border-bottom:1px solid #e6e2db;">
-                <h5 class="modal-title fw-bold" style="color:#532374;"><i class="bi bi-clock-history me-2"></i>Yearly Goal Rates & Comparison</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title fw-bold" style="color:#532374;"><i class="bi bi-clock-history me-2"></i>@Localizer["Yearly Goal Rates & Comparison"]</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="@Localizer["Close"]"></button>
             </div>
             <div class="modal-body p-0">
                 <div class="table-responsive">
                     <table class="table table-hover align-middle mb-0 text-center" style="font-size:14px; background:#fff;">
                         <thead style="background:#532374; color:#fff;">
                             <tr>
-                                <th>Year</th>
-                                <th>Actual Sales</th>
-                                <th>Target Goal</th>
-                                <th>Achievement Rate</th>
+                                <th>@Localizer["Year"]</th>
+                                <th>@Localizer["Actual Sales"]</th>
+                                <th>@Localizer["Target Goal"]</th>
+                                <th>@Localizer["Achievement Rate"]</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -513,7 +513,7 @@
                 </div>
             </div>
             <div class="modal-footer" style="border-top:1px solid #e6e2db;">
-                <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal">@Localizer["Close"]</button>
             </div>
         </div>
     </div>
@@ -524,21 +524,21 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title fw-bold" style="color:#532374;">Update Sales Goal (<span id="modalYear">@DateTime.Now.Year</span>)</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title fw-bold" style="color:#532374;">@Localizer["Update Sales Goal"] (<span id="modalYear">@DateTime.Now.Year</span>)</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="@Localizer["Close"]"></button>
             </div>
             <form asp-controller="AdminDashboard" asp-action="UpdateSalesGoal" method="post">
                 <input type="hidden" id="editGoalYear" name="year" value="@DateTime.Now.Year" />
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="goalAmount" class="form-label">New Target Amount (৳)</label>
+                        <label for="goalAmount" class="form-label">@Localizer["New Target Amount"] (৳)</label>
                         <input type="number" class="form-control" id="goalAmount" name="goalAmount" value="@Model.SalesGoal" required min="1" step="0.01">
-                        <div class="form-text">Change your yearly target goal to adjust the progress charts tracking.</div>
+                        <div class="form-text">@Localizer["Change your yearly target goal to adjust the progress charts tracking."]</div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn text-white fw-bold" style="background-color:#532374;">Save New Target</button>
+                    <button type="button" class="btn btn-light border" data-bs-dismiss="modal">@Localizer["Cancel"]</button>
+                    <button type="submit" class="btn text-white fw-bold" style="background-color:#532374;">@Localizer["Save New Target"]</button>
                 </div>
             </form>
         </div>

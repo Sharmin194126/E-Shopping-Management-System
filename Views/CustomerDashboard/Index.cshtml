@@ -2,7 +2,7 @@
 @model IEnumerable<E_ShoppingManagement.Models.Order>
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewData["Title"] = "My Dashboard";
+    ViewData["Title"] = Localizer["My Dashboard"];
 
     var dbContext = Context.RequestServices.GetRequiredService<E_ShoppingManagement.Data.AppDbContext>();
     var userMgr = Context.RequestServices.GetRequiredService<UserManager<E_ShoppingManagement.Models.Users>>();
@@ -25,7 +25,7 @@
         <!-- Main Content -->
         <div class="col-md-9">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h3 class="fw-bold mb-0" style="color:#532374;"><i class="bi bi-grid-1x2 me-2"></i>My Dashboard</h3>
+                <h3 class="fw-bold mb-0" style="color:#532374;"><i class="bi bi-grid-1x2 me-2"></i>@Localizer["My Dashboard"]</h3>
                 <div class="d-flex align-items-center gap-3">
 
                     <a href="/CustomerDashboard/Notifications" class="position-relative text-decoration-none" title="Notifications">
@@ -72,7 +72,7 @@
                 <div class="col-md-4">
                     <a href="/CustomerDashboard/Orders" class="stat-card-premium card-variant-green">
                         <div class="stat-card-content">
-                            <div class="stat-card-label">Total Spent</div>
+                            <div class="stat-card-label">@Localizer["Total Spent"]</div>
                             <div class="stat-card-value">৳@Model.Where(o => o.OrderStatus == "Delivered").Sum(o => o.TotalAmount).ToString("#,##0")</div>
                         </div>
                         <div class="stat-card-icon"><i class="bi bi-wallet2"></i></div>
@@ -81,7 +81,7 @@
                 <div class="col-md-4">
                     <a href="/CustomerDashboard/Orders" class="stat-card-premium card-variant-purple">
                         <div class="stat-card-content">
-                            <div class="stat-card-label">My Orders</div>
+                            <div class="stat-card-label">@Localizer["My Orders"]</div>
                             <div class="stat-card-value">@Model.Count()</div>
                         </div>
                         <div class="stat-card-icon"><i class="bi bi-bag-check-fill"></i></div>
@@ -90,7 +90,7 @@
                 <div class="col-md-4">
                     <a href="/CustomerDashboard/Orders" class="stat-card-premium card-variant-orange">
                         <div class="stat-card-content">
-                            <div class="stat-card-label">Pending / Process</div>
+                            <div class="stat-card-label">@Localizer["Pending / Process"]</div>
                             <div class="stat-card-value">@Model.Count(o => o.OrderStatus == "Pending" || o.OrderStatus == "Processing")</div>
                         </div>
                         <div class="stat-card-icon"><i class="bi bi-hourglass-split"></i></div>
@@ -100,15 +100,15 @@
 
             <div class="card shadow-sm border-0" style="border-radius: 16px; overflow:hidden; background: #f8f6f0 !important;">
                 <div class="card-header border-bottom p-4" style="background: #f8f6f0 !important; color: #532374;">
-                    <h5 class="mb-0 fw-bold"><i class="bi bi-clock-history me-2" style="opacity: 0.8;"></i>Recent Orders</h5>
+                    <h5 class="mb-0 fw-bold"><i class="bi bi-clock-history me-2" style="opacity: 0.8;"></i>@Localizer["Recent Orders"]</h5>
                 </div>
                 <div class="card-body p-0" style="background: #f8f6f0 !important;">
                     @if (!Model.Any())
                     {
                         <div class="text-center py-5">
                             <i class="bi bi-bag-x" style="font-size:4rem; color:#cbd5e1;"></i>
-                            <p class="text-muted mt-3 fs-5">You haven't placed any orders yet.</p>
-                            <a href="/Home/CategoryProducts" class="btn fw-bold px-4 pt-2 pb-2 text-white" style="background:#532374; border-radius:25px;">Start Shopping</a>
+                            <p class="text-muted mt-3 fs-5">@Localizer["You haven't placed any orders yet."]</p>
+                            <a href="/Home/CategoryProducts" class="btn fw-bold px-4 pt-2 pb-2 text-white" style="background:#532374; border-radius:25px;">@Localizer["Start Shopping"]</a>
                         </div>
                     }
                     else
@@ -117,13 +117,13 @@
                             <table class="table table-hover align-middle mb-0" style="background: #f8f6f0 !important;">
                                 <thead style="background:#f2efe9; color:#532374;">
                                     <tr>
-                                        <th class="ps-4" style="width: 70px;">SL</th>
-                                        <th>Order ID</th>
-                                        <th>Date & Time</th>
-                                        <th>Total</th>
-                                        <th>Status</th>
-                                        <th>Payment</th>
-                                        <th class="text-center pe-4">Action</th>
+                                        <th class="ps-4" style="width: 70px;">@Localizer["SL"]</th>
+                                        <th>@Localizer["Order ID"]</th>
+                                        <th>@Localizer["Date & Time"]</th>
+                                        <th>@Localizer["Total"]</th>
+                                        <th>@Localizer["Status"]</th>
+                                        <th>@Localizer["Payment"]</th>
+                                        <th class="text-center pe-4">@Localizer["Action"]</th>
                                     </tr>
                                 </thead>
                                 <tbody style="background: #f8f6f0 !important;">
@@ -137,16 +137,16 @@
                                             <td class="fw-bold text-success">৳@order.TotalAmount</td>
                                             <td>
                                                 <span class="badge rounded-pill @(order.OrderStatus == "Delivered" ? "bg-success" : (order.OrderStatus == "Cancelled" ? "bg-danger" : "bg-warning text-dark"))">
-                                                    @order.OrderStatus
+                                                    @Localizer[order.OrderStatus]
                                                 </span>
                                             </td>
                                             <td>
                                                 <span class="badge rounded-pill @(order.PaymentStatus == "Paid" ? "bg-success" : "bg-danger")">
-                                                    @order.PaymentStatus
+                                                    @Localizer[order.PaymentStatus]
                                                 </span>
                                             </td>
                                             <td class="text-center pe-4">
-                                                <a href="/CustomerDashboard/OrderDetails/@order.Id" class="btn btn-sm btn-outline-secondary rounded-pill px-3">View</a>
+                                                <a href="/CustomerDashboard/OrderDetails/@order.Id" class="btn btn-sm btn-outline-secondary rounded-pill px-3">@Localizer["View"]</a>
                                             </td>
                                         </tr>
                                     }
@@ -156,7 +156,7 @@
                         @if(Model.Count() > 5)
                         {
                             <div class="text-center p-3 border-top" style="background:#f2efe9;">
-                                <a href="/CustomerDashboard/Orders" class="text-decoration-none fw-bold" style="color:#532374;">View All Orders <i class="bi bi-arrow-right"></i></a>
+                                <a href="/CustomerDashboard/Orders" class="text-decoration-none fw-bold" style="color:#532374;">@Localizer["View All Orders"] <i class="bi bi-arrow-right"></i></a>
                             </div>
                         }
                     }

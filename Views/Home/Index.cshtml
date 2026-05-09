@@ -173,7 +173,7 @@
             if (dispSection.Name.Contains("Category", StringComparison.OrdinalIgnoreCase) || dispSection.Name.Contains("Categories", StringComparison.OrdinalIgnoreCase))
             {
                 <section class="section" id="@sectionId" style="margin-bottom: 40px; margin-top: 30px;">
-                    <h2 style="text-align: center; margin-bottom: 20px; font-size: 32px;">@dispSection.Name</h2>
+                    <h2 style="text-align: center; margin-bottom: 20px; font-size: 32px;">@Localizer[dispSection.Name]</h2>
                     
                     <div style="display: flex; gap: 20px; overflow-x: auto; padding: 10px 15px; justify-content: center; flex-wrap: wrap;">
                         @foreach (var cat in Model.Categories)
@@ -195,7 +195,7 @@
                 var sectionProducts = validSectionProducts[dispSection.Name];
                 
                 <section class="section" id="@sectionId" style="margin-bottom: 30px;">
-                    <h2 style="text-align: center; margin-bottom: 15px; font-size: 32px;">@dispSection.Name</h2>
+                    <h2 style="text-align: center; margin-bottom: 15px; font-size: 32px;">@Localizer[dispSection.Name]</h2>
                     
                     <div class="@(dispSection.Name.Contains("Featured") ? "featured-grid" : "product-grid")">
                         @foreach (var item in sectionProducts)
@@ -204,7 +204,7 @@
                                 <a href="/Home/Details/@item.Id" style="position: relative; display: block;">
                                     @if (item.OfferPercentage > 0)
                                     {
-                                        <div style="position: absolute; top: 12px; left: 12px; font-size: 11px; background: #3c3935; color: white; padding: 3px 8px; border-radius: 4px; font-weight: 600;">-@item.OfferPercentage% OFF</div>
+                                        <div style="position: absolute; top: 12px; left: 12px; font-size: 11px; background: #3c3935; color: white; padding: 3px 8px; border-radius: 4px; font-weight: 600;">-@item.OfferPercentage% @Localizer["OFF"]</div>
                                     }
                                     <img src="@(string.IsNullOrEmpty(item.ImageUrl) ? "/images/no-image.png" : (item.ImageUrl.StartsWith("/") ? item.ImageUrl : "/images/products/" + item.ImageUrl))" alt="@item.Name">
                                 </a>
