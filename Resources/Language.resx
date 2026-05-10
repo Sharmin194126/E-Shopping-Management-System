@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
+  
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
@@ -28,7 +29,7 @@
                 <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
                 <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="0" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
               <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
               <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
               <xsd:attribute ref="xml:space" />
@@ -214,42 +215,6 @@
   <data name="Pending" xml:space="preserve">
     <value>Pending</value>
   </data>
-  <data name="Edit Delivery Man" xml:space="preserve">
-    <value>Edit Delivery Man</value>
-  </data>
-  <data name="Contact Number" xml:space="preserve">
-    <value>Contact Number</value>
-  </data>
-  <data name="Must be exactly 11 digits" xml:space="preserve">
-    <value>Must be exactly 11 digits</value>
-  </data>
-  <data name="Name" xml:space="preserve">
-    <value>Name</value>
-  </data>
-  <data name="Vehicle Info" xml:space="preserve">
-    <value>Vehicle Info</value>
-  </data>
-  <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
-  </data>
-  <data name="Save Changes" xml:space="preserve">
-    <value>Save Changes</value>
-  </data>
-  <data name="Status" xml:space="preserve">
-    <value>Status</value>
-  </data>
-  <data name="Active" xml:space="preserve">
-    <value>Active</value>
-  </data>
-  <data name="Inactive" xml:space="preserve">
-    <value>Inactive</value>
-  </data>
-  <data name="Pending" xml:space="preserve">
-    <value>Pending</value>
-  </data>
-  <data name="Save" xml:space="preserve">
-    <value>Save</value>
-  </data>
   <data name="Discover Your Style" xml:space="preserve">
     <value>Discover Your Style</value>
   </data>
@@ -287,7 +252,7 @@
     <value>Free</value>
   </data>
   <data name="Reviews" xml:space="preserve">
-    <value>Reviews</value>
+    <value>reviews</value>
   </data>
   <data name="OFF" xml:space="preserve">
     <value>OFF</value>
@@ -336,9 +301,6 @@
   </data>
   <data name="Based on" xml:space="preserve">
     <value>Based on</value>
-  </data>
-  <data name="reviews" xml:space="preserve">
-    <value>reviews</value>
   </data>
   <data name="Customer Experience" xml:space="preserve">
     <value>Customer Experience</value>
@@ -628,21 +590,6 @@
   <data name="Product Category" xml:space="preserve">
     <value>Product Category</value>
   </data>
-  <data name="Discover Your Style" xml:space="preserve">
-    <value>Discover Your Style</value>
-  </data>
-  <data name="Your ultimate destination for fashion, beauty and pure luxury." xml:space="preserve">
-    <value>Your ultimate destination for fashion, beauty and pure luxury.</value>
-  </data>
-  <data name="Shop Now" xml:space="preserve">
-    <value>Shop Now</value>
-  </data>
-  <data name="Welcome To E-Shop" xml:space="preserve">
-    <value>Welcome To E-Shop</value>
-  </data>
-  <data name="Your trusted online shopping destination for fashion, beauty and electronics. Enjoy premium products, exclusive deals and fast delivery." xml:space="preserve">
-    <value>Your trusted online shopping destination for fashion, beauty and electronics. Enjoy premium products, exclusive deals and fast delivery.</value>
-  </data>
   <data name="Admin Dashboard Overview" xml:space="preserve">
     <value>Admin Dashboard Overview</value>
   </data>
@@ -651,9 +598,6 @@
   </data>
   <data name="Delivered Orders" xml:space="preserve">
     <value>Delivered Orders</value>
-  </data>
-  <data name="Pending Orders" xml:space="preserve">
-    <value>Pending Orders</value>
   </data>
   <data name="In Processing" xml:space="preserve">
     <value>In Processing</value>
@@ -667,9 +611,6 @@
   <data name="Quick Management" xml:space="preserve">
     <value>Quick Management</value>
   </data>
-  <data name="Products" xml:space="preserve">
-    <value>Products</value>
-  </data>
   <data name="Employee Goal Set" xml:space="preserve">
     <value>Employee Goal Set</value>
   </data>
@@ -681,9 +622,6 @@
   </data>
   <data name="Delivery Men" xml:space="preserve">
     <value>Delivery Men</value>
-  </data>
-  <data name="Reports" xml:space="preserve">
-    <value>Reports</value>
   </data>
   <data name="Footer Settings" xml:space="preserve">
     <value>Footer Settings</value>
@@ -856,17 +794,8 @@
   <data name="View All Orders" xml:space="preserve">
     <value>View All Orders</value>
   </data>
-  <data name="Dashboard" xml:space="preserve">
-    <value>Dashboard</value>
-  </data>
-  <data name="My Profile" xml:space="preserve">
-    <value>My Profile</value>
-  </data>
   <data name="Track Order" xml:space="preserve">
     <value>Track Order</value>
-  </data>
-  <data name="Logout" xml:space="preserve">
-    <value>Logout</value>
   </data>
   <data name="Verified Customer" xml:space="preserve">
     <value>Verified Customer</value>
@@ -880,17 +809,8 @@
   <data name="Product Categories" xml:space="preserve">
     <value>Product Categories</value>
   </data>
-  <data name="Offer Price" xml:space="preserve">
-    <value>Offer Price</value>
-  </data>
-  <data name="Back" xml:space="preserve">
-    <value>Back</value>
-  </data>
   <data name="Filter Products" xml:space="preserve">
     <value>Filter Products</value>
-  </data>
-  <data name="Product Types" xml:space="preserve">
-    <value>Product Types</value>
   </data>
   <data name="Price Range" xml:space="preserve">
     <value>Price Range</value>
@@ -913,14 +833,8 @@
   <data name="+ Add New Product" xml:space="preserve">
     <value>+ Add New Product</value>
   </data>
-  <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
-  </data>
   <data name="Del" xml:space="preserve">
     <value>Del</value>
-  </data>
-  <data name="Add to Cart" xml:space="preserve">
-    <value>Add to Cart</value>
   </data>
   <data name="Buy Now" xml:space="preserve">
     <value>Buy Now</value>
@@ -937,26 +851,17 @@
   <data name="All Prices" xml:space="preserve">
     <value>All Prices</value>
   </data>
-  <data name="Below à§³500" xml:space="preserve">
-    <value>Below à§³500</value>
+  <data name="Below ৳500" xml:space="preserve">
+    <value>Below ৳500</value>
   </data>
-  <data name="Under à§³500 - à§³2000" xml:space="preserve">
-    <value>Under à§³500 - à§³2000</value>
+  <data name="Under ৳500 - ৳2,000" xml:space="preserve">
+    <value>Under ৳500 - ৳2,000</value>
   </data>
-  <data name="Above à§³2000" xml:space="preserve">
-    <value>Above à§³2000</value>
+  <data name="Above  ৳2,000" xml:space="preserve">
+    <value>Above  ৳2,000</value>
   </data>
-  <data name="Above à§³10000" xml:space="preserve">
-    <value>Above à§³10000</value>
-  </data>
-  <data name="Delete" xml:space="preserve">
-    <value>Delete</value>
-  </data>
-  <data name="Save" xml:space="preserve">
-    <value>Save</value>
-  </data>
-  <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
+  <data name="Above  ৳10,000" xml:space="preserve">
+    <value>Above  ৳10,000</value>
   </data>
   <data name="Shop by Categories" xml:space="preserve">
     <value>Shop by Categories</value>
@@ -975,5 +880,11 @@
   </data>
   <data name="Electronics" xml:space="preserve">
     <value>Electronics</value>
+  </data>
+  <data name="Above ৳2,000" xml:space="preserve">
+    <value>Above ৳2,000</value>
+  </data>
+  <data name="Above ৳10,000" xml:space="preserve">
+    <value>Above ৳10,000</value>
   </data>
 </root>

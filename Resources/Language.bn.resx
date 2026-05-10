@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
+
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
@@ -28,7 +29,7 @@
                 <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
                 <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="0" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
               <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
               <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
               <xsd:attribute ref="xml:space" />
@@ -214,6 +215,24 @@
   <data name="Pending" xml:space="preserve">
     <value>অপেক্ষমান</value>
   </data>
+  <data name="Discover Your Style" xml:space="preserve">
+    <value>আপনার স্টাইল আবিষ্কার করুন</value>
+  </data>
+  <data name="Your ultimate destination for fashion, beauty and pure luxury." xml:space="preserve">
+    <value>ফ্যাশন, সৌন্দর্য এবং বিশুদ্ধ বিলাসিতার জন্য আপনার চূড়ান্ত গন্তব্য।</value>
+  </data>
+  <data name="Shop Now" xml:space="preserve">
+    <value>এখনই কিনুন</value>
+  </data>
+  <data name="Welcome To E-Shop" xml:space="preserve">
+    <value>ই-শপে স্বাগতম</value>
+  </data>
+  <data name="Your trusted online shopping destination for fashion, beauty and electronics. Enjoy premium products, exclusive deals and fast delivery." xml:space="preserve">
+    <value>ফ্যাশন, সৌন্দর্য এবং ইলেকট্রনিক্সের জন্য আপনার বিশ্বস্ত অনলাইন শপিং গন্তব্য। প্রিমিয়াম পণ্য, একচেটিয়া ডিল এবং দ্রুত ডেলিভারি উপভোগ করুন।</value>
+  </data>
+  <data name="Add to Cart" xml:space="preserve">
+    <value>কার্টে যোগ করুন</value>
+  </data>
   <data name="Live Chat Support Available!" xml:space="preserve">
     <value>লাইভ চ্যাট সাপোর্ট উপলব্ধ!</value>
   </data>
@@ -282,9 +301,6 @@
   </data>
   <data name="Based on" xml:space="preserve">
     <value>ভিত্তি করে</value>
-  </data>
-  <data name="reviews" xml:space="preserve">
-    <value>রিভিউ</value>
   </data>
   <data name="Customer Experience" xml:space="preserve">
     <value>গ্রাহক অভিজ্ঞতা</value>
@@ -574,21 +590,6 @@
   <data name="Product Category" xml:space="preserve">
     <value>পণ্যের বিভাগ</value>
   </data>
-  <data name="Discover Your Style" xml:space="preserve">
-    <value>আপনার স্টাইল আবিষ্কার করুন</value>
-  </data>
-  <data name="Your ultimate destination for fashion, beauty and pure luxury." xml:space="preserve">
-    <value>ফ্যাশন, সৌন্দর্য এবং বিশুদ্ধ বিলাসিতার জন্য আপনার চূড়ান্ত গন্তব্য।</value>
-  </data>
-  <data name="Shop Now" xml:space="preserve">
-    <value>এখনই কিনুন</value>
-  </data>
-  <data name="Welcome To E-Shop" xml:space="preserve">
-    <value>ই-শপে স্বাগতম</value>
-  </data>
-  <data name="Your trusted online shopping destination for fashion, beauty and electronics. Enjoy premium products, exclusive deals and fast delivery." xml:space="preserve">
-    <value>ফ্যাশন, সৌন্দর্য এবং ইলেকট্রনিক্সের জন্য আপনার বিশ্বস্ত অনলাইন শপিং গন্তব্য। প্রিমিয়াম পণ্য, একচেটিয়া ডিল এবং দ্রুত ডেলিভারি উপভোগ করুন।</value>
-  </data>
   <data name="Admin Dashboard Overview" xml:space="preserve">
     <value>অ্যাডমিন ড্যাশবোর্ড ওভারভিউ</value>
   </data>
@@ -597,9 +598,6 @@
   </data>
   <data name="Delivered Orders" xml:space="preserve">
     <value>ডেলিভারি করা অর্ডার</value>
-  </data>
-  <data name="Pending Orders" xml:space="preserve">
-    <value>অপেক্ষমান অর্ডার</value>
   </data>
   <data name="In Processing" xml:space="preserve">
     <value>প্রক্রিয়াকরণ চলছে</value>
@@ -613,9 +611,6 @@
   <data name="Quick Management" xml:space="preserve">
     <value>দ্রুত ব্যবস্থাপনা</value>
   </data>
-  <data name="Products" xml:space="preserve">
-    <value>পণ্যসমূহ</value>
-  </data>
   <data name="Employee Goal Set" xml:space="preserve">
     <value>কর্মচারী লক্ষ্য নির্ধারণ</value>
   </data>
@@ -627,9 +622,6 @@
   </data>
   <data name="Delivery Men" xml:space="preserve">
     <value>ডেলিভারি ম্যান</value>
-  </data>
-  <data name="Reports" xml:space="preserve">
-    <value>রিপোর্ট</value>
   </data>
   <data name="Footer Settings" xml:space="preserve">
     <value>ফুটার সেটিংস</value>
@@ -802,17 +794,8 @@
   <data name="View All Orders" xml:space="preserve">
     <value>সব অর্ডার দেখুন</value>
   </data>
-  <data name="Dashboard" xml:space="preserve">
-    <value>ড্যাশবোর্ড</value>
-  </data>
-  <data name="My Profile" xml:space="preserve">
-    <value>আমার প্রোফাইল</value>
-  </data>
   <data name="Track Order" xml:space="preserve">
     <value>অর্ডার ট্র্যাক করুন</value>
-  </data>
-  <data name="Logout" xml:space="preserve">
-    <value>লগআউট</value>
   </data>
   <data name="Verified Customer" xml:space="preserve">
     <value>যাচাইকৃত গ্রাহক</value>
@@ -825,9 +808,6 @@
   </data>
   <data name="Product Categories" xml:space="preserve">
     <value>পণ্যের বিভাগসমূহ</value>
-  </data>
-  <data name="Offer Price" xml:space="preserve">
-    <value>অফার মূল্য</value>
   </data>
   <data name="Filter Products" xml:space="preserve">
     <value>পণ্য ফিল্টার করুন</value>
@@ -871,23 +851,14 @@
   <data name="All Prices" xml:space="preserve">
     <value>সব মূল্য</value>
   </data>
-  <data name="Below ৳500" xml:space="preserve">
-    <value>৳৫০০ এর নিচে</value>
-  </data>
-  <data name="Under ৳500 - ৳2000" xml:space="preserve">
-    <value>৳৫০০ - ৳২০০০ এর মধ্যে</value>
-  </data>
-  <data name="Above ৳2000" xml:space="preserve">
+  <data name="Above  ৳2,000" xml:space="preserve">
     <value>৳২০০০ এর উপরে</value>
   </data>
-  <data name="Above ৳10000" xml:space="preserve">
-    <value>৳১০,০০০ এর উপরে</value>
+  <data name="Above  ৳1,000" xml:space="preserve">
+    <value>৳১,০০০ এর উপরে</value>
   </data>
   <data name="Shop by Categories" xml:space="preserve">
     <value>বিভাগ অনুযায়ী কেনাকাটা করুন</value>
-  </data>
-  <data name="Add to Cart" xml:space="preserve">
-    <value>কার্টে যোগ করুন</value>
   </data>
   <data name="Women Products" xml:space="preserve">
     <value>মহিলাদের পণ্য</value>
@@ -903,5 +874,17 @@
   </data>
   <data name="Electronics" xml:space="preserve">
     <value>ইলেকট্রনিক্স</value>
+  </data>
+	<data name="Below ৳500" xml:space="preserve">
+    <value>Below ৳500</value>
+  </data>
+  <data name="Under ৳500 - ৳2,000" xml:space="preserve">
+    <value>৳৫০০ - ৳২,০০০ এর মধ্যে</value>
+  </data>
+  <data name="Above ৳2,000" xml:space="preserve">
+    <value>৳২০০০ এর উপরে</value>
+  </data>
+  <data name="Above ৳10,000" xml:space="preserve">
+    <value>৳১০,০০০ এর উপরে</value>
   </data>
 </root>
