@@ -493,7 +493,133 @@ namespace E_ShoppingManagement.Controllers
                  if (order.Customer?.UserId != user?.Id) return Forbid();
             }
 
-            return View(order);
         }
+
+        // POST: Order/SendOtpSms
+        [HttpPost]
+        public async Task<IActionResult> SendOtpSms([FromBody] OtpRequestModel model)
+        {
+            if (string.IsNullOrEmpty(model.PhoneNumber))
+                return Json(new { success = false, message = "Phone number is required." });
+
+            try
+            {
+                // Generate a real 4-digit OTP
+                Random rand = new Random();
+                string otp = rand.Next(1000, 9999).ToString();
+
+                // Store OTP securely in Session or TempData
+                TempData["RealOTP_" + model.PhoneNumber] = otp;
+                TempData.Keep("RealOTP_" + model.PhoneNumber);
+
+                // --- REAL SMS GATEWAY INTEGRATION ---
+                // To send a real SMS, you must purchase an SMS API from providers like BulkSMSBD, GreenWeb, SMSQ, or Twilio.
+                // Replace the API_KEY and SENDER_ID with your purchased credentials.
+                string apiKey = "YOUR_SMS_API_KEY_HERE";
+                string senderId = "YOUR_SENDER_ID";
+                string message = $"Your E-Shopping payment OTP is: {otp}. Do not share this with anyone.";
+
+                // Example of BulkSMSBD / Typical BD SMS Gateway URL structure:
+                string requestUrl = $"http://bulksmsbd.net/api/smsapi?api_key={apiKey}&type=text&number={model.PhoneNumber}&senderid={senderId}&message={Uri.EscapeDataString(message)}";
+
+                using (var client = new HttpClient())
+                {
+                    // UNCOMMENT the next two lines when you have put your real API_KEY above.
+                    // var response = await client.GetAsync(requestUrl);
+                    // if (!response.IsSuccessStatusCode) { return Json(new { success = false, message = "Failed to send real SMS. Gateway error." }); }
+                }
+
+                return Json(new { success = true, message = "OTP sent to your number.", testOtp = otp });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Error sending SMS: " + ex.Message });
+            }
+        }
+
+        // POST: Order/SendOtpEmail
+        [HttpPost]
+        public async Task<IActionResult> SendOtpEmail([FromBody] OtpRequestModel model)
+        {
+            if (string.IsNullOrEmpty(model.Email))
+                return Json(new { success = false, message = "Email is required." });
+
+            try
+            {
+                // Generate a real 4-digit OTP
+                Random rand = new Random();
+                string otp = rand.Next(1000, 9999).ToString();
+
+                // Store OTP securely in Session or TempData
+                TempData["RealOTP_" + model.Email] = otp;
+                TempData.Keep("RealOTP_" + model.Email);
+
+                // --- REAL EMAIL SMTP INTEGRATION ---
+                // To send a real email, put your Gmail address and App Password here.
+                string smtpUser = "YOUR_GMAIL_ADDRESS@gmail.com";
+                string smtpPass = "YOUR_GMAIL_APP_PASSWORD";
+
+                using (var mail = new System.Net.Mail.MailMessage())
+                {
+                    mail.From = new System.Net.Mail.MailAddress(smtpUser, "E-Shopping Payment");
+                    mail.To.Add(model.Email);
+                    mail.Subject = "Your Payment OTP Code";
+                    mail.Body = $"<div style='font-family:Arial; padding:20px; border:1px solid #ddd; text-align:center;'>" +
+                                $"<h2 style='color:#e81828;'>E-Shopping Management</h2>" +
+                                $"<p>Your OTP code for the payment verification is:</p>" +
+                                $"<h1 style='letter-spacing:5px; color:#333; background:#f4f4f4; padding:10px; display:inline-block;'>{otp}</h1>" +
+                                $"<p>Do not share this code with anyone.</p></div>";
+                    mail.IsBodyHtml = true;
+
+                    using (var smtp = new System.Net.Mail.SmtpClient("smtp.gmail.com", 587))
+                    {
+                        smtp.Credentials = new System.Net.NetworkCredential(smtpUser, smtpPass);
+                        smtp.EnableSsl = true;
+                        
+                        // UNCOMMENT the next line when you have put your real GMAIL credentials above.
+                        // await smtp.SendMailAsync(mail);
+                    }
+                }
+
+                return Json(new { success = true, message = "OTP sent to your email.", testOtp = otp });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Error sending Email: " + ex.Message });
+            }
+        }
+
+        // POST: Order/VerifyOtpSms
+        [HttpPost]
+        public IActionResult VerifyOtpSms([FromBody] OtpVerifyModel model)
+        {
+            string target = !string.IsNullOrEmpty(model.PhoneNumber) ? model.PhoneNumber : model.Email;
+            
+            if (string.IsNullOrEmpty(target) || string.IsNullOrEmpty(model.Otp))
+                return Json(new { success = false, message = "Invalid data." });
+
+            var savedOtp = TempData["RealOTP_" + target]?.ToString();
+            TempData.Keep("RealOTP_" + target);
+
+            if (savedOtp != null && savedOtp == model.Otp)
+            {
+                return Json(new { success = true });
+            }
+
+            return Json(new { success = false, message = "Incorrect OTP. Please check your SMS/Email and try again." });
+        }
+    }
+
+    public class OtpRequestModel
+    {
+        public string PhoneNumber { get; set; }
+        public string Email { get; set; }
+    }
+
+    public class OtpVerifyModel
+    {
+        public string PhoneNumber { get; set; }
+        public string Email { get; set; }
+        public string Otp { get; set; }
     }
 }

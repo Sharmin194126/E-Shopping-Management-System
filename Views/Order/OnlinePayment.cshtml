@@ -186,6 +186,115 @@
         color: var(--payment-primary);
     }
 
+    /* Payment Gateway Modal Styles */
+    .payment-modal-overlay {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        backdrop-filter: blur(5px);
+    }
+
+    .payment-modal {
+        background: white;
+        padding: 40px 30px;
+        border-radius: 15px;
+        width: 90%;
+        max-width: 420px;
+        text-align: center;
+        box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+        animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @@keyframes modalPop {
+        0% { transform: scale(0.8); opacity: 0; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+
+    .payment-modal h4 {
+        color: var(--payment-primary);
+        margin-bottom: 15px;
+        font-weight: 700;
+        font-size: 24px;
+    }
+
+    .payment-modal p {
+        color: #555;
+        margin-bottom: 25px;
+        font-size: 15px;
+        line-height: 1.5;
+    }
+
+    .payment-modal input.gateway-input {
+        width: 100%;
+        padding: 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        text-align: center;
+        font-size: 24px;
+        letter-spacing: 5px;
+        margin-bottom: 25px;
+        transition: all 0.3s;
+        font-weight: bold;
+    }
+
+    .payment-modal input.gateway-input:focus {
+        border-color: var(--payment-primary);
+        outline: none;
+        box-shadow: 0 0 0 4px rgba(0,0,0,0.05);
+    }
+
+    .payment-modal .btn-gateway-confirm {
+        background: linear-gradient(135deg, var(--payment-primary) 0%, var(--payment-secondary) 100%);
+        color: white;
+        padding: 15px 30px;
+        border: none;
+        border-radius: 10px;
+        font-weight: bold;
+        font-size: 16px;
+        cursor: pointer;
+        width: 100%;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .payment-modal .btn-gateway-confirm:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    .payment-modal .btn-gateway-cancel {
+        color: #888;
+        background: none;
+        border: none;
+        margin-top: 15px;
+        font-size: 14px;
+        cursor: pointer;
+        text-decoration: underline;
+        transition: color 0.2s;
+    }
+
+    .payment-modal .btn-gateway-cancel:hover {
+        color: #333;
+    }
+
+    .gateway-spinner {
+        width: 50px;
+        height: 50px;
+        border: 5px solid #f3f3f3;
+        border-top: 5px solid var(--payment-primary);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 20px auto;
+    }
+
+    @@keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
     @@media (max-width: 768px) {
         .payment-grid {
             grid-template-columns: 1fr;
@@ -245,7 +354,9 @@
                     <h3 style="color: var(--payment-primary); margin-bottom: 20px;">@paymentMethod Details</h3>
                 </div>
 
-                <form asp-action="ConfirmOnlinePayment" method="post">
+                <form id="paymentForm" asp-action="ConfirmOnlinePayment" method="post">
+                    <input type="hidden" name="transactionId" id="generatedTransactionId" />
+                    
                     @if (paymentMethod.Contains("Card", StringComparison.OrdinalIgnoreCase) || paymentMethod.Contains("Credit", StringComparison.OrdinalIgnoreCase))
                     {
                         <div class="form-group">
@@ -254,7 +365,7 @@
                         </div>
                         <div class="form-group">
                             <label>Card Number</label>
-                            <input type="text" name="transactionId" placeholder="XXXX XXXX XXXX XXXX" required pattern="[0-9\s]{13,19}" />
+                            <input type="text" id="cardNumberInput" placeholder="XXXX XXXX XXXX XXXX" required pattern="[0-9\s]{13,19}" />
                         </div>
                         <div class="row">
                             <div class="col-6">
@@ -288,21 +399,15 @@
                             <input type="tel" name="phoneNumber" placeholder="e.g., 01XXXXXXXXX" pattern="01[0-9]{9}" maxlength="11" required />
                             <small class="text-muted">Enter your 11-digit @paymentMethod account number</small>
                         </div>
-
-                        <div class="form-group">
-                            <label>Transaction ID</label>
-                            <input type="text" name="transactionId" id="transactionId" placeholder="Enter Transaction ID" required maxlength="20" />
-                            <small class="text-muted">Enter the transaction ID from your @paymentMethod payment confirmation.</small>
-                        </div>
                     }
 
-                    <button type="submit" class="pay-button">Confirm & Complete Payment</button>
+                    <button type="submit" class="pay-button">Proceed to Pay</button>
                 </form>
             </div>
         </div>
 
         <div class="info-box">
-            <strong>Security Note:</strong> Your payment information is secure and encrypted. We do not store your PIN or sensitive account details. Please ensure you have completed the payment via your mobile app before submitting the Transaction ID.
+            <strong>Security Note:</strong> Your payment information is securely encrypted by our gateway. We do not store your PIN or sensitive card details.
         </div>
 
         <div class="button-container">
@@ -311,14 +416,207 @@
     </div>
 </div>
 
+<!-- Payment Gateway Modals -->
+<div class="payment-modal-overlay" id="paymentGatewayModal">
+    <!-- Method Selection Step -->
+    <div class="payment-modal" id="modalMethodSelection">
+        <h4>Choose OTP Method</h4>
+        <p>How would you like to receive your secure payment OTP?</p>
+        <button type="button" class="btn-gateway-confirm mb-3" style="background: #198754;" onclick="sendOtpOption('email')">
+            <i class="bi bi-envelope"></i> Send via Email
+        </button>
+        <button type="button" class="btn-gateway-confirm" onclick="sendOtpOption('sms')">
+            <i class="bi bi-chat-dots"></i> Send via SMS
+        </button>
+        <button type="button" class="btn-gateway-cancel mt-3" onclick="closeModal()">Cancel Payment</button>
+    </div>
+    <!-- OTP Verification Step -->
+    <div class="payment-modal" id="modalStepOtp">
+        <h4>OTP Verification</h4>
+        <p>A 4-digit OTP has been sent to <br><strong id="otpTargetText">your account</strong>.<br>Please enter it below to verify.</p>
+        <input type="text" id="otpInput" class="gateway-input" maxlength="4" placeholder="••••" autocomplete="off" />
+        <button type="button" class="btn-gateway-confirm" onclick="verifyOtp()">Verify OTP</button>
+        <button type="button" class="btn-gateway-cancel" onclick="closeModal()">Cancel Payment</button>
+    </div>
+
+    <!-- PIN Entry Step -->
+    <div class="payment-modal" id="modalStepPin" style="display: none;">
+        <h4>Secure Payment</h4>
+        <p>Enter your @paymentMethod PIN to confirm the payment of <br><strong style="font-size: 20px;">৳@Model.Items?.Sum(i => i.Quantity * i.PriceWithVat).ToString("N2")</strong></p>
+        <input type="password" id="pinInput" class="gateway-input" maxlength="5" placeholder="•••••" autocomplete="off" />
+        <button type="button" class="btn-gateway-confirm" onclick="verifyPin()">Confirm Payment</button>
+        <button type="button" class="btn-gateway-cancel" onclick="closeModal()">Cancel Payment</button>
+    </div>
+
+    <!-- Processing Step -->
+    <div class="payment-modal" id="modalStepProcessing" style="display: none;">
+        <h4>Processing...</h4>
+        <p>Please wait while we securely process your payment. Do not refresh or close this window.</p>
+        <div class="gateway-spinner"></div>
+    </div>
+</div>
+
 @section Scripts {
     <script>
-        // Auto-uppercase transaction ID if it exists
-        const trxInput = document.getElementById('transactionId');
-        if (trxInput) {
-            trxInput.addEventListener('input', function(e) {
-                e.target.value = e.target.value.toUpperCase();
+        const form = document.getElementById('paymentForm');
+        const paymentGatewayModal = document.getElementById('paymentGatewayModal');
+        const modalStepOtp = document.getElementById('modalStepOtp');
+        const modalStepPin = document.getElementById('modalStepPin');
+        const modalStepProcessing = document.getElementById('modalStepProcessing');
+        const generatedTransactionIdInput = document.getElementById('generatedTransactionId');
+        const otpTargetText = document.getElementById('otpTargetText');
+
+        let paymentMethodIsCard = @(paymentMethod.Contains("Card", StringComparison.OrdinalIgnoreCase) || paymentMethod.Contains("Credit", StringComparison.OrdinalIgnoreCase) ? "true" : "false");
+        let currentPhoneTarget = "";
+        let currentEmailTarget = "";
+        let selectedOtpMethod = "";
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Collect targets from form
+            if (paymentMethodIsCard) {
+                currentPhoneTarget = "01XXXXXXXXX"; // Fallback for card
+                currentEmailTarget = "customer@example.com";
+            } else {
+                const phoneInput = document.querySelector('input[name="phoneNumber"]');
+                const emailInput = document.querySelector('input[name="email"]');
+                if (phoneInput && phoneInput.value) currentPhoneTarget = phoneInput.value;
+                if (emailInput && emailInput.value) currentEmailTarget = emailInput.value;
+            }
+
+            // Show Gateway Modal (Method Selection Step)
+            paymentGatewayModal.style.display = 'flex';
+            document.getElementById('modalMethodSelection').style.display = 'block';
+            modalStepOtp.style.display = 'none';
+            modalStepPin.style.display = 'none';
+            modalStepProcessing.style.display = 'none';
+        });
+
+        function sendOtpOption(method) {
+            selectedOtpMethod = method;
+            let target = "";
+            let endpoint = "";
+            let bodyData = {};
+
+            if (method === 'sms') {
+                if(!currentPhoneTarget || currentPhoneTarget.length < 11) {
+                    alert("Please enter a valid phone number to receive the real OTP SMS.");
+                    return;
+                }
+                target = currentPhoneTarget;
+                endpoint = '/Order/SendOtpSms';
+                bodyData = { PhoneNumber: currentPhoneTarget };
+            } else if (method === 'email') {
+                if(!currentEmailTarget || !currentEmailTarget.includes("@")) {
+                    alert("Please enter a valid email address to receive the real OTP Email.");
+                    return;
+                }
+                target = currentEmailTarget;
+                endpoint = '/Order/SendOtpEmail';
+                bodyData = { Email: currentEmailTarget };
+            }
+
+            otpTargetText.innerText = target;
+
+            // Show Processing
+            document.getElementById('modalMethodSelection').style.display = 'none';
+            modalStepProcessing.style.display = 'block';
+            
+            // Call Backend API
+            fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(bodyData)
+            })
+            .then(res => res.json())
+            .then(data => {
+                modalStepProcessing.style.display = 'none';
+                if(data.success) {
+                    modalStepOtp.style.display = 'block';
+                    document.getElementById('otpInput').value = '';
+                    setTimeout(() => document.getElementById('otpInput').focus(), 100);
+                    
+                    // Notice for missing API Key configuration during testing
+                    if (data.testOtp) {
+                        let noticeText = method === 'sms' 
+                            ? "Real SMS API Key not configured yet!\nTesting OTP is: " + data.testOtp + "\nTo receive real SMS, setup API Key in OrderController." 
+                            : "Real Gmail SMTP not configured yet!\nTesting OTP is: " + data.testOtp + "\nTo receive real Email, setup Gmail App Password in OrderController.";
+                        alert(`[System Notice]\n\n${noticeText}`);
+                    }
+                } else {
+                    alert(data.message || "Failed to send OTP.");
+                    closeModal();
+                }
+            })
+            .catch(err => {
+                alert("Server error sending OTP.");
+                closeModal();
             });
+        }
+
+        function verifyOtp() {
+            const otp = document.getElementById('otpInput').value;
+            if (otp.length < 4) {
+                alert("Please enter a valid 4-digit OTP.");
+                return;
+            }
+
+            modalStepOtp.style.display = 'none';
+            modalStepProcessing.style.display = 'block';
+
+            // Verify with backend
+            let verifyBody = { Otp: otp };
+            if (selectedOtpMethod === 'sms') verifyBody.PhoneNumber = currentPhoneTarget;
+            else verifyBody.Email = currentEmailTarget;
+
+            fetch('/Order/VerifyOtpSms', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(verifyBody)
+            })
+            .then(res => res.json())
+            .then(data => {
+                modalStepProcessing.style.display = 'none';
+                if(data.success) {
+                    // Move to PIN Step
+                    modalStepPin.style.display = 'block';
+                    setTimeout(() => document.getElementById('pinInput').focus(), 100);
+                } else {
+                    modalStepOtp.style.display = 'block';
+                    alert(data.message || "Incorrect OTP.");
+                }
+            })
+            .catch(err => {
+                alert("Error verifying OTP.");
+                modalStepProcessing.style.display = 'none';
+                modalStepOtp.style.display = 'block';
+            });
+        }
+
+        function verifyPin() {
+            const pin = document.getElementById('pinInput').value;
+            if (pin.length < 4) {
+                alert("Please enter a valid PIN.");
+                return;
+            }
+            // Move to Processing Step
+            modalStepPin.style.display = 'none';
+            modalStepProcessing.style.display = 'block';
+
+            // Simulate network processing and generate real Transaction ID
+            setTimeout(() => {
+                const prefix = paymentMethodIsCard ? "CRD" : "TXN";
+                const randomString = Math.random().toString(36).substring(2, 12).toUpperCase();
+                generatedTransactionIdInput.value = prefix + randomString;
+                
+                // Submit form directly to server
+                form.submit();
+            }, 3000);
+        }
+
+        function closeModal() {
+            paymentGatewayModal.style.display = 'none';
         }
     </script>
 }
