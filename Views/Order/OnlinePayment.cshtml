@@ -351,7 +351,13 @@
             <div class="payment-form-section">
                 <div class="payment-header">
                     <div class="payment-logo-icon">@logoIcon</div>
-                    <h3 style="color: var(--payment-primary); margin-bottom: 20px;">@paymentMethod Details</h3>
+                    <h3 style="color: var(--payment-primary); margin-bottom: 5px;">@paymentMethod Details</h3>
+                    @if (ViewBag.PaymentMethodObj != null && !string.IsNullOrEmpty(ViewBag.PaymentMethodObj.Details))
+                    {
+                        <div class="alert alert-info py-2 mb-3">
+                            <strong>Receiving Account:</strong> @ViewBag.PaymentMethodObj.Details
+                        </div>
+                    }
                 </div>
 
                 <form id="paymentForm" asp-action="ConfirmOnlinePayment" method="post">
@@ -508,7 +514,7 @@
                 endpoint = '/Order/SendOtpSms';
                 bodyData = { PhoneNumber: currentPhoneTarget };
             } else if (method === 'email') {
-                if(!currentEmailTarget || !currentEmailTarget.includes("@")) {
+                if(!currentEmailTarget || !currentEmailTarget.includes("@@")) {
                     alert("Please enter a valid email address to receive the real OTP Email.");
                     return;
                 }

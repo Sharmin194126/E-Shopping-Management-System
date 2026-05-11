@@ -527,6 +527,66 @@ namespace E_ShoppingManagement.Controllers
             TempData["Message"] = "Payment Method updated successfully!";
             return RedirectToAction(nameof(PaymentMethods));
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DeletePaymentMethod(int id)
+        {
+            var method = await _context.PaymentMethods.FindAsync(id);
+            if (method != null)
+            {
+                _context.PaymentMethods.Remove(method);
+                await _context.SaveChangesAsync();
+                TempData["Message"] = "Payment Method deleted successfully!";
+            }
+            return RedirectToAction(nameof(PaymentMethods));
+        }
+
+        public async Task<IActionResult> OnlinePaymentHistory(string? search, string? status, string? method, string? sortBy)
+        {
+            var query = _context.PaymentHistories
+                .Include(p => p.Order)
+                    .ThenInclude(o => o.Customer)
+                .Include(p => p.Order)
+                    .ThenInclude(o => o.OrderDetails!)
+                        .ThenInclude(od => od.Product)
+                .AsQueryable();
+
+            // Search
+            if (!string.IsNullOrEmpty(search))
+            {
+                query = query.Where(p => p.TransactionId.Contains(search) || 
+                                       p.CustomerName.Contains(search) || 
+                                       p.CustomerAccount.Contains(search));
+            }
+
+            // Filter
+            if (!string.IsNullOrEmpty(status))
+            {
+                query = query.Where(p => p.Status == status);
+            }
+            if (!string.IsNullOrEmpty(method))
+            {
+                query = query.Where(p => p.GatewayName == method);
+            }
+
+            // Sorting
+            query = sortBy switch
+            {
+                "date_asc" => query.OrderBy(p => p.PaymentDate),
+                "amount_desc" => query.OrderByDescending(p => p.Amount),
+                "amount_asc" => query.OrderBy(p => p.Amount),
+                _ => query.OrderByDescending(p => p.PaymentDate)
+            };
+
+            var history = await query.ToListAsync();
+            
+            ViewBag.Search = search;
+            ViewBag.Status = status;
+            ViewBag.Method = method;
+            ViewBag.SortBy = sortBy;
+
+            return View(history);
+        }
         public async Task<IActionResult> ManageReviews()
         {
             var reviews = await _context.Reviews

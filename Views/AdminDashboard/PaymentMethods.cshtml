@@ -39,6 +39,7 @@
                     <tr>
                         <th style="width: 70px;">SL No</th>
                         <th>Name</th>
+                        <th>Account Details</th>
                         <th>Status</th>
                         <th>Created</th>
                         <th class="text-end">Actions</th>
@@ -56,10 +57,16 @@
                                 }
                                 <strong>@m.Name</strong>
                             </td>
-                            <td><span class="badge bg-success">@m.Status</span></td>
+                            <td>@m.Details</td>
+                            <td><span class="badge @(m.Status == "Active" ? "bg-success" : "bg-danger")">@m.Status</span></td>
                             <td>@m.CreatedAt.ToString("dd MMM yyyy")</td>
                             <td class="text-end">
-                                <a asp-action="EditPaymentMethod" asp-route-id="@m.Id" class="btn btn-sm btn-outline-primary">Edit</a>
+                                <div class="btn-group">
+                                    <a asp-action="EditPaymentMethod" asp-route-id="@m.Id" class="btn btn-sm btn-outline-primary">Edit</a>
+                                    <form asp-action="DeletePaymentMethod" asp-route-id="@m.Id" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this payment method?');">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     }

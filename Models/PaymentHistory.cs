@@ -21,6 +21,9 @@ namespace E_ShoppingManagement.Models
         [StringLength(50)]
         public string GatewayName { get; set; } = string.Empty; // bKash, SSLCommerz, etc.
 
+        public string? CustomerName { get; set; }
+        public string? CustomerAccount { get; set; }
+
         [Required]
         [StringLength(20)]
         public string Status { get; set; } = "Pending"; // Success, Failed, Cancelled

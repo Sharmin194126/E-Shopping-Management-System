@@ -192,6 +192,9 @@ namespace E_ShoppingManagement.Controllers
             ViewBag.ZipCode = TempData["ZipCode"]?.ToString();
             ViewBag.Phone = TempData["Phone"]?.ToString();
             
+            var methodName = TempData["PaymentMethod"]?.ToString();
+            ViewBag.PaymentMethodObj = await _context.PaymentMethods.FirstOrDefaultAsync(pm => pm.Name == methodName);
+
             // Keep data for payment confirmation
             TempData.Keep();
             
@@ -316,6 +319,8 @@ namespace E_ShoppingManagement.Controllers
                 Amount = totalAmount,
                 TransactionId = transactionId,
                 GatewayName = TempData["PaymentMethod"]?.ToString() ?? "Online",
+                CustomerName = fullName,
+                CustomerAccount = phoneNumber,
                 Status = "Success",
                 PaymentDate = DateTime.Now,
                 ResponsePayload = $"Payer: {fullName}, Phone: {phoneNumber ?? "N/A"}"
@@ -493,6 +498,7 @@ namespace E_ShoppingManagement.Controllers
                  if (order.Customer?.UserId != user?.Id) return Forbid();
             }
 
+            return View(order);
         }
 
         // POST: Order/SendOtpSms

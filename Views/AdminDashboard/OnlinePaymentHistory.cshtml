@@ -1,0 +1,122 @@
+@model IEnumerable<E_ShoppingManagement.Models.PaymentHistory>
+@{
+    ViewData["Title"] = "Online Payment History";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi bi-credit-card"></i> Online Payment History</h2>
+    <div>
+        <a asp-action="Index" class="theme-back-btn mb-0">Dashboard</a>
+    </div>
+</div>
+
+<div class="page-card mb-4">
+    <form method="get" class="row g-3">
+        <div class="col-md-4">
+            <input type="text" name="search" class="form-control" placeholder="Search Transaction ID, Name, Account..." value="@ViewBag.Search">
+        </div>
+        <div class="col-md-2">
+            <select name="method" class="form-select">
+                <option value="">All Methods</option>
+                <option value="bKash" selected="@(ViewBag.Method == "bKash")">bKash</option>
+                <option value="Nagad" selected="@(ViewBag.Method == "Nagad")">Nagad</option>
+                <option value="Rocket" selected="@(ViewBag.Method == "Rocket")">Rocket</option>
+                <option value="Visa" selected="@(ViewBag.Method == "Visa")">Visa/Card</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <select name="status" class="form-select">
+                <option value="">All Status</option>
+                <option value="Success" selected="@(ViewBag.Status == "Success")">Success</option>
+                <option value="Pending" selected="@(ViewBag.Status == "Pending")">Pending</option>
+                <option value="Failed" selected="@(ViewBag.Status == "Failed")">Failed</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <select name="sortBy" class="form-select">
+                <option value="date_desc" selected="@(ViewBag.SortBy == "date_desc")">Newest First</option>
+                <option value="date_asc" selected="@(ViewBag.SortBy == "date_asc")">Oldest First</option>
+                <option value="amount_desc" selected="@(ViewBag.SortBy == "amount_desc")">Highest Amount</option>
+                <option value="amount_asc" selected="@(ViewBag.SortBy == "amount_asc")">Lowest Amount</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Filter</button>
+        </div>
+    </form>
+</div>
+
+<div class="page-card">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead style="background:#532374; color:#fff;">
+                <tr>
+                    <th>Customer & Account</th>
+                    <th>Product Details</th>
+                    <th>Payment Info</th>
+                    <th>Status</th>
+                    <th>Dates</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    var firstItem = item.Order?.OrderDetails?.FirstOrDefault();
+                    <tr>
+                        <td>
+                            <strong>@item.CustomerName</strong><br/>
+                            <small class="text-muted"><i class="bi bi-phone"></i> @item.CustomerAccount</small><br/>
+                            <small class="text-muted"><i class="bi bi-person"></i> @(item.Order?.Customer?.Name ?? "N/A")</small>
+                        </td>
+                        <td>
+                            @if (firstItem != null)
+                            {
+                                <div class="d-flex align-items-center">
+                                    <img src="@firstItem.Product?.ImageUrl" style="width: 40px; height: 40px; object-fit: cover; border-radius: 5px; margin-right: 10px;" alt="">
+                                    <div>
+                                        <div class="fw-bold">@firstItem.Product?.Name</div>
+                                        <small class="text-muted">Qty: @firstItem.Quantity</small>
+                                        @if (item.Order?.OrderDetails?.Count > 1)
+                                        {
+                                            <br/><small class="badge bg-secondary">@(item.Order.OrderDetails.Count - 1) more item(s)</small>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </td>
+                        <td>
+                            <div class="fw-bold text-primary">৳@item.Amount.ToString("N2")</div>
+                            <small class="text-muted">Method: <strong>@item.GatewayName</strong></small><br/>
+                            <small class="text-muted">TrxID: <span class="text-dark fw-bold">@item.TransactionId</span></small>
+                        </td>
+                        <td>
+                            @if (item.Status == "Success")
+                            {
+                                <span class="badge bg-success">Success</span>
+                            }
+                            else if (item.Status == "Failed")
+                            {
+                                <span class="badge bg-danger">Failed</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning text-dark">@item.Status</span>
+                            }
+                        </td>
+                        <td>
+                            <small>Order: @item.Order?.CreatedAt.ToString("dd MMM yyyy")</small><br/>
+                            <small>Paid: @item.PaymentDate.ToString("dd MMM yyyy HH:mm")</small>
+                        </td>
+                    </tr>
+                }
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="5" class="text-center py-4 text-muted">No payment records found.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
