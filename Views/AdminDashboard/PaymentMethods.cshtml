@@ -16,11 +16,11 @@
             <form asp-action="AddPaymentMethod" method="post" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label class="form-label">Method Name (e.g. bKash, Nagad)</label>
-                    <input name="Name" class="form-control" required placeholder="Enter method name" />
+                    <input name="Name" class="form-control" required placeholder="Enter payment method name" />
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Details / Instructions</label>
-                    <textarea name="Details" class="form-control" rows="3" placeholder="Account number or usage details"></textarea>
+                    <label class="form-label">Business Receiving Account Number</label>
+                    <textarea name="Details" class="form-control" rows="3" placeholder="Enter your business account number where customers will send money" required></textarea>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Logo Icon</label>
@@ -39,7 +39,7 @@
                     <tr>
                         <th style="width: 70px;">SL No</th>
                         <th>Name</th>
-                        <th>Account Details</th>
+                        <th>Business Account</th>
                         <th>Status</th>
                         <th>Created</th>
                         <th class="text-end">Actions</th>

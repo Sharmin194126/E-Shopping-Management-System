@@ -42,7 +42,10 @@
             </select>
         </div>
         <div class="col-md-2">
-            <button type="submit" class="btn btn-primary w-100">Filter</button>
+            <div class="btn-group w-100">
+                <button type="submit" class="btn btn-primary">Filter</button>
+                <a asp-action="OnlinePaymentHistory" class="btn btn-secondary" title="Clear Filters"><i class="bi bi-x-circle"></i></a>
+            </div>
         </div>
     </form>
 </div>
