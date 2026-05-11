@@ -21,8 +21,13 @@
                 </div>
                 
                 <div class="mb-3">
-                    <label class="form-label">Business Receiving Account Number</label>
-                    <input name="Details" class="form-control" value="@Model.Details" required />
+                    <label class="form-label">Receiving Account Number</label>
+                    <input name="AccountNumber" class="form-control" value="@Model.AccountNumber" placeholder="e.g. 017XXXXXXXX" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Details / Instructions</label>
+                    <textarea name="Details" class="form-control" rows="3">@Model.Details</textarea>
                 </div>
                 
                 <div class="mb-3">

@@ -502,6 +502,7 @@ namespace E_ShoppingManagement.Controllers
 
             existing.Name = method.Name;
             existing.Details = method.Details;
+            existing.AccountNumber = method.AccountNumber;
             existing.Status = method.Status;
             
             // Assume method.IsActive maps from Status if needed, but since it's just Name and Details

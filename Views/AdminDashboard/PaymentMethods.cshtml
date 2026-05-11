@@ -19,8 +19,12 @@
                     <input name="Name" class="form-control" required placeholder="Enter payment method name" />
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Business Receiving Account Number</label>
-                    <input name="Details" class="form-control" placeholder="e.g., 01XXXXXXXXX" required />
+                    <label class="form-label">Receiving Account Number</label>
+                    <input name="AccountNumber" class="form-control" placeholder="e.g. 017XXXXXXXX" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Details / Instructions</label>
+                    <textarea name="Details" class="form-control" rows="2" placeholder="Account usage details or instructions"></textarea>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Logo Icon</label>
@@ -39,7 +43,8 @@
                     <tr>
                         <th style="width: 70px;">SL No</th>
                         <th>Name</th>
-                        <th>Business Account</th>
+                        <th>Account Number</th>
+                        <th>Details / Instructions</th>
                         <th>Status</th>
                         <th>Created</th>
                         <th class="text-end">Actions</th>
@@ -57,7 +62,8 @@
                                 }
                                 <strong>@m.Name</strong>
                             </td>
-                            <td>@m.Details</td>
+                             <td>@m.AccountNumber</td>
+                             <td><small>@m.Details</small></td>
                             <td><span class="badge @(m.Status == "Active" ? "bg-success" : "bg-danger")">@m.Status</span></td>
                             <td>@m.CreatedAt.ToString("dd MMM yyyy")</td>
                             <td class="text-end">

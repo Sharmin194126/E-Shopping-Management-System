@@ -352,11 +352,20 @@
                 <div class="payment-header">
                     <div class="payment-logo-icon">@logoIcon</div>
                     <h3 style="color: var(--payment-primary); margin-bottom: 5px;">@paymentMethod Details</h3>
-                    @if (ViewBag.PaymentMethodObj != null && !string.IsNullOrEmpty(ViewBag.PaymentMethodObj.Details))
+                    @if (ViewBag.PaymentMethodObj != null)
                     {
-                        <div class="alert alert-info py-2 mb-3">
-                            <strong>Receiving Account:</strong> @ViewBag.PaymentMethodObj.Details
-                        </div>
+                        @if (!string.IsNullOrEmpty(ViewBag.PaymentMethodObj.AccountNumber))
+                        {
+                            <div class="alert alert-info py-2 mb-2">
+                                <strong>Receiving Account:</strong> <span class="fs-5 fw-bold text-dark">@ViewBag.PaymentMethodObj.AccountNumber</span>
+                            </div>
+                        }
+                        @if (!string.IsNullOrEmpty(ViewBag.PaymentMethodObj.Details))
+                        {
+                            <div class="alert alert-warning py-2 mb-3" style="font-size: 0.9rem;">
+                                <i class="bi bi-info-circle me-1"></i> @ViewBag.PaymentMethodObj.Details
+                            </div>
+                        }
                     }
                 </div>
 

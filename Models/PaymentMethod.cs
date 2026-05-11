@@ -10,7 +10,10 @@ namespace E_ShoppingManagement.Models
         [StringLength(50)]
         public string Name { get; set; } = string.Empty; // bkash, nogod, rocket, etc.
 
-        public string? Details { get; set; } // instructions or account number
+        public string? Details { get; set; } // instructions or usage details
+        
+        [StringLength(100)]
+        public string? AccountNumber { get; set; } // The actual receiving number
 
         public string? LogoUrl { get; set; }
 
